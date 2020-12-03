@@ -1,0 +1,19 @@
+$red: #f00;
+$white: #fff;
+
+// theme color variables
+$skymap-background: #0b1320;
+$skymap-dark-blue: #212c6f;
+$skymap-main-blue: #303f9f;
+$skymap-light-blue: #5965b2;
+
+// Layout variables
+@function min-main-height($vh) {
+  $total: $header-height + $footer-height;
+  $height: calc(#{$vh} - #{$total});
+  @return $height;
+}
+
+$header-height: 64px;
+$footer-height: 64px;
+$main-min-height: min-main-height(100vh);

@@ -1,0 +1,16 @@
+{
+  "defaultSeverity": "error",
+  "extends": ["tslint-react", "tslint-config-prettier"],
+  "jsRules": {},
+  "rules": {
+    "jsx-no-multiline-js": false,
+    "jsx-no-lambda": false,
+    "jsx-no-bind": false,
+    "jsx-boolean-value": false,
+    "semicolon": false
+  },
+  "rulesDirectory": [],
+  "linterOptions": {
+    "exclude": ["tsconfig.*"]
+  }
+}

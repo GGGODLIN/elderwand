@@ -1,0 +1,19 @@
+# IDE
+.idea/
+.vscode/
+
+# node
+node_modules/
+yarn.lock
+
+# nextjs
+.next
+.server/
+
+# temp
+.tmp
+.temp/
+.test/
+dist/
+
+# log

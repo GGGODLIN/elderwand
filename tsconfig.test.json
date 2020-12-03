@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "commonjs",
+    "jsx": "react",
+    "alwaysStrict": true
+  },
+  "include": [
+    "next-env.d.ts",
+    "pages/**/*.tsx",
+    "src/client/**/*.ts",
+    "src/client/**/*.tsx",
+    "src/server/**/*.ts"
+  ]
+}

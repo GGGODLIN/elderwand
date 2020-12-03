@@ -1,0 +1,33 @@
+# IDE
+.idea
+.vscode
+
+# node
+node_modules
+
+# nextjs
+.next
+.server
+
+# temp
+.tmp
+.temp
+.test
+dist/
+
+# log
+*.log
+
+# env
+.env*
+!.env.sample
+yarn.lock
+
+# container data
+/docker/data
+
+# other
+*TODO.md
+
+# security
+
