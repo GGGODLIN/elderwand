@@ -1,5 +1,5 @@
 import * as React from "react";
-import { HomePage } from "src/client/containers/home/HomePage";
+import { AdminPage } from "src/client/containers/admin/AdminPage";
 import { NextPage, NextPageContext } from "next";
 
 export interface IndexPageProps {
@@ -9,7 +9,7 @@ export interface IndexPageProps {
 export const IndexPage: NextPage<IndexPageProps> = (props) => {
   return (
     <React.Fragment>
-      <HomePage {...props} />
+      <AdminPage {...props} />
     </React.Fragment>
   );
 };

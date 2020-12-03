@@ -2,13 +2,14 @@ import Head from "next/head";
 import React from "react";
 import { AppProps } from "next/app";
 import { Provider } from "react-redux";
-import "../src/client/style.scss";
+import "src/client/style.scss";
 import {
   createMuiTheme,
   NoSsr,
   ThemeProvider,
   useMediaQuery,
 } from "@material-ui/core";
+import RootStore from "src/client/store";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: light)");
@@ -27,25 +28,27 @@ function MyApp({ Component, pageProps }: AppProps) {
   const title = "index";
 
   return (
-    <ThemeProvider theme={theme}>
-      <Head>
-        <title>{title}</title>
-        <meta charSet="UTF-8" />
-        <meta name="keywords" content="NextJS, KoaJS" />
-        <meta name="author" content="Rex" />
-        <meta
-          name="viewport"
-          content="minimum-scale=1, initial-scale=1, width=device-width"
-        />
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
-        />
-      </Head>
-      <NoSsr>
-        <Component {...pageProps} />
-      </NoSsr>
-    </ThemeProvider>
+    <Provider store={RootStore}>
+      <ThemeProvider theme={theme}>
+        <Head>
+          <title>{title}</title>
+          <meta charSet="UTF-8" />
+          <meta name="keywords" content="NextJS, KoaJS" />
+          <meta name="author" content="Rex" />
+          <meta
+            name="viewport"
+            content="minimum-scale=1, initial-scale=1, width=device-width"
+          />
+          <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+          />
+        </Head>
+        <NoSsr>
+          <Component {...pageProps} />
+        </NoSsr>
+      </ThemeProvider>
+    </Provider>
   );
 }
 

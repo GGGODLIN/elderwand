@@ -1,0 +1,11 @@
+@import "src/client/styles/variable";
+
+.admin.page {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+
+  .name {
+    font-size: 64px;
+  }
+}
