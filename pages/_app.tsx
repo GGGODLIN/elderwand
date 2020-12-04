@@ -1,15 +1,15 @@
-import Head from "next/head";
-import React from "react";
-import { AppProps } from "next/app";
-import { Provider } from "react-redux";
-import "src/client/style.scss";
+import Head from 'next/head';
+import React from 'react';
+import RootStore from 'src/client/store';
+import { AppProps } from 'next/app';
+import { Provider } from 'react-redux';
+import 'src/client/style.scss';
 import {
   createMuiTheme,
   NoSsr,
   ThemeProvider,
   useMediaQuery,
 } from "@material-ui/core";
-import RootStore from "src/client/store";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: light)");
@@ -25,7 +25,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     [prefersDarkMode]
   );
 
-  const title = "index";
+  const title = pageProps.title || "";
 
   return (
     <Provider store={RootStore}>

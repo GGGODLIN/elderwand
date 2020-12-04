@@ -1,6 +1,7 @@
 import * as React from "react";
 import { HomePage } from "src/client/containers/home/HomePage";
 import { NextPage, NextPageContext } from "next";
+import Layout from "src/client/components/layout/Layout";
 
 export interface IndexPageProps {
   title: string;
@@ -9,7 +10,9 @@ export interface IndexPageProps {
 export const IndexPage: NextPage<IndexPageProps> = (props) => {
   return (
     <React.Fragment>
-      <HomePage {...props} />
+      <Layout {...props}>
+        <HomePage {...props} />
+      </Layout>
     </React.Fragment>
   );
 };

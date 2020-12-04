@@ -6,30 +6,23 @@ main {
   min-height: $main-min-height;
 }
 
-footer {
-  background-color: $skymap-dark-blue;
-  height: 64px;
-
-  > div {
-    height: 100%;
-  }
-}
-
 .page {
   min-height: $main-min-height;
 }
 
 .header-nav {
   align-items: center;
-  background-color: $skymap-dark-blue;
+  background-color: $bg-green-dark;
   display: flex;
-  height: 64px;
+  height: $header-height;
+}
 
-  .link {
-    color: $white;
-    float: right;
-    text-decoration: none;
-    padding: 0 8px;
+footer {
+  background-color: $bg-green-dark;
+  height: $footer-height;
+
+  > div {
+    height: 100%;
   }
 }
 
@@ -38,4 +31,15 @@ footer {
   display: flex;
   height: 100%;
   justify-content: center;
+}
+
+.link {
+  text-decoration: none;
+}
+
+.header-nav,
+footer {
+  .link {
+    color: $white;
+  }
 }

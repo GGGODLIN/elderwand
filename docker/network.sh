@@ -4,6 +4,6 @@ export ELDERWAND_NETWORK=$(docker network ls | grep 'elderwand-network' | awk '{
 
 echo $ELDERWAND_NETWORK
 
-if [[ -z "$ELDERWAND_NETWORK" ]]; then
+if [ -z "$ELDERWAND_NETWORK" ]; then
     docker network create elderwand-network
 fi

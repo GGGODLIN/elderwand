@@ -16,16 +16,18 @@ nginx-reload:
 	sh docker/nginx/reload.sh
 
 
-web-dev:
-	docker-compose -f docker/web/docker-compose.yaml up
-web-build:
+dev-up:
+	docker-compose -f docker/web/docker-compose.yaml up -d --force-recreate
+	$(MAKE) dev-logs
+dev-build:
 	sh docker/network.sh
 	docker-compose -f docker/web/docker-compose.yaml build --force-rm 
-web-down:
-	docker-compose -f docker/web/docker-compose.yaml down
-web-renew:
+dev-down:
+	docker-compose -f docker/web/docker-compose.yaml down -v --remove-orphans 
+dev-renew:
 	docker-compose -f docker/web/docker-compose.yaml down -v --remove-orphans 
 	docker-compose -f docker/nginx/docker-compose.yaml up -d --build --force-recreate
-web-logs:
-	docker logs 
+	$(MAKE) dev-logs
+dev-logs:
+	docker logs elderwand-web -f --tail=0
 
