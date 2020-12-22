@@ -1,24 +1,54 @@
 $red: #f00;
 $white: #fff;
-
+$black: #000;
 // theme color variables
-// #00ff00	(0,255,0)
-// #00ee00	(0,238,0)
-// #00cd00	(0,205,0)
-// #008b00	(0,139,0)
-// #006400	(0,100,0)
+// #0ABAB5	(0,255,0)
+// #3ACBC7	(0,238,0)
+// #6ADBD8	(0,205,0)
+// #99ECEA	(0,139,0)
+// #C9FCFB	(0,100,0)
 
-$bg-green-light: #00ff00 ;
-$bg-green-primary: #00cd00 ;
-$bg-green-dark: #008b00 ;
+$bg-blue-light: #448aff;
+$bg-blue-primary: #2979ff;
+$bg-blue-dark: #2962ff;
+
+$bg-red-light: #ff4569;
+$bg-red-primary: #ff1744;
+$bg-red-dark: #b2102f;
+
+$bg-green-light: #c9fcfb;
+$bg-green-primary: #6adbd8;
+$bg-green-dark: #0abab5;
+
+$bg-orange-light: #ffab40;
+$bg-orange-primary: #ff9100;
+$bg-orange-dark: #ff6d00;
+
+$bg-grey-light: #e0e0e0;
+$bg-grey-primary: #9e9e9e;
+$bg-grey-dark: #616161;
 
 // Layout variables
-  @function min-main-height($vh) {
+@function min-main-height($vh) {
   $total: $header-height + $footer-height;
   $height: calc(#{$vh} - #{$total});
   @return $height;
 }
 
+@function main-height($vh) {
+  $total: $header-height + $footer-height;
+  // $total: $header-height;
+  $height: calc(#{$vh} - #{$total});
+  @return $height;
+}
+
+$max-width-1280: 1280px;
+$min-width-360: 360px;
+
 $header-height: 64px;
-$footer-height: 64px;
+$footer-height: 48px;
+$main-height: main-height(100vh);
 $main-min-height: min-main-height(100vh);
+
+$mini-drawer-width: 60px;
+$drawer-width: 240px;

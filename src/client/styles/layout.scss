@@ -3,23 +3,266 @@
 html,
 body,
 main {
+  background-color: $bg-green-light;
+}
+
+body,
+main {
+  overflow-x: hidden;
+  // &::-webkit-scrollbar {
+  //   width: 0;
+  // }
+}
+body{
+  overflow-y: hidden;
+}
+
+main {
+  height: $main-height;
   min-height: $main-min-height;
+  padding-top: $header-height;
+  padding-left: $mini-drawer-width;
 }
 
 .page {
   min-height: $main-min-height;
 }
 
-.header-nav {
-  align-items: center;
+header {
+  height: $header-height;
+}
+
+header.app-bar {
   background-color: $bg-green-dark;
   display: flex;
-  height: $header-height;
+  flex-direction: row;
+  align-items: center;
+
+  a {
+    text-decoration: none;
+    color: $white;
+
+    &:hover {
+      cursor: pointer;
+    }
+
+    svg {
+      font-size: 36px;
+      margin: 0 12px;
+    }
+  }
+
+  nav {
+    margin: 0 0 0 auto;
+
+    ul {
+      display: flex;
+      flex-direction: row;
+      > li {
+        margin: 0 8px;
+      }
+    }
+  }
+
+  .logo {
+    margin: 0 8px;
+  }
+
+  .auth-action {
+    margin: 0;
+  }
+}
+
+.feature-drawer {
+  > div {
+    background-color: $bg-green-primary;
+    overflow: hidden;
+    width: $mini-drawer-width;
+    transition: width 600ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    z-index: 800;
+  }
+
+  &.open {
+    > div {
+      width: $drawer-width;
+      transition: width 600ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+      z-index: 2000;
+    }
+  }
+
+  .drawer-header {
+    height: $header-height;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    > :first-child {
+      margin: 0 16px;
+    }
+    .close-drawer {
+      margin: 0 0 0 auto;
+    }
+  }
+
+  a {
+    text-decoration: none;
+    &:hover {
+      cursor: pointer;
+    }
+    svg {
+      font-size: 36px;
+      color: $white;
+      margin: 0 12px;
+    }
+  }
+
+  ul {
+    margin: 12px 0;
+    > li {
+      > a {
+        height: 40px;
+        display: flex;
+        align-items: center;
+        white-space: nowrap;
+      }
+    }
+  }
+
+  ~ .mask {
+    position: fixed;
+    display: none;
+    z-index: 800;
+
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    overflow: hidden;
+    pointer-events: visible;
+    opacity: 0;
+
+    &.open {
+      display: block;
+      z-index: 1100;
+      background-color: $black;
+      opacity: 20%;
+    }
+  }
+}
+
+.profile-drawer {
+  > div {
+    > div {
+      width: $drawer-width;
+    }
+    background-color: $bg-green-primary;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 0;
+    transition: width 800ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    z-index: 800;
+  }
+
+  &.open {
+    > div {
+      width: $drawer-width;
+      transition: width 800ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+      z-index: 2000;
+    }
+  }
+
+  .drawer-header {
+    height: $header-height;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    > :first-child {
+      margin: 0 16px;
+    }
+    .close-drawer {
+      margin: 0 0 0 auto;
+    }
+  }
+
+  a {
+    text-decoration: none;
+    &:hover {
+      cursor: pointer;
+    }
+    svg {
+      font-size: 28px;
+      color: $white;
+      margin: 0 12px;
+    }
+  }
+
+  ul {
+    margin: 12px 0;
+    width: $drawer-width;
+
+    > li {
+      > a {
+        height: 40px;
+        display: flex;
+        align-items: center;
+        white-space: nowrap;
+        color: $white;
+      }
+    }
+  }
+
+  .user-info {
+    text-align: center;
+    font-weight: 700;
+  }
+
+  .settings {
+    ul > li {
+      margin: 0 36px 0 0;
+      > label {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+      }
+    }
+  }
+
+  .avatar {
+    > div {
+      height: 100px;
+      width: 100px;
+      margin: 0 auto;
+      background-color: $bg-green-light;
+    }
+  }
+
+  ~ .mask {
+    position: fixed;
+    display: none;
+    z-index: 800;
+
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    overflow: hidden;
+    pointer-events: visible;
+    opacity: 0;
+
+    &.open {
+      display: block;
+      z-index: 1100;
+      background-color: $black;
+      opacity: 20%;
+    }
+  }
 }
 
 footer {
   background-color: $bg-green-dark;
   height: $footer-height;
+
+  position: absolute;
+  width: 100%;
 
   > div {
     height: 100%;
@@ -31,6 +274,16 @@ footer {
   display: flex;
   height: 100%;
   justify-content: center;
+
+  a {
+    margin: 0 4px;
+    text-decoration: none;
+    color: $bg-green-light;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 }
 
 .link {
@@ -41,5 +294,46 @@ footer {
 footer {
   .link {
     color: $white;
+  }
+}
+
+.fab.goto-top-btn {
+  position: fixed;
+  bottom: 64px;
+  right: 24px;
+  z-index: 1600;
+  color: $white;
+  background-color: $bg-green-dark;
+
+  &:hover {
+    background-color: $bg-green-primary;
+  }
+
+  &.hidden {
+    display: none;
+  }
+
+  svg {
+    font-size: 36px;
+  }
+}
+
+.overlay {
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 225ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+
+  &.open {
+    display: flex;
+    z-index: 8000;
+    opacity: 100;
+    transition: opacity 225ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  }
+
+  .MuiCircularProgress-svg {
+    color: $bg-green-light;
   }
 }

@@ -1,13 +1,13 @@
 import * as React from "react";
 import { HomePage } from "src/client/containers/home/HomePage";
 import { NextPage, NextPageContext } from "next";
-import Layout from "src/client/components/layout/Layout";
+import Layout from "src/client/containers/layout/Layout";
 
-export interface IndexPageProps {
+export interface HomeIndexProps {
   title: string;
 }
 
-export const IndexPage: NextPage<IndexPageProps> = (props) => {
+export const HomeIndex: NextPage<HomeIndexProps> = (props) => {
   return (
     <React.Fragment>
       <Layout {...props}>
@@ -17,10 +17,10 @@ export const IndexPage: NextPage<IndexPageProps> = (props) => {
   );
 };
 
-IndexPage.getInitialProps = async (ctx: NextPageContext) => {
+HomeIndex.getInitialProps = async (ctx: NextPageContext) => {
   return {
     title: "Home",
   };
 };
 
-export default IndexPage;
+export default HomeIndex;

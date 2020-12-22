@@ -5,6 +5,7 @@
     "*.spec.ts"
   ],
   "watch": [
-    "src/server"
+    "src/server",
+    "../G13.Web.Shared/src/server"
   ]
 }

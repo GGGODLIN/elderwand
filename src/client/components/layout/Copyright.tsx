@@ -1,28 +1,29 @@
 import React from "react";
 import { Box, Link, Typography } from "@material-ui/core";
-import { EnvVar } from "../../configs/EnvVar";
+import { ClientEnvVar } from "src/client/configs/ClientEnvVar";
 
 export interface CopyrightProps {}
 
-const Copyright: React.FC<CopyrightProps> = (props): React.ReactElement => {
-  const domain = EnvVar.DomainName;
-  const copyright = `Copyright © `;
+export const Copyright: React.FC<CopyrightProps> = (
+  props
+): React.ReactElement => {
+  const domain = ClientEnvVar.DomainName;
+  const copyright = `Copyright ©`;
   const url = `${document.location.origin}`;
-  const year = `${new Date().getFullYear()}.`;
+  const year = `${new Date().getFullYear()}`;
+  const version = ClientEnvVar.Version;
 
   return (
     <React.Fragment>
       <Box className={"copyright"}>
         <Typography>
           {copyright}
-          <Link href={url} target={"_blank"}>
+          <a href={url} target={"_blank"}>
             {domain}
-          </Link>{" "}
-          {year}
+          </a>
+          {`${year}.`} {`Ver: ${version}`}
         </Typography>
       </Box>
     </React.Fragment>
   );
 };
-
-export default Copyright;

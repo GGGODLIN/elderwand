@@ -1,0 +1,14 @@
+{
+  "ErrorMessage": {
+    "IsRequired": "is require",
+    "InvalidEmailAddress": "invalid email address"
+  },
+  "Login": "Sign In",
+  "Username": "Username",
+  "Password": "Password",
+  "EmailAddress": "Email Address",
+  "Email": "Email",
+  "RememberMe": "Remember me",
+  "ForgotPassword": "Forgot password",
+  "DoNotHaveAnAccount": "Don't have an account"
+}

@@ -1,0 +1,40 @@
+@import "src/client/styles/variable";
+
+.login.page {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+.login-form-card {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+
+    .MuiCardContent-root {
+        padding: 24px;
+    }
+
+    .avatar {
+        background-color: $red;
+        color: $white;
+        margin: 8px auto;
+    }
+
+    .title {
+        text-align: center;
+    }
+
+    form {
+        margin: 24px 0 0 0;
+        width: 100%;
+
+        [type="submit"] {
+            margin: 16px 0;
+        }
+
+        a {
+            color: $white;
+        }
+    }
+}

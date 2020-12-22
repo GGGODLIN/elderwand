@@ -1,5 +1,5 @@
 const version = require("./package.json").version;
-const webpack = require("webpack");
+// const webpack = require("webpack");
 const dotenv = require("dotenv");
 
 const env = dotenv.config({
@@ -11,13 +11,16 @@ function NextConfig() {
 
         const config = {
             ...defaultConfig,
-            publicRuntimeConfig: {
-                staticFolder: "/static",
-            },
             // for build time
             env: {
+                ...env,
                 VERSION: version,
             },
+            // publicRuntimeConfig: {
+            //     staticFolder: "/static",
+            // },
+            // serverRuntimeConfig: {
+            // },
             webpack: (
                 config,
                 { buildId, dev, isServer, defaultLoaders, webpack }
@@ -29,21 +32,23 @@ function NextConfig() {
                     isServer,
                 });
 
+                config.plugins = config.plugins || [];
                 config.plugins.push(new webpack.IgnorePlugin(/\/__tests__\//));
+                // config.plugins.push(new webpack.DefinePlugin({
+                //     'process.env': JSON.stringify(env),
+                //     'process.env.VERSION': JSON.stringify(version),
+                // }));
 
                 return config;
             },
             experimental: {
-                cpus: 4
+                cpus: 8
             }
-
         };
 
         console.log({ config });
 
-        return {
-            ...config,
-        };
+        return config;
     };
 }
 

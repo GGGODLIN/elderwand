@@ -1,4 +1,8 @@
 @import "styles/reset";
 @import "styles/layout";
+
 @import "containers/home/home";
+@import "containers/auth/auth";
 @import "containers/admin/admin";
+
+@import "components/user/user";

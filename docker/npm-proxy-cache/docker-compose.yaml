@@ -1,0 +1,22 @@
+version: "3"
+
+services:
+  npm-proxy-cache:
+    container_name: npm-proxy-cache
+    image: g13/npm-proxy-cache
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - /tmp/npm-proxy/cache:/cache
+    ports:
+      - "28080:8080"
+    networks: 
+      - black-hole-network
+    # restart: always
+
+networks:
+  default:
+  black-hole-network:
+    external:
+      name: black-hole-network

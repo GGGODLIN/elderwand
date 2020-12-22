@@ -20,14 +20,21 @@ dev-up:
 	docker-compose -f docker/web/docker-compose.yaml up -d --force-recreate
 	$(MAKE) dev-logs
 dev-build:
-	sh docker/network.sh
-	docker-compose -f docker/web/docker-compose.yaml build --force-rm 
+	sh docker/network.sh && \
+	docker-compose -f docker/web/docker-compose.yaml build --force-rm
 dev-down:
 	docker-compose -f docker/web/docker-compose.yaml down -v --remove-orphans 
 dev-renew:
-	docker-compose -f docker/web/docker-compose.yaml down -v --remove-orphans 
-	docker-compose -f docker/nginx/docker-compose.yaml up -d --build --force-recreate
+	docker-compose -f docker/web/docker-compose.yaml down -v --remove-orphans
+	docker-compose -f docker/web/docker-compose.yaml up -d --build --force-recreate
 	$(MAKE) dev-logs
 dev-logs:
-	docker logs elderwand-web -f --tail=0
+	docker logs elderwand-web -f --tail=10
 
+
+npm-proxy-cache-up:
+	docker-compose -f docker/npm-proxy-cache/docker-compose.yaml up -d --force-recreate
+set-proxy:
+	yarn config set proxy http://rex.com:28080
+	yarn config set https-proxy http://rex.com:28080
+	yarn config set strict-ssl false

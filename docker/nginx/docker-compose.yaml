@@ -3,7 +3,7 @@ version: "3"
 services:
   nginx:
     container_name: nginx
-    image: rex/nginx:1.19.3-alpine
+    image: g13/nginx:1.19.3-alpine
     build:
       context: .
       dockerfile: Dockerfile
@@ -18,15 +18,15 @@ services:
       - "80:80"
       - "443:443"
     networks:
-      - elderwand-network
+      - black-hole-network
     # network_mode: "host"
     # restart: always
-    external_links: 
-      - elderwand-web
-      - elderwand-api
+    # external_links: 
+    #   - elderwand-web
+    #   - elderwand-api
 
 networks:
   # default:  
-  elderwand-network:
+  black-hole-network:
     external:
-      name: elderwand-network
+      name: black-hole-network

@@ -1,9 +1,11 @@
-import Head from 'next/head';
-import React from 'react';
-import RootStore from 'src/client/store';
-import { AppProps } from 'next/app';
-import { Provider } from 'react-redux';
-import 'src/client/style.scss';
+import Head from "next/head";
+import React from "react";
+import RootStore from "src/client/store";
+import { AppProps } from "next/app";
+import { ClientEnvVar } from "src/client/configs/ClientEnvVar";
+import { Provider } from "react-redux";
+import "src/client/utils/i18n";
+import "src/client/style.scss";
 import {
   createMuiTheme,
   NoSsr,
@@ -20,15 +22,25 @@ function MyApp({ Component, pageProps }: AppProps) {
       createMuiTheme({
         palette: {
           type: prefersDarkMode ? "dark" : "light",
+          primary: {
+            light: "#C9FCFB",
+            main: "#6ADBD8",
+            dark: "#0ABAB5",
+            contrastText: "#000",
+          },
         },
       }),
     [prefersDarkMode]
   );
 
+  if (ClientEnvVar.IsDev) {
+    console.info({ client: ClientEnvVar });
+  }
+  const store = RootStore;
   const title = pageProps.title || "";
 
   return (
-    <Provider store={RootStore}>
+    <Provider store={store}>
       <ThemeProvider theme={theme}>
         <Head>
           <title>{title}</title>

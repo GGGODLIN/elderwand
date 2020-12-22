@@ -1,17 +1,25 @@
-import { configureStore } from "@reduxjs/toolkit";
-import { RootReducer } from "./reducer";
+import { RootReducer } from "src/client/reducer";
+
+import {
+  configureStore,
+  createSerializableStateInvariantMiddleware,
+  isPlain,
+} from '@reduxjs/toolkit'
+
+const isIterator = (maybeIterator: any): boolean => maybeIterator && typeof maybeIterator.next === 'function';
+
+const isSerializable = (value: any) => isIterator(value) || isPlain(value)
+
+const getEntries = (value: any) => isIterator(value) ? value.entries() : Object.entries(value)
+
+const serializableMiddleware = createSerializableStateInvariantMiddleware({
+  isSerializable,
+  getEntries,
+})
 
 const RootStore = configureStore({
   reducer: RootReducer,
+  middleware: [serializableMiddleware],
 });
-//
-// if (process.env.NODE_ENV === "development" && module.hot) {
-//   module.hot.accept("./rootReducer", () => {
-//     const newRootReducer = require("./rootReducer").default;
-//     RootStore.replaceReducer(newRootReducer);
-//   });
-// }
-
-// export type AppDispatch = typeof RootStore.dispatch;
 
 export default RootStore;

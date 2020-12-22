@@ -11,11 +11,9 @@ export const HomePage: React.FC<HomePageProps> = (props) => {
 
   return (
     <React.Fragment>
-      <main>
-        <div className={classname}>
-          <div className="name">{DOMAIN_NAME}</div>
-        </div>
-      </main>
+      <div className={classname}>
+        <div className="name">{DOMAIN_NAME}</div>
+      </div>
     </React.Fragment>
   );
 };
