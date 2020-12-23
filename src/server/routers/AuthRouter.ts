@@ -8,8 +8,6 @@ import { IRouterParamContext } from 'koa-router';
 export class AuthRouter {
     static getPageRouter = ():
         Middleware<ParameterizedContext<any, IRouterParamContext<any, {}>>> => KoaRouterFactory.create("/", {
-            // /register
-            // /login
             login: {
                 action: "/login",
                 method: "GET",
@@ -19,15 +17,17 @@ export class AuthRouter {
                 action: "/logout",
                 method: "GET",
                 controller: AuthPageController.logout()
+            },
+            register: {
+                action: "/register",
+                method: "GET",
+                controller: AuthPageController.register()
             }
             // /password/change
-
         })
 
     static getApiRouter = ():
         Middleware<ParameterizedContext<any, IRouterParamContext<any, {}>>> => KoaRouterFactory.create("/api", {
-            // /register
-            // /login
             login: {
                 action: "/login",
                 method: "POST",
@@ -37,7 +37,13 @@ export class AuthRouter {
                 action: "/logout",
                 method: "POST",
                 controller: AuthApiController.logout()
+            },
+            register: {
+                action: "/register",
+                method: "POST",
+                controller: AuthApiController.register()
             }
+
             // /token
             // /password/change
             // /password/reset

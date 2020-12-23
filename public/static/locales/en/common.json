@@ -6,9 +6,15 @@
   "Login": "Sign In",
   "Username": "Username",
   "Password": "Password",
+  "ConfirmPassword": "Confirm Password",
   "EmailAddress": "Email Address",
   "Email": "Email",
   "RememberMe": "Remember me",
   "ForgotPassword": "Forgot password",
-  "DoNotHaveAnAccount": "Don't have an account"
+  "DoNotHaveAnAccount": "Don't have an account",
+  "DisplayName": "Display name",
+  "Address": "Address",
+  "PhoneNumber": "Phone number",
+  "AlreadyHaveAnAccount": "Already have an account",
+  "Submit": "Submit"
 }

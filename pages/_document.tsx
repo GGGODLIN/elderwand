@@ -40,7 +40,7 @@ export default class IntlDocument extends Document<IntlDocumentInitialProps> {
     const lang = "en";
 
     return (
-      <Html lang={lang}>
+      <Html lang={lang} style={{ backgroundColor: "#c9fcfb" }}>
         <Head />
         <body>
           <Main />

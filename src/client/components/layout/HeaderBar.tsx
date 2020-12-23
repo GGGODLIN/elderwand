@@ -57,7 +57,7 @@ export const HeaderBar: React.FC<{}> = () => {
     <React.Fragment>
       <AppBar className={"app-bar"}>
         <div className="open-drawer">
-          <FeatureButton />
+          {isLogin && <FeatureButton />}
         </div>
 
         <div className="logo">

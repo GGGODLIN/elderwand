@@ -1,21 +1,20 @@
-import clsx from "clsx";
-import FetchSlice from "src/client/slices/FetchSlice";
-import kws from "src/client/configs/Keywords";
-import PersonAddIcon from "@material-ui/icons/PersonAdd";
+import clsx from 'clsx';
+import FileCopyIcon from '@material-ui/icons/FileCopy';
+import kws from 'src/client/configs/Keywords';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import UserSlice from 'src/client/slices/UserSlice';
+import { AxiosError, AxiosResponse } from 'axios';
+import { AxiosUtil } from 'src/client/utils/AxiosUtil';
+import { RootState } from 'src/client/reducer';
+import { useDispatch, useSelector } from 'react-redux';
+import { useForm } from 'react-hook-form';
+import { UserRoleEnum } from 'src/client/configs/Enum';
+import { UserVM } from 'src/client/domain/user/UserVM';
+import { useTranslation } from 'react-i18next';
 import React, {
   ChangeEvent,
-  MouseEventHandler,
-  TextareaHTMLAttributes,
   useEffect,
 } from "react";
-import UserSlice from "src/client/slices/UserSlice";
-import { AxiosError, AxiosResponse } from "axios";
-import { AxiosUtil } from "src/client/utils/AxiosUtil";
-import { RootState } from "../../reducer";
-import { useDispatch, useSelector } from "react-redux";
-import { useForm } from "react-hook-form";
-import { UserRoleEnum } from "src/client/configs/Enum";
-import { useTranslation } from "react-i18next";
 import {
   Button,
   Dialog,
@@ -29,12 +28,9 @@ import {
   IconButton,
   InputLabel,
   Select,
-  TextareaAutosize,
   TextField,
   Zoom,
 } from "@material-ui/core";
-import FileCopyIcon from "@material-ui/icons/FileCopy";
-import { UserVM } from "src/client/domain/user/UserVM";
 
 export const AddUserFAB: React.FC<any> = () => {
   const dispatch = useDispatch();
@@ -59,12 +55,6 @@ export const AddUserFAB: React.FC<any> = () => {
   );
 };
 
-interface InviteUserFrom {
-  role_id?: string;
-  email?: string;
-  description?: string;
-}
-
 interface CreateUserForm {
   email: string;
   role_id: string;
@@ -77,7 +67,7 @@ export const InviteUserDialog: React.FC<{}> = () => {
   const name = "invite-user-dialog";
   const form_id = "invite-user-form";
 
-  const { form, show, inviting_user, inviting_token } = useSelector(
+  const { show, inviting_user, inviting_token } = useSelector(
     (state: RootState) => state.user.invite_dialog
   );
 
@@ -97,12 +87,9 @@ export const InviteUserDialog: React.FC<{}> = () => {
       role_id: parseInt(form.role_id),
     };
 
-    console.log(body);
-
     client
       .post<{ user: UserVM; token: string }>("/api/invite/user", body)
       .then((res: AxiosResponse<any>) => {
-        console.log(res.data);
         dispatch(UserSlice.setInvitingUserInfo(res.data));
       })
       .catch((err: AxiosError<any>) => {
@@ -111,9 +98,6 @@ export const InviteUserDialog: React.FC<{}> = () => {
           console.log(err.response.data);
         }
         AxiosUtil.redirectUnAuthorization(err);
-      })
-      .finally(() => {
-        dispatch(FetchSlice.end());
       });
   };
 
@@ -129,13 +113,16 @@ export const InviteUserDialog: React.FC<{}> = () => {
   ) => {
     const name = e.target.name;
     const value = e.target.value;
-    // const name = "role_id";
-    // const value = "7";
-    console.log({ name, value });
     dispatch(UserSlice.changeInviteUserForm({ name, value }));
   };
 
   const handleCreateUser = () => handleSubmit(onSubmit)();
+
+  const handleCopyInviteUrl = () => {
+    const elem = document.querySelector("textarea[name=invite_url]") as any;
+    elem.select();
+    document.execCommand("copy");
+  };
 
   const handleInviteUser = () => {};
 
@@ -145,20 +132,16 @@ export const InviteUserDialog: React.FC<{}> = () => {
 
   const handleCloseDialog = () => {
     dispatch(UserSlice.showInviteDialog(false));
-    dispatch(UserSlice.clearInviteUserForm());
-    dispatch(UserSlice.refresh());
     if (!!inviting_user) {
+      dispatch(UserSlice.clearInviteUserForm());
+      dispatch(UserSlice.refresh());
     }
   };
-
-  // if (!show) {
-  //   return <React.Fragment />;
-  // }
 
   const options: {
     name: string;
     value: any;
-  display?: boolean;
+    display?: boolean;
     disabled?: boolean;
   }[] = [
     { name: "Select...", value: "", display: false },
@@ -222,7 +205,6 @@ export const InviteUserDialog: React.FC<{}> = () => {
                   id={role_select_id}
                   // value={form.role_id}
                   defaultValue={""}
-                  // onBlur={handleChangeRoleSelect}
                   onChange={handleChangeRoleSelect}
                   required
                   inputRef={register({
@@ -267,7 +249,6 @@ export const InviteUserDialog: React.FC<{}> = () => {
                 rows={1}
                 size="small"
                 inputRef={register({
-                  //   required: `${t(kws.ErrorMessage.IsRequired)}`,
                   maxLength: {
                     value: 128,
                     message: `${t(kws.ErrorMessage.MaxLength)}`,
@@ -288,7 +269,6 @@ export const InviteUserDialog: React.FC<{}> = () => {
                 fullWidth
                 autoComplete="email"
                 inputRef={register({
-                  //   required: `${t(kws.ErrorMessage.IsRequired)}`,
                   pattern: {
                     value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
                     message: `${t(kws.ErrorMessage.InvalidEmailAddress)}`,
@@ -297,7 +277,6 @@ export const InviteUserDialog: React.FC<{}> = () => {
                 error={!!errors.email}
                 helperText={handleErrorMessage(errors.email)}
                 size="small"
-                // value={`${!!inviting_user && inviting_user?.email && ""}`}
               />
             </Grid>
 
@@ -312,33 +291,12 @@ export const InviteUserDialog: React.FC<{}> = () => {
                     style={{ width: "100%" }}
                     size="small"
                     value={invite_url}
-                    autoFocus
-                    // disabled={true}
                     multiline
                     rows={6}
-                    onClick={(e: any) => {
-                      //e.target.select();
-                      const elem = document.querySelector(
-                        "textarea[name=invite_url]"
-                      ) as any;
-                      elem.select();
-                      document.execCommand("copy");
-                      // navigator.clipboard.readText().then((text) => {
-                      //   console.log(text);
-                      // });
-                    }}
+                    onClick={handleCopyInviteUrl}
                   />
                   <div className="copy-btn">
-                    <IconButton
-                      onClick={() => {
-                        const elem = document.querySelector(
-                          "textarea[name=invite_url]"
-                        ) as any;
-                        elem.select();
-                        document.execCommand("copy");
-                        console.log("copy");
-                      }}
-                    >
+                    <IconButton onClick={handleCopyInviteUrl}>
                       <FileCopyIcon />
                     </IconButton>
                   </div>

@@ -14,6 +14,20 @@ const Keywords = {
     ForgotPassword: "ForgotPassword",
     DoNotHaveAnAccount: "DoNotHaveAnAccount",
   },
+  RegisterPage: {
+    Register: "Register",
+    Username: "Username",
+    DisplayName: "DisplayName",
+    Password: "Password",
+    ConfirmPassword: "ConfirmPassword",
+    EmailAddress: "EmailAddress",
+    Email: "Email",
+    Address: "Address",
+    PhoneNumber: "PhoneNumber",
+    ForgotPassword: "ForgotPassword",
+    AlreadyHaveAnAccount: "AlreadyHaveAnAccount",
+    Submit: "Submit"
+  },
 };
 
 export default Keywords;

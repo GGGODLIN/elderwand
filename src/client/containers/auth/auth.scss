@@ -1,11 +1,13 @@
 @import "src/client/styles/variable";
 
+.register.page,
 .login.page {
     align-items: center;
     display: flex;
     justify-content: center;
 }
 
+.register-form-card,
 .login-form-card {
     align-items: center;
     display: flex;
@@ -35,6 +37,12 @@
 
         a {
             color: $white;
+        }
+    }
+    .other-action{
+        a{
+            color: $black;
+            text-decoration: underline;
         }
     }
 }

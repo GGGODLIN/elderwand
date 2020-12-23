@@ -60,11 +60,11 @@ export const LoginPage: React.FC<LoginPageProps> = (props) => {
     client
       .post("/api/login", form)
       .then((res: AxiosResponse<any>) => {
+        console.log(res.data);
         if (200 <= res.status && res.status < 300) {
           window.location.replace("/admin");
           return;
         }
-        console.log(res.data);
       })
       .catch((err: AxiosError<any>) => {
         console.log(err.message);
@@ -153,14 +153,14 @@ export const LoginPage: React.FC<LoginPageProps> = (props) => {
                   {t(kws.LoginPage.Login)}
                 </Button>
 
-                <Grid container>
+                <Grid container className={"other-action"}>
                   <Grid item xs>
-                    <Link href="#" variant="body2">
-                      {t(kws.LoginPage.ForgotPassword) + " ?"}
+                    <Link href="/register" variant="body2">
+                      {t(kws.LoginPage.DoNotHaveAnAccount)}
                     </Link>
                   </Grid>
                   <Grid item>
-                    <Link href="#" variant="body2">
+                    <Link href="/password/reset" variant="body2">
                       {t(kws.LoginPage.ForgotPassword) + " ?"}
                     </Link>
                   </Grid>

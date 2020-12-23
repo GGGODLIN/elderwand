@@ -86,6 +86,7 @@
     "clear": "rm -rf .next/ .server/",
     "clear:lib": "yarn lib:unlink && rm -rf node_modules/",
     "clear:all": "yarn clear && yarn clear:lib && rm -f yarn.lock",
+    "lib:link:install": "cd ../G13.Web.Shared && yarn install",
     "lib:link:create": "cd ../G13.Web.Shared/dist && yarn link",
     "lib:link": "yarn link g13-web-shared",
     "lib:unlink": "yarn unlink g13-web-shared",

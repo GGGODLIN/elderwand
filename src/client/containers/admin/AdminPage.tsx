@@ -143,10 +143,6 @@ export const AdminPage: React.FC<AdminPageProps> = () => {
 
   const actions = clsx(["fab-actions", goto_top.show ? "with-goto-top" : ""]);
 
-  // useEffect(() => {
-  //   dispatch(UserSlice.refresh());
-  // }, []);
-
   return (
     <React.Fragment>
       <div className={classname}>

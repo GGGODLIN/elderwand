@@ -5,7 +5,7 @@ import {
     LoginVO,
     RegisterVO,
     UserDTO
-    } from 'g13-web-shared/server/user/models';
+} from 'g13-web-shared/server/user/models';
 import { PlatformEnum } from 'g13-web-shared/server/enums';
 import { QueryUserVO } from 'g13-web-shared/server/user/models/QueryUserVO';
 import { ServerEnvVar } from '../config/ServerEnvVar';
@@ -91,6 +91,7 @@ class UserMaintainUCO {
         const params = {
             token: token
         }
+        console.log(token);
 
         return new Promise(function (resolve, reject) {
             axios
@@ -114,12 +115,13 @@ class UserMaintainUCO {
 
             username: vo.username,
             password: vo.password,
-            platform_id: vo.platform_id,
-
+            
             email: vo.email,
             display_name: vo.display_name,
             tel: vo.tel,
             address: vo.address,
+            
+            platform_id: PlatformEnum.ElderWand,
         }
 
         return new Promise(function (resolve, reject) {

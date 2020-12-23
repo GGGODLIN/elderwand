@@ -13,7 +13,7 @@ main {
   //   width: 0;
   // }
 }
-body{
+body {
   overflow-y: hidden;
 }
 
@@ -62,6 +62,10 @@ header.app-bar {
         margin: 0 8px;
       }
     }
+  }
+
+  .open-drawer {
+    min-width: 60px;
   }
 
   .logo {

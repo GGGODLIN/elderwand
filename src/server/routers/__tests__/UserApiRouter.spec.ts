@@ -7,6 +7,7 @@ import { ServerEnvVar } from '../../config/ServerEnvVar';
 import { UserPaginationVM } from '../../../client/domain/user/UserVM';
 import { UserRoleEnum } from 'g13-web-shared/server/enums';
 import { UserRouter } from '../UserRouter';
+import { UserVM } from '../../../client/domain/user/UserVM';
 
 describe("User API Router", () => {
     let server: any;
@@ -46,7 +47,6 @@ describe("User API Router", () => {
     describe("POST /api/invite", () => {
         test("should return inviting user", async () => {
             const { id, token } = await GetUserToken(server);
-            // console.log(token)
 
             const agent = supertest.agent(server);
 
@@ -67,22 +67,20 @@ describe("User API Router", () => {
         });
     });
 
-    describe("POST /api/invite without email", () => {
+    describe("GET /api/invite/user without email", () => {
         test("should return inviting user", async () => {
-            const { id, token } = await GetUserToken(server);
-            // console.log(token)
+            // const { id, token } = await GetUserToken(server);
+            const { user, token } = await GetInvitingUserToken(server);
 
             const agent = supertest.agent(server);
 
-            const body = {
-                role_id: UserRoleEnum.ProjectEngineer
-            }
+            const url = `/api/invite/user`
 
             const result = await agent
-                .post(`/api/invite/user`)
+                .get(url)
                 .set("Accept", "application/json")
-                .set(AuthUtil.AuthHeader, AuthUtil.newBearer(token))
-                .send(body)
+                // .set(AuthUtil.AuthHeader, AuthUtil.newBearer(token))
+                .query({ token: encodeURIComponent(token) })
                 .expect(200);
 
             console.log(result.body);
@@ -107,8 +105,26 @@ async function GetUserToken(server: any): Promise<{ id: string, token: string }>
     const token = AuthUtil.parseBearer(result.headers[AuthUtil.AuthHeader]);
     const { id } = result.body as { id: string }
 
-    // console.log(token);
     expect(token).not.toBeNull();
 
     return { id, token };
+}
+
+async function GetInvitingUserToken(server: any): Promise<{ user: UserVM, token: string }> {
+    const { id, token } = await GetUserToken(server);
+
+    const agent = supertest.agent(server);
+
+    const body = {
+        role_id: UserRoleEnum.ProjectEngineer
+    }
+
+    const result = await agent
+        .post(`/api/invite/user`)
+        .set("Accept", "application/json")
+        .set(AuthUtil.AuthHeader, AuthUtil.newBearer(token))
+        .send(body)
+        .expect(200);
+
+    return { ...result.body };
 }

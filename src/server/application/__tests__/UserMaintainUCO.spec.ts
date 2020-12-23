@@ -185,7 +185,7 @@ describe("User Maintain UseCase", () => {
     });
   });
 
-  describe("POST /api/invite/user", () => {
+  describe("GET /api/invite/user", () => {
     test("get inviting user should return 200", async () => {
       const token = await GetInviteTenantToken()
         .then((result) => {
@@ -199,7 +199,9 @@ describe("User Maintain UseCase", () => {
       await new UserMaintainUCO()
         .getInvitingUser(token)
         .then((result) => {
+
           expect(result).not.toBeNull();
+          console.log(result);
         })
         .catch((err) => {
           expect(err).toBeNull();

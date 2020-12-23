@@ -17,7 +17,7 @@ COPY package.json package.json
 RUN rm -rf node_modules
 RUN yarn install
 
-# RUN rm yarn.lock
+RUN rm yarn.lock
 
 EXPOSE 3000
 

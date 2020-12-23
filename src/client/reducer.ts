@@ -1,3 +1,4 @@
+import { AuthSlice } from './slices/AuthSlice';
 import { combineReducers } from '@reduxjs/toolkit';
 import { FetchSlice } from './slices/FetchSlice';
 import { InitSlice } from './slices/InitSlice';
@@ -8,6 +9,7 @@ export const RootReducer = combineReducers({
     init: InitSlice.reducer,
     fetch: FetchSlice.reducer,
     layout: LayoutSlice.reducer,
+    auth: AuthSlice.reducer,
     user: UserSlice.reducer,
 });
 

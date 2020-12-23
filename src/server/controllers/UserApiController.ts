@@ -28,6 +28,7 @@ export class UserApiController {
                 });
         }
     }
+
     static queryUsers(): compose.Middleware<
         ParameterizedContext<any, Router.IRouterParamContext<any, {}>>> {
         return async (ctx) => {
@@ -49,7 +50,8 @@ export class UserApiController {
         }
     }
 
-    static inviteUser(): compose.Middleware<ParameterizedContext<any, Router.IRouterParamContext<any, {}>>> {
+    static inviteUser(): compose.Middleware<
+        ParameterizedContext<any, Router.IRouterParamContext<any, {}>>> {
         return async (ctx) => {
             const token = AuthUtil.getToken(ctx, ServerEnvVar.TokenKey);
             const jwt = AuthUtil.decode(token, ServerEnvVar.JwtSecret);
@@ -57,7 +59,7 @@ export class UserApiController {
             const body = ctx.request.body;
 
             console.log(body);
-            
+
             const vo: InviteUserVO = {
                 ...body,
                 parent_id: uid,
@@ -76,4 +78,26 @@ export class UserApiController {
                 });
         }
     }
+
+    static getInvitingUser(): compose.Middleware<
+        ParameterizedContext<any, Router.IRouterParamContext<any, {}>>> {
+        return async (ctx) => {
+
+            const { token } = ctx.request.query
+
+            console.log(token);
+
+            await new UserMaintainUCO().getInvitingUser(token)
+                .then((result) => {
+                    ctx.status = 200;
+                    ctx.body = result
+
+                }).catch((err) => {
+                    console.log(err);
+                    ctx.status = 400;
+                    ctx.body = err;
+                });
+        }
+    }
+
 }

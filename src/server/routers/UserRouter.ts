@@ -27,11 +27,11 @@ export class UserRouter {
             method: "POST",
             controller: UserApiController.inviteUser()
         },
-        // send: {
-        //     action: "/invite",
-        //     method: "GET",
-        //     controller: UserApiController.inviteUser()
-        // }
+        get_inviting_user: {
+            action: "/invite/user",
+            method: "GET",
+            controller: UserApiController.getInvitingUser()
+        },
     })
 
     static getRouters = () => {

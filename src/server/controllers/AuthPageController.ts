@@ -5,11 +5,20 @@ import { ParameterizedContext } from 'koa';
 import { ServerEnvVar } from '../config/ServerEnvVar';
 
 export class AuthPageController {
+
+    static register() {
+        return async (
+            ctx: ParameterizedContext<any, Router.IRouterParamContext<any, {}>>,
+            next: () => any
+        ) => {
+            await next();
+            return;
+        };
+    }
+
     static login() {
         return async (
-            ctx: ParameterizedContext<
-                any,
-                Router.IRouterParamContext<any, {}>
+            ctx: ParameterizedContext<any, Router.IRouterParamContext<any, {}>
             >,
             next: () => any
         ) => {

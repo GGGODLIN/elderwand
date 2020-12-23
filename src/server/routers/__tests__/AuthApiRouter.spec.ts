@@ -1,15 +1,13 @@
 import compose from 'koa-compose';
-import jwt from 'jsonwebtoken';
 import KoaServer from '../../server';
 import Router from 'koa-router';
 import supertest from 'supertest';
 import TestEnvVar from '../../../test/config/TestEnvVar';
 import { AuthApiController } from '../../controllers/AuthApiController';
-import { AuthJwtDTO } from 'g13-web-shared/server/user/models/JwtDTO';
-import { ServerEnvVar } from '../../config/ServerEnvVar';
-import { v4 as uuidv4 } from 'uuid';
 import { AuthUtil } from 'g13-web-shared/server/user';
+import { ServerEnvVar } from '../../config/ServerEnvVar';
 import { UserDTO } from 'g13-web-shared/server/user/models';
+import { v4 as uuidv4 } from 'uuid';
 
 describe("Verify JWT token", () => {
 
