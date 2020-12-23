@@ -5,14 +5,9 @@ yarn config set https-proxy http://npm-proxy-cache:8080
 yarn config set strict-ssl false
 yarn config list
 
-cd ../G13.Web.Shared/ && yarn install
-cd ../opt
-
-echo $(pwd)
-
-yarn init-link-package
-
-yarn clear:all
+yarn lib:unlink
+yarn lib:link:create
+yarn lib:link
 
 yarn web:install
 yarn web:dev

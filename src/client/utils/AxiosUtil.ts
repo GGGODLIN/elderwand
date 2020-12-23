@@ -25,6 +25,17 @@ export class AxiosUtil {
             location.replace("/logout");
         }
     }
+
+    static getOriginWithPort = () => {
+        if (!document) {
+            return "";
+        }
+
+        const origin = document.location.origin;
+        const port = document.location.port;
+
+        return port ? `${origin}:${port}` : origin
+    }
 }
 
 export interface PaginationParams {

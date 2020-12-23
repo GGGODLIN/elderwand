@@ -13,6 +13,7 @@ interface EnvironmentVariables {
     Version: string
     DomainName: string
     Host: string
+    
     Port: number
     TokenKey: string
     JwtSecret: string

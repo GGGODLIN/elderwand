@@ -52,7 +52,7 @@ export const LoginPage: React.FC<LoginPageProps> = (props) => {
     mode: "onChange",
   });
 
-  const origin = document.location.origin;
+  const origin = AxiosUtil.getOriginWithPort();
 
   const client = AxiosUtil.makeAxiosInstance(dispatch, origin);
 

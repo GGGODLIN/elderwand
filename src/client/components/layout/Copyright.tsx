@@ -1,15 +1,16 @@
 import React from "react";
-import { Box, Link, Typography } from "@material-ui/core";
+import { Box, Typography } from "@material-ui/core";
 import { ClientEnvVar } from "src/client/configs/ClientEnvVar";
 
 export interface CopyrightProps {}
 
-export const Copyright: React.FC<CopyrightProps> = (
-  props
-): React.ReactElement => {
+export const Copyright: React.FC<CopyrightProps> = (): React.ReactElement => {
+  const origin = document.location.origin;
+  const port = document.location.port;
+  const url = port ? `${origin}:${port}` : origin;
+
   const domain = ClientEnvVar.DomainName;
   const copyright = `Copyright ©`;
-  const url = `${document.location.origin}`;
   const year = `${new Date().getFullYear()}`;
   const version = ClientEnvVar.Version;
 

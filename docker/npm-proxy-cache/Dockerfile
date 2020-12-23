@@ -7,9 +7,6 @@ VOLUME /cache
 
 EXPOSE 8080
 
-RUN mkdir -p -m 0600 ~/.ssh && ssh-keyscan .visualstudio.com >> ~/.ssh/known_hosts
-
-
 CMD ["npm-proxy-cache", "-h", "0.0.0.0", "-s", "/cache", "-t", "2592000", "-e" ]
 
 #  npm-proxy-cache --help

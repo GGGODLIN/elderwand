@@ -32,7 +32,7 @@ export const AdminIndex: NextPage<AdminIndexProps> = (props) => {
   }, []);
 
   useEffect(() => {
-    const origin = location.origin;
+    const origin = AxiosUtil.getOriginWithPort();
 
     const client = AxiosUtil.makeAxiosInstance(dispatch, origin);
 

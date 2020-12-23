@@ -8,12 +8,14 @@ nginx-up:
 	docker-compose -f docker/nginx/docker-compose.yaml up -d
 nginx-renew:
 	docker-compose -f docker/nginx/docker-compose.yaml up -d --build --force-recreate
+	$(MAKE) nginx-logs
 nginx-down:
 	docker-compose -f docker/nginx/docker-compose.yaml down -v --remove-orphans 
 nginx-logs:
 	sh docker/nginx/logs.sh
 nginx-reload:
 	sh docker/nginx/reload.sh
+	$(MAKE) nginx-logs
 
 
 dev-up:
@@ -25,16 +27,17 @@ dev-build:
 dev-down:
 	docker-compose -f docker/web/docker-compose.yaml down -v --remove-orphans 
 dev-renew:
-	docker-compose -f docker/web/docker-compose.yaml down -v --remove-orphans
-	docker-compose -f docker/web/docker-compose.yaml up -d --build --force-recreate
+	$(MAKE) dev-down
+	$(MAKE) dev-build
+	$(MAKE) dev-up
 	$(MAKE) dev-logs
 dev-logs:
 	docker logs elderwand-web -f --tail=10
 
 
 npm-proxy-cache-up:
-	docker-compose -f docker/npm-proxy-cache/docker-compose.yaml up -d --force-recreate
+	docker-compose -f docker/npm-proxy-cache/docker-compose.yaml up -d --build --force-recreate
 set-proxy:
-	yarn config set proxy http://rex.com:28080
-	yarn config set https-proxy http://rex.com:28080
+	yarn config set proxy http://localhost:28080
+	yarn config set https-proxy http://localhost:28080
 	yarn config set strict-ssl false

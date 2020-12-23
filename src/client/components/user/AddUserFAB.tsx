@@ -87,7 +87,7 @@ export const InviteUserDialog: React.FC<{}> = () => {
     mode: "onChange",
   });
 
-  const origin = document.location.origin;
+  const origin = AxiosUtil.getOriginWithPort();
 
   const client = AxiosUtil.makeAxiosInstance(dispatch, origin);
 

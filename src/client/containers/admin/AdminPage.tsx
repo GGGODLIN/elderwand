@@ -123,7 +123,7 @@ export const AdminPage: React.FC<AdminPageProps> = () => {
   const classname = `${name} page`;
   const dispatch = useDispatch();
 
-  const origin = location.origin;
+  const origin = AxiosUtil.getOriginWithPort();
   const client = AxiosUtil.makeAxiosInstance(dispatch, origin);
 
   const { isLoading } = useSelector((state: RootState) => state.fetch);

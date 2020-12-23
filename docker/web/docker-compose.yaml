@@ -5,15 +5,17 @@ services:
     container_name: elderwand-web
     image: g13/elderwand-web
     build:
-      context: ../../../.
-      dockerfile: G13.ElderWand.Web/docker/web/Dockerfile
+      # context: .
+      # dockerfile: Dockerfile
+      context: ../../.
+      dockerfile: docker/web/Dockerfile
     volumes:
       - ../../.:/opt
-      - ~/Projects/G13.Web.Shared:/G13.Web.Shared
+      - ../../../G13.Web.Shared:/G13.Web.Shared
       - /tmp/elderwand-web/.next:/opt/.next
       - /tmp/elderwand-web/.temp:/opt/.temp
       - /tmp/elderwand-web/node_modules:/opt/node_modules
-      # - ~/tmp/web-shared/node_modules:/G13.Web.Shared/node_modules
+      - /tmp/web-shared/node_modules:/G13.Web.Shared/node_modules
     ports:
       - "3000:3000"
     env_file:
@@ -22,8 +24,8 @@ services:
       - black-hole-network
     external_links:
       - npm-proxy-cache
-      # - skymap-api   
-      # - elderwand-api
+    # - skymap-api
+    # - elderwand-api
     # restart: always
     command: "yarn web:dev:docker"
     # command: "yarn web:start:docker"
