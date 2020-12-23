@@ -6,13 +6,11 @@ yarn config set strict-ssl false
 yarn config list
 
 
-yarn clear:all
-# yarn web:install
-yarn install --force
+yarn lib:unlink
+yarn lib:link:create
+yarn lib:link
 
 yarn add --dev typescript @types/node   
+yarn web:install
 
-yarn next build 
-
-sh scripts/handel-shared.sh
-./node_modules/typescript/bin/tsc --project tsconfig.server.json
+yarn next build && ./node_modules/typescript/bin/tsc --project tsconfig.server.json
