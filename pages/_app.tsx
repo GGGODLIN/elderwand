@@ -14,7 +14,8 @@ import {
 } from "@material-ui/core";
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const prefersDarkMode = useMediaQuery("(prefers-color-scheme: light)");
+  // const prefersDarkMode = useMediaQuery("(prefers-color-scheme: light)");
+  const prefersDarkMode = false;
 
   // https://material-ui.com/customization/default-theme/
   const theme = React.useMemo(
