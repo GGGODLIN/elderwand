@@ -1,24 +1,46 @@
 import compose from 'koa-compose';
 import Router from 'koa-router';
-import UserMaintainUCO from '../application/UserMaintainUCO';
+import ProjectMaintainUCO from '../application/ProjectMaintainUCO';
 import { ParameterizedContext } from 'koa';
-import { ServerEnvVar } from '../config/ServerEnvVar';
 import { AuthUtil } from 'g13-web-shared/server/user';
-import { InviteUserVO } from 'g13-web-shared/server/user/models';
+import { ServerEnvVar } from '../config/ServerEnvVar';
 
-export class UserApiController {
-
-    static getUserByToken(): compose.Middleware<
+export class ProjectApiController {
+    static create(): compose.Middleware<
         ParameterizedContext<any, Router.IRouterParamContext<any, {}>>> {
 
         return async (ctx) => {
+
             const token = AuthUtil.getToken(ctx, ServerEnvVar.TokenKey);
             const jwt = AuthUtil.decode(token, ServerEnvVar.JwtSecret);
             const uid = jwt.data.id
 
-            await new UserMaintainUCO().getUser(uid)
+            const code = await new ProjectMaintainUCO()
+                .generateProjectCode({})
                 .then((result) => {
-                    // console.log(result)
+                    return result.code
+                }).catch((err) => {
+                    ctx.status = 400;
+                    ctx.body = err;
+                    return ""
+                });
+
+            if (!code) {
+                return;
+            }
+
+            const body = ctx.request["body"]
+            const vo = {
+                ...body,
+                owner_id: uid,
+                code: code
+            }
+
+            console.log(vo);
+
+            await new ProjectMaintainUCO()
+                .create(vo)
+                .then((result) => {
                     ctx.status = 200;
                     ctx.body = result
 
@@ -29,7 +51,46 @@ export class UserApiController {
         }
     }
 
-    static queryUsers(): compose.Middleware<
+    static get(): compose.Middleware<
+        ParameterizedContext<any, Router.IRouterParamContext<any, {}>>> {
+
+        return async (ctx) => {
+
+            const { pid, code } = ctx.params
+            const vo = {
+                pid, code
+            }
+
+            await new ProjectMaintainUCO().get(pid)
+                .then((result) => {
+                    ctx.status = 200;
+                    ctx.body = result
+
+                }).catch((err) => {
+                    ctx.status = 400;
+                    ctx.body = err;
+                });
+        }
+    }
+
+    static generateProjectCode(): compose.Middleware<
+        ParameterizedContext<any, Router.IRouterParamContext<any, {}>>> {
+
+        return async (ctx) => {
+
+            await new ProjectMaintainUCO().generateProjectCode({})
+                .then((result) => {
+                    ctx.status = 200;
+                    ctx.body = result
+
+                }).catch((err) => {
+                    ctx.status = 400;
+                    ctx.body = err;
+                });
+        }
+    }
+
+    static query(): compose.Middleware<
         ParameterizedContext<any, Router.IRouterParamContext<any, {}>>> {
         return async (ctx) => {
 
@@ -37,63 +98,12 @@ export class UserApiController {
                 ...ctx.query
             }
 
-            await new UserMaintainUCO().queryUsers(vo)
-                .then((result) => {
-                    // console.log(result)
-                    ctx.status = 200;
-                    ctx.body = result
-
-                }).catch((err) => {
-                    ctx.status = 400;
-                    ctx.body = err;
-                });
-        }
-    }
-
-    static inviteUser(): compose.Middleware<
-        ParameterizedContext<any, Router.IRouterParamContext<any, {}>>> {
-        return async (ctx) => {
-            const token = AuthUtil.getToken(ctx, ServerEnvVar.TokenKey);
-            const jwt = AuthUtil.decode(token, ServerEnvVar.JwtSecret);
-            const uid = jwt.data.id;
-            const body = ctx.request["body"];
-
-            console.log(body);
-
-            const vo: InviteUserVO = {
-                ...body,
-                parent_id: uid,
-                operator_id: uid,
-            }
-
-            await new UserMaintainUCO().inviteUser(vo)
-                .then((result) => {
-                    // console.log(result)
-                    ctx.status = 200;
-                    ctx.body = result
-
-                }).catch((err) => {
-                    ctx.status = 400;
-                    ctx.body = err;
-                });
-        }
-    }
-
-    static getInvitingUser(): compose.Middleware<
-        ParameterizedContext<any, Router.IRouterParamContext<any, {}>>> {
-        return async (ctx) => {
-
-            const { token } = ctx.request.query
-
-            console.log(token);
-
-            await new UserMaintainUCO().getInvitingUser(token)
+            await new ProjectMaintainUCO().query(vo)
                 .then((result) => {
                     ctx.status = 200;
                     ctx.body = result
 
                 }).catch((err) => {
-                    console.log(err);
                     ctx.status = 400;
                     ctx.body = err;
                 });

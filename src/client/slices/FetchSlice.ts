@@ -2,6 +2,7 @@ import produce from 'immer';
 import {
 
     ActionCreatorWithoutPayload,
+    ActionCreatorWithPayload,
     createSlice,
     PayloadAction,
     SliceCaseReducers,
@@ -52,7 +53,7 @@ export const FetchSlice = createSlice<
         end: (state: FetchState) => {
             return produce(state, (draft) => {
                 draft.queue.pop();
-                if(draft.queue.length <= 0){
+                if (draft.queue.length <= 0) {
                     draft.isLoading = false;
                 }
             });
@@ -60,10 +61,10 @@ export const FetchSlice = createSlice<
     },
 });
 
-const { success, fail } = FetchSlice.actions
-
+// const { success, fail } = FetchSlice.actions
 const start = FetchSlice.actions.start as ActionCreatorWithoutPayload<string>
-
 const end = FetchSlice.actions.end as ActionCreatorWithoutPayload<string>
+const success = FetchSlice.actions.success as ActionCreatorWithPayload<{ data: any | undefined }>
+const fail = FetchSlice.actions.fail as ActionCreatorWithPayload<{ error: any }>
 
 export default { start, end, success, fail }

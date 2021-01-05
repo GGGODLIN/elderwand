@@ -1,3 +1,4 @@
+import { ProjectSlice } from './slices/ProjectSlice';
 import { AuthSlice } from './slices/AuthSlice';
 import { combineReducers } from '@reduxjs/toolkit';
 import { FetchSlice } from './slices/FetchSlice';
@@ -11,6 +12,7 @@ export const RootReducer = combineReducers({
     layout: LayoutSlice.reducer,
     auth: AuthSlice.reducer,
     user: UserSlice.reducer,
+    project: ProjectSlice.reducer,
 });
 
 export type RootState = ReturnType<typeof RootReducer>;

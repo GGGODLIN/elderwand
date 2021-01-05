@@ -16,6 +16,7 @@
     "strict": false,
     "target": "es5",
     "traceResolution": true,
+    "allowSyntheticDefaultImports": true,
     "typeRoots": ["src/@types"]
   },
   "include": [

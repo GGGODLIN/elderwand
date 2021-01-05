@@ -2,10 +2,9 @@ import * as React from "react";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import clsx from "clsx";
 import LayoutSlice from "src/client/slices/LayoutSlice";
-import { Divider, Drawer } from "@material-ui/core";
+import { Divider, Drawer, Tooltip } from "@material-ui/core";
 import { Feature } from "src/client/domain/user/Feature";
 import { RootState } from "src/client/reducer";
-import { ScrollUtil } from "src/client/utils/ScrollUtil";
 import { Typography } from "@material-ui/core";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -16,12 +15,15 @@ import {
 export interface FeatureButtonProps {
   name: string;
   icon: FeatureIconEnum;
+  path: string;
 }
 
 export const FeatureButton: React.FC<FeatureButtonProps> = (props) => {
   return (
-    <a>
-      {FeatureIconMap[props.icon]}
+    <a href={props.path}>
+      <Tooltip title={props.name} placement="right">
+        {FeatureIconMap[props.icon]}
+      </Tooltip>
       <Typography>{props.name}</Typography>
     </a>
   );
@@ -32,10 +34,14 @@ export interface FeatureListProps {
 }
 
 export const FeatureList: React.FC<FeatureListProps> = (props) => {
-  const elements = props.features.map((item, idx) => {
+  const elements = props.features.map((feature, idx) => {
     return (
       <li key={idx}>
-        <FeatureButton name={item.name} icon={item.icon} />
+        <FeatureButton
+          name={feature.name}
+          icon={feature.icon}
+          path={feature.path}
+        />
       </li>
     );
   });
@@ -47,12 +53,10 @@ export const FeatureDrawer: React.FC<{}> = () => {
   const dispatch = useDispatch();
 
   const handleDrawerOpen = () => {
-    ScrollUtil.enableBodyScroll();
     dispatch(LayoutSlice.openFeatureDrawer(true));
   };
 
   const handleDrawerClose = () => {
-    ScrollUtil.enableBodyScroll();
     dispatch(LayoutSlice.openFeatureDrawer(false));
   };
 
@@ -71,12 +75,7 @@ export const FeatureDrawer: React.FC<{}> = () => {
 
   return (
     <React.Fragment>
-      <Drawer
-        className={drawer}
-        variant="permanent"
-        anchor={"left"}
-        onClick={handleDrawerOpen}
-      >
+      <Drawer className={drawer} variant="permanent" anchor={"left"}>
         <div className="drawer-header">
           <div className="logo">
             <a>{"LOGO"}</a>
@@ -88,7 +87,10 @@ export const FeatureDrawer: React.FC<{}> = () => {
           </div>
         </div>
         <Divider />
-        <FeatureList features={features} />
+        <div className="drawer-content">
+          <FeatureList features={features} />
+          <div className="fill" onClick={handleDrawerOpen} />
+        </div>
       </Drawer>
       <div className={mask} onClick={handleDrawerClose} />
     </React.Fragment>

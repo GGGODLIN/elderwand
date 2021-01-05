@@ -1,16 +1,27 @@
 @import "src/client/styles/variable";
 
-.user-card-grid {
+.fab.create-project-btn {
+    color: $white;
+    background-color: $bg-red-primary;
+    &:hover {
+        background-color: $bg-red-light;
+    }
+    svg {
+        font-size: 32px;
+    }
+}
+
+.project-card-grid {
     width: 100%;
     max-width: $max-width-1280;
     margin: 24px auto 0;
 }
 
-.user-card {
+.project-card {
     width: 280px;
     margin: 12px auto;
-    -webkit-box-shadow: 6px 5px 14px 2px rgba(76,175,80,0.55); 
-    box-shadow: 6px 5px 14px 2px rgba(76,175,80,0.55);
+    -webkit-box-shadow: 6px 5px 14px 2px rgba(76, 175, 80, 0.55);
+    box-shadow: 6px 5px 14px 2px rgba(76, 175, 80, 0.55);
 
     &.MuiPaper-rounded {
         border-radius: 12px;
@@ -30,7 +41,7 @@
         }
     }
     .card-header {
-        display: flex;
+        white-space: nowrap;
     }
 
     .card-avatar {
@@ -52,58 +63,22 @@
     }
 
     .card-content {
-        margin: 12px auto 0;
+        margin: 8px auto;
         div {
             width: 100%;
         }
     }
 
     .card-actions {
-        padding: 0 4px;
+        padding: 0 8px;
 
         button {
-            padding: 8px;
+            padding: 8px 4px;
         }
     }
 }
 
-.fab-actions {
-    position: fixed;
-    bottom: 64px;
-    right: 24px;
-    z-index: 1600;
-
-    margin-bottom: 0;
-    transition: margin-bottom 1000ms cubic-bezier(0.4, 0, 0.2, 1) 600ms;
-
-    &.with-goto-top {
-        margin-bottom: 68px;
-        transition: margin-bottom 600ms cubic-bezier(0.4, 0, 0.2, 1) 200ms;
-    }
-}
-
-.fab.add-user-btn {
-    background-color: $bg-red-primary;
-    color: $white;
-
-    &:hover {
-        background-color: $bg-red-light;
-    }
-
-    &.hidden {
-        display: none;
-    }
-
-    svg {
-        font-size: 28px;
-    }
-}
-
-.invite-user-dialog {
-    .MuiPaper-root {
-        height: 600px;
-    }
-
+.create-project-dialog {
     .MuiDialogTitle-root {
         color: $white;
         background-color: $bg-blue-dark;
@@ -126,7 +101,7 @@
         }
     }
 
-    .role-select {
+    .cloud-code-select {
         .MuiFormLabel-root {
             background: $white;
         }
@@ -136,20 +111,6 @@
         background-color: $white;
     }
 
-    .invite-url {
-        .MuiInputBase-root {
-            background-color: $bg-grey-light;
-            color: $bg-grey-primary;
-        }
-    }
-
-    .copy-btn {
-        position: relative;
-        width: auto;
-        float: right;
-        top: -46px;
-        right: 0px;
-    }
     .clear {
         color: $bg-green-dark;
     }
@@ -165,8 +126,4 @@
     .cancel {
         color: $bg-red-dark;
     }
-}
-
-[aria-labelledby="role_select_input_label"] {
-    min-width: 240px;
 }

@@ -3,7 +3,7 @@ import Router from 'koa-router';
 import UserMaintainUCO from '../application/UserMaintainUCO';
 import { AuthUserRepository } from 'g13-web-shared/server/user/repositories';
 import { AuthUtil } from 'g13-web-shared/server/user';
-import { InviteUserVO, LoginVO, UserDTO } from 'g13-web-shared/server/user/models';
+import { LoginVO, UserDTO } from 'g13-web-shared/server/user/models';
 import { ParameterizedContext } from 'koa';
 import { ServerEnvVar } from '../config/ServerEnvVar';
 
@@ -80,11 +80,10 @@ export class AuthApiController {
 
       // let token = ctx.request.token;
       // let token = AuthUtil.getToken(ctx, ServerEnvVar.TokenKey)
-      console.log(ctx.request.body);
+      // console.log(ctx.request["body"]);
 
-      const vo = {...ctx.request.body}
+      const vo = { ...ctx.request["body"] }
 
-     
       await new UserMaintainUCO().register(vo)
         .then((res) => {
 

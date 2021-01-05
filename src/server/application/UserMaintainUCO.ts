@@ -5,7 +5,7 @@ import {
     LoginVO,
     RegisterVO,
     UserDTO
-} from 'g13-web-shared/server/user/models';
+    } from 'g13-web-shared/server/user/models';
 import { PlatformEnum } from 'g13-web-shared/server/enums';
 import { QueryUserVO } from 'g13-web-shared/server/user/models/QueryUserVO';
 import { ServerEnvVar } from '../config/ServerEnvVar';

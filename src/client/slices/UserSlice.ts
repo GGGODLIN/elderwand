@@ -45,26 +45,32 @@ const features: Feature[] = [
     {
         name: "Dashboard",
         icon: FeatureIconEnum.Dashboard,
+        path: "/admin",
     },
     {
         name: "User Management",
         icon: FeatureIconEnum.User,
-    },
-    {
-        name: "Group Management",
-        icon: FeatureIconEnum.Group,
+        path: "/user", //TODO
     },
     {
         name: "Project Management",
         icon: FeatureIconEnum.Project,
+        path: "/project",
+    },
+    {
+        name: "Group Management",
+        icon: FeatureIconEnum.Group,
+        path: "/group",
     },
     {
         name: "Spatial Topology",
         icon: FeatureIconEnum.Spatial,
+        path: "/spatial",
     },
     {
         name: "Device Topology",
         icon: FeatureIconEnum.Device,
+        path: "/device",
     },
 ];
 

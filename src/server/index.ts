@@ -4,6 +4,7 @@ import NextJS from 'next';
 import { AuthMiddleware } from 'g13-web-shared/server/user/middlewares/AuthMiddleware';
 import { AuthRouter } from './routers/AuthRouter';
 import { AuthWhitelist } from './config/Whitelist';
+import { ProjectRouter } from './routers/ProjectRouter';
 import { RouterMiddleware } from 'g13-web-shared/server/shared/middlewares';
 import { ServerEnvVar } from './config/ServerEnvVar';
 import { UserRouter } from './routers/UserRouter';
@@ -26,6 +27,7 @@ app.prepare().then(() => {
       AuthMiddleware(ServerEnvVar.TokenKey, ServerEnvVar.JwtSecret, AuthWhitelist),
       AuthRouter.getRouters(),
       UserRouter.getRouters(),
+      ProjectRouter.getRouters(),
       RouterMiddleware.handlePageRouter(handle)
     ]).getInstance();
 

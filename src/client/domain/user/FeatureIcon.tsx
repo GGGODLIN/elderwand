@@ -17,8 +17,8 @@ export enum FeatureIconEnum {
 export const FeatureIconMap = {
   dashboard: <DashboardIcon />,
   user: <PeopleIcon />,
-  group: <GroupWorkIcon />,
   project: <AssignmentIndIcon />,
+  group: <GroupWorkIcon />,
   spatial: <HomeWorkIcon />,
   device: <DeviceHubIcon />,
 };

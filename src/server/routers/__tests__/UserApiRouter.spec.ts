@@ -71,7 +71,7 @@ describe("User API Router", () => {
         test("should return inviting user", async () => {
             // const { id, token } = await GetUserToken(server);
             const { user, token } = await GetInvitingUserToken(server);
-
+            
             const agent = supertest.agent(server);
 
             const url = `/api/invite/user`
