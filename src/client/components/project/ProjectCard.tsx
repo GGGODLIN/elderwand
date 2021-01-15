@@ -1,21 +1,20 @@
+import AccountBoxIcon from "@material-ui/icons/AccountBox";
 import ApartmentIcon from "@material-ui/icons/Apartment";
+import AttachFileIcon from "@material-ui/icons/AttachFile";
+import BuildIcon from "@material-ui/icons/Build";
 import BusinessIcon from "@material-ui/icons/Business";
 import clsx from "clsx";
 import ControlCameraIcon from "@material-ui/icons/ControlCamera";
+import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import HomeIcon from "@material-ui/icons/Home";
 import HomeWorkIcon from "@material-ui/icons/HomeWork";
-import React from "react";
-import StoreIcon from "@material-ui/icons/Store";
-import { ProjectVM } from "../../domain/project/ProjectVM";
-import { Card, Grid, IconButton, Typography } from "@material-ui/core";
-
-import BuildIcon from "@material-ui/icons/Build";
-import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
-import SettingsIcon from "@material-ui/icons/Settings";
-import VisibilityIcon from "@material-ui/icons/Visibility";
-import AccountBoxIcon from "@material-ui/icons/AccountBox";
-import AttachFileIcon from "@material-ui/icons/AttachFile";
 import PublishIcon from "@material-ui/icons/Publish";
+import React from "react";
+import SettingsIcon from "@material-ui/icons/Settings";
+import StoreIcon from "@material-ui/icons/Store";
+import VisibilityIcon from "@material-ui/icons/Visibility";
+import { Card, Grid, IconButton, Typography } from "@material-ui/core";
+import { ProjectVM } from "src/client/domain/project/ProjectVM";
 
 export interface ProjectCardProps {
   project: ProjectVM;

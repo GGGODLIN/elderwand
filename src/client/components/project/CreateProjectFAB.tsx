@@ -100,8 +100,8 @@ const SelectOptions: React.FC<{ options: SelectOption[] }> = (props) => {
 const TimeFormat = "YYYY-MM-DD";
 
 export const CreateProjectDialog: React.FC<{}> = () => {
-  const { t } = useTranslation();
   const dispatch = useDispatch();
+  const { t } = useTranslation();
 
   const name = "create-project-dialog";
   const form_id = "create-project-form";
@@ -110,7 +110,7 @@ export const CreateProjectDialog: React.FC<{}> = () => {
     (state: RootState) => state.project.create_dialog
   );
 
-  const classname = clsx(["fab", name, show ? "" : "open"]);
+  const classname = clsx([name]);
 
   const onSubmit = (form: CreateProjectForm) => {
     const origin = AxiosUtil.getOriginWithPort();
@@ -121,6 +121,8 @@ export const CreateProjectDialog: React.FC<{}> = () => {
       cloud_code_id: parseInt(form.cloud_code_id),
       expire_date: TimeUtil.parse(form.expire_date, TimeFormat).valueOf(),
     };
+
+    console.log(body);
 
     client
       .post<{ user: UserVM; token: string }>("/api/projects", body)

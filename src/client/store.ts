@@ -1,4 +1,4 @@
-import { RootReducer } from "src/client/reducer";
+import { RootReducer } from './reducer';
 
 import {
   configureStore,

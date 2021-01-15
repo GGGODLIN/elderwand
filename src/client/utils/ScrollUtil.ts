@@ -8,4 +8,10 @@ export class ScrollUtil {
         // document.body.style.overflowY = "auto";
         // document.body.style.height = "auto"
     }
+    static GotoTop = (selector: string) => {
+        setTimeout(() => {
+            const main = document.querySelector(selector);
+            main.scroll({ top: 0, behavior: "smooth" });
+        }, 100);
+    }
 }

@@ -11,14 +11,58 @@
     }
 }
 
+.fab.assign-user-btn {
+    background-color: $bg-blue-primary;
+    color: $white;
+
+    &:hover {
+        background-color: $bg-blue-light;
+    }
+
+    &.hidden {
+        display: none;
+    }
+
+    svg {
+        font-size: 28px;
+    }
+}
+
+.project-list-style-tab {
+    max-width: $max-width-1280;
+    margin: 0 auto;
+
+    .MuiButtonBase-root {
+        min-height: 32px;
+    }
+
+    .MuiTabs-flexContainer {
+        justify-content: flex-end;
+        margin: 12px 0 0;
+
+        button {
+            width: 48px;
+            min-width: auto;
+            padding: 0px;
+
+            &[aria-selected="true"] {
+                border-bottom: solid 4px $bg-green-primary;
+            }
+        }
+    }
+    .MuiTabs-indicator {
+        display: none;
+    }
+}
+
 .project-card-grid {
     width: 100%;
     max-width: $max-width-1280;
-    margin: 24px auto 0;
+    margin: 4px auto 0;
 }
 
 .project-card {
-    width: 280px;
+    width: 300px;
     margin: 12px auto;
     -webkit-box-shadow: 6px 5px 14px 2px rgba(76, 175, 80, 0.55);
     box-shadow: 6px 5px 14px 2px rgba(76, 175, 80, 0.55);
@@ -78,6 +122,29 @@
     }
 }
 
+.project-list-table {
+    max-width: $max-width-1280;
+    margin: 12px auto 0;
+
+    .MuiCard-root {
+        border-radius: 12px;
+    }
+
+    .ka-table {
+        width: 100%;
+    }
+
+    td::chil {
+        order: 1;
+    }
+
+    .row-actions {
+        button {
+            padding: 2px;
+        }
+    }
+}
+
 .create-project-dialog {
     .MuiDialogTitle-root {
         color: $white;
@@ -117,11 +184,43 @@
     .create {
         color: $bg-blue-dark;
     }
-    .edit {
-        color: $bg-orange-dark;
+    .cancel {
+        color: $bg-red-dark;
     }
-    .invite {
-        color: $bg-blue-dark;
+}
+
+.assign-user-to-project-dialog {
+    .MuiDialogTitle-root {
+        color: $white;
+        background-color: $bg-blue-dark;
+    }
+    .MuiCard-root {
+        min-height: 100%;
+    }
+
+    .MuiDialogContent-root {
+        display: flex;
+        justify-content: center;
+
+        .actions {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0 24px;
+        }
+    }
+    .available-user-list,
+    .allocate-user-list {
+        min-width: 360px;
+        overflow-y: auto;
+        border: $bg-green-primary solid 1px;
+    }
+
+    .clear {
+        color: $bg-green-dark;
+    }
+    .assign {
+        color: $bg-orange-dark;
     }
     .cancel {
         color: $bg-red-dark;

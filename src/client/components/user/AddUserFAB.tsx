@@ -1,20 +1,18 @@
-import clsx from 'clsx';
-import FileCopyIcon from '@material-ui/icons/FileCopy';
-import kws from 'src/client/configs/Keywords';
-import PersonAddIcon from '@material-ui/icons/PersonAdd';
-import UserSlice from 'src/client/slices/UserSlice';
-import { AxiosError, AxiosResponse } from 'axios';
-import { AxiosUtil } from 'src/client/utils/AxiosUtil';
-import { RootState } from 'src/client/reducer';
-import { useDispatch, useSelector } from 'react-redux';
-import { useForm } from 'react-hook-form';
-import { UserRoleEnum } from 'src/client/configs/Enum';
-import { UserVM } from 'src/client/domain/user/UserVM';
-import { useTranslation } from 'react-i18next';
-import React, {
-  ChangeEvent,
-  useEffect,
-} from "react";
+import clsx from "clsx";
+import FetchSlice from "src/client/slices/FetchSlice";
+import FileCopyIcon from "@material-ui/icons/FileCopy";
+import kws from "src/client/configs/Keywords";
+import PersonAddIcon from "@material-ui/icons/PersonAdd";
+import React, { ChangeEvent, useEffect } from "react";
+import UserSlice from "src/client/slices/UserSlice";
+import { AxiosError, AxiosResponse } from "axios";
+import { AxiosUtil } from "src/client/utils/AxiosUtil";
+import { RootState } from "src/client/reducer";
+import { useDispatch, useSelector } from "react-redux";
+import { useForm } from "react-hook-form";
+import { UserRoleEnum } from "src/client/configs/Enum";
+import { UserVM } from "src/client/domain/user/UserVM";
+import { useTranslation } from "react-i18next";
 import {
   Button,
   Dialog,
@@ -93,11 +91,10 @@ export const InviteUserDialog: React.FC<{}> = () => {
         dispatch(UserSlice.setInvitingUserInfo(res.data));
       })
       .catch((err: AxiosError<any>) => {
-        console.log(err.message);
-        if (err.isAxiosError) {
-          console.log(err.response.data);
-        }
         AxiosUtil.redirectUnAuthorization(err);
+      })
+      .finally(() => {
+        dispatch(FetchSlice.end());
       });
   };
 

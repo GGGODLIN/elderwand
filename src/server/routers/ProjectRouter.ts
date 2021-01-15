@@ -27,6 +27,11 @@ export class ProjectRouter {
             method: "GET",
             controller: ProjectApiController.generateProjectCode()
         },
+        assign: {
+            action: "/project/group/user",
+            method: "POST",
+            controller: ProjectApiController.assignUserToProjectGroup()
+        },
     })
 
     static getRouters = () => {

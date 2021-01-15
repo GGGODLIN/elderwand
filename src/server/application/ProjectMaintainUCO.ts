@@ -2,7 +2,6 @@ import axios, { AxiosError } from 'axios';
 import { PaginationResultModel } from '../models/PaginationModels';
 import { ProjectDTO } from '../domain/project/ProjectDTO';
 import { ServerEnvVar } from '../config/ServerEnvVar';
-import { AuthUtil } from 'g13-web-shared/server/user';
 
 const ApiHost = `http://${ServerEnvVar.SkymapApiHost}`
 
@@ -33,6 +32,12 @@ export const CloudCode = {
     Azure: 6,
     GoogleCloud: 7,
     Jinmao: 8,
+}
+
+export interface AssignUserVO {
+    projects: string[]
+    users: string[]
+    operator: string
 }
 
 class ProjectMaintainUCO {
@@ -84,6 +89,25 @@ class ProjectMaintainUCO {
         return new Promise(function (resolve, reject) {
             axios
                 .get<ProjectDTO>(url, { params })
+                .then((result) => {
+                    resolve(result.data)
+                })
+                .catch((err: AxiosError) => {
+                    reject(err.message)
+                });
+        })
+    }
+
+    async assignUserToProjectGroup(vo: AssignUserVO): Promise<any> {
+
+        const url = `${ApiHost}/api/project/group/user`;
+        const body = { ...vo }
+
+        console.log(body);
+
+        return new Promise(function (resolve, reject) {
+            axios
+                .post<any>(url, body)
                 .then((result) => {
                     resolve(result.data)
                 })

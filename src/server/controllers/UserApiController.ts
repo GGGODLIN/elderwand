@@ -56,10 +56,8 @@ export class UserApiController {
             const token = AuthUtil.getToken(ctx, ServerEnvVar.TokenKey);
             const jwt = AuthUtil.decode(token, ServerEnvVar.JwtSecret);
             const uid = jwt.data.id;
-            const body = ctx.request["body"];
-
-            console.log(body);
-
+            const body = ctx.request.body;
+            // console.log(body);
             const vo: InviteUserVO = {
                 ...body,
                 parent_id: uid,

@@ -1,21 +1,14 @@
+import { produce } from 'immer';
+import { ProjectPaginationVM } from '../domain/project/ProjectVM';
 import {
     ActionCreatorWithoutPayload,
     ActionCreatorWithPayload,
+    AnyAction,
     createSlice,
     PayloadAction,
+    Reducer,
     SliceCaseReducers,
 } from "@reduxjs/toolkit";
-import { produce } from 'immer';
-import { ProjectPaginationVM } from '../domain/project/ProjectVM';
-
-export interface ProjectState {
-    page_result?: ProjectPaginationVM
-    fetch_refresh?: boolean
-    create_dialog: {
-        show: boolean
-        form: CreateProjectFrom
-    }
-}
 
 interface CreateProjectFrom {
     name?: string;
@@ -24,8 +17,24 @@ interface CreateProjectFrom {
     // code?: string;
 }
 
-interface ProjectPaginationPayload {
+interface AssignUserFrom {
+
+}
+
+export interface ProjectState {
     page_result?: ProjectPaginationVM
+    fetch_refresh?: boolean
+    create_dialog: {
+        show: boolean
+        form: CreateProjectFrom
+    },
+    assign_user_dialog: {
+        show: boolean
+        form: AssignUserFrom
+    },
+    selected: string[]
+    start: string
+    checked: boolean
 }
 
 const getInitialState = (): ProjectState => {
@@ -42,12 +51,19 @@ const getInitialState = (): ProjectState => {
             show: false,
             form: {},
         },
+        assign_user_dialog: {
+            show: false,
+            form: {},
+        },
+        selected: [],
+        start: "",
+        checked: false
     };
 
     return state
 }
 
-export const ProjectSlice = createSlice<
+const ProjectSlice = createSlice<
     ProjectState,
     SliceCaseReducers<ProjectState>,
     string
@@ -69,6 +85,7 @@ export const ProjectSlice = createSlice<
         refresh: (state, action) => {
             return produce(state, (draft) => {
                 draft.fetch_refresh = true
+                draft.selected = []
             });
         },
         showCreateDialog: (state, action: PayloadAction<boolean>) => {
@@ -83,13 +100,80 @@ export const ProjectSlice = createSlice<
                 draft.create_dialog.form[name] = value
             });
         },
+        showAssignUserDialog: (state, action: PayloadAction<boolean>) => {
+            return produce(state, (draft) => {
+                draft.assign_user_dialog.show = action.payload
+            });
+        },
+        selectRow: (state, action: PayloadAction<string>) => {
+            return produce(state, (draft) => {
+                draft.selected.push(action.payload)
+            });
+        },
+        deselectRow: (state, action: PayloadAction<string>) => {
+            return produce(state, (draft) => {
+                draft.selected = state.selected.filter((item) => item != action.payload)
+            });
+        },
+        selectAllRows: (state, action: PayloadAction<string>) => {
+            return produce(state, (draft) => {
+                draft.selected = state.page_result.projects.map((item) => item.id);
+            });
+        },
+        deselectAllRows: (state, action: PayloadAction<string>) => {
+            return produce(state, (draft) => {
+                draft.selected = [];
+            });
+        },
+        setRangeStart: (state, action: PayloadAction<{ key: string, checked: boolean }>) => {
+            return produce(state, (draft) => {
+
+                draft.start = action.payload.key,
+                    draft.checked = action.payload.checked
+            });
+        },
+        setRangeSelect: (state, action: PayloadAction<string>) => {
+            return produce(state, (draft) => {
+
+                const projects = state.page_result.projects.map((item) => item.id);
+                const start = projects.indexOf(state.start);
+                const end = projects.indexOf(action.payload);
+                const items = projects.slice(start, end);
+
+                if (draft.checked) {
+                    draft.selected = Array.from(new Set([...state.selected.concat(items)]));
+                    return;
+                }
+
+                draft.selected = state.selected.filter((item) => items.indexOf(item) < 0);
+            });
+        },
     },
 })
 
-const fetch = ProjectSlice.actions.fetch as ActionCreatorWithPayload<ProjectPaginationVM>;
+type key = string | number;
+
+const reducer = ProjectSlice.reducer as Reducer<ProjectState, AnyAction>;
+
+const fetch = ProjectSlice.actions.fetch as ActionCreatorWithPayload<ProjectPaginationVM, string>;
 const refresh = ProjectSlice.actions.refresh as ActionCreatorWithoutPayload<string>;
+
+const selectRow = ProjectSlice.actions.selectRow as ActionCreatorWithPayload<key, string>;
+const deselectRow = ProjectSlice.actions.deselectRow as ActionCreatorWithPayload<key, string>;
+const selectAllRows = ProjectSlice.actions.selectAllRows as ActionCreatorWithoutPayload<string>;
+const deselectAllRows = ProjectSlice.actions.deselectAllRows as ActionCreatorWithoutPayload<string>;
+
+const setRangeStart = ProjectSlice.actions.setRangeStart as ActionCreatorWithPayload<{ key: key, checked: boolean }, string>;
+const setRangeSelect = ProjectSlice.actions.setRangeSelect as ActionCreatorWithPayload<key, string>;
 
 const showCreateDialog = ProjectSlice.actions.showCreateDialog as ActionCreatorWithPayload<boolean>;
 const changeCreateProjectForm = ProjectSlice.actions.changeCreateProjectForm as ActionCreatorWithPayload<{ name: string, value: any }>;
 
-export default { fetch, refresh, showCreateDialog, changeCreateProjectForm }
+const showAssignUserDialog = ProjectSlice.actions.showAssignUserDialog as ActionCreatorWithPayload<boolean>;
+
+export default {
+    reducer, fetch, refresh,
+    selectRow, deselectRow, selectAllRows, deselectAllRows, setRangeStart, setRangeSelect,
+    showCreateDialog, changeCreateProjectForm,
+    showAssignUserDialog
+}

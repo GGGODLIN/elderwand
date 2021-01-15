@@ -113,7 +113,6 @@ export const UserSlice = createSlice<
                 draft.user = user;
             });
         },
-
         fetch: (state, action: PayloadAction<UserPaginationPayload>) => {
             return produce(state, (draft) => {
                 const vm = {
