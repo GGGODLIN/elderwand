@@ -19,12 +19,7 @@ export default class KoaServer {
     ])
   }
 
-  use(middlewares:
-    Middleware<ParameterizedContext<any, IRouterParamContext<any, {}>>> |
-    Middleware<ParameterizedContext<{}, {}>> |
-    Middleware<ParameterizedContext<{}, {}>>[] |
-    Middleware<ParameterizedContext<any, IRouterParamContext<any, {}>>> |
-    Middleware<ParameterizedContext<any, IRouterParamContext<any, {}>>>[]) {
+  use(middlewares: any) {
 
     if (Array.isArray(middlewares)) {
       middlewares.forEach((mw: Middleware<any>) => {

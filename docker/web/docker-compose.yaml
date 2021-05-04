@@ -16,8 +16,8 @@ services:
       - /tmp/elderwand-web/.temp:/opt/.temp
       - /tmp/elderwand-web/node_modules:/opt/node_modules
       - /tmp/web-shared/node_modules:/G13.Web.Shared/node_modules
-    ports:
-      - "3000:3000"
+    # ports:
+    #   - "3000:3000"
     env_file:
       - ../../.env.development
     networks:
