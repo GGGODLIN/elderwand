@@ -32,6 +32,13 @@ export class AxiosUtil {
         }
 
         const origin = document.location.origin;
+
+        const regex = new RegExp(/:\d+$/)
+        console.log(regex.test(origin));
+        if (regex.test(origin)) {
+            return origin
+        }
+
         const port = document.location.port;
 
         return port ? `${origin}:${port}` : origin

@@ -41,9 +41,9 @@ function NextConfig() {
 
                 return config;
             },
-            experimental: {
-                cpus: 8
-            }
+            // experimental: {
+            //     cpus: 8
+            // }
         };
 
         console.log({ config });

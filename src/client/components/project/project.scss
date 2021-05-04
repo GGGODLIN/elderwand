@@ -3,9 +3,11 @@
 .fab.create-project-btn {
     color: $white;
     background-color: $bg-red-primary;
+    
     &:hover {
         background-color: $bg-red-light;
     }
+
     svg {
         font-size: 32px;
     }
@@ -134,7 +136,7 @@
         width: 100%;
     }
 
-    td::chil {
+    td::child {
         order: 1;
     }
 

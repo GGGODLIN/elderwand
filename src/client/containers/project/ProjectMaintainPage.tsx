@@ -8,9 +8,10 @@ import { AssignUserToProjectGroupFAB } from "src/client/components/project/Assig
 import { AxiosError, AxiosInstance } from "axios";
 import { AxiosUtil } from "src/client/utils/AxiosUtil";
 import { CreateProjectFAB } from "src/client/components/project/CreateProjectFAB";
+import { PaginationVM } from "src/client/models/PaginationVM";
 import { ProjectCardGrid } from "src/client/components/project/ProjectCardGrid";
 import { ProjectListTable } from "src/client/components/project/ProjectListTable";
-import { ProjectPaginationVM } from "src/client/domain/project/ProjectVM";
+import { ProjectVM } from "src/client/domain/project/ProjectVM";
 import { RootState } from "src/client/reducer";
 import { ScrollUtil } from "src/client/utils/ScrollUtil";
 import { Tab, Tabs } from "@material-ui/core";
@@ -37,7 +38,7 @@ const fetchProjectOnInitial = (
 
     if (refresh) {
       client
-        .get<ProjectPaginationVM>("/api/projects", { params: params })
+        .get<PaginationVM<ProjectVM>>("/api/projects", { params: params })
         .then((res) => {
           console.log(res.data);
           if (res.data.offset === 0) {
@@ -101,7 +102,7 @@ export const ProjectMaintainPage: React.FC<ProjectMaintainPageProps> = () => {
   /* Projects fetch */
   const { projects, refresh, selected } = useSelector((state: RootState) => {
     return {
-      ...state.project.page_result,
+      projects:state.project.page_result.results,
       selected: state.project.selected,
       refresh: state.project.fetch_refresh,
     };

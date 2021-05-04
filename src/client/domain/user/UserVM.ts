@@ -26,9 +26,10 @@ export interface UserVM {
     updated_at: number;
 }
 
-export interface UserPaginationVM {
-    limit: number
-    offset: number
-    total: number
-    users: UserVM[]
-}
+// TODO remove and change to use PaginationVM
+// export interface UserPaginationVM {
+//     limit: number
+//     offset: number
+//     total: number
+//     users: UserVM[]
+// }

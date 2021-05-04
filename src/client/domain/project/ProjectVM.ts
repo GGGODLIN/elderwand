@@ -1,10 +1,3 @@
-export interface ProjectPaginationVM {
-    offset: number;
-    limit: number;
-    total: number;
-    projects: ProjectVM[];
-}
-
 export interface ProjectVM {
     selected?: boolean;
     id: string;

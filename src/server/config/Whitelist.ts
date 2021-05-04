@@ -1,6 +1,8 @@
 export const AuthWhitelist: RegExp[] = [
     /^\/$/, // index
     /^\/_next\/static/,
+    /^\/space/,
+    /^\/topology/,
     /^\/login/,
     /^\/logout/,
     /^\/register/,

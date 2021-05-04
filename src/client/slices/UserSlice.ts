@@ -1,7 +1,8 @@
 import produce from 'immer';
 import { Feature } from '../domain/user/Feature';
 import { FeatureIconEnum } from '../domain/user/FeatureIcon';
-import { UserPaginationVM, UserVM } from '../domain/user/UserVM';
+import { PaginationVM } from '../models/PaginationVM';
+import { UserVM } from '../domain/user/UserVM';
 import {
     ActionCreatorWithoutPayload,
     ActionCreatorWithPayload,
@@ -13,7 +14,7 @@ import {
 export interface UserState {
     user?: UserVM
     features: Feature[]
-    page_result?: UserPaginationVM
+    page_result?: PaginationVM<UserVM>
     fetch_user_refresh?: boolean
     invite_dialog?: {
         show: boolean
@@ -32,7 +33,7 @@ export interface UserPayload {
 }
 
 export interface UserPaginationPayload {
-    page_result?: UserPaginationVM
+    page_result?: PaginationVM<UserVM>
 }
 
 const defaultInviteForm = {
@@ -58,19 +59,24 @@ const features: Feature[] = [
         path: "/project",
     },
     {
-        name: "Group Management",
-        icon: FeatureIconEnum.Group,
-        path: "/group",
-    },
-    {
         name: "Spatial Topology",
         icon: FeatureIconEnum.Spatial,
-        path: "/spatial",
+        path: "/space",
     },
     {
         name: "Device Topology",
         icon: FeatureIconEnum.Device,
         path: "/device",
+    },
+    {
+        name: "Group Management",
+        icon: FeatureIconEnum.Group,
+        path: "/group",
+    },
+    {
+        name: "Data Migration",
+        icon: FeatureIconEnum.Migration,
+        path: "/migration",
     },
 ];
 
@@ -83,7 +89,7 @@ const getInitialState = (): UserState => {
             offset: 0,
             limit: 50,
             total: 0,
-            users: []
+            results: []
         },
         invite_dialog: {
             show: false,
@@ -117,11 +123,11 @@ export const UserSlice = createSlice<
             return produce(state, (draft) => {
                 const vm = {
                     ...action.payload
-                } as UserPaginationVM;
+                } as PaginationVM<UserVM>;
 
                 draft.fetch_user_refresh = false
-                draft.page_result.users = vm.users;
-                draft.page_result.offset = vm.offset + vm.users.length;
+                draft.page_result.results = vm.results;
+                draft.page_result.offset = vm.offset + vm.results.length;
                 draft.page_result.limit = vm.limit;
                 draft.page_result.total = vm.total;
             });
@@ -130,12 +136,12 @@ export const UserSlice = createSlice<
             return produce(state, (draft) => {
                 const vm = {
                     ...action.payload
-                } as UserPaginationVM;
+                } as PaginationVM<UserVM>;
 
-                const users = state.page_result.users.concat(vm.users);
+                const users = state.page_result.results.concat(vm.results);
 
-                draft.page_result.users = users;
-                draft.page_result.offset = vm.offset + vm.users.length;
+                draft.page_result.results = users;
+                draft.page_result.offset = vm.offset + vm.results.length;
                 draft.page_result.limit = vm.limit;
                 draft.page_result.total = vm.total;
             });
@@ -175,8 +181,8 @@ export const UserSlice = createSlice<
 })
 
 const initial = UserSlice.actions.initial as ActionCreatorWithPayload<UserPayload>;
-const fetch = UserSlice.actions.fetch as ActionCreatorWithPayload<UserPaginationVM>;
-const push = UserSlice.actions.push as ActionCreatorWithPayload<UserPaginationVM>;
+const fetch = UserSlice.actions.fetch as ActionCreatorWithPayload<PaginationVM<UserVM>>;
+const push = UserSlice.actions.push as ActionCreatorWithPayload<PaginationVM<UserVM>>;
 const refresh = UserSlice.actions.refresh as ActionCreatorWithoutPayload<string>;
 
 const showInviteDialog = UserSlice.actions.showInviteDialog as ActionCreatorWithPayload<boolean>;

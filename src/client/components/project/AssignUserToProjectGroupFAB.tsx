@@ -14,7 +14,7 @@ import { AxiosUtil } from "src/client/utils/AxiosUtil";
 import { IconButton } from "@material-ui/core";
 import { RootState } from "src/client/reducer";
 import { useDispatch, useSelector } from "react-redux";
-import { UserPaginationVM } from "src/client/domain/user/UserVM";
+// import { PaginationVM } from "src/client/models/user/PaginationVM";
 import {
   Button,
   Dialog,
@@ -24,6 +24,7 @@ import {
   Fab,
   Zoom,
 } from "@material-ui/core";
+import { UserVM } from "src/client/domain/user/UserVM";
 
 interface AssignUserToProjectGroupFABProp {
   disable: boolean;
@@ -36,9 +37,8 @@ export const AssignUserToProjectGroupFAB: React.FC<AssignUserToProjectGroupFABPr
 ) => {
   const dispatch = useDispatch();
 
-  const name = "assign-user-btn";
-
   const display = true;
+  const name = "assign-user-btn";
   const classname = clsx(["fab", name, display ? "" : "hidden"]);
 
   const handleOpenDialog = () => {
@@ -167,9 +167,8 @@ export const AssignUserToProjectDialog: React.FC<{}> = () => {
     };
 
     client
-      .get<UserPaginationVM>("/api/users", { params: params })
+      .get<PaginationVM<UserVM>>("/api/users", { params: params })
       .then((res) => {
-        // console.log(res.data);
         dispatch(AvailableUserSlice.fetch(res.data));
       })
       .catch((err: AxiosError) => {

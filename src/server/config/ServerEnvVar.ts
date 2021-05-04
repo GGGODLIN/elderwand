@@ -13,11 +13,14 @@ interface EnvironmentVariables {
     Version: string
     DomainName: string
     Host: string
-    
+
     Port: number
     TokenKey: string
     JwtSecret: string
-    SkymapApiHost: any;
+    AuthTokenTTL: string
+
+    SkymapApiHost: string;
+    I18nGoogleSheetID: string;
 }
 
 export const ServerEnvVar: EnvironmentVariables = {
@@ -31,5 +34,9 @@ export const ServerEnvVar: EnvironmentVariables = {
     // Version: process.env.VERSION || ""
     TokenKey: process.env["TOKEN_KEY"] || 'token',
     JwtSecret: process.env["JWT_SECRET"] || 'secret',
-    SkymapApiHost: process.env["SKYMAP_API_HOST"] || "localhost"
+    AuthTokenTTL: process.env["AUTH_TOKEN_TTL"] || "1h",
+
+    SkymapApiHost: process.env["SKYMAP_API_HOST"] || "localhost",
+
+    I18nGoogleSheetID: process.env["GOOGLE_SHEET_ICONS_ID"] || '',
 }

@@ -31,7 +31,7 @@ export class AuthApiController {
             username: user.username,
           };
 
-          const token = AuthUtil.sign(data, ServerEnvVar.JwtSecret);
+          const token = AuthUtil.sign(data, ServerEnvVar.JwtSecret, "1d");
 
           AuthUserRepository.login(token, ServerEnvVar.JwtSecret)
           // AuthUserRepository.display()

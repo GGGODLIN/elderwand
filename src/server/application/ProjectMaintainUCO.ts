@@ -1,5 +1,5 @@
 import axios, { AxiosError } from 'axios';
-import { PaginationResultModel } from '../models/PaginationModels';
+import { PaginationDTO } from '../models/PaginationDTO';
 import { ProjectDTO } from '../domain/project/ProjectDTO';
 import { ServerEnvVar } from '../config/ServerEnvVar';
 
@@ -117,7 +117,7 @@ class ProjectMaintainUCO {
         })
     }
 
-    async query(vo: QueryProjectVO): Promise<PaginationResultModel<ProjectDTO>> {
+    async query(vo: QueryProjectVO): Promise<PaginationDTO<ProjectDTO>> {
 
         const url = `${ApiHost}/api/projects`;
         const params = {
@@ -126,7 +126,7 @@ class ProjectMaintainUCO {
 
         return new Promise(function (resolve, reject) {
             axios
-                .get<PaginationResultModel<ProjectDTO>>(url, { params })
+                .get<PaginationDTO<ProjectDTO>>(url, { params })
                 .then((result) => {
                     resolve(result.data)
                 })

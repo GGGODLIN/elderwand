@@ -1,0 +1,232 @@
+[{
+        "displayName": "AD_TW",
+        "projectCode": "8TiG",
+        "projectName": "AD_TW",
+        "cloudCode": 1,
+        "owner": "smarthome"
+    },
+    {
+        "displayName": "AD_SH",
+        "projectCode": "3E0t",
+        "projectName": "AD_SH",
+        "cloudCode": 2,
+        "owner": "smarthome"
+    },
+    {
+        "displayName": "Test",
+        "projectCode": "shx5",
+        "projectName": "Test",
+        "cloudCode": 2,
+        "owner": "unknown"
+    },
+    {
+        "displayName": "AD_ALLEN",
+        "projectCode": "GMWv",
+        "projectName": "AD_ALLEN",
+        "cloudCode": 1,
+        "owner": "unknown"
+    },
+    {
+        "displayName": "AD_EDGAR",
+        "projectCode": "9WY8",
+        "projectName": "AD_EDGAR",
+        "cloudCode": 1,
+        "owner": "smarthome"
+    },
+    {
+        "displayName": "AD_TW_2",
+        "projectCode": "rQiR",
+        "projectName": "AD_TW_2",
+        "cloudCode": 1,
+        "owner": "smarthome"
+    },
+    {
+        "displayName": "AD_HSIEH",
+        "projectCode": "D3LM",
+        "projectName": "AD_HSIEH",
+        "cloudCode": 2,
+        "owner": "smarthome"
+    },
+    {
+        "displayName": "浦江項目",
+        "projectCode": "Mi1P",
+        "projectName": "AD_BRAGG",
+        "cloudCode": 1,
+        "owner": "smarthome"
+    },
+    {
+        "displayName": "環保大樓項目",
+        "projectCode": "mbOR",
+        "projectName": "環保大樓項目",
+        "cloudCode": 1,
+        "owner": "smarthome"
+    },
+    {
+        "displayName": "科創中心項目",
+        "projectCode": "PLrV",
+        "projectName": "科創中心項目",
+        "cloudCode": 1,
+        "owner": "smarthome"
+    },
+    {
+        "displayName": "AD_test1",
+        "projectCode": "T2Qy",
+        "projectName": "AD_test1",
+        "cloudCode": 1,
+        "owner": "smarthome"
+    },
+    {
+        "displayName": "123",
+        "projectCode": "QJkJ",
+        "projectName": "123",
+        "cloudCode": 1,
+        "owner": "smarthome"
+    },
+    {
+        "displayName": "tpe_test",
+        "projectCode": "1HM6",
+        "projectName": "tpe_test",
+        "cloudCode": 5,
+        "owner": "smarthome"
+    },
+    {
+        "displayName": "中通服Test(不能刪)",
+        "projectCode": "OJ9Y",
+        "projectName": "中通服Test",
+        "cloudCode": 2,
+        "owner": "smarthome"
+    },
+    {
+        "displayName": "help",
+        "projectCode": "zI1P",
+        "projectName": "help",
+        "cloudCode": 2,
+        "owner": "blake_test"
+    },
+    {
+        "displayName": "help2",
+        "projectCode": "qjOk",
+        "projectName": "help2",
+        "cloudCode": 5,
+        "owner": "blake_test"
+    },
+    {
+        "displayName": "12232322",
+        "projectCode": "lM9C",
+        "projectName": "12232322",
+        "cloudCode": 2,
+        "owner": "smarthome"
+    },
+    {
+        "displayName": "ghfghdfg",
+        "projectCode": "USED",
+        "projectName": "ghfghdfg",
+        "cloudCode": 1,
+        "owner": "smarthome"
+    },
+    {
+        "displayName": "城寓超级社区·上海华山路店(环保大楼)",
+        "projectCode": "MjnQ",
+        "projectName": "环保大楼",
+        "cloudCode": 2,
+        "owner": "wonder"
+    },
+    {
+        "displayName": "Zero_test",
+        "projectCode": "kqqd",
+        "projectName": "Zero_test",
+        "cloudCode": 2,
+        "owner": "smarthome"
+    },
+    {
+        "displayName": "金茂test",
+        "projectCode": "Xccj",
+        "projectName": "金茂test",
+        "cloudCode": 2,
+        "owner": "smarthome"
+    },
+    {
+        "displayName": "城方活力社区-城寓江月路店  (浦江)",
+        "projectCode": "lwQF",
+        "projectName": "浦江世博家园",
+        "cloudCode": 2,
+        "owner": "wonder"
+    },
+    {
+        "displayName": "Demo",
+        "projectCode": "obtC",
+        "projectName": "Demo",
+        "cloudCode": 2,
+        "owner": "wonder"
+    },
+    {
+        "displayName": "亦备德",
+        "projectCode": "bOka",
+        "projectName": "亦备德",
+        "cloudCode": 1,
+        "owner": "smarthome"
+    },
+    {
+        "displayName": "康定路1299弄小区",
+        "projectCode": "fETH",
+        "projectName": "康定路1299弄小区",
+        "cloudCode": 2,
+        "owner": "wonder"
+    },
+    {
+        "displayName": "Sirius Demo (不可刪)",
+        "projectCode": "SR6G",
+        "projectName": "Sirius Demo",
+        "cloudCode": 8,
+        "owner": "smarthome"
+    },
+    {
+        "displayName": "展示项目",
+        "projectCode": "xpEx",
+        "projectName": "展示项目",
+        "cloudCode": 8,
+        "owner": "cjh"
+    },
+    {
+        "displayName": "Test",
+        "projectCode": "h2jm",
+        "projectName": "Test",
+        "cloudCode": 1,
+        "owner": "cjh"
+    },
+    {
+        "displayName": "DEMO",
+        "projectCode": "mgdS",
+        "projectName": "DEMO",
+        "cloudCode": 1,
+        "owner": "smarthome"
+    },
+    {
+        "displayName": "顺义实验室AI+运行流程测试项目",
+        "projectCode": "PR47",
+        "projectName": "测试用项目",
+        "cloudCode": 1,
+        "owner": "cjh"
+    },
+    {
+        "displayName": "范辉用测试项目",
+        "projectCode": "rNH7",
+        "projectName": "范辉用测试项目",
+        "cloudCode": 1,
+        "owner": "cjh"
+    },
+    {
+        "displayName": "黄山亚朵",
+        "projectCode": "VuU2",
+        "projectName": "黄山亚朵",
+        "cloudCode": 1,
+        "owner": "smarthome"
+    },
+    {
+        "displayName": "Sation",
+        "projectCode": "bsLH",
+        "projectName": "Sation",
+        "cloudCode": 1,
+        "owner": "smarthome"
+    }
+]

@@ -122,7 +122,7 @@ export const CreateProjectDialog: React.FC<{}> = () => {
       expire_date: TimeUtil.parse(form.expire_date, TimeFormat).valueOf(),
     };
 
-    console.log(body);
+    // console.log(body);
 
     client
       .post<{ user: UserVM; token: string }>("/api/projects", body)

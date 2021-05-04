@@ -1,5 +1,7 @@
+import { PaginationVM } from 'src/client/models/PaginationVM';
 import { produce } from 'immer';
-import { ProjectPaginationVM } from '../domain/project/ProjectVM';
+import { ProjectVM } from 'src/client/domain/project/ProjectVM';
+
 import {
     ActionCreatorWithoutPayload,
     ActionCreatorWithPayload,
@@ -22,7 +24,7 @@ interface AssignUserFrom {
 }
 
 export interface ProjectState {
-    page_result?: ProjectPaginationVM
+    page_result?: PaginationVM<ProjectVM>
     fetch_refresh?: boolean
     create_dialog: {
         show: boolean
@@ -44,7 +46,7 @@ const getInitialState = (): ProjectState => {
             offset: 0,
             limit: 60,
             total: 0,
-            projects: [],
+            results: [],
         },
         fetch_refresh: true,
         create_dialog: {
@@ -71,15 +73,15 @@ const ProjectSlice = createSlice<
     name: "project",
     initialState: getInitialState(),
     reducers: {
-        fetch: (state, action: PayloadAction<ProjectPaginationVM>) => {
+        fetch: (state, action: PayloadAction<PaginationVM<ProjectVM>>) => {
             return produce(state, (draft) => {
                 const vm = action.payload;
 
                 draft.fetch_refresh = false
-                draft.page_result.offset = vm.offset + vm.projects.length;
+                draft.page_result.offset = vm.offset + vm.results.length;
                 draft.page_result.limit = vm.limit;
                 draft.page_result.total = vm.total;
-                draft.page_result.projects = vm.projects;
+                draft.page_result.results = vm.results;
             });
         },
         refresh: (state, action) => {
@@ -117,7 +119,7 @@ const ProjectSlice = createSlice<
         },
         selectAllRows: (state, action: PayloadAction<string>) => {
             return produce(state, (draft) => {
-                draft.selected = state.page_result.projects.map((item) => item.id);
+                draft.selected = state.page_result.results.map((item) => item.id);
             });
         },
         deselectAllRows: (state, action: PayloadAction<string>) => {
@@ -135,7 +137,7 @@ const ProjectSlice = createSlice<
         setRangeSelect: (state, action: PayloadAction<string>) => {
             return produce(state, (draft) => {
 
-                const projects = state.page_result.projects.map((item) => item.id);
+                const projects = state.page_result.results.map((item) => item.id);
                 const start = projects.indexOf(state.start);
                 const end = projects.indexOf(action.payload);
                 const items = projects.slice(start, end);
@@ -155,7 +157,7 @@ type key = string | number;
 
 const reducer = ProjectSlice.reducer as Reducer<ProjectState, AnyAction>;
 
-const fetch = ProjectSlice.actions.fetch as ActionCreatorWithPayload<ProjectPaginationVM, string>;
+const fetch = ProjectSlice.actions.fetch as ActionCreatorWithPayload<PaginationVM<ProjectVM>, string>;
 const refresh = ProjectSlice.actions.refresh as ActionCreatorWithoutPayload<string>;
 
 const selectRow = ProjectSlice.actions.selectRow as ActionCreatorWithPayload<key, string>;

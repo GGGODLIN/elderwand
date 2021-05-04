@@ -11,3 +11,11 @@ export const ClientEnvVar: EnvironmentVariables = {
     DomainName: process.env["DOMAIN_NAME"] || "sample.com",
     Host: process.env["HOST"] || "localhost",
 }
+
+interface DevEnvironmentVariables {
+    MigrationSourceMongoUri: string
+}
+
+export const DevEnvVar: DevEnvironmentVariables = {
+    MigrationSourceMongoUri: process.env["MIGRATION_SOURCE_MONGO_URI"] || "",
+}

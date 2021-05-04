@@ -8,7 +8,7 @@ import { Dispatch } from "redux";
 import { RootState } from "src/client/reducer";
 import { useDispatch, useSelector } from "react-redux";
 import { UserCardList } from "src/client/components/user/UserCardList";
-import { UserPaginationVM } from "src/client/domain/user/UserVM";
+import { UserVM } from "src/client/domain/user/UserVM";
 
 let PreviousParams: {
   limit: number;
@@ -23,7 +23,7 @@ const fetchUser = (
   callback: Function
 ) => {
   client
-    .get<UserPaginationVM>("/api/users", { params: params })
+    .get<any>("/api/users", { params: params })
     .then((res) => {
       if (res.data.offset === 0) {
         setTimeout(() => {
@@ -51,7 +51,7 @@ const fetchUserOnInitial = (
     };
 
     if (refresh) {
-      fetchUser(client, params, (payload: UserPaginationVM) => {
+      fetchUser(client, params, (payload: any) => {
         dispatch(UserSlice.fetch(payload));
       });
     }
@@ -107,7 +107,7 @@ const fetchUserOnScroll = (
 
       main.onscroll = () => {};
 
-      fetchUser(client, params, (payload: UserPaginationVM) => {
+      fetchUser(client, params, (payload: any) => {
         dispatch(UserSlice.push(payload));
       });
     };
@@ -127,9 +127,15 @@ export const UserMaintainPage: React.FC<UserMaintainPageProps> = () => {
   const client = AxiosUtil.makeAxiosInstance(dispatch, origin);
 
   const { isLoading } = useSelector((state: RootState) => state.fetch);
-  const { users, limit, offset, total } = useSelector(
-    (state: RootState) => state.user.page_result
-  );
+  const { users, limit, offset, total } = useSelector((state: RootState) => {
+    const pvm = state.user.page_result;
+    return {
+      offset: pvm.offset,
+      limit: pvm.limit,
+      total: pvm.total,
+      users: pvm.results,
+    };
+  });
 
   const { refresh } = useSelector((state: RootState) => {
     return { refresh: state.user.fetch_user_refresh };

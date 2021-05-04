@@ -1,0 +1,2973 @@
+[
+    {
+      "id": "sp-kSp-Hpb-V9u-b25-emm-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-Hpb-V9u-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-Hpb-2pE-3sh-dqh-0-0-0-0-MjnQ",
+      "icon": "b-23.png",
+      "name": "餐厅",
+      "parent_id": "sp-kSp-Hpb-2pE-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-QTD-Ged-bYI-0-0-0-0-MjnQ",
+      "icon": "b-15.png",
+      "name": "大厅",
+      "parent_id": "sp-kSp-qt4-QTD-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-uwD-5ea-zVR-E9w-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "厕所",
+      "parent_id": "sp-kSp-uwD-5ea-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-Hpb-V9u-b25-Uch-0-0-0-0-MjnQ",
+      "icon": "b-23.png",
+      "name": "餐厅",
+      "parent_id": "sp-kSp-Hpb-V9u-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-8h8-yty-WnQ-6ph-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "厕所",
+      "parent_id": "sp-kSp-8h8-yty-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-lC6-0-0-0-0-0-0-MjnQ",
+      "icon": "b-3.png",
+      "name": "209户型",
+      "bgPic": "sp-kSp-qt4-lC6-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-qt4-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-fzQ-QnW-qde-3xR-0-0-0-0-MjnQ",
+      "icon": "b-23.png",
+      "name": "餐厅",
+      "parent_id": "sp-kSp-fzQ-QnW-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-yCp-4nc-8Ag-0-0-0-0-MjnQ",
+      "icon": "b-62.png",
+      "name": "阳台/露台",
+      "parent_id": "sp-kSp-qt4-yCp-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-F8Y-U3u-0ub-o0C-0-0-0-0-MjnQ",
+      "icon": "b-17.png",
+      "name": "楼上浴室",
+      "parent_id": "sp-kSp-F8Y-U3u-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-4IZ-0-0-0-0-0-0-MjnQ",
+      "icon": "b-3.png",
+      "name": "206户型",
+      "bgPic": "sp-kSp-qt4-4IZ-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-qt4-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-F8Y-hSc-0-0-0-0-0-0-MjnQ",
+      "icon": "b-3.png",
+      "name": "302户型",
+      "bgPic": "sp-kSp-F8Y-hSc-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-F8Y-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-omn-2ep-587-XGx-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-omn-2ep-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-Wod-s6b-04H-fO4-0-0-0-0-MjnQ",
+      "icon": "b-23.png",
+      "name": "餐厅",
+      "parent_id": "sp-kSp-Wod-s6b-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-fzQ-yOW-Zng-dD5-0-0-0-0-MjnQ",
+      "icon": "b-19.png",
+      "name": "走廊",
+      "parent_id": "sp-kSp-fzQ-yOW-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-87G-KQE-mjL-uor-0-0-0-0-MjnQ",
+      "icon": "b-17.png",
+      "name": "浴室",
+      "parent_id": "sp-kSp-87G-KQE-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-87G-tlR-T33-Ikd-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-87G-tlR-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-M02-uJt-YAE-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "楼下卧室",
+      "parent_id": "sp-kSp-qt4-M02-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-yCp-4nc-Q60-0-0-0-0-MjnQ",
+      "icon": "b-19.png",
+      "name": "走廊",
+      "parent_id": "sp-kSp-qt4-yCp-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-IuS-0-0-0-0-0-0-0-MjnQ",
+      "icon": "b-3.png",
+      "name": "12层",
+      "parent_id": "sp-kSp-0-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-IuS-9ZK-i46-LCL-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "客厅",
+      "parent_id": "sp-kSp-IuS-9ZK-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-RLN-Vdh-FFv-3ae-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "厕所",
+      "parent_id": "sp-kSp-RLN-Vdh-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-RLN-RSt-1VI-1Uh-0-0-0-0-MjnQ",
+      "icon": "b-50.png",
+      "name": "书房",
+      "parent_id": "sp-kSp-RLN-RSt-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-gmK-RSt-zNb-UHw-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-gmK-RSt-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-uwD-Y0s-AKt-pZ1-0-0-0-0-MjnQ",
+      "icon": "b-23.png",
+      "name": "餐厅",
+      "parent_id": "sp-kSp-uwD-Y0s-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-ykn-fkl-ivg-bwZ-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-ykn-fkl-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-F8Y-hTw-0-0-0-0-0-0-MjnQ",
+      "icon": "b-3.png",
+      "name": "305户型",
+      "bgPic": "sp-kSp-F8Y-hTw-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-F8Y-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-87G-NCO-T33-QsC-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "厕所",
+      "parent_id": "sp-kSp-87G-NCO-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-fzQ-yOW-Zng-X5f-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "客厅",
+      "parent_id": "sp-kSp-fzQ-yOW-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-yCp-0-0-0-0-0-0-MjnQ",
+      "icon": "b-1.png",
+      "name": "202户型",
+      "bgPic": "sp-kSp-qt4-yCp-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-qt4-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-F8Y-02W-exm-xEg-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "楼下卧室",
+      "parent_id": "sp-kSp-F8Y-02W-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-omn-kcj-AKt-85L-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-omn-kcj-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-ykn-oSl-Xs9-o7c-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-ykn-oSl-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-F8Y-PwV-tk6-KT5-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "楼上卧室2",
+      "parent_id": "sp-kSp-F8Y-PwV-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-ykn-UpN-6wc-jT7-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "客厅",
+      "parent_id": "sp-kSp-ykn-UpN-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-8h8-b8Z-xRM-CdF-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "客厅",
+      "parent_id": "sp-kSp-8h8-b8Z-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-8h8-ltW-AKt-LL9-0-0-0-0-MjnQ",
+      "icon": "b-19.png",
+      "name": "走廊",
+      "parent_id": "sp-kSp-8h8-ltW-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-lC6-Mpp-oQw-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "楼上卧室",
+      "parent_id": "sp-kSp-qt4-lC6-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-Wod-S54-0-0-0-0-0-0-MjnQ",
+      "icon": "b-1.png",
+      "name": "1409室D4户型",
+      "bgPic": "sp-kSp-lWq-S54-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-Wod-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-omn-2ep-587-uqZ-0-0-0-0-MjnQ",
+      "icon": "b-23.png",
+      "name": "餐厅",
+      "parent_id": "sp-kSp-omn-2ep-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-Hpb-CPJ-Zn3-C85-0-0-0-0-MjnQ",
+      "icon": "b-23.png",
+      "name": "餐厅",
+      "parent_id": "sp-kSp-Hpb-CPJ-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-8h8-Hkx-0-0-0-0-0-0-MjnQ",
+      "icon": "b-3.png",
+      "name": "1003室C1户型",
+      "bgPic": "sp-kSp-uwD-vln-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-8h8-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-uwD-yty-Fva-E9w-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "厕所",
+      "parent_id": "sp-kSp-uwD-yty-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-ykn-63l-0-0-0-0-0-0-MjnQ",
+      "icon": "b-1.png",
+      "name": "1102室C户型.",
+      "bgPic": "sp-kSp-FPT-UpN-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-ykn-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-Wod-ZWR-04H-Fe5-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-Wod-ZWR-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-RLN-Vdh-0-0-0-0-0-0-MjnQ",
+      "icon": "b-1.png",
+      "name": "406室B户型",
+      "bgPic": "sp-kSp-RLN-Aon-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-RLN-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-QTD-Ged-0Wh-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "楼上卧室",
+      "parent_id": "sp-kSp-qt4-QTD-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-fzQ-V9u-6tO-xCb-0-0-0-0-MjnQ",
+      "icon": "b-23.png",
+      "name": "餐厅",
+      "parent_id": "sp-kSp-fzQ-V9u-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-uwD-x5L-3hL-MT4-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "客厅",
+      "parent_id": "sp-kSp-uwD-x5L-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-yCp-4nc-97j-0-0-0-0-MjnQ",
+      "icon": "b-15.png",
+      "name": "大厅",
+      "parent_id": "sp-kSp-qt4-yCp-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-yCp-4nc-I9z-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-qt4-yCp-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-uwD-Lb5-dfj-NIZ-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-uwD-Lb5-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-IuS-xmr-Z1M-5f3-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-IuS-xmr-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-uwD-5ea-zVR-Dud-0-0-0-0-MjnQ",
+      "icon": "b-23.png",
+      "name": "餐厅",
+      "parent_id": "sp-kSp-uwD-5ea-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-Wod-0-0-0-0-0-0-0-MjnQ",
+      "icon": "b-1.png",
+      "name": "14层",
+      "parent_id": "sp-kSp-0-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-fzQ-Six-Fva-Dud-0-0-0-0-MjnQ",
+      "icon": "b-23.png",
+      "name": "餐厅",
+      "parent_id": "sp-kSp-fzQ-Six-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-RLN-Vdh-FFv-1IV-0-0-0-0-MjnQ",
+      "icon": "b-23.png",
+      "name": "餐厅",
+      "parent_id": "sp-kSp-RLN-Vdh-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-omn-5AQ-0-0-0-0-0-0-MjnQ",
+      "icon": "b-3.png",
+      "name": "908室AI户型.",
+      "bgPic": "sp-kSp-uwD-vMR-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-omn-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-87G-Hzy-0Ej-034-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "客厅",
+      "parent_id": "sp-kSp-87G-Hzy-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-ZSj-Fu8-kZs-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "楼下厕所",
+      "parent_id": "sp-kSp-qt4-ZSj-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-F8Y-hSc-TnM-T6D-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-F8Y-hSc-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-RLN-yOW-LJP-rP2-0-0-0-0-MjnQ",
+      "icon": "b-23.png",
+      "name": "餐厅",
+      "parent_id": "sp-kSp-RLN-yOW-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-Wod-wZH-Epb-BLi-0-0-0-0-MjnQ",
+      "icon": "b-23.png",
+      "name": "餐厅",
+      "parent_id": "sp-kSp-Wod-wZH-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-Wod-NgL-Xwe-yyh-0-0-0-0-MjnQ",
+      "icon": "b-19.png",
+      "name": "走廊",
+      "parent_id": "sp-kSp-Wod-NgL-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-RLN-0-0-0-0-0-0-0-MjnQ",
+      "icon": "b-3.png",
+      "name": "4层",
+      "parent_id": "sp-kSp-0-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-gmK-T8f-0-0-0-0-0-0-MjnQ",
+      "icon": "b-3.png",
+      "name": "507室B户型",
+      "bgPic": "sp-kSp-uwD-yty-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-gmK-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-fzQ-yOW-Zng-z4i-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "厕所",
+      "parent_id": "sp-kSp-fzQ-yOW-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-RLN-RSt-1VI-2uT-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-RLN-RSt-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-ykn-ve1-ivg-Doo-0-0-0-0-MjnQ",
+      "icon": "b-50.png",
+      "name": "衣帽间",
+      "parent_id": "sp-kSp-ykn-ve1-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-yCp-4nc-qRM-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-qt4-yCp-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-lC6-Mpp-C3T-0-0-0-0-MjnQ",
+      "icon": "b-15.png",
+      "name": "大厅",
+      "parent_id": "sp-kSp-qt4-lC6-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-8h8-Hkx-U4v-Q4L-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "客厅",
+      "parent_id": "sp-kSp-8h8-Hkx-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-Hpb-QnW-0-0-0-0-0-0-MjnQ",
+      "icon": "b-3.png",
+      "name": "605室C户型",
+      "bgPic": "sp-kSp-Hpb-QnW-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-Hpb-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-F8Y-02W-exm-C3D-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "楼上卧室",
+      "parent_id": "sp-kSp-F8Y-02W-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-omn-2ep-587-Z5t-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "客厅",
+      "parent_id": "sp-kSp-omn-2ep-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-Wod-nrD-eFk-nBE-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "浴室",
+      "parent_id": "sp-kSp-Wod-nrD-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-KQe-Pku-uMt-0-0-0-0-MjnQ",
+      "icon": "b-63.png",
+      "name": "楼梯",
+      "parent_id": "sp-kSp-qt4-KQe-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-F8Y-0-0-0-0-0-0-0-MjnQ",
+      "icon": "b-3.png",
+      "name": "3层",
+      "parent_id": "sp-kSp-0-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-uwD-2ep-Lvs-IjA-0-0-0-0-MjnQ",
+      "icon": "b-23.png",
+      "name": "餐厅",
+      "parent_id": "sp-kSp-uwD-2ep-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-Wod-o23-Xwe-8aC-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "客厅",
+      "parent_id": "sp-kSp-Wod-o23-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-Wod-S54-eFk-SUg-0-0-0-0-MjnQ",
+      "icon": "b-42.png",
+      "name": "衣帽间",
+      "parent_id": "sp-kSp-Wod-S54-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-8h8-yty-WnQ-W5a-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-8h8-yty-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-8h8-yty-WnQ-OMj-0-0-0-0-MjnQ",
+      "icon": "b-23.png",
+      "name": "餐厅",
+      "parent_id": "sp-kSp-8h8-yty-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-uwD-x5L-3hL-YNT-0-0-0-0-MjnQ",
+      "icon": "b-19.png",
+      "name": "走廊",
+      "parent_id": "sp-kSp-uwD-x5L-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-RLN-QnW-iLe-iuz-0-0-0-0-MjnQ",
+      "icon": "b-23.png",
+      "name": "客厅",
+      "parent_id": "sp-kSp-RLN-QnW-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-87G-CYD-mjL-2ke-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-87G-CYD-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-Wod-s6b-0-0-0-0-0-0-MjnQ",
+      "icon": "b-1.png",
+      "name": "1408室D3户型",
+      "parent_id": "sp-kSp-Wod-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-gmK-T8f-Fva-E9w-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "厕所",
+      "parent_id": "sp-kSp-gmK-T8f-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-Hpb-CPJ-0-0-0-0-0-0-MjnQ",
+      "icon": "b-1.png",
+      "name": "609室A2户型",
+      "bgPic": "sp-kSp-Hpb-RSt-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-Hpb-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-ykn-sOI-0-0-0-0-0-0-MjnQ",
+      "icon": "b-1.png",
+      "name": "1101室C1户型",
+      "bgPic": "sp-kSp-FPT-ket-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-ykn-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-fzQ-pH5-Fva-Bli-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-fzQ-pH5-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-QTD-Ged-GKN-0-0-0-0-MjnQ",
+      "icon": "b-19.png",
+      "name": "走廊",
+      "parent_id": "sp-kSp-qt4-QTD-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-F8Y-PwV-tk6-YEG-0-0-0-0-MjnQ",
+      "icon": "b-10.png",
+      "name": "厨房",
+      "parent_id": "sp-kSp-F8Y-PwV-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-T9u-Xuu-d8G-0-0-0-0-MjnQ",
+      "icon": "b-10.png",
+      "name": "厨房",
+      "parent_id": "sp-kSp-qt4-T9u-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-IuS-Y2n-j6s-EPd-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "客厅",
+      "parent_id": "sp-kSp-IuS-Y2n-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-Hpb-V9u-b25-iqf-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "客厅",
+      "parent_id": "sp-kSp-Hpb-V9u-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-uwD-yty-Fva-Bli-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-uwD-yty-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-uwD-Lb5-dfj-Lbc-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "客厅",
+      "parent_id": "sp-kSp-uwD-Lb5-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-uwD-2ep-0-0-0-0-0-0-MjnQ",
+      "icon": "b-3.png",
+      "name": "809室A2户型",
+      "bgPic": "sp-kSp-uwD-2ep-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-uwD-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-IuS-tsV-V9x-N2u-0-0-0-0-MjnQ",
+      "icon": "b-50.png",
+      "name": "书房",
+      "parent_id": "sp-kSp-IuS-tsV-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-F8Y-q1U-XRl-oi8-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "楼下厕所",
+      "parent_id": "sp-kSp-F8Y-q1U-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-RLN-RSt-0-0-0-0-0-0-MjnQ",
+      "icon": "b-1.png",
+      "name": "405室C户型",
+      "bgPic": "sp-kSp-RLN-RSt-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-RLN-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-F8Y-U3u-0ub-iHZ-0-0-0-0-MjnQ",
+      "icon": "b-15.png",
+      "name": "大厅",
+      "parent_id": "sp-kSp-F8Y-U3u-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-RLN-Aon-0-0-0-0-0-0-MjnQ",
+      "icon": "b-1.png",
+      "name": "407室B户型",
+      "bgPic": "sp-kSp-RLN-Aon-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-RLN-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-87G-KQE-0-0-0-0-0-0-MjnQ",
+      "icon": "b-1.png",
+      "name": "1306室D3户型",
+      "parent_id": "sp-kSp-87G-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-omn-S3W-U4v-PJP-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-omn-S3W-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-Wod-eCH-Epb-eOp-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-Wod-eCH-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-gmK-3St-TwA-MtI-0-0-0-0-MjnQ",
+      "icon": "b-23.png",
+      "name": "餐厅",
+      "parent_id": "sp-kSp-gmK-3St-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-IuS-tsV-0-0-0-0-0-0-MjnQ",
+      "icon": "b-1.png",
+      "name": "1208室D1户型",
+      "parent_id": "sp-kSp-IuS-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-ZSj-Fu8-tGy-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "楼下卧室",
+      "parent_id": "sp-kSp-qt4-ZSj-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-Hpb-2pE-0-0-0-0-0-0-MjnQ",
+      "icon": "b-3.png",
+      "name": "607室B户型",
+      "bgPic": "sp-kSp-Hpb-2pE-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-Hpb-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-omn-PFe-WCs-2i5-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "客厅",
+      "parent_id": "sp-kSp-omn-PFe-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-ykn-oSl-Xs9-Fbh-0-0-0-0-MjnQ",
+      "icon": "b-50.png",
+      "name": "书房",
+      "parent_id": "sp-kSp-ykn-oSl-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-omn-PFe-0-0-0-0-0-0-MjnQ",
+      "icon": "b-3.png",
+      "name": "906室B户型.",
+      "bgPic": "sp-kSp-uwD-yty-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-omn-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-fzQ-2b3-0-0-0-0-0-0-MjnQ",
+      "icon": "b-3.png",
+      "name": "708室AI户型",
+      "bgPic": "sp-kSp-uwD-vMR-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-fzQ-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-M02-uJt-soh-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "楼下厕所",
+      "parent_id": "sp-kSp-qt4-M02-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-87G-iAF-Obr-nsL-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "客厅",
+      "parent_id": "sp-kSp-87G-iAF-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-omn-5AQ-FEg-Y9j-0-0-0-0-MjnQ",
+      "icon": "b-23.png",
+      "name": "餐厅",
+      "parent_id": "sp-kSp-omn-5AQ-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-IuS-5jW-Z1M-r1k-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "书房",
+      "parent_id": "sp-kSp-IuS-5jW-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-omn-kcj-AKt-LL9-0-0-0-0-MjnQ",
+      "icon": "b-19.png",
+      "name": "走廊",
+      "parent_id": "sp-kSp-omn-kcj-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-uwD-5ea-zVR-5Sx-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "客厅",
+      "parent_id": "sp-kSp-uwD-5ea-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-uwD-Y0s-0-0-0-0-0-0-MjnQ",
+      "icon": "b-3.png",
+      "name": "805室C户型",
+      "bgPic": "sp-kSp-uwD-vln-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-uwD-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-RLN-yOW-LJP-joK-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "客厅",
+      "parent_id": "sp-kSp-RLN-yOW-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-T9u-Xuu-VOu-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "楼下卧室",
+      "parent_id": "sp-kSp-qt4-T9u-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-fzQ-2b3-X0a-2OJ-0-0-0-0-MjnQ",
+      "icon": "b-23.png",
+      "name": "餐厅",
+      "parent_id": "sp-kSp-fzQ-2b3-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-Hpb-V9u-0-0-0-0-0-0-MjnQ",
+      "icon": "b-1.png",
+      "name": "601室K户型",
+      "bgPic": "sp-kSp-Hpb-V9u-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-Hpb-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-F8Y-N1S-0-0-0-0-0-0-MjnQ",
+      "icon": "b-3.png",
+      "name": "309户型",
+      "bgPic": "sp-kSp-F8Y-U3u-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-F8Y-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-gmK-QnW-ZwC-xmr-0-0-0-0-MjnQ",
+      "icon": "b-19.png",
+      "name": "走廊",
+      "parent_id": "sp-kSp-gmK-QnW-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-F8Y-N1S-VnI-QBJ-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "楼下卧室",
+      "parent_id": "sp-kSp-F8Y-N1S-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-IuS-cNK-i46-VlA-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "卫生间",
+      "parent_id": "sp-kSp-IuS-cNK-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-F8Y-hSc-TnM-jcr-0-0-0-0-MjnQ",
+      "icon": "b-13.png",
+      "name": "库房/储藏室",
+      "parent_id": "sp-kSp-F8Y-hSc-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-ykn-ve1-ivg-Ky1-0-0-0-0-MjnQ",
+      "icon": "b-23.png",
+      "name": "餐厅",
+      "parent_id": "sp-kSp-ykn-ve1-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-uwD-5ea-0-0-0-0-0-0-MjnQ",
+      "icon": "b-3.png",
+      "name": "807室B户型",
+      "bgPic": "sp-kSp-uwD-yty-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-uwD-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-8h8-ltW-AKt-QZE-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "客厅",
+      "parent_id": "sp-kSp-8h8-ltW-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-omn-5AQ-FEg-S2k-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "客厅",
+      "parent_id": "sp-kSp-omn-5AQ-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-omn-yty-oA2-bzP-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "客厅",
+      "parent_id": "sp-kSp-omn-yty-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-IuS-cNK-i46-UT6-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室1",
+      "parent_id": "sp-kSp-IuS-cNK-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-RLN-QnW-iLe-2NK-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "餐厅",
+      "parent_id": "sp-kSp-RLN-QnW-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-8h8-Y0s-a2B-X4L-0-0-0-0-MjnQ",
+      "icon": "b-23.png",
+      "name": "餐厅",
+      "parent_id": "sp-kSp-8h8-Y0s-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-gmK-V9u-Ycw-3rQ-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-gmK-V9u-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-M02-uJt-lvZ-0-0-0-0-MjnQ",
+      "icon": "b-15.png",
+      "name": "大厅",
+      "parent_id": "sp-kSp-qt4-M02-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-F8Y-PwV-tk6-SpV-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "楼下卧室",
+      "parent_id": "sp-kSp-F8Y-PwV-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-fzQ-Six-Fva-5Sx-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "客厅",
+      "parent_id": "sp-kSp-fzQ-Six-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-Hpb-bAL-dOF-kve-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "客厅",
+      "parent_id": "sp-kSp-Hpb-bAL-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-omn-kcj-0-0-0-0-0-0-MjnQ",
+      "icon": "b-3.png",
+      "name": "905室C户型",
+      "bgPic": "sp-kSp-uwD-vln-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-omn-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-KQe-Pku-Iie-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "楼下卧室",
+      "parent_id": "sp-kSp-qt4-KQe-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-F8Y-U3u-0ub-qgR-0-0-0-0-MjnQ",
+      "icon": "b-10.png",
+      "name": "厨房",
+      "parent_id": "sp-kSp-F8Y-U3u-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-uwD-Y0s-AKt-85L-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-uwD-Y0s-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-gmK-RSt-zNb-HVI-0-0-0-0-MjnQ",
+      "icon": "b-42.png",
+      "name": "其它",
+      "parent_id": "sp-kSp-gmK-RSt-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-lC6-Mpp-s4e-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "楼下卧室",
+      "parent_id": "sp-kSp-qt4-lC6-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-omn-S3W-U4v-kdF-0-0-0-0-MjnQ",
+      "icon": "b-19.png",
+      "name": "走廊",
+      "parent_id": "sp-kSp-omn-S3W-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-RLN-V9u-4Tp-Xoh-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-RLN-V9u-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-ykn-sOI-8DZ-9wD-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-ykn-sOI-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-F8Y-N1S-VnI-CFK-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "楼上卧室",
+      "parent_id": "sp-kSp-F8Y-N1S-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-ZSj-Fu8-oRQ-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "楼上卧室",
+      "parent_id": "sp-kSp-qt4-ZSj-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-gmK-USI-0-0-0-0-0-0-MjnQ",
+      "icon": "b-1.png",
+      "name": "508室A1户型",
+      "bgPic": "sp-kSp-gmK-V9u-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-gmK-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-fzQ-pH5-Fva-5Sx-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "客厅",
+      "parent_id": "sp-kSp-fzQ-pH5-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-4IZ-9gC-3pL-0-0-0-0-MjnQ",
+      "icon": "b-15.png",
+      "name": "大厅",
+      "parent_id": "sp-kSp-qt4-4IZ-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-8h8-Hkx-U4v-ple-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "厕所",
+      "parent_id": "sp-kSp-8h8-Hkx-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-IuS-9ZK-i46-X9Y-0-0-0-0-MjnQ",
+      "icon": "b-23.png",
+      "name": "餐厅",
+      "parent_id": "sp-kSp-IuS-9ZK-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-Hpb-QnW-cY7-d3o-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "客厅",
+      "parent_id": "sp-kSp-Hpb-QnW-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-fzQ-PMA-JC2-Ocg-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "客厅",
+      "parent_id": "sp-kSp-fzQ-PMA-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-8h8-ltW-AKt-pZ1-0-0-0-0-MjnQ",
+      "icon": "b-23.png",
+      "name": "餐厅",
+      "parent_id": "sp-kSp-8h8-ltW-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-IuS-9ZK-i46-5QW-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室2",
+      "parent_id": "sp-kSp-IuS-9ZK-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-IuS-Y2n-0-0-0-0-0-0-MjnQ",
+      "icon": "b-1.png",
+      "name": "1203室C1户型",
+      "parent_id": "sp-kSp-IuS-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-gmK-3St-TwA-fak-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "客厅",
+      "parent_id": "sp-kSp-gmK-3St-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-IuS-5jW-Z1M-OQD-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-IuS-5jW-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-ykn-ve1-0-0-0-0-0-0-MjnQ",
+      "icon": "b-1.png",
+      "name": "1109室D2户型",
+      "bgPic": "sp-kSp-FPT-ve1-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-ykn-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-uwD-yty-0-0-0-0-0-0-MjnQ",
+      "icon": "b-3.png",
+      "name": "806室B户型",
+      "bgPic": "sp-kSp-uwD-yty-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-uwD-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-RLN-Aon-8Op-w1U-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "客厅",
+      "parent_id": "sp-kSp-RLN-Aon-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-Hpb-QnW-cY7-jEx-0-0-0-0-MjnQ",
+      "icon": "b-19.png",
+      "name": "走廊",
+      "parent_id": "sp-kSp-Hpb-QnW-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-gmK-V9u-Ycw-atg-0-0-0-0-MjnQ",
+      "icon": "b-23.png",
+      "name": "餐厅",
+      "parent_id": "sp-kSp-gmK-V9u-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-fzQ-yOW-Zng-AOE-0-0-0-0-MjnQ",
+      "icon": "b-23.png",
+      "name": "餐厅",
+      "parent_id": "sp-kSp-fzQ-yOW-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-fzQ-V9u-0-0-0-0-0-0-MjnQ",
+      "icon": "b-1.png",
+      "name": "701室K户型",
+      "bgPic": "sp-kSp-fzQ-V9u-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-fzQ-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-gmK-QnW-ZwC-OR6-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-gmK-QnW-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-IuS-i5A-j6s-QE8-0-0-0-0-MjnQ",
+      "icon": "b-19.png",
+      "name": "走廊",
+      "parent_id": "sp-kSp-IuS-i5A-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-8h8-ltW-AKt-qDH-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "厕所",
+      "parent_id": "sp-kSp-8h8-ltW-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-gmK-yOW-iez-3Wj-0-0-0-0-MjnQ",
+      "icon": "b-23.png",
+      "name": "餐厅",
+      "parent_id": "sp-kSp-gmK-yOW-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-87G-Hzy-0Ej-VNf-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "餐厅",
+      "parent_id": "sp-kSp-87G-Hzy-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-F8Y-hSc-TnM-a2B-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "厕所",
+      "parent_id": "sp-kSp-F8Y-hSc-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-IuS-Dor-V9x-hCa-0-0-0-0-MjnQ",
+      "icon": "b-19.png",
+      "name": "走廊",
+      "parent_id": "sp-kSp-IuS-Dor-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-F8Y-N1S-VnI-DNt-0-0-0-0-MjnQ",
+      "icon": "b-15.png",
+      "name": "大厅",
+      "parent_id": "sp-kSp-F8Y-N1S-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-uwD-5ea-zVR-Bli-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-uwD-5ea-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-RLN-yOW-LJP-SVM-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-RLN-yOW-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-QTD-Ged-uWc-0-0-0-0-MjnQ",
+      "icon": "b-10.png",
+      "name": "厨房",
+      "parent_id": "sp-kSp-qt4-QTD-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-Hpb-2pE-3sh-7nX-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-Hpb-2pE-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-ykn-UpN-0-0-0-0-0-0-MjnQ",
+      "icon": "b-1.png",
+      "name": "1105室C户型",
+      "bgPic": "sp-kSp-FPT-UpN-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-ykn-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-8h8-Hkx-U4v-PJP-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-8h8-Hkx-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-gmK-RSt-0-0-0-0-0-0-MjnQ",
+      "icon": "b-1.png",
+      "name": "503室J户型",
+      "bgPic": "sp-kSp-gmK-RSt-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-gmK-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-F8Y-02W-0-0-0-0-0-0-MjnQ",
+      "icon": "b-3.png",
+      "name": "308户型",
+      "bgPic": "sp-kSp-F8Y-U3u-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-F8Y-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-F8Y-U3u-0ub-Bk9-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "楼下卧室",
+      "parent_id": "sp-kSp-F8Y-U3u-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-uwD-Y0s-AKt-qDH-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "厕所",
+      "parent_id": "sp-kSp-uwD-Y0s-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-IuS-Dor-V9x-RVk-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "主卧",
+      "parent_id": "sp-kSp-IuS-Dor-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-uwD-2ep-Lvs-mJl-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "客厅",
+      "parent_id": "sp-kSp-uwD-2ep-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-ykn-63l-6wc-n4Q-0-0-0-0-MjnQ",
+      "icon": "b-19.png",
+      "name": "走廊",
+      "parent_id": "sp-kSp-ykn-63l-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-8h8-5ea-qiF-mMM-0-0-0-0-MjnQ",
+      "icon": "b-23.png",
+      "name": "餐厅",
+      "parent_id": "sp-kSp-8h8-5ea-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-87G-iAF-Obr-L9F-0-0-0-0-MjnQ",
+      "icon": "b-23.png",
+      "name": "餐厅",
+      "parent_id": "sp-kSp-87G-iAF-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-Hpb-yOW-0-0-0-0-0-0-MjnQ",
+      "icon": "b-3.png",
+      "name": "606室B户型",
+      "bgPic": "sp-kSp-Hpb-yOW-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-Hpb-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-uwD-Y0s-AKt-QZE-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "客厅",
+      "parent_id": "sp-kSp-uwD-Y0s-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-F8Y-02W-exm-mFG-0-0-0-0-MjnQ",
+      "icon": "b-15.png",
+      "name": "大厅",
+      "parent_id": "sp-kSp-F8Y-02W-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-F8Y-q1U-XRl-Tvg-0-0-0-0-MjnQ",
+      "icon": "b-19.png",
+      "name": "楼下走廊",
+      "parent_id": "sp-kSp-F8Y-q1U-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-IuS-tsV-V9x-yim-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "客厅",
+      "parent_id": "sp-kSp-IuS-tsV-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-gmK-T8f-Fva-5Sx-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "客厅",
+      "parent_id": "sp-kSp-gmK-T8f-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-87G-NCO-T33-I5R-0-0-0-0-MjnQ",
+      "icon": "b-23.png",
+      "name": "餐厅",
+      "parent_id": "sp-kSp-87G-NCO-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-gmK-QnW-0-0-0-0-0-0-MjnQ",
+      "icon": "b-3.png",
+      "name": "505室C户型",
+      "bgPic": "sp-kSp-gmK-QnW-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-gmK-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-F8Y-hTw-ph8-1om-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "楼下厕所",
+      "parent_id": "sp-kSp-F8Y-hTw-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-fzQ-QnW-qde-1xX-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "客厅",
+      "parent_id": "sp-kSp-fzQ-QnW-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-F8Y-ICR-Ui8-gbT-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "楼下厕所",
+      "parent_id": "sp-kSp-F8Y-ICR-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-RLN-Aon-8Op-vCF-0-0-0-0-MjnQ",
+      "icon": "b-19.png",
+      "name": "走廊",
+      "parent_id": "sp-kSp-RLN-Aon-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-87G-Hzy-0Ej-zVc-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室2",
+      "parent_id": "sp-kSp-87G-Hzy-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-fzQ-Six-0-0-0-0-0-0-MjnQ",
+      "icon": "b-3.png",
+      "name": "707室B户型",
+      "bgPic": "sp-kSp-uwD-yty-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-fzQ-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-yCp-4nc-TBn-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-qt4-yCp-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-F8Y-q1U-XRl-QZP-0-0-0-0-MjnQ",
+      "icon": "b-19.png",
+      "name": "楼上走廊",
+      "parent_id": "sp-kSp-F8Y-q1U-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-omn-yty-oA2-7R6-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-omn-yty-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-F8Y-ICR-0-0-0-0-0-0-MjnQ",
+      "icon": "b-3.png",
+      "name": "307户型",
+      "bgPic": "sp-kSp-F8Y-U3u-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-F8Y-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-RLN-rUr-PIG-acT-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "客厅",
+      "parent_id": "sp-kSp-RLN-rUr-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-ykn-1SE-0-0-0-0-0-0-MjnQ",
+      "icon": "b-1.png",
+      "name": "1106室D1户型",
+      "bgPic": "sp-kSp-FPT-1SE-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-ykn-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-ykn-oSl-0-0-0-0-0-0-MjnQ",
+      "icon": "b-1.png",
+      "name": "1108室D1户型",
+      "bgPic": "sp-kSp-FPT-1SE-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-ykn-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-4IZ-9gC-c3R-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "楼下卧室",
+      "parent_id": "sp-kSp-qt4-4IZ-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-ykn-63l-6wc-Hyx-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-ykn-63l-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-fzQ-2b3-X0a-2XZ-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "客厅",
+      "parent_id": "sp-kSp-fzQ-2b3-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-F8Y-q1U-XRl-8Bb-0-0-0-0-MjnQ",
+      "icon": "b-15.png",
+      "name": "大厅",
+      "parent_id": "sp-kSp-F8Y-q1U-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-F8Y-PwV-0-0-0-0-0-0-MjnQ",
+      "icon": "b-3.png",
+      "name": "303户型",
+      "bgPic": "sp-kSp-F8Y-PwV-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-F8Y-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-F8Y-N1S-VnI-x1k-0-0-0-0-MjnQ",
+      "icon": "b-63.png",
+      "name": "楼梯",
+      "parent_id": "sp-kSp-F8Y-N1S-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-uwD-x5L-3hL-fhY-0-0-0-0-MjnQ",
+      "icon": "b-23.png",
+      "name": "餐厅",
+      "parent_id": "sp-kSp-uwD-x5L-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-RLN-Aon-8Op-WUY-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-RLN-Aon-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-ykn-fkl-ivg-dAG-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "厕所1",
+      "parent_id": "sp-kSp-ykn-fkl-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-IuS-tsV-V9x-hWQ-0-0-0-0-MjnQ",
+      "icon": "b-23.png",
+      "name": "餐厅",
+      "parent_id": "sp-kSp-IuS-tsV-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-IuS-Y2n-j6s-UKJ-0-0-0-0-MjnQ",
+      "icon": "b-23.png",
+      "name": "餐厅",
+      "parent_id": "sp-kSp-IuS-Y2n-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-Wod-NgL-0-0-0-0-0-0-MjnQ",
+      "icon": "b-1.png",
+      "name": "1401室C1户型",
+      "bgPic": "sp-kSp-lWq-o23-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-Wod-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-8h8-Y0s-0-0-0-0-0-0-MjnQ",
+      "icon": "b-3.png",
+      "name": "1008室A1户型",
+      "bgPic": "sp-kSp-uwD-vln-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-8h8-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-KQe-Pku-4MI-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "楼上卧室",
+      "parent_id": "sp-kSp-qt4-KQe-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-IuS-xmr-0-0-0-0-0-0-MjnQ",
+      "icon": "b-1.png",
+      "name": "1202室C户型.",
+      "parent_id": "sp-kSp-IuS-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-Hpb-QnW-cY7-8XF-0-0-0-0-MjnQ",
+      "icon": "b-23.png",
+      "name": "餐厅",
+      "parent_id": "sp-kSp-Hpb-QnW-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-8h8-Y0s-a2B-Orq-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-8h8-Y0s-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-gmK-3St-0-0-0-0-0-0-MjnQ",
+      "icon": "b-1.png",
+      "name": "509室A2户型",
+      "bgPic": "sp-kSp-gmK-RSt-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-gmK-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-IuS-i5A-0-0-0-0-0-0-MjnQ",
+      "icon": "b-1.png",
+      "name": "1201室C1户型",
+      "parent_id": "sp-kSp-IuS-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-QTD-Ged-J9N-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "楼上厕所",
+      "parent_id": "sp-kSp-qt4-QTD-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-Wod-wZH-Epb-NPy-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "客厅",
+      "parent_id": "sp-kSp-Wod-wZH-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-fzQ-pH5-Fva-E9w-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "厕所",
+      "parent_id": "sp-kSp-fzQ-pH5-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-ykn-ket-8DZ-d6D-0-0-0-0-MjnQ",
+      "icon": "b-23.png",
+      "name": "餐厅",
+      "parent_id": "sp-kSp-ykn-ket-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-Hpb-V9u-b25-IW0-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "卫生间",
+      "parent_id": "sp-kSp-Hpb-V9u-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-gmK-yOW-iez-UjS-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-gmK-yOW-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-Wod-ZWR-0-0-0-0-0-0-MjnQ",
+      "icon": "b-1.png",
+      "name": "1406室D3户型",
+      "parent_id": "sp-kSp-Wod-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-fzQ-pH5-Fva-Dud-0-0-0-0-MjnQ",
+      "icon": "b-23.png",
+      "name": "餐厅",
+      "parent_id": "sp-kSp-fzQ-pH5-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-RLN-V9u-4Tp-ucT-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "卫生间",
+      "parent_id": "sp-kSp-RLN-V9u-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-F8Y-q1U-XRl-Zhm-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "楼下卧室",
+      "parent_id": "sp-kSp-F8Y-q1U-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-87G-nS2-0Ej-vbo-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "卫生间",
+      "parent_id": "sp-kSp-87G-nS2-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-T9u-Xuu-Cot-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "楼下厕所",
+      "parent_id": "sp-kSp-qt4-T9u-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-ZSj-Fu8-tbz-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "客厅",
+      "parent_id": "sp-kSp-qt4-ZSj-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-F8Y-ICR-Ui8-mAb-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "楼上卧室",
+      "parent_id": "sp-kSp-F8Y-ICR-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-omn-S3W-0-0-0-0-0-0-MjnQ",
+      "icon": "b-3.png",
+      "name": "903室C1户型",
+      "bgPic": "sp-kSp-uwD-vln-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-omn-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-Hpb-2pE-3sh-ckl-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "客厅",
+      "parent_id": "sp-kSp-Hpb-2pE-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-IuS-9ZK-0-0-0-0-0-0-MjnQ",
+      "icon": "b-1.png",
+      "name": "1209室D2户型",
+      "parent_id": "sp-kSp-IuS-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-ykn-oSl-Xs9-smD-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "厕所1",
+      "parent_id": "sp-kSp-ykn-oSl-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-gmK-USI-IgF-Fi7-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-gmK-USI-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-gmK-USI-IgF-DzX-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "客厅",
+      "parent_id": "sp-kSp-gmK-USI-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-fzQ-QnW-qde-QgN-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-fzQ-QnW-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-Wod-eCH-0-0-0-0-0-0-MjnQ",
+      "icon": "b-1.png",
+      "name": "1402室C户型",
+      "bgPic": "sp-kSp-lWq-wZH-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-Wod-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-M02-uJt-Q5C-0-0-0-0-MjnQ",
+      "icon": "b-63.png",
+      "name": "楼梯",
+      "parent_id": "sp-kSp-qt4-M02-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-omn-S3W-U4v-Q4L-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "客厅",
+      "parent_id": "sp-kSp-omn-S3W-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-ykn-sOI-8DZ-Dgh-0-0-0-0-MjnQ",
+      "icon": "b-19.png",
+      "name": "走廊",
+      "parent_id": "sp-kSp-ykn-sOI-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-T9u-Xuu-tzR-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "楼上卧室",
+      "parent_id": "sp-kSp-qt4-T9u-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-Wod-wZH-0-0-0-0-0-0-MjnQ",
+      "icon": "b-1.png",
+      "name": "1405室C户型",
+      "bgPic": "sp-kSp-lWq-wZH-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-Wod-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-Wod-o23-0-0-0-0-0-0-MjnQ",
+      "icon": "b-1.png",
+      "name": "1403室C1户型",
+      "bgPic": "sp-kSp-lWq-o23-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-Wod-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-Wod-nrD-0-0-0-0-0-0-MjnQ",
+      "icon": "b-1.png",
+      "name": "1407室D4户型",
+      "bgPic": "sp-kSp-lWq-S54-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-Wod-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-87G-KQE-mjL-ynH-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-87G-KQE-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-F8Y-ICR-Ui8-FzQ-0-0-0-0-MjnQ",
+      "icon": "b-15.png",
+      "name": "大厅",
+      "parent_id": "sp-kSp-F8Y-ICR-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-omn-kcj-AKt-QZE-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "客厅",
+      "parent_id": "sp-kSp-omn-kcj-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-8h8-b8Z-xRM-XTj-0-0-0-0-MjnQ",
+      "icon": "b-23.png",
+      "name": "餐厅",
+      "parent_id": "sp-kSp-8h8-b8Z-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-F8Y-hSc-TnM-Az2-0-0-0-0-MjnQ",
+      "icon": "b-10.png",
+      "name": "厨房",
+      "parent_id": "sp-kSp-F8Y-hSc-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-uwD-yty-Fva-Dud-0-0-0-0-MjnQ",
+      "icon": "b-23.png",
+      "name": "餐厅",
+      "parent_id": "sp-kSp-uwD-yty-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-87G-Hzy-0-0-0-0-0-0-MjnQ",
+      "icon": "b-1.png",
+      "name": "1309室D4户型",
+      "parent_id": "sp-kSp-87G-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-F8Y-hSc-TnM-rpN-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-F8Y-hSc-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-8h8-ltW-0-0-0-0-0-0-MjnQ",
+      "icon": "b-3.png",
+      "name": "1005室C户型",
+      "bgPic": "sp-kSp-uwD-vln-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-8h8-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-ykn-UpN-6wc-MXc-0-0-0-0-MjnQ",
+      "icon": "b-23.png",
+      "name": "餐厅",
+      "parent_id": "sp-kSp-ykn-UpN-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-87G-Hzy-0Ej-58z-0-0-0-0-MjnQ",
+      "icon": "b-50.png",
+      "name": "衣帽间",
+      "parent_id": "sp-kSp-87G-Hzy-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-8h8-5ea-qiF-wcO-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-8h8-5ea-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-RLN-QnW-iLe-mWI-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-RLN-QnW-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-F8Y-U3u-0ub-t1A-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "楼下厕所",
+      "parent_id": "sp-kSp-F8Y-U3u-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-0-0-0-0-0-0-0-0-MjnQ",
+      "icon": "b-25.png",
+      "name": "环保大厦",
+      "bgPic": "sp-kSp-0-0-0-0-0-0-0-0-MjnQ.jpg",
+      "parent_id": ""
+    },
+    {
+      "id": "sp-kSp-omn-yty-oA2-FsP-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "厕所",
+      "parent_id": "sp-kSp-omn-yty-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-Hpb-bAL-0-0-0-0-0-0-MjnQ",
+      "icon": "b-1.png",
+      "name": "608室A1户型",
+      "bgPic": "sp-kSp-Hpb-V9u-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-Hpb-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-Wod-eCH-Epb-UR8-0-0-0-0-MjnQ",
+      "icon": "b-19.png",
+      "name": "走廊",
+      "parent_id": "sp-kSp-Wod-eCH-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-omn-S3W-U4v-HIg-0-0-0-0-MjnQ",
+      "icon": "b-23.png",
+      "name": "餐厅",
+      "parent_id": "sp-kSp-omn-S3W-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-ykn-1SE-Xs9-wgy-0-0-0-0-MjnQ",
+      "icon": "b-19.png",
+      "name": "走廊",
+      "parent_id": "sp-kSp-ykn-1SE-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-8h8-yty-WnQ-FEt-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "客厅",
+      "parent_id": "sp-kSp-8h8-yty-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-8h8-Hkx-U4v-kdF-0-0-0-0-MjnQ",
+      "icon": "b-19.png",
+      "name": "走廊",
+      "parent_id": "sp-kSp-8h8-Hkx-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-gmK-0-0-0-0-0-0-0-MjnQ",
+      "icon": "b-3.png",
+      "name": "5层",
+      "parent_id": "sp-kSp-0-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-IuS-xmr-Z1M-Pl7-0-0-0-0-MjnQ",
+      "icon": "b-19.png",
+      "name": "走廊",
+      "parent_id": "sp-kSp-IuS-xmr-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-omn-2ep-0-0-0-0-0-0-MjnQ",
+      "icon": "b-3.png",
+      "name": "909室A2户型",
+      "bgPic": "sp-kSp-uwD-2ep-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-omn-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-87G-tlR-0-0-0-0-0-0-MjnQ",
+      "icon": "b-1.png",
+      "name": "1301室C1户型",
+      "bgPic": "sp-kSp-lWq-NCO-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-87G-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-T9u-0-0-0-0-0-0-MjnQ",
+      "icon": "b-3.png",
+      "name": "207户型",
+      "bgPic": "sp-kSp-qt4-T9u-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-qt4-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-Hpb-yOW-krM-ckl-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "客厅",
+      "parent_id": "sp-kSp-Hpb-yOW-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-uwD-2ep-Lvs-fUe-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-uwD-2ep-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-F8Y-hSc-TnM-Z6f-0-0-0-0-MjnQ",
+      "icon": "b-19.png",
+      "name": "走廊",
+      "parent_id": "sp-kSp-F8Y-hSc-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-ZSj-Fu8-DDk-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "客厅",
+      "parent_id": "sp-kSp-qt4-ZSj-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-F8Y-hTw-ph8-Pt3-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "楼下卧室",
+      "parent_id": "sp-kSp-F8Y-hTw-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-87G-CYD-mjL-1jY-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "卫生间",
+      "parent_id": "sp-kSp-87G-CYD-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-IuS-Dor-0-0-0-0-0-0-MjnQ",
+      "icon": "b-1.png",
+      "name": "1206室D1户型",
+      "parent_id": "sp-kSp-IuS-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-IuS-5jW-0-0-0-0-0-0-MjnQ",
+      "icon": "b-1.png",
+      "name": "1205室C户型",
+      "parent_id": "sp-kSp-IuS-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-uwD-0-0-0-0-0-0-0-MjnQ",
+      "icon": "b-3.png",
+      "name": "8层",
+      "parent_id": "sp-kSp-0-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-F8Y-02W-exm-Zd2-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "楼下厕所",
+      "parent_id": "sp-kSp-F8Y-02W-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-RLN-rUr-PIG-gil-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-RLN-rUr-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-M02-uJt-FCi-0-0-0-0-MjnQ",
+      "icon": "b-10.png",
+      "name": "厨房",
+      "parent_id": "sp-kSp-qt4-M02-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-F8Y-PwV-tk6-ZCZ-0-0-0-0-MjnQ",
+      "icon": "b-15.png",
+      "name": "大厅",
+      "parent_id": "sp-kSp-F8Y-PwV-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-Wod-wZH-Epb-O2d-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "厕所",
+      "parent_id": "sp-kSp-Wod-wZH-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-87G-iAF-0-0-0-0-0-0-MjnQ",
+      "icon": "b-1.png",
+      "name": "1305室C户型",
+      "parent_id": "sp-kSp-87G-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-Wod-o23-Xwe-z3i-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "厕所",
+      "parent_id": "sp-kSp-Wod-o23-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-ykn-oSl-Xs9-aig-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "客厅",
+      "parent_id": "sp-kSp-ykn-oSl-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-Wod-s6b-04H-cCj-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "客厅",
+      "parent_id": "sp-kSp-Wod-s6b-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-uwD-Lb5-0-0-0-0-0-0-MjnQ",
+      "icon": "b-3.png",
+      "name": "808室AI户型.",
+      "bgPic": "sp-kSp-uwD-vMR-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-uwD-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-F8Y-02W-exm-iy7-0-0-0-0-MjnQ",
+      "icon": "b-63.png",
+      "name": "楼梯",
+      "parent_id": "sp-kSp-F8Y-02W-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-ykn-0-0-0-0-0-0-0-MjnQ",
+      "icon": "b-3.png",
+      "name": "11层",
+      "parent_id": "sp-kSp-0-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-KQe-0-0-0-0-0-0-MjnQ",
+      "icon": "b-3.png",
+      "name": "208户型",
+      "bgPic": "sp-kSp-qt4-KQe-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-qt4-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-8h8-ltW-AKt-85L-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-8h8-ltW-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-RLN-V9u-0-0-0-0-0-0-MjnQ",
+      "icon": "b-1.png",
+      "name": "401室K户型",
+      "bgPic": "sp-kSp-RLN-V9u-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-RLN-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-omn-yty-0-0-0-0-0-0-MjnQ",
+      "icon": "b-3.png",
+      "name": "907室B户型",
+      "bgPic": "sp-kSp-uwD-yty-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-omn-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-IuS-tsV-V9x-IsC-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "次卧",
+      "parent_id": "sp-kSp-IuS-tsV-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-T9u-Xuu-udx-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "楼下厕所",
+      "parent_id": "sp-kSp-qt4-T9u-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-RLN-Vdh-FFv-tvD-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "客厅",
+      "parent_id": "sp-kSp-RLN-Vdh-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-fzQ-QnW-qde-wvS-0-0-0-0-MjnQ",
+      "icon": "b-42.png",
+      "name": "其它",
+      "parent_id": "sp-kSp-fzQ-QnW-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-RLN-yOW-0-0-0-0-0-0-MjnQ",
+      "icon": "b-3.png",
+      "name": "409室A2户型",
+      "bgPic": "sp-kSp-RLN-yOW-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-RLN-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-F8Y-U3u-0ub-k5S-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "楼上厕所",
+      "parent_id": "sp-kSp-F8Y-U3u-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-gmK-T8f-Fva-Bli-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-gmK-T8f-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-M02-0-0-0-0-0-0-MjnQ",
+      "icon": "b-1.png",
+      "name": "205户型",
+      "bgPic": "sp-kSp-qt4-M02-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-qt4-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-4IZ-9gC-pJv-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "楼下厕所",
+      "parent_id": "sp-kSp-qt4-4IZ-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-RLN-RSt-1VI-n74-0-0-0-0-MjnQ",
+      "icon": "b-19.png",
+      "name": "走廊",
+      "parent_id": "sp-kSp-RLN-RSt-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-gmK-3St-TwA-mM1-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-gmK-3St-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-omn-5AQ-FEg-ica-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-omn-5AQ-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-fzQ-PMA-0-0-0-0-0-0-MjnQ",
+      "icon": "b-1.png",
+      "name": "709室A2户型",
+      "bgPic": "sp-kSp-fzQ-RSt-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-fzQ-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-F8Y-PwV-tk6-IVZ-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "楼上卧室1",
+      "parent_id": "sp-kSp-F8Y-PwV-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-gmK-V9u-Ycw-3d0-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "客厅",
+      "parent_id": "sp-kSp-gmK-V9u-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-RLN-rUr-0-0-0-0-0-0-MjnQ",
+      "icon": "b-1.png",
+      "name": "403室J户型",
+      "bgPic": "sp-kSp-RLN-rUr-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-RLN-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-Hpb-rUr-G2N-Pyv-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-Hpb-rUr-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-ykn-oSl-Xs9-ruH-0-0-0-0-MjnQ",
+      "icon": "b-23.png",
+      "name": "餐厅",
+      "parent_id": "sp-kSp-ykn-oSl-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-F8Y-hSc-TnM-y6S-0-0-0-0-MjnQ",
+      "icon": "b-15.png",
+      "name": "大厅",
+      "parent_id": "sp-kSp-F8Y-hSc-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-RLN-rUr-PIG-szF-0-0-0-0-MjnQ",
+      "icon": "b-23.png",
+      "name": "餐厅",
+      "parent_id": "sp-kSp-RLN-rUr-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-87G-nS2-0-0-0-0-0-0-MjnQ",
+      "icon": "b-1.png",
+      "name": "1307室D4户型",
+      "parent_id": "sp-kSp-87G-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-8h8-5ea-qiF-7RW-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "客厅",
+      "parent_id": "sp-kSp-8h8-5ea-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-Wod-ZWR-04H-Tln-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "卫生间",
+      "parent_id": "sp-kSp-Wod-ZWR-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-ykn-1SE-Xs9-Gk2-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "主卧室",
+      "parent_id": "sp-kSp-ykn-1SE-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-Hpb-rUr-G2N-YJR-0-0-0-0-MjnQ",
+      "icon": "b-23.png",
+      "name": "餐厅",
+      "parent_id": "sp-kSp-Hpb-rUr-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-4IZ-9gC-BVB-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "楼下卧室",
+      "parent_id": "sp-kSp-qt4-4IZ-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-fzQ-PMA-JC2-4pJ-0-0-0-0-MjnQ",
+      "icon": "b-23.png",
+      "name": "餐厅",
+      "parent_id": "sp-kSp-fzQ-PMA-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-ykn-fkl-0-0-0-0-0-0-MjnQ",
+      "icon": "b-1.png",
+      "name": "1107室D2户型",
+      "bgPic": "sp-kSp-FPT-ve1-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-ykn-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-ZSj-Fu8-NlY-0-0-0-0-MjnQ",
+      "icon": "b-10.png",
+      "name": "厨房",
+      "parent_id": "sp-kSp-qt4-ZSj-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-RLN-Vdh-FFv-h9O-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-RLN-Vdh-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-87G-NCO-0-0-0-0-0-0-MjnQ",
+      "icon": "b-1.png",
+      "name": "1303室C1户型",
+      "bgPic": "sp-kSp-lWq-NCO-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-87G-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-4IZ-9gC-eoA-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "楼上卧室",
+      "parent_id": "sp-kSp-qt4-4IZ-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-F8Y-hSc-TnM-ltr-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "厕所",
+      "parent_id": "sp-kSp-F8Y-hSc-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-gmK-T8f-Fva-Dud-0-0-0-0-MjnQ",
+      "icon": "b-23.png",
+      "name": "餐厅",
+      "parent_id": "sp-kSp-gmK-T8f-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-ykn-ket-8DZ-ZTL-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "厕所",
+      "parent_id": "sp-kSp-ykn-ket-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-87G-NCO-T33-ZXC-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "客厅",
+      "parent_id": "sp-kSp-87G-NCO-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-IuS-Y2n-j6s-ch5-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "厕所",
+      "parent_id": "sp-kSp-IuS-Y2n-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-F8Y-ICR-Ui8-Faq-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "楼上厕所",
+      "parent_id": "sp-kSp-F8Y-ICR-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-M02-uJt-UZI-0-0-0-0-MjnQ",
+      "icon": "b-19.png",
+      "name": "走廊",
+      "parent_id": "sp-kSp-qt4-M02-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-gmK-RSt-zNb-Z0v-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "客厅",
+      "parent_id": "sp-kSp-gmK-RSt-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-fzQ-QnW-0-0-0-0-0-0-MjnQ",
+      "icon": "b-3.png",
+      "name": "703室J户型",
+      "bgPic": "sp-kSp-fzQ-QnW-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-fzQ-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-omn-PFe-WCs-Ymc-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-omn-PFe-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-gmK-QnW-ZwC-HdY-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "客厅",
+      "parent_id": "sp-kSp-gmK-QnW-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-Wod-s6b-04H-3Qd-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "卫生间",
+      "parent_id": "sp-kSp-Wod-s6b-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-Wod-o23-Xwe-hNZ-0-0-0-0-MjnQ",
+      "icon": "b-23.png",
+      "name": "餐厅",
+      "parent_id": "sp-kSp-Wod-o23-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-F8Y-q1U-0-0-0-0-0-0-MjnQ",
+      "icon": "b-1.png",
+      "name": "301户型",
+      "bgPic": "sp-kSp-F8Y-q1U-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-F8Y-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-RLN-V9u-4Tp-PHc-0-0-0-0-MjnQ",
+      "icon": "b-23.png",
+      "name": "餐厅",
+      "parent_id": "sp-kSp-RLN-V9u-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-gmK-V9u-Ycw-J7N-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "卫生间",
+      "parent_id": "sp-kSp-gmK-V9u-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-fzQ-V9u-6tO-TBW-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "客厅",
+      "parent_id": "sp-kSp-fzQ-V9u-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-fzQ-yOW-0-0-0-0-0-0-MjnQ",
+      "icon": "b-3.png",
+      "name": "705室C户型",
+      "bgPic": "sp-kSp-fzQ-yOW-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-fzQ-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-8h8-5ea-qiF-3MP-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "厕所",
+      "parent_id": "sp-kSp-8h8-5ea-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-IuS-9ZK-i46-bsj-0-0-0-0-MjnQ",
+      "icon": "b-6.png",
+      "name": "衣帽间",
+      "parent_id": "sp-kSp-IuS-9ZK-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-F8Y-U3u-0-0-0-0-0-0-MjnQ",
+      "icon": "b-3.png",
+      "name": "306户型",
+      "bgPic": "sp-kSp-F8Y-U3u-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-F8Y-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-F8Y-hTw-ph8-XUw-0-0-0-0-MjnQ",
+      "icon": "b-15.png",
+      "name": "大厅",
+      "parent_id": "sp-kSp-F8Y-hTw-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-gmK-yOW-iez-eDd-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "客厅",
+      "parent_id": "sp-kSp-gmK-yOW-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-8h8-0-0-0-0-0-0-0-MjnQ",
+      "icon": "b-3.png",
+      "name": "10层",
+      "parent_id": "sp-kSp-0-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-8h8-5ea-0-0-0-0-0-0-MjnQ",
+      "icon": "b-3.png",
+      "name": "1007室B户型",
+      "bgPic": "sp-kSp-uwD-yty-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-8h8-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-KQe-Pku-VAV-0-0-0-0-MjnQ",
+      "icon": "b-15.png",
+      "name": "大厅",
+      "parent_id": "sp-kSp-qt4-KQe-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-F8Y-q1U-XRl-zsA-0-0-0-0-MjnQ",
+      "icon": "b-10.png",
+      "name": "厨房",
+      "parent_id": "sp-kSp-F8Y-q1U-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-IuS-cNK-0-0-0-0-0-0-MjnQ",
+      "icon": "b-1.png",
+      "name": "1207室D2户型",
+      "parent_id": "sp-kSp-IuS-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-Wod-NgL-Xwe-vbm-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-Wod-NgL-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-omn-yty-oA2-aQ4-0-0-0-0-MjnQ",
+      "icon": "b-23.png",
+      "name": "餐厅",
+      "parent_id": "sp-kSp-omn-yty-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-Wod-S54-eFk-Zov-0-0-0-0-MjnQ",
+      "icon": "b-23.png",
+      "name": "餐厅",
+      "parent_id": "sp-kSp-Wod-S54-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-Wod-s6b-04H-BBh-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-Wod-s6b-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-F8Y-hTw-ph8-fg3-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "楼上卧室",
+      "parent_id": "sp-kSp-F8Y-hTw-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-fzQ-V9u-6tO-ql4-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-fzQ-V9u-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-fzQ-PMA-JC2-F0G-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-fzQ-PMA-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-Hpb-yOW-krM-dqh-0-0-0-0-MjnQ",
+      "icon": "b-23.png",
+      "name": "餐厅",
+      "parent_id": "sp-kSp-Hpb-yOW-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-omn-S3W-U4v-ple-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "厕所",
+      "parent_id": "sp-kSp-omn-S3W-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-8h8-yty-0-0-0-0-0-0-MjnQ",
+      "icon": "b-3.png",
+      "name": "1006室B户型",
+      "bgPic": "sp-kSp-uwD-yty-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-8h8-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-F8Y-q1U-XRl-PUp-0-0-0-0-MjnQ",
+      "icon": "b-63.png",
+      "name": "楼梯",
+      "parent_id": "sp-kSp-F8Y-q1U-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-F8Y-q1U-XRl-hXK-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "楼上卧室",
+      "parent_id": "sp-kSp-F8Y-q1U-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-ZSj-Fu8-BTs-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "楼上卧室",
+      "parent_id": "sp-kSp-qt4-ZSj-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-omn-kcj-AKt-qDH-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "厕所",
+      "parent_id": "sp-kSp-omn-kcj-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-IuS-tsV-V9x-1Bg-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "厕所",
+      "parent_id": "sp-kSp-IuS-tsV-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-uwD-x5L-0-0-0-0-0-0-MjnQ",
+      "icon": "b-3.png",
+      "name": "803室C1户型",
+      "bgPic": "sp-kSp-uwD-vln-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-uwD-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-Hpb-bAL-dOF-ikz-0-0-0-0-MjnQ",
+      "icon": "b-23.png",
+      "name": "餐厅",
+      "parent_id": "sp-kSp-Hpb-bAL-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-Wod-S54-eFk-3S5-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室2",
+      "parent_id": "sp-kSp-Wod-S54-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-87G-KQE-mjL-ctO-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "卫生间",
+      "parent_id": "sp-kSp-87G-KQE-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-uwD-Lb5-dfj-VDa-0-0-0-0-MjnQ",
+      "icon": "b-23.png",
+      "name": "餐厅",
+      "parent_id": "sp-kSp-uwD-Lb5-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-ZSj-Fu8-G7D-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "楼上厕所",
+      "parent_id": "sp-kSp-qt4-ZSj-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-yCp-4nc-tOY-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "厕所",
+      "parent_id": "sp-kSp-qt4-yCp-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-yCp-4nc-CAt-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-qt4-yCp-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-ykn-ve1-ivg-0Nb-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "厕所2",
+      "parent_id": "sp-kSp-ykn-ve1-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-Wod-nrD-eFk-f9f-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-Wod-nrD-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-F8Y-ICR-Ui8-azi-0-0-0-0-MjnQ",
+      "icon": "b-10.png",
+      "name": "厨房",
+      "parent_id": "sp-kSp-F8Y-ICR-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-F8Y-PwV-tk6-YW0-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "楼下厕所",
+      "parent_id": "sp-kSp-F8Y-PwV-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-87G-CYD-mjL-SyY-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "客厅",
+      "parent_id": "sp-kSp-87G-CYD-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-87G-iAF-Obr-XXJ-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "厕所",
+      "parent_id": "sp-kSp-87G-iAF-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-lC6-Mpp-bSS-0-0-0-0-MjnQ",
+      "icon": "b-63.png",
+      "name": "楼梯",
+      "parent_id": "sp-kSp-qt4-lC6-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-fzQ-Six-Fva-E9w-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "厕所",
+      "parent_id": "sp-kSp-fzQ-Six-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-fzQ-pH5-0-0-0-0-0-0-MjnQ",
+      "icon": "b-3.png",
+      "name": "706室B户型",
+      "bgPic": "sp-kSp-uwD-yty-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-fzQ-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-Hpb-QnW-cY7-ARY-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-Hpb-QnW-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-RLN-RSt-1VI-Svf-0-0-0-0-MjnQ",
+      "icon": "b-23.png",
+      "name": "餐厅",
+      "parent_id": "sp-kSp-RLN-RSt-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-8h8-b8Z-0-0-0-0-0-0-MjnQ",
+      "icon": "b-3.png",
+      "name": "1009室A2户型",
+      "bgPic": "sp-kSp-uwD-nBm-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-8h8-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-ZSj-Fu8-KR7-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "楼上卧室",
+      "parent_id": "sp-kSp-qt4-ZSj-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-uwD-x5L-3hL-JH5-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-uwD-x5L-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-gmK-V9u-0-0-0-0-0-0-MjnQ",
+      "icon": "b-1.png",
+      "name": "501室K户型",
+      "bgPic": "sp-kSp-gmK-V9u-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-gmK-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-IuS-5jW-Z1M-0qi-0-0-0-0-MjnQ",
+      "icon": "b-23.png",
+      "name": "餐厅",
+      "parent_id": "sp-kSp-IuS-5jW-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-F8Y-ICR-Ui8-RUZ-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "楼下厕所",
+      "parent_id": "sp-kSp-F8Y-ICR-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-8h8-Hkx-U4v-HIg-0-0-0-0-MjnQ",
+      "icon": "b-23.png",
+      "name": "餐厅",
+      "parent_id": "sp-kSp-8h8-Hkx-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-ZSj-0-0-0-0-0-0-MjnQ",
+      "icon": "b-1.png",
+      "name": "201户型",
+      "bgPic": "sp-kSp-qt4-ZSj-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-qt4-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-87G-CYD-mjL-F2n-0-0-0-0-MjnQ",
+      "icon": "b-23.png",
+      "name": "餐厅",
+      "parent_id": "sp-kSp-87G-CYD-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-RLN-V9u-4Tp-z4A-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "客厅",
+      "parent_id": "sp-kSp-RLN-V9u-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-lC6-Mpp-0RT-0-0-0-0-MjnQ",
+      "icon": "b-15.png",
+      "name": "大厅",
+      "parent_id": "sp-kSp-qt4-lC6-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-F8Y-N1S-VnI-Ild-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "楼下厕所",
+      "parent_id": "sp-kSp-F8Y-N1S-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-ykn-UpN-6wc-PY7-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "厕所",
+      "parent_id": "sp-kSp-ykn-UpN-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-Hpb-CPJ-Zn3-7IX-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-Hpb-CPJ-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-Wod-ZWR-04H-3Qd-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "浴室",
+      "parent_id": "sp-kSp-Wod-ZWR-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-fzQ-0-0-0-0-0-0-0-MjnQ",
+      "icon": "b-3.png",
+      "name": "7层",
+      "parent_id": "sp-kSp-0-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-QTD-0-0-0-0-0-0-MjnQ",
+      "icon": "b-1.png",
+      "name": "203户型",
+      "bgPic": "sp-kSp-qt4-QTD-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-qt4-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-Hpb-CPJ-Zn3-6NF-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "客厅",
+      "parent_id": "sp-kSp-Hpb-CPJ-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-F8Y-hTw-ph8-PZr-0-0-0-0-MjnQ",
+      "icon": "b-10.png",
+      "name": "厨房",
+      "parent_id": "sp-kSp-F8Y-hTw-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-RLN-Aon-8Op-u9q-0-0-0-0-MjnQ",
+      "icon": "b-23.png",
+      "name": "餐厅",
+      "parent_id": "sp-kSp-RLN-Aon-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-gmK-RSt-zNb-7PT-0-0-0-0-MjnQ",
+      "icon": "b-23.png",
+      "name": "餐厅",
+      "parent_id": "sp-kSp-gmK-RSt-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-T9u-Xuu-Nz4-0-0-0-0-MjnQ",
+      "icon": "b-15.png",
+      "name": "大厅",
+      "parent_id": "sp-kSp-qt4-T9u-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-omn-kcj-AKt-pZ1-0-0-0-0-MjnQ",
+      "icon": "b-23.png",
+      "name": "餐厅",
+      "parent_id": "sp-kSp-omn-kcj-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-Hpb-0-0-0-0-0-0-0-MjnQ",
+      "icon": "b-3.png",
+      "name": "6层",
+      "parent_id": "sp-kSp-0-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-F8Y-hTw-ph8-1Ly-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "楼上厕所",
+      "parent_id": "sp-kSp-F8Y-hTw-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-0-0-0-0-0-0-0-MjnQ",
+      "icon": "b-3.png",
+      "name": "2层",
+      "parent_id": "sp-kSp-0-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-87G-0-0-0-0-0-0-0-MjnQ",
+      "icon": "b-1.png",
+      "name": "13层",
+      "parent_id": "sp-kSp-0-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-fzQ-yOW-Zng-DvQ-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-fzQ-yOW-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-ykn-ve1-ivg-HcI-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "客厅",
+      "parent_id": "sp-kSp-ykn-ve1-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-omn-0-0-0-0-0-0-0-MjnQ",
+      "icon": "b-3.png",
+      "name": "9层",
+      "parent_id": "sp-kSp-0-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-KQe-Pku-W0a-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "楼下厕所",
+      "parent_id": "sp-kSp-qt4-KQe-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-8h8-b8Z-xRM-7Cz-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-8h8-b8Z-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-Hpb-rUr-G2N-bGs-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "客厅",
+      "parent_id": "sp-kSp-Hpb-rUr-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-8h8-Y0s-a2B-Cfb-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "客厅",
+      "parent_id": "sp-kSp-8h8-Y0s-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-87G-tlR-T33-aaa-0-0-0-0-MjnQ",
+      "icon": "b-19.png",
+      "name": "走廊",
+      "parent_id": "sp-kSp-87G-tlR-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-F8Y-U3u-0ub-Cz9-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "楼下卧室",
+      "parent_id": "sp-kSp-F8Y-U3u-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-ykn-ket-0-0-0-0-0-0-MjnQ",
+      "icon": "b-1.png",
+      "name": "1103室C1户型",
+      "bgPic": "sp-kSp-FPT-ket-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-ykn-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-omn-PFe-WCs-5wz-0-0-0-0-MjnQ",
+      "icon": "b-23.png",
+      "name": "餐厅",
+      "parent_id": "sp-kSp-omn-PFe-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-omn-PFe-WCs-OYE-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "厕所",
+      "parent_id": "sp-kSp-omn-PFe-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-F8Y-PwV-tk6-GXc-0-0-0-0-MjnQ",
+      "icon": "b-63.png",
+      "name": "楼梯",
+      "parent_id": "sp-kSp-F8Y-PwV-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-T9u-Xuu-8K7-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "楼上厕所",
+      "parent_id": "sp-kSp-qt4-T9u-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-F8Y-ICR-Ui8-UlN-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "楼下卧室",
+      "parent_id": "sp-kSp-F8Y-ICR-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-RLN-rUr-PIG-Rpa-0-0-0-0-MjnQ",
+      "icon": "b-23.png",
+      "name": "灯带",
+      "parent_id": "sp-kSp-RLN-rUr-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-KQe-Pku-hnB-0-0-0-0-MjnQ",
+      "icon": "b-15.png",
+      "name": "大厅",
+      "parent_id": "sp-kSp-qt4-KQe-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-4IZ-9gC-miW-0-0-0-0-MjnQ",
+      "icon": "b-10.png",
+      "name": "厨房",
+      "parent_id": "sp-kSp-qt4-4IZ-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-gmK-USI-IgF-TB6-0-0-0-0-MjnQ",
+      "icon": "b-23.png",
+      "name": "餐厅",
+      "parent_id": "sp-kSp-gmK-USI-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-IuS-i5A-j6s-xZF-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-IuS-i5A-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-lC6-Mpp-dna-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "楼下厕所",
+      "parent_id": "sp-kSp-qt4-lC6-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-RLN-RSt-1VI-fSZ-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "客厅",
+      "parent_id": "sp-kSp-RLN-RSt-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-87G-CYD-0-0-0-0-0-0-MjnQ",
+      "icon": "b-1.png",
+      "name": "1308室D3户型",
+      "parent_id": "sp-kSp-87G-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-uwD-Y0s-AKt-LL9-0-0-0-0-MjnQ",
+      "icon": "b-19.png",
+      "name": "走廊",
+      "parent_id": "sp-kSp-uwD-Y0s-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-Wod-S54-eFk-OKs-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "客厅",
+      "parent_id": "sp-kSp-Wod-S54-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-uwD-yty-Fva-5Sx-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "客厅",
+      "parent_id": "sp-kSp-uwD-yty-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-Hpb-yOW-krM-7nX-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-Hpb-yOW-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-gmK-QnW-ZwC-7Ju-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "厕所",
+      "parent_id": "sp-kSp-gmK-QnW-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-ykn-ket-8DZ-A2N-0-0-0-0-MjnQ",
+      "icon": "b-20.png",
+      "name": "客厅",
+      "parent_id": "sp-kSp-ykn-ket-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-fzQ-2b3-X0a-ZuF-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-fzQ-2b3-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-uwD-x5L-3hL-TbR-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "厕所",
+      "parent_id": "sp-kSp-uwD-x5L-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-QTD-Ged-TmZ-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "楼下厕所",
+      "parent_id": "sp-kSp-qt4-QTD-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-gmK-QnW-ZwC-t52-0-0-0-0-MjnQ",
+      "icon": "b-23.png",
+      "name": "餐厅",
+      "parent_id": "sp-kSp-gmK-QnW-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-gmK-yOW-0-0-0-0-0-0-MjnQ",
+      "icon": "b-3.png",
+      "name": "506室B户型",
+      "bgPic": "sp-kSp-gmK-yOW-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-gmK-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-RLN-QnW-0-0-0-0-0-0-MjnQ",
+      "icon": "b-3.png",
+      "name": "408室A1户型",
+      "bgPic": "sp-kSp-RLN-QnW-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-RLN-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-QTD-Ged-WE2-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "楼下卧室",
+      "parent_id": "sp-kSp-qt4-QTD-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-Hpb-rUr-0-0-0-0-0-0-MjnQ",
+      "icon": "b-1.png",
+      "name": "603室J户型",
+      "bgPic": "sp-kSp-Hpb-rUr-0-0-0-0-0-0-MjnQ.png",
+      "parent_id": "sp-kSp-Hpb-0-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-fzQ-Six-Fva-Bli-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-fzQ-Six-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-87G-nS2-0Ej-NvP-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室1",
+      "parent_id": "sp-kSp-87G-nS2-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-Hpb-QnW-cY7-Urh-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "厕所",
+      "parent_id": "sp-kSp-Hpb-QnW-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-Hpb-bAL-dOF-Ax7-0-0-0-0-MjnQ",
+      "icon": "b-9.png",
+      "name": "卧室",
+      "parent_id": "sp-kSp-Hpb-bAL-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-4IZ-9gC-FlT-0-0-0-0-MjnQ",
+      "icon": "b-18.png",
+      "name": "楼上厕所",
+      "parent_id": "sp-kSp-qt4-4IZ-0-0-0-0-0-0-MjnQ"
+    },
+    {
+      "id": "sp-kSp-qt4-yCp-4nc-nLW-0-0-0-0-MjnQ",
+      "icon": "b-15.png",
+      "name": "大厅",
+      "parent_id": "sp-kSp-qt4-yCp-0-0-0-0-0-0-MjnQ"
+    }
+  ]

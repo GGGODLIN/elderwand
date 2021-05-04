@@ -3,8 +3,8 @@ import supertest from 'supertest';
 import TestEnvVar from '../../../test/config/TestEnvVar';
 import { AuthRouter } from '../AuthRouter';
 import { AuthUtil } from 'g13-web-shared/server/user';
+import { PaginationVM } from './../../../client/models/PaginationVM';
 import { ServerEnvVar } from '../../config/ServerEnvVar';
-import { UserPaginationVM } from '../../../client/domain/user/UserVM';
 import { UserRoleEnum } from 'g13-web-shared/server/enums';
 import { UserRouter } from '../UserRouter';
 import { UserVM } from '../../../client/domain/user/UserVM';
@@ -37,9 +37,10 @@ describe("User API Router", () => {
                 .set(AuthUtil.AuthHeader, AuthUtil.newBearer(token))
                 .expect(200);
 
-            const vm: UserPaginationVM = result.body
+            const vm: PaginationVM<UserVM> = result.body
 
-            expect(vm.users).not.toBeNull()
+            expect(vm.results).not.toBeNull()
+
             // console.log(result.body);
         });
     });
@@ -71,7 +72,7 @@ describe("User API Router", () => {
         test("should return inviting user", async () => {
             // const { id, token } = await GetUserToken(server);
             const { user, token } = await GetInvitingUserToken(server);
-            
+
             const agent = supertest.agent(server);
 
             const url = `/api/invite/user`

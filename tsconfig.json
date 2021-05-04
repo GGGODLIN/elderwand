@@ -24,6 +24,6 @@
     "pages/**/*.tsx",
     "src/client/**/*.ts",
     "src/client/**/*.tsx"
-  ],
+, "pages/space_copy.tsx"  ],
   "exclude": ["node_modules", "**/__tests__/**", "*.spec.ts"]
 }

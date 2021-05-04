@@ -1,0 +1,15 @@
+@import "src/client/styles/variable";
+
+.device.page {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+
+  .name {
+    font-size: 64px;
+  }
+}
+
+.topology-toolbox{
+
+}

@@ -5,18 +5,14 @@ import {
     LoginVO,
     RegisterVO,
     UserDTO
-    } from 'g13-web-shared/server/user/models';
+} from 'g13-web-shared/server/user/models';
 import { PlatformEnum } from 'g13-web-shared/server/enums';
 import { QueryUserVO } from 'g13-web-shared/server/user/models/QueryUserVO';
 import { ServerEnvVar } from '../config/ServerEnvVar';
+import { PaginationDTO } from '../models/PaginationDTO';
 
 const ApiHost = `http://${ServerEnvVar.SkymapApiHost}`
 
-interface PaginationResultModel<T> {
-    total: number
-    index: number
-    date: Array<T>
-}
 class UserMaintainUCO {
 
     async getUser(uid: string): Promise<UserDTO> {
@@ -115,12 +111,12 @@ class UserMaintainUCO {
 
             username: vo.username,
             password: vo.password,
-            
+
             email: vo.email,
             display_name: vo.display_name,
             tel: vo.tel,
             address: vo.address,
-            
+
             platform_id: PlatformEnum.ElderWand,
         }
 
@@ -156,7 +152,7 @@ class UserMaintainUCO {
         })
     }
 
-    async queryUsers(vo: QueryUserVO): Promise<PaginationResultModel<UserDTO>> {
+    async queryUsers(vo: QueryUserVO): Promise<PaginationDTO<UserDTO>> {
 
         const url = `${ApiHost}/api/users`;
         const params = {
@@ -166,7 +162,7 @@ class UserMaintainUCO {
 
         return new Promise(function (resolve, reject) {
             axios
-                .get<PaginationResultModel<UserDTO>>(url, { params })
+                .get<PaginationDTO<UserDTO>>(url, { params })
                 .then((result) => {
                     resolve(result.data)
                 })

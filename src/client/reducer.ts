@@ -1,6 +1,8 @@
 import AllocateUserSlice from './slices/AllocateUserSlice';
 import AvailableUserSlice from './slices/AvailableUserSlice';
+import DataMigrationSlice from './slices/DataMigrationSlice';
 import ProjectSlice from './slices/ProjectSlice';
+import SpaceSlice from './slices/SpaceSlice';
 import { AuthSlice } from './slices/AuthSlice';
 import { combineReducers } from '@reduxjs/toolkit';
 import { FetchSlice } from './slices/FetchSlice';
@@ -10,14 +12,22 @@ import { UserSlice } from './slices/UserSlice';
 
 // TODO move reducers to default module
 export const RootReducer = combineReducers({
-    init: InitSlice.reducer,
     fetch: FetchSlice.reducer,
+    // global slices
+    init: InitSlice.reducer,
     layout: LayoutSlice.reducer,
     auth: AuthSlice.reducer,
+    // user maintain
     user: UserSlice.reducer,
+    // project maintain
     project: ProjectSlice.reducer,
+    // common action
     available_users: AvailableUserSlice.reducer,
     allocate_users: AllocateUserSlice.reducer,
+    // space maintain
+    space: SpaceSlice.reducer,
+    // data migration
+    migration: DataMigrationSlice.reducer,
 });
 
 export type RootState = ReturnType<typeof RootReducer>;

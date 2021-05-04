@@ -1,0 +1,176 @@
+@import "src/client/styles/variable";
+
+.migration.page {
+  .migration-tabs {
+    margin: 8px 24px 4px;
+
+    .MuiTabs-flexContainer {
+      button {
+        padding: 4px 0 0;
+
+        &[aria-selected="true"] {
+          border-bottom: solid 4px $bg-green-primary;
+        }
+      }
+    }
+    .MuiTabs-indicator {
+      display: none;
+    }
+  }
+
+  .migration-card {
+    min-height: calc(#{$main-min-height} - #{80px});
+    margin: 0 24px;
+    display: flex;
+    align-items: stretch;
+
+    .MuiCardContent-root {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      width: 100%;
+    }
+  }
+
+  .connect-info {
+    display: flex;
+    flex-direction: row;
+    white-space: nowrap;
+    height: 42px;
+    margin-bottom: 12px;
+
+    .import-btn,
+    .export-btn {
+      color: $white;
+      margin: 2px 4px;
+    }
+
+    .import-btn {
+      background-color: $bg-blue-primary;
+    }
+    .export-btn {
+      background: $bg-orange-primary;
+    }
+
+    .MuiTextField-root {
+      margin: 0 4px;
+    }
+
+    #conn-string {
+      width: 30vw;
+    }
+
+    #dbname {
+      width: 64px;
+    }
+
+    .connect-btn {
+      background-color: $bg-green-primary;
+      color: $white;
+      margin: 2px 4px;
+    }
+    .disconnect-btn {
+      background-color: $bg-red-primary;
+      color: $white;
+      margin: 2px 4px;
+    }
+
+    // .refresh-btn {
+    //   background-color: $bg-grey-primary;
+    //   color: $white;
+    //   margin: 2px 4px;
+    // }
+
+    .clear-btn {
+      background-color: $bg-grey-primary;
+      color: $white;
+      margin: 2px 4px;
+    }
+
+    .version-selector {
+      margin: 0 4px;
+      #version-selector {
+        padding: 12px 32px 9px 16px;
+        margin: 0;
+      }
+    }
+  }
+
+  .data-info {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 100%;
+
+    > div {
+      border: 2px solid $bg-green-primary;
+      border-radius: 8px;
+      padding: 16px;
+
+      overflow: auto;
+
+      .list-header {
+        margin-bottom: 12px;
+      }
+      .MuiTreeItem-label {
+        white-space: nowrap;
+      }
+    }
+
+    .project-list {
+      width: 20%;
+    }
+    .space-list {
+      width: 35%;
+    }
+    .device-list {
+      width: 35%;
+    }
+
+    .MuiTreeItem-root.Mui-selected > .MuiTreeItem-content .MuiTreeItem-label {
+      background-color: $bg-green-primary;
+    }
+  }
+
+  .import-project-btn {
+    color: $white;
+    background-color: $bg-blue-primary;
+
+    &:hover {
+      background-color: $bg-blue-light;
+    }
+
+    &.hidden {
+      display: none;
+    }
+
+    &[disabled] {
+      background-color: $bg-grey-light;
+    }
+  }
+}
+
+.import-project-dialog {
+  .MuiPaper-root {
+    min-width: 320px;
+  }
+
+  .MuiDialogTitle-root {
+    color: $white;
+    background-color: $bg-blue-dark;
+  }
+
+  .MuiDialogContent-root .MuiGrid-item {
+    padding: 12px 0;
+  }
+
+  button.import {
+    color: $bg-blue-light;
+  }
+  button.clear {
+    color: $bg-green-dark;
+  }
+  button.cancel {
+    color: $bg-red-dark;
+  }
+}

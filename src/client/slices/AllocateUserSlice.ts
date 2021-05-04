@@ -1,5 +1,5 @@
+import { PaginationVM } from 'src/client/models/PaginationVM';
 import { produce } from 'immer';
-import { UserPaginationVM } from '../domain/user/UserVM';
 import { UserVM } from 'src/client/domain/user/UserVM';
 import {
     ActionCreatorWithoutPayload,
@@ -35,15 +35,15 @@ const AllocateUserSlice = createSlice<
     name: "allocate_user",
     initialState: getInitialState(),
     reducers: {
-        clear: (state, action: PayloadAction<UserPaginationVM>) => {
+        clear: (state, action: PayloadAction<PaginationVM<UserVM>>) => {
             return produce(state, (draft) => {
                 draft.users = [];
                 draft.selected = [];
             });
         },
-        fetch: (state, action: PayloadAction<UserPaginationVM>) => {
+        fetch: (state, action: PayloadAction<PaginationVM<UserVM>>) => {
             return produce(state, (draft) => {
-                draft.users = action.payload.users;
+                draft.users = action.payload.results;
             });
         },
         push: (state, action: PayloadAction<UserVM[]>) => {
@@ -105,7 +105,7 @@ type key = string | number;
 const reducer = AllocateUserSlice.reducer
 
 const clear = AllocateUserSlice.actions.clear as ActionCreatorWithoutPayload<string>;
-const fetch = AllocateUserSlice.actions.fetch as ActionCreatorWithPayload<UserPaginationVM, string>;
+const fetch = AllocateUserSlice.actions.fetch as ActionCreatorWithPayload<PaginationVM<UserVM>, string>;
 const push = AllocateUserSlice.actions.push as ActionCreatorWithPayload<UserVM[], string>;
 const remove = AllocateUserSlice.actions.remove as ActionCreatorWithPayload<key[], string>;
 
