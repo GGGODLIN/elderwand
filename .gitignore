@@ -1,3 +1,5 @@
+.DS_Store
+
 # IDE
 .idea
 .vscode
@@ -31,4 +33,4 @@ yarn.lock
 
 # security
 
-.DS_Store
+**/http-client.private.env.json
