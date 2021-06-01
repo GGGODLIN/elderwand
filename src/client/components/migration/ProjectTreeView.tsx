@@ -9,6 +9,7 @@ import { groupBy } from "src/client/utils/FunctionUtil";
 import { ScrollUtil } from "src/client/utils/ScrollUtil";
 import { TreeItem, TreeView } from "@material-ui/lab";
 import { useDispatch } from "react-redux";
+import { DevEnvVar } from "src/client/configs/ClientEnvVar";
 import {
   DevicePreviewVM,
   ProjectPreviewVM,
@@ -25,7 +26,8 @@ const ProjectTreeView: React.FC<ProjectTreeViewProp> = (props) => {
   const dispatch = useDispatch();
 
   // TODO Get from self api
-  const origin = "http://192.168.128.20:8000";
+  // const origin = AxiosUtil.getOriginWithPort();
+  const origin = `http://${DevEnvVar.SkymapApiHost}`;
   const client = AxiosUtil.makeAxiosInstance(dispatch, origin);
 
   const elements = Object.keys(groups).map((key: string) => {

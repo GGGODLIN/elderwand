@@ -1,4 +1,5 @@
 import * as React from "react";
+import FetchSlice from "src/client/slices/FetchSlice";
 import kws from "src/client/configs/Keywords";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { AxiosError, AxiosResponse } from "axios";
@@ -48,27 +49,35 @@ export const LoginPage: React.FC<LoginPageProps> = (props) => {
 
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const { register, handleSubmit, errors } = useForm<LoginForm>({
-    mode: "onChange",
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginForm>({
+    mode: "all",
+    defaultValues: {},
   });
 
   const origin = AxiosUtil.getOriginWithPort();
-
   const client = AxiosUtil.makeAxiosInstance(dispatch, origin);
 
   const onSubmit = async (form: LoginForm) => {
+    console.log(form);
+
     client
       .post("/api/login", form)
       .then((res: AxiosResponse<any>) => {
-        console.log(res.data);
         if (200 <= res.status && res.status < 300) {
           window.location.replace("/admin");
           return;
         }
+        console.log(res.data);
       })
       .catch((err: AxiosError<any>) => {
-        console.log(err.message);
-      });
+        console.error(err.message);
+        dispatch(FetchSlice.end());
+      })
+      .finally(() => {});
   };
 
   let username = "";
@@ -95,51 +104,41 @@ export const LoginPage: React.FC<LoginPageProps> = (props) => {
 
               <form noValidate onSubmit={handleSubmit(onSubmit)}>
                 <TextField
-                  defaultValue={username}
                   type="text"
-                  id="username"
-                  name="username"
                   label={t(kws.LoginPage.Username)}
-                  //   onChange={handleTextInputChange}
                   variant="outlined"
                   margin="normal"
                   required
                   fullWidth
                   autoFocus
+                  size="medium"
                   autoComplete="username"
-                  inputRef={register({
-                    required: `${t(kws.ErrorMessage.IsRequired)}`,
-                  })}
+                  defaultValue={username}
+                  // {...register("username", {
+                  //   required: `${t(kws.ErrorMessage.IsRequired)}`,
+                  // })}
                   error={!!errors.username}
                   helperText={handleErrorMessage(errors.username)}
                 />
 
                 <TextField
-                  defaultValue={password}
                   type="password"
-                  id="password"
-                  name="password"
                   label={t(kws.LoginPage.Password)}
-                  //   onChange={handleTextInputChange}
                   variant="outlined"
                   margin="normal"
                   required
                   fullWidth
-                  inputRef={register({
-                    required: `${t(kws.ErrorMessage.IsRequired)}`,
-                  })}
+                  size="medium"
+                  defaultValue={password}
+                  // {...register("password", {
+                  //   required: `${t(kws.ErrorMessage.IsRequired)}`,
+                  // })}
                   error={!!errors.password}
                   helperText={handleErrorMessage(errors.password)}
                 />
 
                 <FormControlLabel
-                  control={
-                    <Checkbox
-                      value="remember"
-                      color="primary"
-                      //   onChange={handleCheckboxChange}
-                    />
-                  }
+                  control={<Checkbox value="remember" color="primary" />}
                   label={t(kws.LoginPage.RememberMe)}
                 />
 

@@ -1,0 +1,95 @@
+# List source projects
+GET {{HOST}}/api/migration/projects?dbname={{MIGRATION_MONGODB_SAKE}}&conn={{MIGRATION_MONGODB_URI}}&version=200
+accept: application/json
+
+###
+
+# list spaces by project code
+GET {{HOST}}/api/migration/projects/{{TARGET_PROJECT_CODE}}/spaces?dbname={{MIGRATION_MONGODB_SAKE}}&conn={{MIGRATION_MONGODB_URI}}&version=200
+accept: application/json
+
+###
+
+# List devices by project code
+GET {{HOST}}/api/migration/projects/{{TARGET_PROJECT_CODE}}/devices?dbname={{MIGRATION_MONGODB_SAKE}}&conn={{MIGRATION_MONGODB_URI}}&version=200
+accept: application/json
+
+###
+
+
+# List source device template by project
+GET {{HOST}}/api/migration/device/templates?dbname={{MIGRATION_MONGODB_THINGS}}&conn={{MIGRATION_MONGODB_URI}}&version=200
+accept: application/json
+
+###
+
+
+# Import device templates
+POST {{HOST}}/api/migration/device/templates?dbname={{MIGRATION_MONGODB_THINGS}}&conn={{MIGRATION_MONGODB_URI}}&version=200
+accept: application/json
+Content-Type: application/json
+
+{}
+
+###
+
+
+# Import project with new project code
+POST {{HOST}}/api/migration/projects/{{MIGRATION_TARGET_PROJECT_CODE}}?dbname={{MIGRATION_MONGODB_SAKE}}&conn={{MIGRATION_MONGODB_URI}}&version=200
+accept: application/json
+Content-Type: application/json
+
+{
+    "code": "TEST"
+}
+
+###
+
+
+# Import spaces with new project code
+POST {{HOST}}/api/migration/projects/{{MIGRATION_TARGET_PROJECT_CODE}}/spaces?dbname={{MIGRATION_MONGODB_SAKE}}&conn={{MIGRATION_MONGODB_URI}}&version=200
+accept: application/json
+Content-Type: application/json
+
+{
+    "code": "TEST"
+}
+
+###
+
+
+
+# Import devices
+POST {{HOST}}/api/migration/projects/{{MIGRATION_TARGET_PROJECT_CODE}}/devices?dbname={{MIGRATION_MONGODB_SAKE}}&conn={{MIGRATION_MONGODB_URI}}&version=200
+accept: application/json
+Content-Type: application/json
+
+###
+
+
+# Import devices with new project code
+POST {{HOST}}/api/migration/projects/{{MIGRATION_TARGET_PROJECT_CODE}}/devices?dbname={{MIGRATION_MONGODB_SAKE}}&conn={{MIGRATION_MONGODB_URI}}&version=200
+accept: application/json
+Content-Type: application/json
+
+{
+    "code": "{{TARGET_PROJECT_CODE}}"
+}
+
+###
+
+
+# List source device template by project
+GET {{HOST}}/api/migration/device/templates?dbname={{MIGRATION_MONGODB_THINGS}}&conn={{MIGRATION_MONGODB_URI}}&version=200
+accept: application/json
+
+###
+
+# Import device templates
+POST {{HOST}}/api/migration/device/templates?dbname={{MIGRATION_MONGODB_THINGS}}&conn={{MIGRATION_MONGODB_URI}}&version=200
+accept: application/json
+Content-Type: application/json
+
+{}
+
+###

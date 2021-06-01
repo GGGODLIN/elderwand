@@ -1,0 +1,164 @@
+# EladerWand Api
+# Get service info
+GET {{HOST}}/api/info
+
+###
+
+
+# List source projects
+GET {{HOST}}/api/migration/projects?dbname={{MIGRATION_MONGODB_SAKE}}&conn={{MIGRATION_MONGODB_URI}}&version=200
+Accept: application/json
+Content-type: application/json
+
+###
+
+
+# List source spaces
+GET {{HOST}}/api/migration/projects/{{MIGRATION_TARGET_PROJECT_CODE}}/spaces?dbname={{MIGRATION_MONGODB_SAKE}}&conn={{MIGRATION_MONGODB_URI}}&version=200
+Accept: application/json
+Content-type: application/json
+
+###
+
+
+# List source devices
+GET {{HOST}}/api/migration/projects/{{MIGRATION_TARGET_PROJECT_CODE}}/devices?dbname={{MIGRATION_MONGODB_SAKE}}&conn={{MIGRATION_MONGODB_URI}}&version=200
+Accept: application/json
+Content-type: application/json
+
+###
+
+
+# List source device template by project
+GET {{HOST}}/api/migration/device/templates?dbname={{MIGRATION_MONGODB_THINGS}}&conn={{MIGRATION_MONGODB_URI}}&version=200
+accept: application/json
+
+###
+
+
+# Import device templates
+POST {{HOST}}/api/migration/device/templates?dbname={{MIGRATION_MONGODB_THINGS}}&conn={{MIGRATION_MONGODB_URI}}&version=200
+accept: application/json
+Content-Type: application/json
+
+{}
+
+###
+
+
+# Import devices
+POST {{HOST}}/api/migration/projects/{{MIGRATION_TARGET_PROJECT_CODE}}/devices?dbname={{MIGRATION_MONGODB_SAKE}}&conn={{MIGRATION_MONGODB_URI}}&version=200
+accept: application/json
+Content-Type: application/json
+
+###
+
+
+# Import devices with new project code
+POST {{HOST}}/api/migration/projects/{{MIGRATION_TARGET_PROJECT_CODE}}/devices?dbname={{MIGRATION_MONGODB_SAKE}}&conn={{MIGRATION_MONGODB_URI}}&version=200
+accept: application/json
+Content-Type: application/json
+
+{
+    "code": "{{TARGET_PROJECT_CODE}}"
+}
+
+###
+
+
+// gateway connect
+PUT {{HOST}}/api/gateway/connections
+accept: application/json
+Content-Type: application/json
+
+//  "id": "1a6a908e-3bdf-49a5-82a3-1258347adfb0",
+{
+  "publicIP": "{{CLIENT_IP}}",
+  "traceIP": "192.168.0.1,{{CLIENT_IP}}",
+  "networkCards": [
+    {
+      "enable": true,
+      "ip": "192.168.0.100",
+      "name": "eth0",
+      "network": "internet",
+      "mac": "22:00:21:33:66:22"
+    },
+    {
+      "enable": true,
+      "ip": "172.168.31.99",
+      "name": "eth1",
+      "network": "intranet",
+      "mac": "22:00:21:33:66:11"
+    }
+  ],
+  "swInfos": {
+    "ADHardKeySun": "0.0.0.1",
+    "ADModbusSun": "1.0.6.1",
+    "SationKNXSun": "0.0.0.1",
+    "driftice": "3.0.17",
+    "image": "0.3",
+    "libadmodbus": "2.0.5.2",
+    "sun": "1.1.5.0"
+  }
+}
+
+###
+
+
+# List gateway connections
+GET {{HOST}}/api/gateway/connections?clientIP={{CLIENT_IP}}
+accept: application/json
+Content-Type: application/json
+
+###
+
+// List devices
+GET {{HOST}}/api/devices?projectID={{TARGET_PROJECT_CODE}}
+accept: application/json
+Content-Type: application/json
+
+###
+
+
+// Get device
+GET {{HOST}}/api/devices/{{TARGET_DEVICE_ID}}?projectID={{TARGET_PROJECT_CODE}}
+accept: application/json
+Content-Type: application/json
+
+###
+
+
+// Get device by DvID
+GET {{HOST}}/api/devices/{{TARGET_DEVICE_DVID}}?projectID={{TARGET_PROJECT_CODE}}
+accept: application/json
+Content-Type: application/json
+
+###
+
+
+// Bind the Gateway connection To the device
+PUT {{HOST}}/api/devices/{{TARGET_DEVICE_DVID}}/gateway?projectID={{TARGET_PROJECT_CODE}}
+accept: application/json
+Content-Type: application/json
+
+{
+    "cid": "{{GATEWAY_CONNECTION_ID}}"
+}
+
+###
+
+
+// Get device repository
+GET {{HOST}}/api/devices/{{TARGET_DEVICE_DVID}}/repository?projectID=REXX
+accept: application/json
+Content-Type: application/json
+
+###
+
+
+// Get device repository from version2
+GET {{HOST}}/api/v2/devices/{{TARGET_DEVICE_DVID}}/repository?projectID=REXX
+accept: application/json
+Content-Type: application/json
+
+###

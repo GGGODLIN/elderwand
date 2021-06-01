@@ -1,16 +1,25 @@
 {
   "defaultSeverity": "error",
-  "extends": ["tslint-react", "tslint-config-prettier"],
+  "extends": [
+    "tslint-react",
+    "tslint-config-prettier",
+    "tslint-jest"
+  ],
   "jsRules": {},
   "rules": {
     "jsx-no-multiline-js": false,
     "jsx-no-lambda": false,
     "jsx-no-bind": false,
     "jsx-boolean-value": false,
-    "semicolon": false
+    "semicolon": false,
+    "no-alias-methods": true,
+    "no-focused-tests": true
   },
   "rulesDirectory": [],
   "linterOptions": {
-    "exclude": ["tsconfig.*"]
+    "exclude": [
+      "tsconfig.*"
+    ]
   }
 }
+  

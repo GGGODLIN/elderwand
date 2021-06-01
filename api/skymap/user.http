@@ -1,0 +1,19 @@
+# get user
+GET {{HOST}}/api/user/me?pid=3
+accept: application/json
+
+###
+
+# list users by platform
+GET {{HOST}}/api/users?pid=3
+accept: application/json
+
+###
+
+
+# get user
+GET {{HOST}}/api/users/skymap_admin?pid=3
+accept: application/json
+
+###
+

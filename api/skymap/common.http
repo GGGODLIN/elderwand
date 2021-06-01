@@ -1,0 +1,16 @@
+# GET service into
+GET {{HOST}}/api/info
+accept: application/json
+
+###
+POST {{HOST}}/api/login
+accept: application/json
+Content-Type: application/json
+
+{
+  "username": "{{USERNAME}}",
+  "password": "{{PASSWORD}}",
+  "platformID": {{ELDERWAND_PLANTFORM_ID}}
+}
+
+###

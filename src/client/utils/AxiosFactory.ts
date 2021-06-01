@@ -1,109 +1,106 @@
-import Axios, { AxiosInstance, AxiosResponse } from 'axios';
-import Cookies from 'universal-cookie';
+import Axios, { AxiosInstance, AxiosResponse } from "axios";
+import Cookies from "universal-cookie";
 
 type ResponseType =
-    | "arraybuffer"
-    | "blob"
-    | "document"
-    | "json"
-    | "text"
-    | "stream";
+  | "arraybuffer"
+  | "blob"
+  | "document"
+  | "json"
+  | "text"
+  | "stream";
 
 interface AxiosFactoryOptions {
-    baseURL?: string;
-    responseType?: ResponseType;
+  baseURL?: string;
+  responseType?: ResponseType;
 }
 
 export class AxiosFactory {
-    private baseURL: string = "";
-    private responseType: ResponseType;
-    private client: AxiosInstance;
+  private baseURL: string = "";
+  private responseType: ResponseType;
+  private client: AxiosInstance;
 
-    constructor(
-        props: AxiosFactoryOptions = {
-            baseURL: "http://localhost/",
-            responseType: "json",
+  constructor(
+    props: AxiosFactoryOptions = {
+      baseURL: "http://localhost/",
+      responseType: "json",
+    }
+  ) {
+    this.baseURL = props.baseURL;
+    this.responseType = props.responseType;
+
+    this.client = Axios.create({
+      baseURL: this.baseURL,
+      responseType: this.responseType,
+    });
+  }
+
+  useBearerToken(key: string = "token") {
+    this.client.interceptors.request.use(
+      (config) => {
+        const cookies = new Cookies();
+
+        const token = cookies.get(key);
+
+        if (token != null) {
+          config.headers.common["Authorization"] = "Bearer " + token;
         }
-    ) {
-        this.baseURL = props.baseURL;
-        this.responseType = props.responseType;
 
-        this.client = Axios.create({
-            baseURL: this.baseURL,
-            responseType: this.responseType,
-        });
-    }
+        return config;
+      },
+      (error) => Promise.reject(error)
+    );
 
-    useBearerToken(key: string = 'token') {
+    this.client.interceptors.response.use(
+      (res: AxiosResponse<{ token: string }>) => {
+        let token = res.headers["authorization"]?.slice(7);
 
-        this.client.interceptors.request.use(
-            (config) => {
-                const cookies = new Cookies();
+        if (!!token) {
+          const cookies = new Cookies();
+          cookies.set(key, token, { path: "/" });
+        }
 
-                const token = cookies.get(key);
+        return res;
+      },
+      (error) => Promise.reject(error)
+    );
 
-                if (token != null) {
-                    config.headers.common["Authorization"] = "Bearer " + token;
-                }
+    return this;
+  }
 
-                return config;
-            },
-            (error) => Promise.reject(error)
-        );
+  before(fn: Function) {
+    this.client.interceptors.request.use(
+      (config) => {
+        fn();
+        return config;
+      },
+      (error) => Promise.reject(error)
+    );
 
-        this.client.interceptors.response.use(
-            (res: AxiosResponse<{ token: string }>) => {
-                let token = res.headers["authorization"]?.slice(7);
+    return this;
+  }
 
-                if (!!token) {
-                    const cookies = new Cookies();
-                    cookies.set(key, token, { path: "/" });
-                }
+  after(fn: Function) {
+    this.client.interceptors.response.use(
+      (config) => {
+        fn();
+        return config;
+      },
+      (error) => Promise.reject(error)
+    );
 
-                return res;
-            },
-            (error) => Promise.reject(error)
-        );
+    return this;
+  }
 
-        return this
-    }
+  getInstance(): AxiosInstance {
+    return this.client;
+  }
 
-    before(fn: Function) {
+  getUseAxios(): AxiosInstance {
+    const apiClient = Axios.create({
+      baseURL: this.baseURL,
+      responseType: this.responseType,
+    });
 
-        this.client.interceptors.request.use(
-            (config) => {
-                fn()
-                return config;
-            },
-            (error) => Promise.reject(error)
-        );
-
-        return this;
-    }
-
-    after(fn: Function) {
-
-        this.client.interceptors.response.use(
-            (config) => {
-                fn()
-                return config;
-            },
-            (error) => Promise.reject(error)
-        );
-
-        return this;
-    }
-
-    getInstance(): AxiosInstance {
-        return this.client;
-    }
-
-    getUseAxios(): AxiosInstance {
-        const apiClient = Axios.create({
-            baseURL: this.baseURL,
-            responseType: this.responseType,
-        });
-
-        return apiClient;
-    }
+    return apiClient;
+  }
 }

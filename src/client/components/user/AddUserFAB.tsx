@@ -56,6 +56,7 @@ export const AddUserFAB: React.FC<any> = () => {
 interface CreateUserForm {
   email: string;
   role_id: string;
+  description: string;
 }
 
 export const InviteUserDialog: React.FC<{}> = () => {
@@ -71,8 +72,12 @@ export const InviteUserDialog: React.FC<{}> = () => {
 
   const classname = clsx(["fab", name, show ? "" : "open"]);
 
-  const { register, handleSubmit, errors } = useForm<CreateUserForm>({
-    mode: "onChange",
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<CreateUserForm>({
+    mode: "all",
   });
 
   const origin = AxiosUtil.getOriginWithPort();
@@ -195,16 +200,19 @@ export const InviteUserDialog: React.FC<{}> = () => {
                 <Select
                   native
                   inputProps={{
-                    name: "role_id",
+                    // name: "role_id",
                     id: role_select_id,
                   }}
-                  name="role"
-                  id={role_select_id}
+                  // name="role"
+                  // id={role_select_id}
                   // value={form.role_id}
                   defaultValue={""}
                   onChange={handleChangeRoleSelect}
                   required
-                  inputRef={register({
+                  // inputRef={register({
+                  //   required: `${t(kws.ErrorMessage.IsRequired)}`,
+                  // })}
+                  {...register("role_id", {
                     required: `${t(kws.ErrorMessage.IsRequired)}`,
                   })}
                   error={!!errors.role_id}
@@ -237,7 +245,7 @@ export const InviteUserDialog: React.FC<{}> = () => {
 
             <Grid item>
               <TextField
-                name="description"
+                // name="description"
                 label="Description"
                 multiline
                 variant="outlined"
@@ -245,7 +253,13 @@ export const InviteUserDialog: React.FC<{}> = () => {
                 style={{ width: "100%" }}
                 rows={1}
                 size="small"
-                inputRef={register({
+                // inputRef={register({
+                //   maxLength: {
+                //     value: 128,
+                //     message: `${t(kws.ErrorMessage.MaxLength)}`,
+                //   },
+                // })}
+                {...register("description", {
                   maxLength: {
                     value: 128,
                     message: `${t(kws.ErrorMessage.MaxLength)}`,
@@ -257,7 +271,7 @@ export const InviteUserDialog: React.FC<{}> = () => {
 
             <Grid item>
               <TextField
-                name="email"
+                // name="email"
                 type="text"
                 variant="outlined"
                 placeholder="Email"
@@ -265,7 +279,13 @@ export const InviteUserDialog: React.FC<{}> = () => {
                 style={{ width: "100%" }}
                 fullWidth
                 autoComplete="email"
-                inputRef={register({
+                // inputRef={register({
+                //   pattern: {
+                //     value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                //     message: `${t(kws.ErrorMessage.InvalidEmailAddress)}`,
+                //   },
+                // })}
+                {...register(`email`, {
                   pattern: {
                     value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
                     message: `${t(kws.ErrorMessage.InvalidEmailAddress)}`,

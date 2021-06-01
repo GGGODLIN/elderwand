@@ -21,16 +21,19 @@ function NextConfig() {
             // },
             // serverRuntimeConfig: {
             // },
+            future: {
+                webpack5: true,
+            },
             webpack: (
                 config,
                 { buildId, dev, isServer, defaultLoaders, webpack }
             ) => {
-                console.log("webpack", {
-                    buildId,
-                    defaultLoaders,
-                    dev,
-                    isServer,
-                });
+                // console.log("webpack", {
+                //     buildId,
+                //     defaultLoaders,
+                //     dev,
+                //     isServer,
+                // });
 
                 config.plugins = config.plugins || [];
                 config.plugins.push(new webpack.IgnorePlugin(/\/__tests__\//));
@@ -46,7 +49,7 @@ function NextConfig() {
             // }
         };
 
-        console.log({ config });
+        // console.log({ config });
 
         return config;
     };

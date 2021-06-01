@@ -1,36 +1,22 @@
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import clsx from "clsx";
 import DataMigrationSlice from "src/client/slices/DataMigrationSlice";
-import DeviceTreeView from "src/client/components/migration/DeviceTreeView";
 import FetchSlice from "src/client/slices/FetchSlice";
-import ProjectTreeView from "src/client/components/migration/ProjectTreeView";
-import React, { ChangeEvent, useState } from "react";
-import SpacePreviewTreeView from "src/client/components/migration/SpacePreviewTreeView";
-import VersionSelector from "src/client/components/migration/VersionSelector";
+import React from "react";
 import { AxiosUtil } from "src/client/utils/AxiosUtil";
-import { ClientEnvVar, DevEnvVar } from "src/client/configs/ClientEnvVar";
-import { ProjectPreviewVM } from "src/client/domain/migration/MigraionPreviewVM";
+import { DevEnvVar } from "src/client/configs/ClientEnvVar";
 import { RootState } from "src/client/reducer";
-import { ScrollUtil } from "src/client/utils/ScrollUtil";
-import { TabPanel } from "src/client/components/TabPanel";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import {
   Button,
-  Card,
-  CardContent,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
   Fab,
-  FormControl,
   Grid,
-  InputLabel,
-  Select,
-  Tab,
-  Tabs,
   TextField,
   Zoom,
 } from "@material-ui/core";
@@ -134,7 +120,7 @@ const ImportProjectDialog: React.FC<ImportProjectDialogProp> = (props) => {
 
     // TODO use origin
     // const origin = AxiosUtil.getOriginWithPort();
-    const origin = "http://192.168.128.20:8000";
+    const origin = `http://${DevEnvVar.SkymapApiHost}`;
     const client = AxiosUtil.makeAxiosInstance(dispatch, origin);
 
     console.log(form);

@@ -27,6 +27,7 @@ interface RegisterForm {
   username: string;
   display_name: string;
   password: string;
+  password2: string;
   email: string;
   tel: string;
   address: string;
@@ -55,8 +56,13 @@ export const RegisterPage: React.FC<RegisterPageProps> = (props) => {
 
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const { register, handleSubmit, errors } = useForm<RegisterForm>({
-    mode: "onChange",
+  const {
+    register,
+    setValue,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<RegisterForm>({
+    mode: "onSubmit",
   });
 
   const { token } = props.query;
@@ -69,6 +75,8 @@ export const RegisterPage: React.FC<RegisterPageProps> = (props) => {
   ) => {
     const name = e.target.name;
     const value = e.target.value;
+    console.log({ name, value });
+
     dispatch(AuthSlice.changeRegisterUserForm({ name, value }));
   };
 
@@ -76,15 +84,14 @@ export const RegisterPage: React.FC<RegisterPageProps> = (props) => {
     client
       .post("/api/register", form)
       .then((res: AxiosResponse<any>) => {
-        console.log(res.data);
         if (200 <= res.status && res.status < 300) {
           window.location.replace("/admin");
           return;
         }
+        console.log(res.data);
       })
       .catch((err: AxiosError<any>) => {
-        console.log(err.message);
-        // TODO show error message
+        console.error(err.message);
         dispatch(FetchSlice.end());
       });
   };
@@ -101,7 +108,9 @@ export const RegisterPage: React.FC<RegisterPageProps> = (props) => {
     client
       .get("/api/invite/user", { params: params })
       .then((res: AxiosResponse<UserVM>) => {
-        dispatch(AuthSlice.setInvitingUser({ user: res.data }));
+        console.log(res.data);
+
+        // dispatch(AuthSlice.setInvitingUser({ user: res.data }));
       })
       .catch((err: AxiosError<any>) => {
         console.log(err.message);
@@ -121,25 +130,29 @@ export const RegisterPage: React.FC<RegisterPageProps> = (props) => {
               <form noValidate onSubmit={handleSubmit(onSubmit)}>
                 <input
                   type="text"
-                  name="id"
+                  // name="id"
                   value={form.id}
                   hidden
                   readOnly
-                  ref={register({})}
+                  {...register("id", {
+                    required: `${t(kws.ErrorMessage.IsRequired)}`,
+                  })}
                 />
                 <input
                   type="text"
-                  name="account_id"
+                  // name="account_id"
                   value={form.account_id}
                   hidden
                   readOnly
-                  ref={register({})}
+                  {...register("account_id", {
+                    required: `${t(kws.ErrorMessage.IsRequired)}`,
+                  })}
                 />
 
                 <TextField
                   type="text"
-                  id="username"
-                  name="username"
+                  // id="username"
+                  // name="username"
                   label={t(kws.RegisterPage.Username)}
                   variant="outlined"
                   margin="normal"
@@ -148,9 +161,9 @@ export const RegisterPage: React.FC<RegisterPageProps> = (props) => {
                   autoFocus
                   autoComplete="username"
                   size="small"
+                  // onChange={handleInputChange}
                   value={form.username}
-                  onChange={handleInputChange}
-                  inputRef={register({
+                  {...register("username", {
                     required: `${t(kws.ErrorMessage.IsRequired)}`,
                   })}
                   error={!!errors.username}
@@ -159,8 +172,8 @@ export const RegisterPage: React.FC<RegisterPageProps> = (props) => {
 
                 <TextField
                   type="text"
-                  id="display_name"
-                  name="display_name"
+                  // id="display_name"
+                  // name="display_name"
                   label={t(kws.RegisterPage.DisplayName)}
                   variant="outlined"
                   margin="normal"
@@ -168,49 +181,60 @@ export const RegisterPage: React.FC<RegisterPageProps> = (props) => {
                   fullWidth
                   autoComplete="display_name"
                   size="small"
-                  value={form.display_name}
-                  onChange={handleInputChange}
-                  inputRef={register({
+                  // inputRef={register({
+                  //   required: `${t(kws.ErrorMessage.IsRequired)}`,
+                  // })}
+                  defaultValue={form.display_name}
+                  // value={form.display_name}
+                  {...register("display_name", {
                     required: `${t(kws.ErrorMessage.IsRequired)}`,
                   })}
+                  // onChange={handleInputChange}
                   error={!!errors.display_name}
                   helperText={handleErrorMessage(errors.display_name)}
                 />
 
                 <TextField
                   type="password"
-                  id="password"
-                  name="password"
+                  // id="password"
+                  // name="password"
                   label={t(kws.RegisterPage.Password)}
                   variant="outlined"
                   margin="normal"
                   required
                   fullWidth
                   size="small"
+                  // inputRef={register({
+                  //   required: `${t(kws.ErrorMessage.IsRequired)}`,
+                  // })}
                   value={form.password}
-                  onChange={handleInputChange}
-                  inputRef={register({
+                  {...register("password", {
                     required: `${t(kws.ErrorMessage.IsRequired)}`,
                   })}
+                  onChange={handleInputChange}
                   error={!!errors.password}
                   helperText={handleErrorMessage(errors.password)}
                 />
 
                 <TextField
                   type="password"
-                  id="password2"
-                  name="password2"
+                  // id="password2"
+                  // name="password2"
                   label={t(kws.RegisterPage.ConfirmPassword)}
                   variant="outlined"
                   margin="normal"
                   required
                   fullWidth
                   size="small"
+                  // onChange={handleInputChange}
+                  // inputRef={register({
+                  //   required: `${t(kws.ErrorMessage.IsRequired)}`,
+                  // })}
                   value={form.password2}
-                  onChange={handleInputChange}
-                  inputRef={register({
+                  {...register("password2", {
                     required: `${t(kws.ErrorMessage.IsRequired)}`,
                   })}
+                  onChange={handleInputChange}
                   error={!!errors.password}
                   helperText={handleErrorMessage(errors.password)}
                 />
@@ -226,23 +250,30 @@ export const RegisterPage: React.FC<RegisterPageProps> = (props) => {
                   fullWidth
                   size="small"
                   autoComplete="email"
+                  // inputRef={register({
+                  //   required: `${t(kws.ErrorMessage.IsRequired)}`,
+                  //   pattern: {
+                  //     value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                  //     message: `${t(kws.ErrorMessage.InvalidEmailAddress)}`,
+                  //   },
+                  // })}
                   value={form.email}
-                  onChange={handleInputChange}
-                  inputRef={register({
+                  {...register("email", {
                     required: `${t(kws.ErrorMessage.IsRequired)}`,
                     pattern: {
                       value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
                       message: `${t(kws.ErrorMessage.InvalidEmailAddress)}`,
                     },
                   })}
+                  onChange={handleInputChange}
                   error={!!errors.email}
                   helperText={handleErrorMessage(errors.email)}
                 />
 
                 <TextField
                   type="text"
-                  id="address"
-                  name="address"
+                  // id="address"
+                  // name="address"
                   label={t(kws.RegisterPage.Address)}
                   variant="outlined"
                   margin="normal"
@@ -250,31 +281,39 @@ export const RegisterPage: React.FC<RegisterPageProps> = (props) => {
                   fullWidth
                   autoComplete="address"
                   size="small"
+                  // value={form.address}
+                  // onChange={handleInputChange}
+                  // inputRef={register({
+                  //   required: `${t(kws.ErrorMessage.IsRequired)}`,
+                  // })}
                   value={form.address}
-                  onChange={handleInputChange}
-                  inputRef={register({
+                  {...register("address", {
                     required: `${t(kws.ErrorMessage.IsRequired)}`,
                   })}
+                  // onChange={handleInputChange}
                   error={!!errors.display_name}
                   helperText={handleErrorMessage(errors.address)}
                 />
 
                 <TextField
                   type="text"
-                  id="tel"
-                  name="tel"
+                  // id="tel"
+                  // name="tel"
                   label={t(kws.RegisterPage.PhoneNumber)}
                   variant="outlined"
                   margin="normal"
                   required
                   fullWidth
                   size="small"
+                  // inputRef={register({
+                  //   required: `${t(kws.ErrorMessage.IsRequired)}`,
+                  // })}
                   value={form.tel}
-                  onChange={handleInputChange}
-                  inputRef={register({
+                  {...register("tel", {
                     required: `${t(kws.ErrorMessage.IsRequired)}`,
                   })}
-                  error={!!errors.display_name}
+                  // onChange={handleInputChange}
+                  error={!!errors.tel}
                   helperText={handleErrorMessage(errors.tel)}
                 />
 

@@ -38,9 +38,10 @@ dev-logs:
 npm-proxy-cache-up:
 	docker-compose -f docker/npm-proxy-cache/docker-compose.yaml up -d --build --force-recreate
 set-proxy:
-	yarn config set proxy http://localhost:28080
-	yarn config set https-proxy http://localhost:28080
+	yarn config set proxy http://npm-proxy-cache:28080
+	yarn config set https-proxy http://npm-proxy-cache:28080
 	yarn config set strict-ssl false
+	yarn config list
 remove-proxy:
 	yarn config delete proxy
 	yarn config delete https-proxy

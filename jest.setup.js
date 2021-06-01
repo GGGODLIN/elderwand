@@ -3,13 +3,13 @@ const Enzyme = require('enzyme');
 const Dotenv = require('dotenv');
 
 Enzyme.configure({
-    adapter: new Adapter()
+    adapter: new Adapter(),
 });
 
-const name = '.env.test'
+const name = '.env.test';
 
-const file_path = `${process.cwd()}/${name}`
+const file_path = `${process.cwd()}/${name}`;
 
-const output = Dotenv.config({ path: file_path })
+const output = Dotenv.config({ path: file_path });
 
-console.log(output)
+// console.log({ file_path, output });

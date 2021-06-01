@@ -1,47 +1,55 @@
-import dotenv from 'dotenv';
-import KoaServer from './server';
 import NextJS from 'next';
-import { AuthMiddleware } from 'g13-web-shared/server/user/middlewares/AuthMiddleware';
-import { AuthRouter } from './routers/AuthRouter';
-import { AuthWhitelist } from './config/Whitelist';
-import { ProjectRouter } from './routers/ProjectRouter';
-import { RouterMiddleware } from 'g13-web-shared/server/shared/middlewares';
 import { ServerEnvVar } from './config/ServerEnvVar';
-import { UserRouter } from './routers/UserRouter';
-
-const dotenv_path = process.env.NODE_ENV ? `./.env.${process.env.NODE_ENV}` : `./.env`;
-const env = dotenv.config({ path: dotenv_path }).parsed;
+import { AuthWhitelist } from './config/Whitelist';
+import DevelopmentMiddleware from './middlewares/DevelopmentMiddleware';
+import RouterHandleMiddleware from './middlewares/RouterHandleMiddleware';
+import DeviceRouter from './routers/DeviceRouter';
+import ExampleRouter from './routers/ExampleRouter';
+import GatewayRouter from './routers/GatewayRouter';
+import MigrationRouter from './routers/MigrationRouter';
+import NextJsRouter from './routers/NextJsRouter';
+import ProjectRouter from './routers/ProjectRouter';
+import RootRouter from './routers/RootRouter';
+import SpaceRouter from './routers/SpaceRouter';
+import UserRouter from './routers/UserRouter';
+import KoaServer from './server';
 
 const app = NextJS({ dev: ServerEnvVar.IsDev });
 const handle = app.getRequestHandler();
 
 if (ServerEnvVar.IsDev) {
-  AuthWhitelist.push(/^\/_next\/webpack-hmr/);
+    AuthWhitelist.push(/^\/_next\/webpack-hmr/);
 }
 
 app.prepare().then(() => {
+    const server = new KoaServer()
+        .use([
+            DevelopmentMiddleware.displayRequestBody,
+            RouterHandleMiddleware.handleApiRouter,
+        ])
+        .use(ExampleRouter.getApiRouter(ServerEnvVar.IsDev))
+        .use([
+            MigrationRouter.getApiRouter(),
+            // AuthMiddleware(ServerEnvVar.TokenKey, ServerEnvVar.JwtSecret, AuthWhitelist),
+            // AuthRouter.getRouters(),
+            RootRouter.getApiRouter(),
+            UserRouter.getApiRouter(),
+            ProjectRouter.getApiRouter(),
+            GatewayRouter.getApiRouter(),
+            SpaceRouter.getApiRouter(),
+            DeviceRouter.getApiRouter(),
+            DeviceRouter.getApiRouterVersion2(),
+            NextJsRouter.getPageRouter(handle),
+        ])
+        .getInstance();
 
-  const server = new KoaServer()
-    .use([
-      RouterMiddleware.handleApiRouter(),
-      AuthMiddleware(ServerEnvVar.TokenKey, ServerEnvVar.JwtSecret, AuthWhitelist),
-      AuthRouter.getRouters(),
-      UserRouter.getRouters(),
-      ProjectRouter.getRouters(),
-      RouterMiddleware.handlePageRouter(handle)
-    ]).getInstance();
+    const host = ServerEnvVar.Host;
+    const port = ServerEnvVar.Port;
 
-  const host = ServerEnvVar.Host;
-  const port = ServerEnvVar.Port;
-
-  server.listen(port, host, () => {
-    console.log("\n=== Start Server ===");
-    console.log(`=== ${host}:${port} ===`);
-    console.log(JSON.stringify({
-      PATH: dotenv_path, ...env
-    }, undefined, 2))
-    console.log(JSON.stringify(ServerEnvVar, undefined, 2));
-    console.log("====================\n");
-  });
-
+    server.listen(port, host, () => {
+        console.log('\n=== Start Server ===');
+        console.log(`=== ${host}:${port} ===`);
+        console.log(JSON.stringify(ServerEnvVar, undefined, 2));
+        console.log('====================\n');
+    });
 });

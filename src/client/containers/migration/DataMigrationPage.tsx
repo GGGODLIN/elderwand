@@ -72,7 +72,7 @@ export const DataMigrationPage: React.FC<DataMigrationPageProps> = () => {
 
   // TODO use origin
   // const origin = AxiosUtil.getOriginWithPort();
-  const origin = "http://192.168.128.20:8000";
+  const origin = `http://${DevEnvVar.SkymapApiHost}`;
   const client = AxiosUtil.makeAxiosInstance(dispatch, origin);
 
   // TODO from  useForm

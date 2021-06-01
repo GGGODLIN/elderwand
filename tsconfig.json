@@ -6,7 +6,11 @@
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "module": "esnext",
     "moduleResolution": "node",
     "noEmit": true,
@@ -17,13 +21,20 @@
     "target": "es5",
     "traceResolution": true,
     "allowSyntheticDefaultImports": true,
-    "typeRoots": ["src/@types"]
+    "typeRoots": [
+      "node_modules/@types"
+    ]
   },
   "include": [
     "next-env.d.ts",
     "pages/**/*.tsx",
     "src/client/**/*.ts",
-    "src/client/**/*.tsx"
-, "pages/space_copy.tsx"  ],
-  "exclude": ["node_modules", "**/__tests__/**", "*.spec.ts"]
+    "src/client/**/*.tsx",
+    "pages/space_copy.tsx"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/__tests__/**",
+    "*.spec.ts"
+  ]
 }

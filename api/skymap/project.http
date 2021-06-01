@@ -1,0 +1,14 @@
+# List projects
+GET {{HOST}}/api/projects
+Accept: application/json
+Content-Type: application/json
+
+###
+
+
+# Get the project
+GET {{HOST}}/api/projects/{{MIGRATION_TARGET_PROJECT_CODE}}
+Accept: application/json
+Content-Type: application/json
+
+###

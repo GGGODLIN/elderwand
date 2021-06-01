@@ -22,6 +22,7 @@ import { ScrollUtil } from "src/client/utils/ScrollUtil";
 import { SpaceVM } from "src/client/domain/space/SpaceVM";
 import { TabPanel } from "src/client/components/TabPanel";
 import { useDispatch, useSelector } from "react-redux";
+import { DevEnvVar } from "src/client/configs/ClientEnvVar";
 
 const Space2DTopologyGraphWithNoSSR = dynamic(
   () => import("src/client/components/space/Space2DTopologyGraph"),
@@ -56,13 +57,9 @@ const Space3DTopology: React.FC<Space3DTopologyProp> = (props) => {
   );
 };
 
-export interface SpacePageProps {
-  title: string;
-}
-
 const fetchProjects = (dispatch: Dispatch<any>): void => {
-  // TODO const origin = AxiosUtil.getOriginWithPort();
-  const origin = "http://192.168.128.20:8000";
+  // const origin = AxiosUtil.getOriginWithPort();
+  const origin = `http://${DevEnvVar.SkymapApiHost}`;
   const client = AxiosUtil.makeAxiosInstance(dispatch, origin);
   // TODO const url = "/api/projects";
   const url = "/api/projects";
@@ -80,12 +77,12 @@ const fetchProjects = (dispatch: Dispatch<any>): void => {
 };
 
 const fetchSpaces = (dispatch: Dispatch<any>, project: ProjectVM): void => {
-  const origin = "http://192.168.128.20:8000";
+  // const origin = AxiosUtil.getOriginWithPort();
+  const origin = `http://${DevEnvVar.SkymapApiHost}`;
   const client = AxiosUtil.makeAxiosInstance(dispatch, origin);
-  const url = "/api/spaces";
-  const params = {
-    project_id: project.id,
-  };
+
+  const url = `/api/projects/${project.id}/spaces`;
+  const params = {};
 
   client
     .get<PaginationVM<SpaceVM>>(url, { params: params })
@@ -105,6 +102,10 @@ const fetchSpaces = (dispatch: Dispatch<any>, project: ProjectVM): void => {
 
   // dispatch(SpaceSlice.fetchSpaces(pvm));
 };
+
+export interface SpacePageProps {
+  title: string;
+}
 
 export const SpacePage: React.FC<SpacePageProps> = () => {
   const dispatch = useDispatch();
@@ -209,7 +210,13 @@ export const SpacePage: React.FC<SpacePageProps> = () => {
                     icon={<AccountTreeIcon />}
                     aria-label="space-tree-view"
                   />
-                  <Tab icon={<AssignmentIcon />} aria-label="projects" />
+                  <Tab
+                    icon={<AssignmentIcon />}
+                    aria-label="projects"
+                    onClick={() => {
+                      fetchProjects(dispatch);
+                    }}
+                  />
                 </Tabs>
               </div>
               <div className="toolbox-panels">

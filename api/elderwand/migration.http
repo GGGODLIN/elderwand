@@ -1,0 +1,43 @@
+# api get example
+GET {{HOST}}/api/example
+Accept: application/json
+
+###
+
+# show current user info
+GET {{HOST}}/api/user/me
+Accept: application/json
+
+###
+
+
+# list source projects
+GET {{HOST}}/api/migration/projects?dbname={{MIGRATION_MONGODB_SAKE}}&conn={{MIGRATION_MONGODB_URI}}&version=200
+Accept: application/json
+Content-type: application/json
+
+###
+
+
+# list source projects to be 400
+GET {{HOST}}/api/migration/projects
+Accept: application/json
+Content-type: application/json
+
+###
+
+
+# list source spaces
+GET {{HOST}}/api/migration/projects/{{MIGRATION_TARGET_PROJECT_CODE}}/spaces?dbname={{MIGRATION_MONGODB_SAKE}}&conn={{MIGRATION_MONGODB_URI}}&version=200
+Accept: application/json
+Content-type: application/json
+
+###
+
+
+# list source devices
+GET {{HOST}}/api/migration/projects/{{MIGRATION_TARGET_PROJECT_CODE}}/devices?dbname={{MIGRATION_MONGODB_SAKE}}&conn={{MIGRATION_MONGODB_URI}}&version=200
+Accept: application/json
+Content-type: application/json
+
+###

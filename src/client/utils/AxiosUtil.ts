@@ -2,13 +2,14 @@ import FetchSlice from 'src/client/slices/FetchSlice';
 import { AxiosError, AxiosInstance } from 'axios';
 import { AxiosFactory } from 'src/client/utils/AxiosFactory';
 import { Dispatch } from 'react';
+import { ClientEnvVar } from '../configs/ClientEnvVar';
 
 export class AxiosUtil {
 
     static makeAxiosInstance = (dispatch: Dispatch<any>, baseURL: string): AxiosInstance => {
 
         const client = new AxiosFactory({ baseURL: baseURL })
-            .useBearerToken()
+            .useBearerToken(ClientEnvVar.TokenKey)
             .before(() => {
                 dispatch(FetchSlice.start());
             })
@@ -34,7 +35,7 @@ export class AxiosUtil {
         const origin = document.location.origin;
 
         const regex = new RegExp(/:\d+$/)
-        console.log(regex.test(origin));
+
         if (regex.test(origin)) {
             return origin
         }

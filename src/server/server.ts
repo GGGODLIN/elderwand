@@ -1,50 +1,58 @@
-import Koa, { ParameterizedContext } from 'koa';
+import * as Application from 'koa';
+import Koa from 'koa';
 import KoaBearerToken from 'koa-bearer-token';
-import KoaBody from 'koa-body';
-import Router, { IRouterParamContext } from 'koa-router';
-import { Middleware } from 'koa-compose';
+import KoaBodyParser from 'koa-bodyparser';
+import KoaLogger from 'koa-logger';
+import Router from 'koa-router';
 
 export default class KoaServer {
+    private readonly server: Application<
+        Application.DefaultState,
+        Application.DefaultContext
+    >;
 
-  private server: Koa<Koa.DefaultState, Koa.DefaultContext>;
-  private middlewares: Koa.Middleware<{}, {}>[] = []
-  private routers: Middleware<
-    Koa.ParameterizedContext<any, Router.IRouterParamContext<{}, {}>>>[] = [];
+    constructor() {
+        this.server = new Koa();
 
-  constructor() {
-    this.server = new Koa();
-    this.use([
-      KoaBody(),
-      KoaBearerToken(),
-    ])
-  }
-
-  use(middlewares: any) {
-
-    if (Array.isArray(middlewares)) {
-      middlewares.forEach((mw: Middleware<any>) => {
-        this.server.use(mw);
-      });
-      return this;
+        this.use([
+            KoaBodyParser(),
+            KoaBearerToken({
+                // bodyKey: "access_token",
+                // queryKey: "access_token",
+                // headerKey: "Bearer",
+                // reqKey: "token",
+            }),
+            KoaLogger(),
+        ]);
     }
 
-    this.server.use(middlewares as any);
+    use(
+        middlewares: ((
+            context: Application.ExtendableContext & {
+                state: any;
+            } & Router.IRouterParamContext<any, {}> & {
+                    body: any;
+                    request: { body: any };
+                    response: { body: any };
+                },
+            next?: Application.Next
+        ) => Promise<void>)[]
+    ) {
+        if (middlewares == null) {
+            return this;
+        }
 
-    return this;
-  }
+        if (Array.isArray(middlewares)) {
+            middlewares.forEach((mw) => {
+                this.server.use(mw);
+            });
+            return this;
+        }
+        this.server.use(middlewares);
+        return this;
+    }
 
-  getInstance(): Koa<Koa.DefaultState, Koa.DefaultContext> {
-
-    this.middlewares.forEach((mw: Middleware<Koa.
-      ParameterizedContext<{}, {}>>) => {
-      this.server.use(mw);
-    });
-
-    this.routers.forEach(router => {
-      this.server.use(router);
-    });
-
-    return this.server;
-  }
-
+    getInstance(): Koa<Koa.DefaultState, Koa.DefaultContext> {
+        return this.server;
+    }
 }
