@@ -1,24 +1,24 @@
 export default interface DeviceDTO {
-    ID: string;
-    dvID: string;
+    id: string;
+    dvId: string;
     name: string;
 
-    typeID: number;
+    typeId: number;
     type: Type;
 
-    spaceID: string;
-    projectID: string;
-    parentID?: string;
+    spaceId: string;
+    projectId: string;
+    parentId?: string;
 
-    iconID: string;
+    iconId: string;
     icon: Icon;
 
     images: object[]; // TODO
 
-    modelID: string;
+    modelId: string;
     model: Model;
 
-    specID: string;
+    specId: string;
     spec: Spec;
 
     attrs?: object[];
@@ -42,40 +42,40 @@ export default interface DeviceDTO {
 }
 
 interface DeviceCategory {
-    ID: string;
+    id: string;
     name: string;
 }
 
 interface Type {
-    ID: number;
+    id: number;
     name: string;
 
-    categoryID: string;
+    categoryId: string;
     category: DeviceCategory;
 }
 
 interface Icon {
-    ID: string;
+    id: string;
     name: string;
     path: string;
     tags: string[];
 }
 
 interface Model {
-    ID: string;
+    id: string;
     name: string;
-    brandID: string;
+    brandId: string;
     brand: Brand;
 }
 
 interface Brand {
-    ID: string;
+    id: string;
     code: string;
     name: string;
 }
 
 interface Spec {
-    ID: string;
+    id: string;
     comPortCount?: number;
     channelCount?: number;
     networkCardCount?: number;

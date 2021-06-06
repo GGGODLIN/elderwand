@@ -1,5 +1,5 @@
 export default interface GatewayConnectionVM {
-    ID: string;
+    id: string;
     publicIP: string;
     traceIP: string;
     softwareInfo: object;
@@ -12,7 +12,7 @@ export default interface GatewayConnectionVM {
 }
 
 interface NetworkCard {
-    ID: string;
+    id: string;
     primary?: boolean;
     enable: boolean;
     IP: string;

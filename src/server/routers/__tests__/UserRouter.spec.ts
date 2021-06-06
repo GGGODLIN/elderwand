@@ -55,6 +55,8 @@ describe('User Router', function () {
     });
 });
 
+export {};
+
 // === TODO Remove ===
 
 describe('User API Router', () => {

@@ -5,7 +5,7 @@ import UserRepository, { UserRepositoryCtor } from '../infra/UserRepository';
 describe('User Repository', function () {
     const ctor: UserRepositoryCtor = {
         host: TestEnvVar.SkymapApiHost,
-        platformID: Platform.ElderWand,
+        platformId: Platform.ElderWand,
     };
 
     it('list users should be successful', async function () {

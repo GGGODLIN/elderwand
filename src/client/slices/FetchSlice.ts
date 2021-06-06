@@ -1,26 +1,25 @@
 import produce from 'immer';
 import {
-
     ActionCreatorWithoutPayload,
     ActionCreatorWithPayload,
     createSlice,
     PayloadAction,
     SliceCaseReducers,
-} from "@reduxjs/toolkit";
+} from '@reduxjs/toolkit';
 
 interface FetchState {
     isLoading: boolean;
     isError: boolean;
     data: any;
     message: string | undefined;
-    queue: any[]
+    queue: any[];
 }
 
 export const FetchSlice = createSlice<
     FetchState,
     SliceCaseReducers<FetchState>
 >({
-    name: "fetch",
+    name: 'fetch',
     initialState: {
         isLoading: false,
         isError: false,
@@ -36,7 +35,7 @@ export const FetchSlice = createSlice<
                 draft.data = undefined;
                 draft.message = undefined;
                 // TODO event key queue
-                draft.queue.push(Date.now())
+                draft.queue.push(Date.now());
             });
         },
         success: (state, action: PayloadAction<{ data: any | undefined }>) => {
@@ -61,10 +60,13 @@ export const FetchSlice = createSlice<
     },
 });
 
-// const { success, fail } = FetchSlice.actions
-const start = FetchSlice.actions.start as ActionCreatorWithoutPayload<string>
-const end = FetchSlice.actions.end as ActionCreatorWithoutPayload<string>
-const success = FetchSlice.actions.success as ActionCreatorWithPayload<{ data: any | undefined }>
-const fail = FetchSlice.actions.fail as ActionCreatorWithPayload<{ error: any }>
+const start = FetchSlice.actions.start as ActionCreatorWithoutPayload<string>;
+const end = FetchSlice.actions.end as ActionCreatorWithoutPayload<string>;
+const success = FetchSlice.actions.success as ActionCreatorWithPayload<{
+    data: any | undefined;
+}>;
+const fail = FetchSlice.actions.fail as ActionCreatorWithPayload<{
+    error: any;
+}>;
 
-export default { start, end, success, fail }
+export default { start, end, success, fail };

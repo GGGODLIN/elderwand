@@ -6,28 +6,28 @@ import DeviceDTO from '../../device/models/DeviceDTO';
 
 export interface DeviceRepositoryCtor {
     host: string;
-    platformID: number;
+    platformId: number;
     version?: number;
 }
 
 export default class DeviceRepository {
     constructor(ctor: DeviceRepositoryCtor) {
         this.origin = ctor.host;
-        this.platformID = ctor.platformID;
+        this.platformId = ctor.platformId;
     }
 
     private readonly origin: string;
-    private readonly platformID: number;
+    private readonly platformId: number;
 
     /**
      * @param projectID Project ID
      */
-    async listDevices(projectID: string): Promise<PaginationDTO<DeviceDTO>> {
+    async listDevices(projectId: string): Promise<PaginationDTO<DeviceDTO>> {
         const baseURL = this.origin;
         const pathname = '/api/devices';
         const params = {
-            platformID: this.platformID,
-            projectID: projectID,
+            platformId: this.platformId,
+            projectId: projectId,
         };
 
         console.log(params);
@@ -67,8 +67,8 @@ export default class DeviceRepository {
         const baseURL = this.origin;
         const pathname = `/api/devices/${id}`;
         const params = {
-            platformID: this.platformID,
-            projectID: pid,
+            platformId: this.platformId,
+            projectId: pid,
         };
 
         const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
@@ -101,8 +101,8 @@ export default class DeviceRepository {
         const baseURL = this.origin;
         const pathname = `/api/devices/${id}/gateway`;
         const params = {
-            platformID: this.platformID,
-            projectID: pid,
+            platformId: this.platformId,
+            projectId: pid,
         };
 
         const body = {

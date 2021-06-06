@@ -1,4 +1,4 @@
-interface TestEnvironmentVariables {
+export interface TestEnvironmentVariables {
     SkymapWebHost: string;
     SkymapApiHost: string;
     SkymapAdminAccount: string;
@@ -13,6 +13,8 @@ interface TestEnvironmentVariables {
 
     GatewayClientIP: string;
     GatewayConnectionID: string;
+
+    ElderwandWebHost: string;
 }
 
 const TestEnvVar: TestEnvironmentVariables = {
@@ -31,6 +33,9 @@ const TestEnvVar: TestEnvironmentVariables = {
 
     GatewayClientIP: process.env['GATEWAY_CLIENT_IP'],
     GatewayConnectionID: process.env['GATEWAY_CONNECTION_ID'],
+
+    // TestCafe
+    ElderwandWebHost: process.env['ELDERWAND_WEB_HOST'],
 };
 
 export default TestEnvVar;

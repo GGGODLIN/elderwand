@@ -9,79 +9,78 @@ import {
     createSlice,
     PayloadAction,
     SliceCaseReducers,
-} from "@reduxjs/toolkit";
+} from '@reduxjs/toolkit';
 
 export interface UserState {
-    user?: UserVM
-    features: Feature[]
-    page_result?: PaginationVM<UserVM>
-    fetch_user_refresh?: boolean
+    user?: UserVM;
+    features: Feature[];
+    page_result?: PaginationVM<UserVM>;
+    fetch_user_refresh?: boolean;
     invite_dialog?: {
-        show: boolean
-        inviting_user?: UserVM
-        inviting_token?: string
+        show: boolean;
+        inviting_user?: UserVM;
+        inviting_token?: string;
         form?: {
-            role_id?: string
-            email?: string
-            description?: string
-        }
-    }
+            role_id?: string;
+            email?: string;
+            description?: string;
+        };
+    };
 }
 
 export interface UserPayload {
-    user?: UserVM
+    user?: UserVM;
 }
 
 export interface UserPaginationPayload {
-    page_result?: PaginationVM<UserVM>
+    page_result?: PaginationVM<UserVM>;
 }
 
 const defaultInviteForm = {
-    role_id: "",
-    email: "",
-    description: "",
-}
+    role_id: '',
+    email: '',
+    description: '',
+};
 
 const features: Feature[] = [
     {
-        name: "Dashboard",
+        name: 'Dashboard',
         icon: FeatureIconEnum.Dashboard,
-        path: "/admin",
+        path: '/admin',
     },
     {
-        name: "User Management",
+        name: 'User Management',
         icon: FeatureIconEnum.User,
-        path: "/user", //TODO
+        path: '/user', //TODO
     },
     {
-        name: "Project Management",
+        name: 'Project Management',
         icon: FeatureIconEnum.Project,
-        path: "/project",
+        path: '/project',
     },
     {
-        name: "Spatial Topology",
+        name: 'Spatial Topology',
         icon: FeatureIconEnum.Spatial,
-        path: "/space",
+        path: '/space',
     },
     {
-        name: "Device Topology",
+        name: 'Device Topology',
         icon: FeatureIconEnum.Device,
-        path: "/device",
+        path: '/device',
     },
     {
-        name: "Group Management",
+        name: 'Group Management',
         icon: FeatureIconEnum.Group,
-        path: "/group",
+        path: '/group',
     },
     {
-        name: "Data Migration",
+        name: 'Data Migration',
         icon: FeatureIconEnum.Migration,
-        path: "/migration",
+        path: '/migration',
     },
 ];
 
 const getInitialState = (): UserState => {
-
     const state: UserState = {
         user: null,
         features: features,
@@ -89,31 +88,31 @@ const getInitialState = (): UserState => {
             offset: 0,
             limit: 50,
             total: 0,
-            results: []
+            results: [],
         },
         invite_dialog: {
             show: false,
             inviting_user: null,
-            form: defaultInviteForm
+            form: defaultInviteForm,
         },
-        fetch_user_refresh: true
+        fetch_user_refresh: true,
     };
 
-    return state
-}
+    return state;
+};
 
 export const UserSlice = createSlice<
     UserState,
     SliceCaseReducers<UserState>,
     string
 >({
-    name: "user",
+    name: 'user',
     initialState: getInitialState(),
     reducers: {
         initial: (state, action: PayloadAction<UserPayload>) => {
             return produce(state, (draft) => {
                 const user = {
-                    ...action.payload
+                    ...action.payload,
                 } as UserVM;
 
                 draft.user = user;
@@ -122,10 +121,10 @@ export const UserSlice = createSlice<
         fetch: (state, action: PayloadAction<UserPaginationPayload>) => {
             return produce(state, (draft) => {
                 const vm = {
-                    ...action.payload
+                    ...action.payload,
                 } as PaginationVM<UserVM>;
 
-                draft.fetch_user_refresh = false
+                draft.fetch_user_refresh = false;
                 draft.page_result.results = vm.results;
                 draft.page_result.offset = vm.offset + vm.results.length;
                 draft.page_result.limit = vm.limit;
@@ -135,7 +134,7 @@ export const UserSlice = createSlice<
         push: (state, action: PayloadAction<UserPaginationPayload>) => {
             return produce(state, (draft) => {
                 const vm = {
-                    ...action.payload
+                    ...action.payload,
                 } as PaginationVM<UserVM>;
 
                 const users = state.page_result.results.concat(vm.results);
@@ -148,26 +147,31 @@ export const UserSlice = createSlice<
         },
         refresh: (state, action) => {
             return produce(state, (draft) => {
-                draft.fetch_user_refresh = true
+                draft.fetch_user_refresh = true;
             });
         },
         showInviteDialog: (state, action: PayloadAction<boolean>) => {
             return produce(state, (draft) => {
-
-                draft.invite_dialog.show = action.payload
+                draft.invite_dialog.show = action.payload;
             });
         },
-        setInvitingUserInfo: (state, action: PayloadAction<{ user: UserVM, token: string }>) => {
+        setInvitingUserInfo: (
+            state,
+            action: PayloadAction<{ user: UserVM; token: string }>
+        ) => {
             return produce(state, (draft) => {
-                draft.invite_dialog.inviting_user = action.payload.user
-                draft.invite_dialog.inviting_token = action.payload.token
+                draft.invite_dialog.inviting_user = action.payload.user;
+                draft.invite_dialog.inviting_token = action.payload.token;
             });
         },
-        changeInviteUserForm: (state, action: PayloadAction<{ name: string, value: any }>) => {
+        changeInviteUserForm: (
+            state,
+            action: PayloadAction<{ name: string; value: any }>
+        ) => {
             return produce(state, (draft) => {
                 const name = action.payload.name;
                 const value = action.payload.value;
-                draft.invite_dialog.form[name] = value
+                draft.invite_dialog.form[name] = value;
             });
         },
         clearInviteUserForm: (state, action) => {
@@ -178,20 +182,42 @@ export const UserSlice = createSlice<
             });
         },
     },
-})
+});
 
-const initial = UserSlice.actions.initial as ActionCreatorWithPayload<UserPayload>;
-const fetch = UserSlice.actions.fetch as ActionCreatorWithPayload<PaginationVM<UserVM>>;
-const push = UserSlice.actions.push as ActionCreatorWithPayload<PaginationVM<UserVM>>;
-const refresh = UserSlice.actions.refresh as ActionCreatorWithoutPayload<string>;
+const initial = UserSlice.actions
+    .initial as ActionCreatorWithPayload<UserPayload>;
+const fetch = UserSlice.actions.fetch as ActionCreatorWithPayload<
+    PaginationVM<UserVM>
+>;
+const push = UserSlice.actions.push as ActionCreatorWithPayload<
+    PaginationVM<UserVM>
+>;
+const refresh = UserSlice.actions
+    .refresh as ActionCreatorWithoutPayload<string>;
 
-const showInviteDialog = UserSlice.actions.showInviteDialog as ActionCreatorWithPayload<boolean>;
-const setInvitingUserInfo = UserSlice.actions.setInvitingUserInfo as ActionCreatorWithPayload<{ user: UserVM, token: string }>;
+const showInviteDialog = UserSlice.actions
+    .showInviteDialog as ActionCreatorWithPayload<boolean>;
+const setInvitingUserInfo = UserSlice.actions
+    .setInvitingUserInfo as ActionCreatorWithPayload<{
+    user: UserVM;
+    token: string;
+}>;
 
-const changeInviteUserForm = UserSlice.actions.changeInviteUserForm as ActionCreatorWithPayload<{ name: string, value: any }>;
-const clearInviteUserForm = UserSlice.actions.clearInviteUserForm as ActionCreatorWithoutPayload<string>;;
+const changeInviteUserForm = UserSlice.actions
+    .changeInviteUserForm as ActionCreatorWithPayload<{
+    name: string;
+    value: any;
+}>;
+const clearInviteUserForm = UserSlice.actions
+    .clearInviteUserForm as ActionCreatorWithoutPayload<string>;
 
 export default {
-    initial, fetch, push, refresh,
-    showInviteDialog, setInvitingUserInfo, changeInviteUserForm, clearInviteUserForm
-}
+    initial,
+    fetch,
+    push,
+    refresh,
+    showInviteDialog,
+    setInvitingUserInfo,
+    changeInviteUserForm,
+    clearInviteUserForm,
+};

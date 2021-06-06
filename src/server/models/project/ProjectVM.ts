@@ -1,15 +1,15 @@
 export default interface ProjectVM {
-    ID: string;
+    id: string;
     name: string;
     code: string;
-    typeID: number;
+    typeId: number;
     type: Type;
-    cloudCodeID: number;
+    cloudCodeId: number;
     cloudCode: CloudCode;
-    statusID: number;
+    statusId: number;
     status: Status;
     expireDate: number;
-    ownerID: string;
+    ownerId: string;
     owner: Owner;
     createdBy: string;
     updatedBy: string;
@@ -35,13 +35,13 @@ interface Status {
 }
 
 interface Owner {
-    ID: string;
-    accountID: string;
+    id: string;
+    accountId: string;
     account: Account;
-    platformID: number;
-    roleID: number;
-    statusID: number;
-    parentID: string;
+    platformId: number;
+    roleId: number;
+    statusId: number;
+    parentId: string;
 }
 
 interface Account {

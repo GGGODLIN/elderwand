@@ -7,7 +7,7 @@ import ProjectRepository, {
 describe('ProjectRepository', function () {
     const ctor: ProjectRepositoryCtor = {
         host: TestEnvVar.SkymapApiHost,
-        platformID: Platform.ElderWand,
+        platformId: Platform.ElderWand,
     };
 
     it('list project should be successful', async function () {

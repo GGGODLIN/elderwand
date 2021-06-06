@@ -7,7 +7,6 @@ import { UserDTO } from 'g13-web-shared/server/user/models';
 const ApiHost = `http://${ServerEnvVar.SkymapApiHost}`;
 
 export class TestUserUtils {
-
     static GetSkyMapAdmin = async (): Promise<UserDTO> => {
         const uid = TestEnvVar.SkymapAdminAccount;
         const url = `${ApiHost}/api/users/${uid}`;

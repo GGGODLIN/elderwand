@@ -8,7 +8,7 @@ import GatewayConnectionRepository, {
 describe('Gateway Repository', function () {
     const ctor: GatewayConnectionRepositoryCtor = {
         host: TestEnvVar.SkymapApiHost,
-        platformID: Platform.ElderWand,
+        platformId: Platform.ElderWand,
     };
 
     it('gateway connect should be successful', async function () {

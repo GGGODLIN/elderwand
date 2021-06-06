@@ -6,17 +6,18 @@ import KoaRouterFactory, {
 export const UserRouterActions = {
     listUsers: () => `/api/users`,
     getUser: (uid: string) => `/api/users/${uid}`,
+    me: () => `/api/user/me`,
 };
 
 export default class UserRouter {
     static getApiRouter() {
         const options: KoaRouterFactoryOptions = {
-            // me: {
-            //     name: 'get-user-with-token',
-            //     action: '/user/me',
-            //     method: 'GET',
-            //     controller: UserMaintainController.getUser, // TODO
-            // },
+            me: {
+                name: 'get-user-with-token',
+                action: '/user/me',
+                method: 'GET',
+                controller: UserMaintainController.getUserWithToken, // TODO
+            },
             listUsers: {
                 name: 'list-users',
                 action: '/users',

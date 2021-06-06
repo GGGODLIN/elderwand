@@ -18,7 +18,7 @@ export default class DeviceMaintainController {
     static listDevices = async (ctx: IRouterContext) => {
         const repository = new DeviceRepository({
             host: ServerEnvVar.SkymapApiHost,
-            platformID: Platform.ElderWand,
+            platformId: Platform.ElderWand,
         });
 
         const query = {
@@ -53,7 +53,7 @@ export default class DeviceMaintainController {
     static getDevice = async (ctx: IRouterContext) => {
         const repository = new DeviceRepository({
             host: ServerEnvVar.SkymapApiHost,
-            platformID: Platform.ElderWand,
+            platformId: Platform.ElderWand,
         });
 
         const params = {
@@ -92,7 +92,7 @@ export default class DeviceMaintainController {
     ) => {
         const repository = new DeviceRepository({
             host: ServerEnvVar.SkymapApiHost,
-            platformID: Platform.ElderWand,
+            platformId: Platform.ElderWand,
         });
 
         const params = {
@@ -134,7 +134,7 @@ export default class DeviceMaintainController {
     static getRepository = async (ctx: IRouterContext) => {
         const ctor: ApiRepositoryCtor = {
             host: ServerEnvVar.SkymapApiHost,
-            platformID: Platform.ElderWand,
+            platformId: Platform.ElderWand,
         };
 
         const params = {
@@ -163,7 +163,7 @@ export default class DeviceMaintainController {
         // spaces
         const spaces = await DeviceDataRepositoryHelper.getSpaces(
             ctor,
-            device.spaceID,
+            device.spaceId,
             query.projectID
         );
 

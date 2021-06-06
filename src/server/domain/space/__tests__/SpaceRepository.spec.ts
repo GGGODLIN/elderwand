@@ -8,7 +8,7 @@ import SpaceDTO from '../../space/models/SpaceDTO';
 describe('Space Repository', function () {
     const ctor: SpaceRepositoryCtor = {
         host: TestEnvVar.SkymapApiHost,
-        platformID: Platform.ElderWand,
+        platformId: Platform.ElderWand,
     };
 
     it('list spaces should be successful', async function () {
@@ -32,7 +32,7 @@ describe('Space Repository', function () {
 
         const space = dto.results[0] as SpaceDTO;
 
-        const actual = await repository.getSpace(space.ID, space.projectID);
+        const actual = await repository.getSpace(space.ID, space.projectId);
 
         expect(actual).not.toBeNull();
         expect(actual.ID).toEqual(space.ID);

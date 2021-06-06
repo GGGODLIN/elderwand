@@ -12,7 +12,7 @@ import SpaceDTO from '../domain/space/models/SpaceDTO';
 
 export interface ApiRepositoryCtor {
     host: string;
-    platformID: Platform.ElderWand;
+    platformId: Platform.ElderWand;
 }
 
 export default class DeviceDataRepositoryHelper {
@@ -39,18 +39,18 @@ export default class DeviceDataRepositoryHelper {
             .listSpaces(pid)
             .then((res: PaginationVM<SpaceDTO>) => {
                 let root = res.results.find((item) => {
-                    if (item.ID == sid) {
+                    if (item.id == sid) {
                         return item;
                     }
                 });
 
                 while (true) {
-                    if (!root.parentID) {
+                    if (!root.parentId) {
                         break;
                     }
 
                     root = res.results.find((item) => {
-                        if (root.parentID == item.ID) {
+                        if (root.parentId == item.id) {
                             return item;
                         }
                     });
@@ -66,7 +66,7 @@ export default class DeviceDataRepositoryHelper {
 
                     for (const item of items) {
                         const filtered = origin.filter((dto) => {
-                            if (item.ID == dto.parentID) {
+                            if (item.ID == dto.parentId) {
                                 return dto;
                             }
                         });
@@ -114,14 +114,14 @@ export default class DeviceDataRepositoryHelper {
                 let origin: DeviceDTO[] = res.results;
                 let latest: DeviceDTO[] = [root];
 
-                function appendChildren(items) {
-                    if (items <= 0) {
+                function appendChildren(items: DeviceDTO[]) {
+                    if (items.length <= 0) {
                         return;
                     }
 
                     for (const item of items) {
                         const filtered = origin.filter((dto) => {
-                            if (item.ID == dto.parentID) {
+                            if (item.id == dto.parentId) {
                                 return dto;
                             }
                         });

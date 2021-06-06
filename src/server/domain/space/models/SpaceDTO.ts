@@ -1,11 +1,11 @@
 export default interface SpaceDTO {
-    ID: string;
+    id: string;
     name: string;
-    typeID: number;
+    typeId: number;
     type: Type;
-    projectID: string;
-    parentID: string;
-    iconID: string;
+    projectId: string;
+    parentId?: string;
+    iconId: string;
     icon: Icon;
     createdBy: string;
     updatedBy: string;

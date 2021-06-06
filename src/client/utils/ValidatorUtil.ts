@@ -8,4 +8,4 @@ const uuid = {
 export const isUUID = (str, version = 'all') => {
     const pattern = uuid[version];
     return pattern && pattern.test(str);
-}
+};

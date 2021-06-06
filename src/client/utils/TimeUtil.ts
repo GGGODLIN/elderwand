@@ -1,11 +1,12 @@
-import customParseFormat from 'dayjs/plugin/customParseFormat';
 import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
 
 dayjs.extend(timezone);
 dayjs.extend(utc);
-dayjs.extend(customParseFormat)
+dayjs.extend(customParseFormat);
+
 export class TimeUtil {
     static now(): dayjs.Dayjs {
         return dayjs();

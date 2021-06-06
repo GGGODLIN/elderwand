@@ -7,17 +7,17 @@ import GatewayConnectVO from '../models/GatewayConnectVO';
 
 export interface GatewayConnectionRepositoryCtor {
     host: string;
-    platformID: number;
+    platformId: number;
     version?: number;
 }
 
 export default class GatewayConnectionRepository {
     constructor(ctor: GatewayConnectionRepositoryCtor) {
         this.origin = ctor.host;
-        this.platformID = ctor.platformID;
+        this.platformId = ctor.platformId;
     }
     private readonly origin: string;
-    private readonly platformID: number;
+    private readonly platformId: number;
 
     /**
      * @param ip clientIP
@@ -28,7 +28,7 @@ export default class GatewayConnectionRepository {
         const baseURL = this.origin;
         const pathname = '/api/device/gateway/connections';
         const params = {
-            platformID: this.platformID,
+            platformId: this.platformId,
             clientIP: ip,
         };
 
@@ -63,7 +63,7 @@ export default class GatewayConnectionRepository {
         const baseURL = this.origin;
         const pathname = '/api/device/gateway/connections';
         const params = {
-            platformID: this.platformID,
+            platformId: this.platformId,
             clientIP: vo.publicIP,
         };
 

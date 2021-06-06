@@ -6,23 +6,23 @@ import UserDTO from '../models/UserDTO';
 
 export interface UserRepositoryCtor {
     host: string;
-    platformID: number;
+    platformId: number;
     version?: number;
 }
 
 export default class UserRepository {
     constructor(ctor: UserRepositoryCtor) {
         this.origin = ctor.host;
-        this.platformID = ctor.platformID;
+        this.platformId = ctor.platformId;
     }
 
     private readonly origin: string;
-    private readonly platformID: number;
+    private readonly platformId: number;
 
     async listUsers(): Promise<PaginationDTO<UserDTO>> {
         const baseURL = this.origin;
         const pathname = '/api/users';
-        const params = { pid: this.platformID };
+        const params = { pid: this.platformId };
 
         const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
 
@@ -54,7 +54,7 @@ export default class UserRepository {
     async getUser(id: string): Promise<UserDTO> {
         const baseURL = this.origin;
         const pathname = `/api/users/${id}`;
-        const params = { pid: this.platformID };
+        const params = { pid: this.platformId };
 
         const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
 

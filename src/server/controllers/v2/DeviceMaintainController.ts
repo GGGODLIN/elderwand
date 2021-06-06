@@ -13,7 +13,7 @@ export default class DeviceMaintainControllerVersion2 {
     static getRepository = async (ctx: IRouterContext) => {
         const ctor: ApiRepositoryCtor = {
             host: ServerEnvVar.SkymapApiHost,
-            platformID: Platform.ElderWand,
+            platformId: Platform.ElderWand,
         };
 
         const params = {
@@ -22,7 +22,7 @@ export default class DeviceMaintainControllerVersion2 {
         };
 
         const query = {
-            projectID: '',
+            projectId: '',
             ...ctx.query,
         };
 
@@ -30,27 +30,27 @@ export default class DeviceMaintainControllerVersion2 {
         const device = await DeviceDataRepositoryHelper.getDevice(
             ctor,
             params.id,
-            query.projectID
+            query.projectId
         );
 
         // project
         const project = await DeviceDataRepositoryHelper.getProject(
             ctor,
-            query.projectID
+            query.projectId
         );
 
         // spaces
         const spaces = await DeviceDataRepositoryHelper.getSpaces(
             ctor,
-            device.spaceID,
-            query.projectID
+            device.spaceId,
+            query.projectId
         );
 
         // devices
         const devices = await DeviceDataRepositoryHelper.getDevices(
             ctor,
             device,
-            query.projectID
+            query.projectId
         );
 
         // const info = DataAccessHelper.getServiceInfo(ctx);
@@ -62,7 +62,7 @@ export default class DeviceMaintainControllerVersion2 {
             gw: convertToGatewayVM(device),
             hubs: filterHubs(devices),
             devices: filterEndpointDevices(devices),
-            cloud: project.cloudCodeID,
+            cloud: project.cloudCodeId,
             license: project.expireDate,
             server: 'beta', // TODO
         };
@@ -78,7 +78,7 @@ function filterEndpointDevices(dtos: DeviceDTO[]): DeviceVM[] {
     const exclude = ['GW', 'A'];
 
     const endpoints = dtos.filter((device) => {
-        if (exclude.includes(device.type.category.ID)) {
+        if (exclude.includes(device.type.category.id)) {
             return;
         }
         return device;
@@ -86,12 +86,12 @@ function filterEndpointDevices(dtos: DeviceDTO[]): DeviceVM[] {
 
     return endpoints.map((dto) => {
         return {
-            id: dto.ID,
-            dvId: dto.dvID,
+            id: dto.id,
+            dvId: dto.dvId,
             name: dto.name,
-            spaceId: dto.spaceID,
-            parentId: dto.parentID,
-            deviceType: dto.typeID,
+            spaceId: dto.spaceId,
+            parentId: dto.parentId,
+            deviceType: dto.typeId,
             attrs: dto.attrs,
             spec: {
                 comPortCnt: dto.spec.comPortCount,
@@ -105,8 +105,7 @@ function filterEndpointDevices(dtos: DeviceDTO[]): DeviceVM[] {
                 model: dto.model.name,
                 brand: dto.model.brand.name,
             },
-            iconId: dto.icon.ID,
-            // chInfo: ChInfo[]; // TODO
+            iconId: dto.iconId, // chInfo: ChInfo[]; // TODO
             // sendTelRules: number[];  // TODO
             // status: number; // TODO
             // commInfo: CommInfo; // TODO
@@ -120,19 +119,19 @@ function filterHubs(dtos: DeviceDTO[]): HubVM[] {
     const include = ['A'];
 
     const hubs = dtos.filter((device) => {
-        if (include.includes(device.type.category.ID)) {
+        if (include.includes(device.type.category.id)) {
             return device;
         }
     });
 
     return hubs.map((hub) => {
         return {
-            id: hub.ID,
-            dvId: hub.dvID,
+            id: hub.id,
+            dvId: hub.dvId,
             name: hub.name,
-            spaceId: hub.spaceID,
-            parentId: hub.parentID,
-            deviceType: hub.typeID,
+            spaceId: hub.spaceId,
+            parentId: hub.parentId,
+            deviceType: hub.typeId,
             attrs: hub.attrs,
             spec: {
                 comPortCnt: hub.spec.comPortCount,
@@ -146,7 +145,7 @@ function filterHubs(dtos: DeviceDTO[]): HubVM[] {
                 model: hub.model.name,
                 brand: hub.model.brand.name,
             },
-            iconId: hub.icon.ID,
+            iconId: hub.icon.id,
             // chInfo: ChInfo[]; // TODO
             // sendTelRules: number[];  // TODO
             // status: number; // TODO
@@ -158,16 +157,16 @@ function filterHubs(dtos: DeviceDTO[]): HubVM[] {
 
 function convertToGatewayVM(dto: DeviceDTO): GatewayVM {
     return {
-        id: dto.ID,
-        dvId: dto.dvID,
-        spaceId: dto.spaceID,
+        id: dto.id,
+        dvId: dto.dvId,
+        spaceId: dto.spaceId,
         name: dto.name,
-        deviceType: dto.typeID,
+        deviceType: dto.typeId,
         hwInfo: {
             brand: dto.model.brand.name,
             model: dto.model.name,
         } as HwInfo,
-        iconId: dto.iconID,
+        iconId: dto.iconId,
         spec: {
             comPortCnt: dto.spec.comPortCount,
             isIPR: false, // TODO
@@ -206,10 +205,10 @@ function convertToSpaceVMs(dtos: SpaceDTO[]): SpaceVM[] {
 
 function convertToSpaceVM(dto: SpaceDTO): SpaceVM {
     return {
-        id: dto.ID,
+        id: dto.id,
         name: dto.name,
-        iconId: dto.iconID,
-        parentId: dto.parentID,
+        iconId: dto.iconId,
+        parentId: dto.parentId,
     } as SpaceVM;
 }
 

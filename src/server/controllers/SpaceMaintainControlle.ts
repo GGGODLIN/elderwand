@@ -12,7 +12,7 @@ export default class SpaceMaintainController {
     static listSpaces = async (ctx: IRouterContext) => {
         const repository = new SpaceRepository({
             host: ServerEnvVar.SkymapApiHost,
-            platformID: Platform.ElderWand,
+            platformId: Platform.ElderWand,
         });
 
         const query = {
@@ -46,7 +46,7 @@ export default class SpaceMaintainController {
     static getSpace = async (ctx: IRouterContext) => {
         const repository = new SpaceRepository({
             host: ServerEnvVar.SkymapApiHost,
-            platformID: Platform.ElderWand,
+            platformId: Platform.ElderWand,
         });
 
         const params = {

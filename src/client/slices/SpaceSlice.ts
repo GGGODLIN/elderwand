@@ -10,21 +10,19 @@ import {
     PayloadAction,
     Reducer,
     SliceCaseReducers,
-} from "@reduxjs/toolkit";
+} from '@reduxjs/toolkit';
 
 export interface SpaceMaintainState {
-    projects: ProjectVM[],
-    project_selected: ProjectVM,
-    spaces: SpaceVM[],
-    space_selected: SpaceVM,
+    projects: ProjectVM[];
+    project_selected: ProjectVM;
+    spaces: SpaceVM[];
+    space_selected: SpaceVM;
     space_checked_map: {
-        [key: string]: boolean
-
-    }
+        [key: string]: boolean;
+    };
 }
 
 const getInitialState = (): SpaceMaintainState => {
-
     // const spaces = require("src/test/fixture/spaces.json");
     const state: SpaceMaintainState = {
         projects: [],
@@ -34,10 +32,10 @@ const getInitialState = (): SpaceMaintainState => {
         space_checked_map: {},
     };
 
-    return state
-}
+    return state;
+};
 
-const SliceName = "space";
+const SliceName = 'space';
 
 const SpaceSlice = createSlice<
     SpaceMaintainState,
@@ -49,10 +47,13 @@ const SpaceSlice = createSlice<
     reducers: {
         clear: (state, action: PayloadAction<any>) => {
             return produce(state, (draft) => {
-                console.log("clear");
+                console.log('clear');
             });
         },
-        fetchProjects: (state, action: PayloadAction<PaginationVM<ProjectVM>>) => {
+        fetchProjects: (
+            state,
+            action: PayloadAction<PaginationVM<ProjectVM>>
+        ) => {
             return produce(state, (draft) => {
                 draft.projects = action.payload.results;
             });
@@ -66,7 +67,8 @@ const SpaceSlice = createSlice<
             return produce(state, (draft) => {
                 const spaces = action.payload.results.map((space) => {
                     return Array.isArray(space.leaves)
-                        ? space : { ...space, leaves: [] } as SpaceVM
+                        ? space
+                        : ({ ...space, leaves: [] } as SpaceVM);
                 });
                 draft.spaces = spaces;
             });
@@ -84,33 +86,32 @@ const SpaceSlice = createSlice<
         setCheckbox: (state, action: PayloadAction<SpaceVM>) => {
             return produce(state, (draft) => {
                 const target = action.payload;
-                const checked = action.payload.checked
+                const checked = action.payload.checked;
 
-                let leaves = [target.id] as string[]
+                let leaves = [target.id] as string[];
 
                 getAllLeaves(target, leaves, state.spaces);
 
                 leaves.map((leaf: string) => {
-                    draft.space_checked_map[leaf] = checked
-                })
+                    draft.space_checked_map[leaf] = checked;
+                });
             });
         },
     },
-})
+});
 
 function getAllLeaves(target: SpaceVM, dest: string[], source: SpaceVM[]) {
-
-    let leaves = source.filter((space) => space.parent_id == target.id)
+    let leaves = source.filter((space) => space.parent_id == target.id);
 
     if (!leaves) {
-        return
+        return;
     }
 
     leaves.map((leaf: SpaceVM) => {
         dest.push(leaf.id);
         const subs = source.filter((space) => space.parent_id == leaf.id);
         if (!!subs) {
-            getAllLeaves(leaf, dest, source)
+            getAllLeaves(leaf, dest, source);
         }
     });
 }
@@ -121,19 +122,37 @@ const reducer = SpaceSlice.reducer as Reducer<SpaceMaintainState, AnyAction>;
 
 const clear = SpaceSlice.actions.clear as ActionCreatorWithPayload<any, string>;
 
-const fetchProjects = SpaceSlice.actions.fetchProjects as ActionCreatorWithPayload<PaginationVM<ProjectVM>, string>;
+const fetchProjects = SpaceSlice.actions
+    .fetchProjects as ActionCreatorWithPayload<PaginationVM<ProjectVM>, string>;
 
-const selectProject = SpaceSlice.actions.selectProject as ActionCreatorWithPayload<ProjectVM, string>;
+const selectProject = SpaceSlice.actions
+    .selectProject as ActionCreatorWithPayload<ProjectVM, string>;
 
-const fetchSpaces = SpaceSlice.actions.fetchSpaces as ActionCreatorWithPayload<PaginationVM<SpaceVM>, string>;
+const fetchSpaces = SpaceSlice.actions.fetchSpaces as ActionCreatorWithPayload<
+    PaginationVM<SpaceVM>,
+    string
+>;
 
-const selectSpace = SpaceSlice.actions.selectSpace as ActionCreatorWithPayload<SpaceVM, string>;
+const selectSpace = SpaceSlice.actions.selectSpace as ActionCreatorWithPayload<
+    SpaceVM,
+    string
+>;
 
-const clearSelected = SpaceSlice.actions.clearSelected as ActionCreatorWithPayload<any, string>;
+const clearSelected = SpaceSlice.actions
+    .clearSelected as ActionCreatorWithPayload<any, string>;
 
-const setCheckbox = SpaceSlice.actions.setCheckbox as ActionCreatorWithPayload<SpaceVM, string>;
+const setCheckbox = SpaceSlice.actions.setCheckbox as ActionCreatorWithPayload<
+    SpaceVM,
+    string
+>;
 
 export default {
-    reducer, clear, fetchProjects, selectProject, fetchSpaces, selectSpace,
-    clearSelected, setCheckbox
-}
+    reducer,
+    clear,
+    fetchProjects,
+    selectProject,
+    fetchSpaces,
+    selectSpace,
+    clearSelected,
+    setCheckbox,
+};

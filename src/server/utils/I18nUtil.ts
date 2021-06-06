@@ -4,57 +4,60 @@ import path from 'path';
 import StringUtil from './StringUtil';
 import { ServerEnvVar } from '../config/ServerEnvVar';
 
-const exportTranslateFile = async (locale_folder: string, lang: string, name: string, text: string) => {
-
+const exportTranslateFile = async (
+    locale_folder: string,
+    lang: string,
+    name: string,
+    text: string
+) => {
     const position = `${lang}/${name}.json`;
 
     const full = path.join(locale_folder, position);
 
     return await FileUtil.createFile(full, text);
-}
+};
 
 export default class I18nUtil {
-
     /**
      * @param  {string} out output locale folder
-     * @returns Promise<boolean> 
+     * @returns Promise<boolean>
      */
-    static async generateIconsLocaleFiles(output: string, filename: string): Promise<boolean> {
-
+    static async generateIconsLocaleFiles(
+        output: string,
+        filename: string
+    ): Promise<boolean> {
         const key = ServerEnvVar.I18nGoogleSheetID;
 
         const json = await GoogleSheetUtil.getＳpreadsheet(key);
 
         if (!json) {
-            console.log("Get GoogleSheet Error");
+            console.log('Get GoogleSheet Error');
             return false;
         }
 
         let results = {};
 
-        if (json.feed.title.$t != "Icon") {
-
+        if (json.feed.title.$t != 'Icon') {
             return new Promise((resolve, reject) => {
-                console.error("Sheet name is not Icon");
-                return resolve(false)
+                console.error('Sheet name is not Icon');
+                return resolve(false);
             });
         }
 
         json.feed.entry.forEach((cursor) => {
-
-            const cell = cursor["gs$cell"];
+            const cell = cursor['gs$cell'];
 
             // const title = cursor.content.$t;
-            const content = cursor.content.$t
+            const content = cursor.content.$t;
 
             if (!results[cell.row]) {
-                results[cell.row] = {}
+                results[cell.row] = {};
             }
 
             results[cell.row][cell.col] = {
-                content: content
-            }
-        })
+                content: content,
+            };
+        });
 
         // console.log(results);
 
@@ -83,32 +86,37 @@ export default class I18nUtil {
 
         // console.log({ titles, table });
 
-        const outs = await Promise.all(titles
-            .filter((title) => title != "key")
-            .map(async (title) => {
+        const outs = await Promise.all(
+            titles
+                .filter((title) => title != 'key')
+                .map(async (title) => {
+                    let model = {};
 
-                let model = {}
+                    Object.keys(table).forEach((field) => {
+                        let key: string =
+                            table[field]['en'] || table[field]['key'];
+                        key = StringUtil.toUpperCaseFirstLetter(key);
 
-                Object.keys(table).forEach((field) => {
+                        const value = table[field][title];
 
-                    let key: string = table[field]["en"] || table[field]["key"];
-                    key = StringUtil.toUpperCaseFirstLetter(key);
+                        model[key] = value;
+                    });
 
-                    const value = table[field][title];
+                    const text = JSON.stringify(model);
 
-                    model[key] = value;
+                    const out = await exportTranslateFile(
+                        output,
+                        title,
+                        filename,
+                        text
+                    );
+
+                    return out;
                 })
+        );
 
-                const text = JSON.stringify(model);
-
-                const out = await exportTranslateFile(output, title, filename, text);
-
-                return out;
-            }))
-
-        const successful = outs.filter((out) => !out).length == 0
+        const successful = outs.filter((out) => !out).length == 0;
 
         return successful;
     }
-
 }

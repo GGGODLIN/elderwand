@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from 'axios';
 
 export interface GoogleSheet {
     version: string;
@@ -47,7 +47,7 @@ export interface Link {
 
 export interface Title {
     type: string;
-    "$t": string;
+    $t: string;
 }
 
 export interface Category {
@@ -56,21 +56,25 @@ export interface Category {
 }
 
 export interface Id {
-    "$t": string;
+    $t: string;
 }
 
 class GoogleSheetUtil {
+    static async getＳpreadsheet(
+        key: string,
+        no: number = 1
+    ): Promise<GoogleSheet | null> {
+        const url = `https://spreadsheets.google.com/feeds/cells/${key}/${no}/public/full?alt=json`;
 
-    static async getＳpreadsheet(key: string, no: number = 1): Promise<GoogleSheet | null> {
-
-        const url = `https://spreadsheets.google.com/feeds/cells/${key}/${no}/public/full?alt=json`
-
-        return await axios.get<GoogleSheet>(url).then((res) => {
-            return res.data
-        }).catch((err) => {
-            return null;
-        });
+        return await axios
+            .get<GoogleSheet>(url)
+            .then((res) => {
+                return res.data;
+            })
+            .catch((err) => {
+                return null;
+            });
     }
 }
 
-export default GoogleSheetUtil
+export default GoogleSheetUtil;

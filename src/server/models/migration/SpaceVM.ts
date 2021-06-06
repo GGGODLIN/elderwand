@@ -1,9 +1,9 @@
 export default interface SpaceVM {
-    ID: string;
+    id: string;
     name: string;
     typeID: number;
     type: Type;
-    parentID?: string;
+    parentId?: string;
     iconID: string;
     icon: Icon;
     projectID: string;

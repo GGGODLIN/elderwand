@@ -1,4 +1,4 @@
-export default interface RequestBody<T> {
+export default interface RequestBody<T = any> {
     request: {
         body: T;
     };

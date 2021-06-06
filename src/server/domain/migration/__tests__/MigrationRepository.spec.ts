@@ -21,6 +21,18 @@ describe('Migration Repository', function () {
         console.log(actual);
     });
 
+    it('get the source project should be successful', async () => {
+        const repository = new MigrationRepository(params);
+
+        const code = TestEnvVar.MigrationTargetProjectCode;
+
+        const actual = await repository.getProject(code);
+
+        expect(actual).not.toBeNull();
+
+        console.log(actual);
+    });
+
     it('list source spaces by project code should be successful', async () => {
         const repository = new MigrationRepository(params);
 

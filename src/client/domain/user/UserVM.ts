@@ -1,4 +1,3 @@
-
 export interface UserVM {
     id: string;
     display_name: string;

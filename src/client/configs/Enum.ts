@@ -1,4 +1,3 @@
-
 export const UserRoleEnum = {
     System: 1,
     Admin: 2,
@@ -19,4 +18,4 @@ export const CloudCodeEnum = {
     Azure: 6,
     GoogleCloud: 7,
     Jinmao: 8,
-}
+};

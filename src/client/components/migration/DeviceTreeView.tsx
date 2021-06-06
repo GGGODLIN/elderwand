@@ -1,82 +1,104 @@
-import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import React from "react";
-import { DevicePreviewVM } from "src/client/domain/migration/MigraionPreviewVM";
-import { groupBy } from "src/client/utils/FunctionUtil";
-import { TreeItem, TreeView } from "@material-ui/lab";
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import React from 'react';
+import {
+    DevicePreviewVM,
+    SpacePreviewVM,
+} from 'src/client/domain/migration/MigraionPreviewVM';
+import { groupBy } from 'src/client/utils/FunctionUtil';
+import { TreeItem, TreeView } from '@material-ui/lab';
 
 interface DeviceTreeViewProp {
-  devices: DevicePreviewVM[];
+    spaces: SpacePreviewVM[];
+    devices: DevicePreviewVM[];
 }
 
 const DeviceTreeView: React.FC<DeviceTreeViewProp> = (props) => {
-  const gateway_groups = groupBy("parent_id")(props.devices);
+    const gateway_groups = groupBy('parentId')(props.devices);
 
-  const elements = Object.keys(gateway_groups)
-    .sort()
-    .map((key) => {
-      const gateway = props.devices.find((device) => {
-        return device.id == key ? device : undefined;
-      });
+    let spaces_map = {} as { [key: string]: SpacePreviewVM };
 
-      if (!gateway) {
-        return;
-      }
+    for (const space of props.spaces) {
+        spaces_map[space.id] = space;
+    }
 
-      const devices = gateway_groups[key];
+    const elements = Object.keys(gateway_groups)
+        .sort()
+        .map((key) => {
+            let gateway = props.devices.find((device) => {
+                return device.id == key ? device : undefined;
+            }) as DevicePreviewVM;
 
-      const spaces_groups = groupBy("space_id")(devices);
+            if (!gateway) {
+                return;
+            }
 
-      const spaces_element = Object.keys(spaces_groups)
-        // .sort()
-        .map((key: string) => {
-          const devices = spaces_groups[key];
+            gateway = {
+                ...gateway,
+                space: spaces_map[gateway.spaceId],
+            };
 
-          const device_element = devices.map((item: DevicePreviewVM) => {
-            const name = `${item.name} - ${item.id}`;
-            const id = item.id;
-            return <TreeItem key={id} nodeId={id} label={name} />;
-          });
+            const devices = gateway_groups[key];
 
-          const space = devices[0].space;
+            const spaces_groups = groupBy('spaceId')(devices);
 
-          if (!space) {
-            console.log(devices[0]);
-            return;
-          }
+            const spaces_element = Object.keys(spaces_groups)
+                // .sort()
+                .map((key: string) => {
+                    const devices = spaces_groups[key];
 
-          const name = `${space.name} - ${space.id}`;
-          const id = key;
+                    const device_element = devices.map(
+                        (item: DevicePreviewVM) => {
+                            const name = `${item.name} - ${item.id}`;
+                            const id = item.id;
+                            return (
+                                <TreeItem key={id} nodeId={id} label={name} />
+                            );
+                        }
+                    );
 
-          return (
-            <TreeItem key={id} nodeId={id} label={name}>
-              {device_element}
-            </TreeItem>
-          );
+                    const space = spaces_map[key];
+
+                    if (!space) {
+                        return;
+                    }
+
+                    const name = `${space.name} - ${space.id}`;
+                    const id = key;
+
+                    return (
+                        <TreeItem key={id} nodeId={id} label={name}>
+                            {device_element}
+                        </TreeItem>
+                    );
+                });
+
+            const id = gateway.id;
+            const space_name = gateway.space ? gateway.space.name : 'unknown';
+            const name = `${space_name} - ${gateway.name} - ${gateway.id}`;
+
+            return (
+                <TreeItem
+                    key={id}
+                    nodeId={id}
+                    label={name}
+                    onLabelClick={() => {
+                        console.log({ gateway });
+                    }}
+                >
+                    {spaces_element}
+                </TreeItem>
+            );
         });
 
-      const handleClick = () => {
-        console.log(gateway.id);
-      };
-
-      const name = `${gateway.space?.name} - ${gateway.name} - ${gateway.id}`;
-      const id = gateway.id;
-
-      return (
-        <TreeItem key={id} nodeId={id} label={name} onClick={handleClick}>
-          {spaces_element}
-        </TreeItem>
-      );
-    });
-
-  return (
-    <TreeView
-      defaultCollapseIcon={<ExpandMoreIcon />}
-      defaultExpandIcon={<ChevronRightIcon />}
-    >
-      {elements}
-    </TreeView>
-  );
+    return (
+        <TreeView
+            defaultCollapseIcon={<ExpandMoreIcon />}
+            defaultExpandIcon={<ChevronRightIcon />}
+        >
+            {elements}
+        </TreeView>
+    );
 };
 
 export default DeviceTreeView;

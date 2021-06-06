@@ -12,7 +12,7 @@ export default class ProjectMaintainController {
     static listProjects = async (ctx: Context) => {
         const repository = new ProjectRepository({
             host: ServerEnvVar.SkymapApiHost,
-            platformID: Platform.ElderWand,
+            platformId: Platform.ElderWand,
         });
 
         await new ProjectMaintainUCO(repository)
@@ -41,7 +41,7 @@ export default class ProjectMaintainController {
     static getProject = async (ctx) => {
         const repository = new ProjectRepository({
             host: ServerEnvVar.SkymapApiHost,
-            platformID: Platform.ElderWand,
+            platformId: Platform.ElderWand,
         });
 
         const params: {

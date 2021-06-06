@@ -3,7 +3,6 @@ import Koa from 'koa';
 import KoaBearerToken from 'koa-bearer-token';
 import KoaBodyParser from 'koa-bodyparser';
 import KoaLogger from 'koa-logger';
-import Router from 'koa-router';
 
 export default class KoaServer {
     private readonly server: Application<
@@ -28,13 +27,7 @@ export default class KoaServer {
 
     use(
         middlewares: ((
-            context: Application.ExtendableContext & {
-                state: any;
-            } & Router.IRouterParamContext<any, {}> & {
-                    body: any;
-                    request: { body: any };
-                    response: { body: any };
-                },
+            context: Application.Context,
             next?: Application.Next
         ) => Promise<void>)[]
     ) {

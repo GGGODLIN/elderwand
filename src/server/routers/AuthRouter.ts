@@ -1,61 +1,88 @@
-import compose, { Middleware } from 'koa-compose';
-import Koa, { ParameterizedContext } from 'koa';
-import { AuthApiController } from '../__remove__/AuthApiController';
-import { AuthPageController } from '../__remove__/AuthPageController';
-import { IRouterParamContext } from 'koa-router';
-import { KoaRouterFactory } from 'g13-web-shared/server/utils';
+import { IRouterContext } from 'koa-router';
+import { ServerEnvVar } from '../config/ServerEnvVar';
+import AuthController from '../controllers/AuthController';
+import RequestToken from '../domain/shared/types/RequestToken';
+import KoaRouterFactory, {
+    KoaRouterFactoryOptions,
+} from '../helpers/KoaRouterFactory';
+import AuthUtil from '../utils/AuthUtil';
 
-export class AuthRouter {
-    static getPageRouter = (): Middleware<
-        ParameterizedContext<any, IRouterParamContext<any, {}>>
-    > =>
-        KoaRouterFactory.create('/', {
+export const AuthPageRouterActions = {
+    login: () => `/login`,
+    logout: () => `/logout`,
+};
+
+export const AuthApiRouterActions = {
+    login: () => `/api/login`,
+    logout: () => `/api/logout`,
+};
+
+export default class AuthRouter {
+    static getPageRouter() {
+        const options: KoaRouterFactoryOptions = {
             login: {
+                name: 'login',
                 action: '/login',
                 method: 'GET',
-                controller: AuthPageController.login() as any,
+                controller: async (
+                    ctx: IRouterContext & RequestToken,
+                    next
+                ) => {
+                    const token = AuthUtil.getToken(
+                        ctx,
+                        ServerEnvVar.JwtSecret
+                    );
+
+                    if (!token) {
+                        await next();
+                        return;
+                    }
+
+                    const verify = AuthUtil.verify(
+                        token,
+                        ServerEnvVar.JwtSecret
+                    );
+
+                    if (!verify) {
+                        await next();
+                        return;
+                    }
+
+                    ctx.status = 200;
+                    ctx.redirect('/admin');
+                },
             },
             logout: {
+                name: 'logout',
                 action: '/logout',
                 method: 'GET',
-                controller: AuthPageController.logout() as any,
+                controller: (ctx) => {
+                    ctx.status = 200;
+                    ctx.cookies.set(ServerEnvVar.TokenKey, '', { maxAge: -1 });
+                    ctx.redirect('/login');
+                },
             },
-            register: {
-                action: '/register',
-                method: 'GET',
-                controller: AuthPageController.register() as any,
-            },
-            // /password/change
-        });
+        };
 
-    static getApiRouter = (): Middleware<
-        ParameterizedContext<any, IRouterParamContext<any, {}>>
-    > =>
-        KoaRouterFactory.create('/api', {
+        return KoaRouterFactory.create('/', options);
+    }
+
+    static getApiRouter() {
+        const options: KoaRouterFactoryOptions = {
             login: {
+                name: 'login',
                 action: '/login',
                 method: 'POST',
-                controller: AuthApiController.login() as any,
+                controller: AuthController.login,
             },
-            logout: {
-                action: '/logout',
-                method: 'POST',
-                controller: AuthApiController.logout() as any,
-            },
-            register: {
-                action: '/register',
-                method: 'POST',
-                controller: AuthApiController.register() as any,
-            },
+            // logout: {
+            //     name: 'logout',
+            //     action: '/logout',
+            //     method: 'GET',
+            //     controller: AuthController.logout,
+            // },
+        };
 
-            // /token
-            // /password/change
-            // /password/reset
-        });
-
-    static getRouters = () => {
-        const pages = AuthRouter.getPageRouter();
-        const apis = AuthRouter.getApiRouter();
-        return compose([pages, apis]) as Koa.Middleware<any>;
-    };
+        return KoaRouterFactory.create('/api', options);
+    }
 }

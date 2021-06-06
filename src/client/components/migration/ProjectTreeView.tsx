@@ -1,127 +1,81 @@
-import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-import DataMigrationSlice from "src/client/slices/DataMigrationSlice";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import FetchSlice from "src/client/slices/FetchSlice";
-import React, { ChangeEvent } from "react";
-import { AxiosUtil } from "src/client/utils/AxiosUtil";
-import { FormControl, InputLabel, Select } from "@material-ui/core";
-import { groupBy } from "src/client/utils/FunctionUtil";
-import { ScrollUtil } from "src/client/utils/ScrollUtil";
-import { TreeItem, TreeView } from "@material-ui/lab";
-import { useDispatch } from "react-redux";
-import { DevEnvVar } from "src/client/configs/ClientEnvVar";
-import {
-  DevicePreviewVM,
-  ProjectPreviewVM,
-  SpacePreviewVM,
-} from "src/client/domain/migration/MigraionPreviewVM";
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { TreeItem, TreeView } from '@material-ui/lab';
+import React from 'react';
+import { useDispatch } from 'react-redux';
+import { ProjectPreviewVM } from 'src/client/domain/migration/MigraionPreviewVM';
+import { groupBy } from 'src/client/utils/FunctionUtil';
+import DataMigrationUtil from '../../domain/migration/DataMigrationUtil';
+import AxiosFactory from '../../helper/AxiosFactory';
+import DataMigrationSlice from '../../slices/DataMigrationSlice';
+import FetchSlice from '../../slices/FetchSlice';
+import ScrollUtil from '../../utils/ScrollUtil';
 
 interface ProjectTreeViewProp {
-  projects: ProjectPreviewVM[];
+    projects: ProjectPreviewVM[];
 }
 
 const ProjectTreeView: React.FC<ProjectTreeViewProp> = (props) => {
-  const groups = groupBy("owner")(props.projects);
+    const dispatch = useDispatch();
 
-  const dispatch = useDispatch();
+    const groups = groupBy('owner')(props.projects);
 
-  // TODO Get from self api
-  // const origin = AxiosUtil.getOriginWithPort();
-  const origin = `http://${DevEnvVar.SkymapApiHost}`;
-  const client = AxiosUtil.makeAxiosInstance(dispatch, origin);
+    const elements = Object.keys(groups).map((key: string) => {
+        const projects: ProjectPreviewVM[] = groups[key];
 
-  const elements = Object.keys(groups).map((key: string) => {
-    const projects: ProjectPreviewVM[] = groups[key];
+        const subs = projects.map((project: ProjectPreviewVM) => {
+            const handleClick = () => {
+                const params = DataMigrationUtil.getConnectionParams();
 
-    const subs = projects.map((project: ProjectPreviewVM) => {
-      const handleClick = () => {
-        // TODO
-        // const code = "MjnQ";
-        const code = project.projectCode;
+                const url = `/api/migration/projects/${project.projectCode}`;
 
-        console.log(code);
+                new AxiosFactory()
+                    .getInstance()
+                    .get<ProjectPreviewVM>(url, { params: params })
+                    .then((res) => {
+                        dispatch(DataMigrationSlice.clearSelectedProject());
+                        dispatch(DataMigrationSlice.selectProject(res.data));
+                        ScrollUtil.GotoTop('main');
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    })
+                    .finally(() => {
+                        dispatch(FetchSlice.end());
+                    });
+            };
 
-        dispatch(DataMigrationSlice.selectProject(code));
+            const label = `${project.projectCode} - ${project.displayName}`;
 
-        // TODO use session key
-        const conn = (document.querySelector(
-          "form #conn-string"
-        ) as HTMLInputElement)?.value;
-        const version = (document.querySelector(
-          'select[name="version"]'
-        ) as HTMLInputElement)?.value;
-        const params = {
-          conn,
-          version,
-        };
-        // fetch spaces
+            return (
+                <TreeItem
+                    key={project.projectCode}
+                    nodeId={project.projectCode}
+                    label={label}
+                    onClick={handleClick}
+                />
+            );
+        });
 
-        client
-          .get<SpacePreviewVM[]>(`/api/migration/projects/${code}/spaces`, {
-            params: {
-              ...params,
-              force: true,
-            },
-          })
-          .then((res) => {
-            dispatch(DataMigrationSlice.fetchSpaces([]));
-            ScrollUtil.GotoTop("main");
-            dispatch(DataMigrationSlice.fetchSpaces(res.data));
-          })
-          .catch(() => {})
-          .finally(() => {
-            dispatch(FetchSlice.end());
-          });
-
-        // fetch devices
-        client
-          .get<DevicePreviewVM[]>(`/api/migration/projects/${code}/devices`, {
-            params: {
-              ...params,
-              force: true,
-            },
-          })
-          .then((res) => {
-            dispatch(DataMigrationSlice.fetchDevices([]));
-            ScrollUtil.GotoTop("main");
-            dispatch(DataMigrationSlice.fetchDevices(res.data));
-          })
-          .catch(() => {})
-          .finally(() => {
-            dispatch(FetchSlice.end());
-          });
-      };
-
-      const label = `${project.projectCode} - ${project.displayName}`;
-      return (
-        <TreeItem
-          key={project.projectCode}
-          nodeId={project.projectCode}
-          label={label}
-          onClick={handleClick}
-        />
-      );
+        return (
+            <TreeItem key={key} nodeId={key} label={key}>
+                {subs}
+            </TreeItem>
+        );
     });
 
     return (
-      <TreeItem key={key} nodeId={key} label={key}>
-        {subs}
-      </TreeItem>
+        <TreeView
+            defaultCollapseIcon={<ExpandMoreIcon />}
+            defaultExpandIcon={<ChevronRightIcon />}
+            // expanded={expanded}
+            // selected={selected}
+            // onNodeToggle={handleToggle}
+            // onNodeSelect={handleSelect}
+        >
+            {elements}
+        </TreeView>
     );
-  });
-
-  return (
-    <TreeView
-      defaultCollapseIcon={<ExpandMoreIcon />}
-      defaultExpandIcon={<ChevronRightIcon />}
-      // expanded={expanded}
-      // selected={selected}
-      // onNodeToggle={handleToggle}
-      // onNodeSelect={handleSelect}
-    >
-      {elements}
-    </TreeView>
-  );
 };
 
 export default ProjectTreeView;

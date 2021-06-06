@@ -5,14 +5,15 @@ export interface ProjectPreviewDTO {
     projectCode: string;
     projectName: string;
     cloudCode: number;
+    expDate: number;
     owner: string;
 }
 
 export interface SpacePreviewDTO {
-    ID: string;
+    id: string;
     icon: string;
     name: string;
-    parentID?: string;
+    parentId?: string;
     bgPic?: string;
 }
 
@@ -28,22 +29,21 @@ export interface DevicePreviewDTO {
 }
 
 export interface DeviceTemplatePreviewDTO {
-    DocTag: string;
-    Name: string;
-    Icon: string;
-    Image: string;
-    DeviceType: number;
-    HwInfo: HwInfo;
-    Attrs?: object[];
-    ProtocolInfo: ProtocolInfo[];
-    CommInfo?: CommInfo;
-    ComPorts?: ComPorts;
-    NetworkCardCount?: number;
-    Status: any;
-    Period?: number;
-    Switch?: Switch;
-    KNX?: Knx2;
-    RS485?: Rs485;
+    docTag: string;
+    name: string;
+    icon: string;
+    image: string;
+    deviceType: number;
+    hwInfo: HwInfo;
+    attrs?: object[];
+    protocolInfo: ProtocolInfo[];
+    switch?: Switch;
+    commInfo?: CommInfo;
+    rs485?: Rs485;
+    period?: number;
+    knx?: Knx;
+    comPorts?: ComPorts;
+    networkCardCount?: number;
 }
 
 interface HwInfo {
@@ -55,19 +55,6 @@ interface HwInfo {
 interface ProtocolInfo {
     protocol: string;
     protocolType?: string;
-}
-
-interface CommInfo {
-    KNX?: Knx;
-    protocol4GW: string;
-}
-
-interface Knx {
-    pAddr: string;
-}
-
-interface ComPorts {
-    portCnt: number;
 }
 
 interface Switch {
@@ -88,7 +75,13 @@ interface VrtRockButton {
     on: number;
 }
 
-interface Knx2 {
+interface CommInfo {
+    KNX?: Knx;
+    protocol4GW: string;
+}
+
+interface Knx {
+    pAddr: string;
     isIPR?: boolean;
     chCnt?: number;
     maxCh?: number;
@@ -114,6 +107,10 @@ interface PhyConf {
     dBit: number;
     ptyBit: number;
     sBit: number;
+}
+
+interface ComPorts {
+    portCnt: number;
 }
 
 export {};

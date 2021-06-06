@@ -63,6 +63,31 @@ describe('Migration Router', () => {
         });
     });
 
+    describe('get the source project', () => {
+        it('should be 200', async function () {
+            const code = TestEnvVar.MigrationTargetProjectCode;
+
+            const pathname = MigrationRouterActions.getProject(code);
+
+            const query = {
+                dbname: TestEnvVar.MigrationMongodbSake,
+                conn: TestEnvVar.MigrationSourceMongodbUri,
+                version: 200,
+            };
+
+            const response = await server
+                .get(pathname)
+                .set('Accept', 'application/json')
+                // .set(AuthUtil.AuthHeader, AuthUtil.newBearer(token))
+                .query(query)
+                .expect(200);
+
+            const actual = response.body as ProjectPreviewVM;
+
+            console.log(actual);
+        });
+    });
+
     describe('list source spaces by project', function () {
         it('should be successful', async function () {
             const code = TestEnvVar.MigrationTargetProjectCode;

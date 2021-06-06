@@ -32,5 +32,4 @@ yarn.lock
 *TODO.md
 
 # security
-
-**/http-client.private.env.json
+**/*.private.env.json

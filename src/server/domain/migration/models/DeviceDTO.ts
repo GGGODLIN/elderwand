@@ -1,12 +1,12 @@
 export default interface DeviceDTO {
-    ID: string;
+    id: string;
     dvID: string;
     name: string;
     typeID: number;
     type: Type;
     spaceID: string;
     projectID: string;
-    parentID?: string;
+    parentId?: string;
     iconID: string;
     icon: Icon;
     modelID: string;
@@ -34,7 +34,7 @@ export interface Icon {
 }
 
 export interface Model {
-    ID: string;
+    id: string;
     brandID: string;
     brand: Brand;
 }
@@ -46,6 +46,6 @@ export interface Brand {
 }
 
 export interface Spec {
-    ID: string;
+    id: string;
     manufacturerCode: number;
 }

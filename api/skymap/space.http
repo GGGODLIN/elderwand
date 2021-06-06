@@ -1,5 +1,5 @@
 # list spaces by project
-GET {{HOST}}/api/spaces?projectID={{TARGET_PROJECT_CODE}}
+GET {{HOST}}/api/spaces?projectId={{TARGET_PROJECT_CODE}}
 accept: application/json
 Content-Type: application/json
 
@@ -7,7 +7,7 @@ Content-Type: application/json
 
 
 # get the space
-GET {{HOST}}/api/spaces/{{TARGET_SPACE_ID}}?projectID={{TARGET_PROJECT_CODE}}
+GET {{HOST}}/api/spaces/{{TARGET_SPACE_ID}}?projectId={{TARGET_PROJECT_CODE}}
 accept: application/json
 Content-Type: application/json
 

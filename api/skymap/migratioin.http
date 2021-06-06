@@ -4,6 +4,14 @@ accept: application/json
 
 ###
 
+
+# Get the source project
+GET {{HOST}}/api/migration/projects/{{MIGRATION_TARGET_PROJECT_CODE}}?dbname={{MIGRATION_MONGODB_SAKE}}&conn={{MIGRATION_MONGODB_URI}}&version=200
+accept: application/json
+
+###
+
+
 # list spaces by project code
 GET {{HOST}}/api/migration/projects/{{TARGET_PROJECT_CODE}}/spaces?dbname={{MIGRATION_MONGODB_SAKE}}&conn={{MIGRATION_MONGODB_URI}}&version=200
 accept: application/json
@@ -75,21 +83,5 @@ Content-Type: application/json
 {
     "code": "{{TARGET_PROJECT_CODE}}"
 }
-
-###
-
-
-# List source device template by project
-GET {{HOST}}/api/migration/device/templates?dbname={{MIGRATION_MONGODB_THINGS}}&conn={{MIGRATION_MONGODB_URI}}&version=200
-accept: application/json
-
-###
-
-# Import device templates
-POST {{HOST}}/api/migration/device/templates?dbname={{MIGRATION_MONGODB_THINGS}}&conn={{MIGRATION_MONGODB_URI}}&version=200
-accept: application/json
-Content-Type: application/json
-
-{}
 
 ###

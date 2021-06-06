@@ -7,11 +7,11 @@ import {
     createSlice,
     PayloadAction,
     SliceCaseReducers,
-} from "@reduxjs/toolkit";
+} from '@reduxjs/toolkit';
 
 export class AuthState {
     register: {
-        inviting_user?: UserVM,
+        inviting_user?: UserVM;
         form: {
             id: string;
             account_id: string;
@@ -23,37 +23,36 @@ export class AuthState {
             tel: string;
             address: string;
             company: string;
-        }
-    }
+        };
+    };
 }
 
 const getInitialState = (): AuthState => {
-
     const state: AuthState = {
         register: {
             form: {
-                id: "",
-                account_id: "",
-                username: "",
-                display_name: "",
-                password: "",
-                password2: "",
-                email: "",
-                tel: "",
-                address: "",
-                company: "",
-            }
-        }
-    }
-    return state
-}
+                id: '',
+                account_id: '',
+                username: '',
+                display_name: '',
+                password: '',
+                password2: '',
+                email: '',
+                tel: '',
+                address: '',
+                company: '',
+            },
+        },
+    };
+    return state;
+};
 
 export const AuthSlice = createSlice<
     AuthState,
     SliceCaseReducers<AuthState>,
     string
 >({
-    name: "auth",
+    name: 'auth',
     initialState: getInitialState(),
     reducers: {
         setInvitingUser: (state, action: PayloadAction<{ user: UserVM }>) => {
@@ -67,32 +66,42 @@ export const AuthSlice = createSlice<
                 // draft.register.form.display_name = user.display_name;
 
                 if (ClientEnvVar.IsDev) {
-
-                    const name = isUUID(user.username) ? `test_${Date.now()}` : user.username;
-                    const password = "password";
+                    const name = isUUID(user.username)
+                        ? `test_${Date.now()}`
+                        : user.username;
+                    const password = 'password';
 
                     draft.register.form.username = name;
-                    draft.register.form.display_name = user.display_name || name;
+                    draft.register.form.display_name =
+                        user.display_name || name;
                     draft.register.form.password = password;
                     draft.register.form.password2 = password;
                     draft.register.form.email = `${name}@mail.com`;
-                    draft.register.form.address = "example address string"
-                    draft.register.form.tel = `${Date.now()}`
+                    draft.register.form.address = 'example address string';
+                    draft.register.form.tel = `${Date.now()}`;
                 }
             });
         },
-        changeRegisterUserForm: (state, action: PayloadAction<{ name: string, value: any }>) => {
+        changeRegisterUserForm: (
+            state,
+            action: PayloadAction<{ name: string; value: any }>
+        ) => {
             return produce(state, (draft) => {
                 const name = action.payload.name;
                 const value = action.payload.value;
-                draft.register.form[name] = value
+                draft.register.form[name] = value;
             });
         },
     },
-})
+});
 
-const setInvitingUser = AuthSlice.actions.setInvitingUser as ActionCreatorWithPayload<{ user: UserVM }>;
+const setInvitingUser = AuthSlice.actions
+    .setInvitingUser as ActionCreatorWithPayload<{ user: UserVM }>;
 
-const changeRegisterUserForm = AuthSlice.actions.changeRegisterUserForm as ActionCreatorWithPayload<{ name: string, value: any }>;
+const changeRegisterUserForm = AuthSlice.actions
+    .changeRegisterUserForm as ActionCreatorWithPayload<{
+    name: string;
+    value: any;
+}>;
 
-export default { setInvitingUser, changeRegisterUserForm }
+export default { setInvitingUser, changeRegisterUserForm };

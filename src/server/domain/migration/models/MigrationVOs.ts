@@ -6,6 +6,10 @@ export interface ListSourceVO {
 
 export interface ListSourceProjectsVO extends ListSourceVO {}
 
+export interface GetSourceProjectVO extends ListSourceVO {
+    code: string;
+}
+
 export interface ListSourceSpacesVO extends ListSourceVO {}
 
 export interface ListSourceDevicesVO extends ListSourceVO {}

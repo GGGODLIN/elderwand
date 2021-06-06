@@ -10,7 +10,7 @@ Content-Type: application/json
 {
   "username": "{{USERNAME}}",
   "password": "{{PASSWORD}}",
-  "platformID": {{ELDERWAND_PLANTFORM_ID}}
+  "platformId": {{ELDERWAND_PLANTFORM_ID}}
 }
 
 ###

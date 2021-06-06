@@ -7,24 +7,24 @@ import {
     createSlice,
     PayloadAction,
     SliceCaseReducers,
-} from "@reduxjs/toolkit";
+} from '@reduxjs/toolkit';
 
 interface AvailableUserState {
-    users: UserVM[]
-    selected: string[]
-    start: string
-    checked: boolean
+    users: UserVM[];
+    selected: string[];
+    start: string;
+    checked: boolean;
 }
 
 const getInitialState = () => {
     const state = {
         users: [],
         selected: [],
-        start: "",
+        start: '',
         checked: false,
     };
     return state;
-}
+};
 //
 
 const AllocateUserSlice = createSlice<
@@ -32,7 +32,7 @@ const AllocateUserSlice = createSlice<
     SliceCaseReducers<AvailableUserState>,
     string
 >({
-    name: "allocate_user",
+    name: 'allocate_user',
     initialState: getInitialState(),
     reducers: {
         clear: (state, action: PayloadAction<PaginationVM<UserVM>>) => {
@@ -55,17 +55,21 @@ const AllocateUserSlice = createSlice<
         remove: (state, action: PayloadAction<string[]>) => {
             return produce(state, (draft) => {
                 const selected = action.payload;
-                draft.users = state.users.filter((item) => selected.indexOf(item.id) < 0);
+                draft.users = state.users.filter(
+                    (item) => selected.indexOf(item.id) < 0
+                );
             });
         },
         selectRow: (state, action: PayloadAction<string>) => {
             return produce(state, (draft) => {
-                draft.selected.push(action.payload)
+                draft.selected.push(action.payload);
             });
         },
         deselectRow: (state, action: PayloadAction<string>) => {
             return produce(state, (draft) => {
-                draft.selected = state.selected.filter((item) => item != action.payload)
+                draft.selected = state.selected.filter(
+                    (item) => item != action.payload
+                );
             });
         },
         selectAllRows: (state, action: PayloadAction<string>) => {
@@ -78,7 +82,10 @@ const AllocateUserSlice = createSlice<
                 draft.selected = [];
             });
         },
-        setRangeStart: (state, action: PayloadAction<{ key: string, checked: boolean }>) => {
+        setRangeStart: (
+            state,
+            action: PayloadAction<{ key: string; checked: boolean }>
+        ) => {
             return produce(state, (draft) => {
                 draft.start = action.payload.key;
                 draft.checked = action.payload.checked;
@@ -86,7 +93,6 @@ const AllocateUserSlice = createSlice<
         },
         setRangeSelect: (state, action: PayloadAction<string>) => {
             return produce(state, (draft) => {
-
                 const projects = state.users.map((item) => item.id);
                 const start = projects.indexOf(state.start);
                 const end = projects.indexOf(action.payload);
@@ -98,26 +104,54 @@ const AllocateUserSlice = createSlice<
             });
         },
     },
-})
+});
 
 type key = string | number;
 
-const reducer = AllocateUserSlice.reducer
+const reducer = AllocateUserSlice.reducer;
 
-const clear = AllocateUserSlice.actions.clear as ActionCreatorWithoutPayload<string>;
-const fetch = AllocateUserSlice.actions.fetch as ActionCreatorWithPayload<PaginationVM<UserVM>, string>;
-const push = AllocateUserSlice.actions.push as ActionCreatorWithPayload<UserVM[], string>;
-const remove = AllocateUserSlice.actions.remove as ActionCreatorWithPayload<key[], string>;
+const clear = AllocateUserSlice.actions
+    .clear as ActionCreatorWithoutPayload<string>;
+const fetch = AllocateUserSlice.actions.fetch as ActionCreatorWithPayload<
+    PaginationVM<UserVM>,
+    string
+>;
+const push = AllocateUserSlice.actions.push as ActionCreatorWithPayload<
+    UserVM[],
+    string
+>;
+const remove = AllocateUserSlice.actions.remove as ActionCreatorWithPayload<
+    key[],
+    string
+>;
 
-const selectRow = AllocateUserSlice.actions.selectRow as ActionCreatorWithPayload<key, string>;
-const deselectRow = AllocateUserSlice.actions.deselectRow as ActionCreatorWithPayload<key, string>;
-const selectAllRows = AllocateUserSlice.actions.selectAllRows as ActionCreatorWithoutPayload<string>;
-const deselectAllRows = AllocateUserSlice.actions.deselectAllRows as ActionCreatorWithoutPayload<string>;
+const selectRow = AllocateUserSlice.actions
+    .selectRow as ActionCreatorWithPayload<key, string>;
+const deselectRow = AllocateUserSlice.actions
+    .deselectRow as ActionCreatorWithPayload<key, string>;
+const selectAllRows = AllocateUserSlice.actions
+    .selectAllRows as ActionCreatorWithoutPayload<string>;
+const deselectAllRows = AllocateUserSlice.actions
+    .deselectAllRows as ActionCreatorWithoutPayload<string>;
 
-const setRangeStart = AllocateUserSlice.actions.setRangeStart as ActionCreatorWithPayload<{ key: key, checked: boolean }, string>;
-const setRangeSelect = AllocateUserSlice.actions.setRangeSelect as ActionCreatorWithPayload<key, string>;
+const setRangeStart = AllocateUserSlice.actions
+    .setRangeStart as ActionCreatorWithPayload<
+    { key: key; checked: boolean },
+    string
+>;
+const setRangeSelect = AllocateUserSlice.actions
+    .setRangeSelect as ActionCreatorWithPayload<key, string>;
 
 export default {
-    reducer, clear, fetch, push, remove,
-    selectRow, deselectRow, selectAllRows, deselectAllRows, setRangeStart, setRangeSelect,
-}
+    reducer,
+    clear,
+    fetch,
+    push,
+    remove,
+    selectRow,
+    deselectRow,
+    selectAllRows,
+    deselectAllRows,
+    setRangeStart,
+    setRangeSelect,
+};

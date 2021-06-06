@@ -3,64 +3,63 @@ import {
     createSlice,
     PayloadAction,
     SliceCaseReducers,
-} from "@reduxjs/toolkit";
+} from '@reduxjs/toolkit';
 
 export interface LayoutState {
     header: {
-        display: boolean
-    },
+        display: boolean;
+    };
     main: {
-        display: boolean
-    },
+        display: boolean;
+    };
     footer: {
-        display: boolean
-    },
+        display: boolean;
+    };
     overlay: {
-        display: boolean
-    },
+        display: boolean;
+    };
     feature_drawer: {
-        display: boolean
-        open: boolean
-    }
+        display: boolean;
+        open: boolean;
+    };
     profile_drawer: {
-        display: boolean
-        open: boolean
-    },
+        display: boolean;
+        open: boolean;
+    };
     goto_top: {
-        display: boolean
-        show: boolean
-    }
+        display: boolean;
+        show: boolean;
+    };
 }
 
 export interface LayoutPayload {
     header?: {
-        display?: boolean
-    },
+        display?: boolean;
+    };
     main?: {
-        display?: boolean
-    },
+        display?: boolean;
+    };
     footer?: {
-        display?: boolean
-    },
+        display?: boolean;
+    };
     overlay?: {
-        display?: boolean
-    },
+        display?: boolean;
+    };
     feature_drawer?: {
-        display?: boolean
-        open?: boolean
-    },
+        display?: boolean;
+        open?: boolean;
+    };
     profile_drawer?: {
-        display?: boolean
-        open?: boolean
-    },
+        display?: boolean;
+        open?: boolean;
+    };
     goto_top?: {
-        display?: boolean
-        show?: boolean
-    }
+        display?: boolean;
+        show?: boolean;
+    };
 }
 
 const getInitialState = (): LayoutState => {
-
     const state: LayoutState = {
         header: {
             display: true,
@@ -81,20 +80,21 @@ const getInitialState = (): LayoutState => {
         profile_drawer: {
             display: false,
             open: false,
-        }, goto_top: {
+        },
+        goto_top: {
             display: false,
-            show: false
-        }
-    }
-    return state
-}
+            show: false,
+        },
+    };
+    return state;
+};
 
 export const LayoutSlice = createSlice<
     LayoutState,
     SliceCaseReducers<LayoutState>,
     string
 >({
-    name: "layout",
+    name: 'layout',
     initialState: getInitialState(),
     reducers: {
         initial: (state, action: PayloadAction<LayoutPayload>) => {
@@ -114,12 +114,13 @@ export const LayoutSlice = createSlice<
         },
         showGotoTop: (state, action: PayloadAction<boolean>) => {
             return produce(state, (draft) => {
-                draft.goto_top.show = action.payload;;
+                draft.goto_top.show = action.payload;
             });
         },
-    }
-})
+    },
+});
 
-const { initial, openFeatureDrawer, openProfileDrawer, showGotoTop } = LayoutSlice.actions
+const { initial, openFeatureDrawer, openProfileDrawer, showGotoTop } =
+    LayoutSlice.actions;
 
-export default { initial, openFeatureDrawer, openProfileDrawer, showGotoTop }
+export default { initial, openFeatureDrawer, openProfileDrawer, showGotoTop };

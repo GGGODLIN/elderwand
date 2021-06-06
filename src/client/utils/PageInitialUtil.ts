@@ -1,3 +1,4 @@
+import AxiosFactory from '../helper/AxiosFactory';
 import InitSlice, { InitialPayload } from '../slices/InitSlice';
 import LayoutSlice, { LayoutPayload } from '../slices/LayoutSlice';
 import UserSlice from '../slices/UserSlice';
@@ -7,7 +8,6 @@ import { Dispatch } from '@reduxjs/toolkit';
 import { useEffect } from 'react';
 
 export class PageInitialUtil {
-
     static initPageLayoutWithUser(dispatch: Dispatch<any>) {
         useEffect(() => {
             const layout: LayoutPayload = {
@@ -23,7 +23,7 @@ export class PageInitialUtil {
     static initPageInfo(dispatch: Dispatch<any>) {
         useEffect(() => {
             const page: InitialPayload = {
-                name: "admin",
+                name: 'admin',
             };
             dispatch(InitSlice.initial(page));
         }, []);
@@ -31,11 +31,10 @@ export class PageInitialUtil {
 
     static initUserInfo(dispatch: Dispatch<any>) {
         useEffect(() => {
-            const origin = AxiosUtil.getOriginWithPort();
-            const client = AxiosUtil.makeAxiosInstance(dispatch, origin);
-
-            client
-                .get("/api/user/me")
+            new AxiosFactory()
+                .useBearerToken()
+                .getInstance()
+                .get('/api/user/me')
                 .then((res) => {
                     if (res.status == 200) {
                         dispatch(UserSlice.initial(res.data));
@@ -45,9 +44,11 @@ export class PageInitialUtil {
                 .catch((err: AxiosError) => {
                     console.log(err.response.status);
                     console.log(err.message);
-                    document.location.replace("/logout");
+                    document.location.replace('/logout');
+                })
+                .finally(() => {
+                    console.log('finally');
                 });
         }, []);
     }
-
 }

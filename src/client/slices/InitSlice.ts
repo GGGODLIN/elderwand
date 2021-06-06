@@ -3,7 +3,7 @@ import {
     createSlice,
     PayloadAction,
     SliceCaseReducers,
-} from "@reduxjs/toolkit";
+} from '@reduxjs/toolkit';
 
 export class InitialState {
     title: string;
@@ -11,13 +11,12 @@ export class InitialState {
 }
 
 const getInitialState = (): InitialState => {
-
     const state: InitialState = {
-        title: "index",
-        name: "Index",
-    }
-    return state
-}
+        title: 'index',
+        name: 'Index',
+    };
+    return state;
+};
 
 export interface InitialPayload {
     title?: string;
@@ -29,7 +28,7 @@ export const InitSlice = createSlice<
     SliceCaseReducers<InitialState>,
     string
 >({
-    name: "init",
+    name: 'init',
     initialState: getInitialState(),
     reducers: {
         initial: (state, action: PayloadAction<InitialPayload>) => {
@@ -38,8 +37,8 @@ export const InitSlice = createSlice<
             });
         },
     },
-})
+});
 
-const { initial } = InitSlice.actions
+const { initial } = InitSlice.actions;
 
-export default { initial }
+export default { initial };

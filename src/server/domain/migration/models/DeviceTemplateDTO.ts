@@ -1,78 +1,48 @@
 // noinspection DuplicatedCode
 
 export default interface DeviceTemplateDTO {
-    ID: string;
-    Name: string;
-    TypeID: number;
-    Type: Type;
-    ParentID: any;
-    Parent: any;
-    IconID: string;
-    Icon: Icon;
-    Images: any;
-    ModelID: string;
-    Model: Model;
-    SpecID: string;
-    Spec: Spec;
-    Attrs: string;
-    Period: number;
-    CreatedBy: string;
-    UpdatedBy: string;
-    CreatedAt: string;
-    UpdatedAt: string;
-    DeletedAt: any;
+    id: string;
+    typeId: number;
+    type: Type;
+    iconId: string;
+    icon: Icon;
+    modelId: string;
+    model: Model;
+    specId: string;
+    spec: Spec;
+    attrs: string;
+    createdBy: string;
+    updatedBy: string;
+    createdAt: number;
+    updatedAt: number;
+    period?: number;
 }
 
-export interface Type {
-    ID: number;
-    Name: string;
-    CreatedBy: string;
-    UpdatedBy: string;
-    CreatedAt: string;
-    UpdatedAt: string;
-    DeletedAt: any;
+interface Type {
+    id: number;
+    name: string;
 }
 
-export interface Icon {
-    ID: string;
-    Name: string;
-    Path: string;
-    Tags: string[];
-    CreatedBy: string;
-    UpdatedBy: string;
-    CreatedAt: string;
-    UpdatedAt: string;
-    DeletedAt: any;
+interface Icon {
+    id: string;
+    name: string;
+    path: string;
+    tags: string[];
 }
 
-export interface Model {
-    ID: string;
-    Name: string;
-    BrandID: string;
-    Brand: Brand;
-    CreatedBy: string;
-    UpdatedBy: string;
-    CreatedAt: string;
-    UpdatedAt: string;
-    DeletedAt: any;
+interface Model {
+    id: string;
+    brandId: string;
+    brand: Brand;
 }
 
-export interface Brand {
-    ID: string;
-    Code: string;
-    Name: string;
-    CreatedBy: string;
-    UpdatedBy: string;
-    CreatedAt: string;
-    UpdatedAt: string;
-    DeletedAt: any;
+interface Brand {
+    id: string;
+    code: string;
+    name: string;
 }
 
-export interface Spec {
-    ID: string;
-    ComPortCount: number;
-    NetworkCardCount: number;
-    ChannelCount: number;
-    ManufacturerCode: number;
-    SwitchPanel: string;
+interface Spec {
+    id: string;
+    manufacturerCode: number;
 }

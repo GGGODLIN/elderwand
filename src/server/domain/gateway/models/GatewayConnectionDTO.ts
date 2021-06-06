@@ -1,5 +1,5 @@
 export default interface GatewayConnectionDTO {
-    ID: string;
+    id: string;
     publicIP: string;
     traceIP: string;
     softwareInfo: object;
@@ -12,7 +12,7 @@ export default interface GatewayConnectionDTO {
 }
 
 interface NetworkCard {
-    ID: string;
+    id: string;
     primary?: boolean;
     enable: boolean;
     IP: string;

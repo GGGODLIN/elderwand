@@ -5,6 +5,7 @@ import KoaRouterFactory, {
 
 export const MigrationRouterActions = {
     listProjects: () => `/api/migration/projects`,
+    getProject: (code: string) => `/api/migration/projects/${code}`,
     listSpaces: (code: string) => `/api/migration/projects/${code}/spaces`,
     listDevices: (code: string) => `/api/migration/projects/${code}/devices`,
     listDeviceTemplates: () => `/api/migration/device/templates`,
@@ -23,6 +24,12 @@ export default class MigrationRouter {
                 method: 'GET',
                 controller: MigrationController.listSourceProjects,
             },
+            getProject: {
+                name: 'get-project',
+                action: '/projects/:code',
+                method: 'GET',
+                controller: MigrationController.getSourceProject,
+            },
             listSpaces: {
                 name: 'list-spaces',
                 action: '/projects/:code/spaces',
@@ -35,7 +42,6 @@ export default class MigrationRouter {
                 method: 'GET',
                 controller: MigrationController.listSourceDevices,
             },
-            // listSourceDeviceTemplates
             listDeviceTemplates: {
                 name: 'list-device-templates',
                 action: '/device/templates',

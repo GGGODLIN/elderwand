@@ -1,5 +1,6 @@
 import { AxiosError } from 'axios';
 import { Context } from 'koa';
+import { IRouterContext } from 'koa-router';
 import { ServerEnvVar } from '../config/ServerEnvVar';
 import MigrationUCO from '../domain/migration/applications/MigrationUCO';
 import MigrationRepository, {
@@ -14,11 +15,13 @@ import {
     SpacePreviewDTO,
 } from '../domain/migration/models/MigrationPreviewDTOs';
 import {
+    GetSourceProjectVO,
     ImportDevicesVO,
     ImportDeviceTemplatesVO,
     ImportProjectVO,
     ImportSpacesVO,
     ListSourceDevicesVO,
+    ListSourceDeviceTemplatesVO,
     ListSourceProjectsVO,
     ListSourceSpacesVO,
     ListSourceVO,
@@ -49,14 +52,14 @@ export default class MigrationController {
             ...ctx.query,
         };
 
-        const params: MigrationRepositoryCtor = {
+        const ctor: MigrationRepositoryCtor = {
             host: ServerEnvVar.SkymapApiHost,
             ...query,
         };
 
         // to do valid vo and params
 
-        const repository = new MigrationRepository(params);
+        const repository = new MigrationRepository(ctor);
 
         await new MigrationUCO({ repository })
             .listProjects()
@@ -82,6 +85,84 @@ export default class MigrationController {
 
                 throw err;
             });
+    };
+
+    // api/migration/projects/:code
+    static getSourceProject = async (ctx: Context & IRouterContext) => {
+        const vo: GetSourceProjectVO = {
+            dbname: '',
+            conn: '',
+            version: 200,
+            code: '',
+            ...ctx.query,
+            ...ctx.params,
+        };
+
+        if (vo.code == '') {
+            throw new Error(`Project Code is required.`);
+        }
+
+        const ctor: MigrationRepositoryCtor = {
+            host: ServerEnvVar.SkymapApiHost,
+            ...vo,
+        };
+
+        const repository = new MigrationRepository(ctor);
+        const uco = new MigrationUCO({ repository });
+
+        const project = (await uco
+            .getProject(vo.code)
+            .then((res: ProjectPreviewDTO) => {
+                return res;
+            })
+            .catch((err: AxiosError<ErrorInfoDTO>) => {
+                if (err.isAxiosError) {
+                    ctx.status = err.response.status;
+                    ctx.body = err.response.data;
+                    return;
+                }
+
+                throw err;
+            })) as ProjectPreviewDTO;
+
+        const spaces = (await uco
+            .listSpaces(project.projectCode)
+            .then((res: PaginationDTO<SpacePreviewDTO>) => {
+                return res.results;
+            })
+            .catch((err: AxiosError<ErrorInfoDTO>) => {
+                if (err.isAxiosError) {
+                    ctx.status = err.response.status;
+                    ctx.body = err.response.data;
+                    return;
+                }
+
+                throw err;
+            })) as SpacePreviewDTO[];
+
+        const devices = (await uco
+            .listDevices(project.projectCode)
+            .then((res: PaginationDTO<DevicePreviewDTO>) => {
+                return res.results;
+            })
+            .catch((err: AxiosError<ErrorInfoDTO>) => {
+                if (err.isAxiosError) {
+                    ctx.status = err.response.status;
+                    ctx.body = err.response.data;
+                    return;
+                }
+
+                throw err;
+            })) as DevicePreviewDTO[];
+
+        const vm = {
+            ...convertToProjectPreviewVM(project),
+            spaces: convertToSpacePreviewVMs(spaces),
+            devices: convertToDevicePreviewVMs(devices),
+        };
+
+        ctx.status = 200;
+        ctx.body = vm;
     };
 
     static listSourceSpaces = async (ctx: Context) => {
@@ -183,7 +264,7 @@ export default class MigrationController {
     };
 
     static listSourceDeviceTemplates = async (ctx: Context) => {
-        const vo: ListSourceDevicesVO = {
+        const vo: ListSourceDeviceTemplatesVO = {
             dbname: '',
             conn: '',
             version: 200,
@@ -207,7 +288,7 @@ export default class MigrationController {
                 const vm = {
                     ...dto,
                     results: convertToDeviceTemplatePreviewVMs(dto.results),
-                } as PaginationVM<DeviceTemplatePreviewDTO>;
+                } as PaginationVM<DeviceTemplatePreviewVM>;
 
                 ctx.status = 200;
                 ctx.body = vm;
@@ -428,7 +509,7 @@ export default class MigrationController {
                 const vm = {
                     ...res,
                     results: convertToDeviceTemplateVMs(res.results),
-                } as PaginationVM<DeviceTemplateDTO>;
+                } as PaginationVM<DeviceTemplateVM>;
 
                 ctx.status = 201;
                 ctx.body = vm;

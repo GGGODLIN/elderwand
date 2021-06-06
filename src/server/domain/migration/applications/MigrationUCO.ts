@@ -22,6 +22,10 @@ export default class MigrationUCO {
         return await this.repository.listProjects();
     }
 
+    async getProject(code: string): Promise<ProjectPreviewDTO> {
+        return await this.repository.getProject(code);
+    }
+
     async listSpaces(code: string): Promise<PaginationDTO<SpacePreviewDTO>> {
         return await this.repository.listSpaces(code);
     }

@@ -1,33 +1,33 @@
-export default interface ProjectVM {
-    ID: string;
+export default interface ProjectDTO {
+    id: string;
     name: string;
     code: string;
-    typeID: number;
+    typeId: number;
     type: Type;
-    cloudCodeID: number;
+    cloudCodeId: number;
     cloudCode: CloudCode;
-    statusID: number;
+    statusId: number;
     status: Status;
     expireDate: number;
-    ownerID: string;
+    ownerId: string;
     createdBy: string;
     updatedBy: string;
     createdAt: number;
     updatedAt: number;
 }
 
-export interface Type {
+interface Type {
     id: number;
     name: string;
 }
 
-export interface CloudCode {
+interface CloudCode {
     id: number;
     code: string;
     name: string;
 }
 
-export interface Status {
+interface Status {
     id: number;
     code: string;
     name: string;

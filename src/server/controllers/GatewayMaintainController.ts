@@ -12,7 +12,7 @@ export default class GatewayMaintainController {
     static listGatewayConnections = async (ctx: Context) => {
         const repository = new GatewayConnectionRepository({
             host: ServerEnvVar.SkymapApiHost,
-            platformID: Platform.ElderWand,
+            platformId: Platform.ElderWand,
         });
 
         const query = {
@@ -54,7 +54,7 @@ export default class GatewayMaintainController {
     ) => {
         const repository = new GatewayConnectionRepository({
             host: ServerEnvVar.SkymapApiHost,
-            platformID: Platform.ElderWand,
+            platformId: Platform.ElderWand,
         });
 
         const vo = {

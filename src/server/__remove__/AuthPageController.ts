@@ -5,7 +5,6 @@ import { ParameterizedContext } from 'koa';
 import { ServerEnvVar } from '../config/ServerEnvVar';
 
 export class AuthPageController {
-
     static register() {
         return async (
             ctx: ParameterizedContext<any, Router.IRouterParamContext<any, {}>>,
@@ -18,18 +17,20 @@ export class AuthPageController {
 
     static login() {
         return async (
-            ctx: ParameterizedContext<any, Router.IRouterParamContext<any, {}>
-            >,
+            ctx: ParameterizedContext<any, Router.IRouterParamContext<any, {}>>,
             next: () => any
         ) => {
             let token = AuthUtil.getToken(ctx, ServerEnvVar.TokenKey);
 
-            if (typeof token == "undefined") {
+            if (typeof token == 'undefined') {
                 await next();
                 return;
             }
 
-            const verify = AuthUserRepository.verify(token, ServerEnvVar.JwtSecret);
+            const verify = AuthUserRepository.verify(
+                token,
+                ServerEnvVar.JwtSecret
+            );
 
             if (!verify) {
                 await next();
@@ -37,35 +38,36 @@ export class AuthPageController {
             }
 
             ctx.status = 200;
-            ctx.redirect("/admin");
+            ctx.redirect('/admin');
         };
     }
 
     static logout() {
         return async (
-            ctx: ParameterizedContext<any, IRouterParamContext<any, {}>
-            >,
+            ctx: ParameterizedContext<any, IRouterParamContext<any, {}>>,
             next: any
         ) => {
             let token = AuthUtil.getToken(ctx, ServerEnvVar.TokenKey);
 
-            if (typeof token == "undefined") {
+            if (typeof token == 'undefined') {
                 ctx.status = 200;
-                ctx.cookies.set(ServerEnvVar.TokenKey, "", { maxAge: -1 });
-                ctx.redirect("/login");
+                ctx.cookies.set(ServerEnvVar.TokenKey, '', { maxAge: -1 });
+                ctx.redirect('/login');
                 return;
             }
 
-            const verify = AuthUserRepository.verify(token, ServerEnvVar.JwtSecret);
+            const verify = AuthUserRepository.verify(
+                token,
+                ServerEnvVar.JwtSecret
+            );
 
             if (verify) {
                 AuthUserRepository.logout(token, ServerEnvVar.JwtSecret);
             }
 
             ctx.status = 200;
-            ctx.cookies.set(ServerEnvVar.TokenKey, "", { maxAge: -1 });
-            ctx.redirect("/login");
-
+            ctx.cookies.set(ServerEnvVar.TokenKey, '', { maxAge: -1 });
+            ctx.redirect('/login');
         };
     }
 }

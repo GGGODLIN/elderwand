@@ -1,4 +1,4 @@
-@import "src/client/styles/variable";
+@import 'src/client/styles/variable';
 
 .migration.page {
   .migration-tabs {
@@ -8,7 +8,7 @@
       button {
         padding: 4px 0 0;
 
-        &[aria-selected="true"] {
+        &[aria-selected='true'] {
           border-bottom: solid 4px $bg-green-primary;
         }
       }

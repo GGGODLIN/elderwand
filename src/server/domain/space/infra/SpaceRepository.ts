@@ -6,28 +6,28 @@ import SpaceDTO from '../../space/models/SpaceDTO';
 
 export interface SpaceRepositoryCtor {
     host: string;
-    platformID: number;
+    platformId: number;
     version?: number;
 }
 
 export default class SpaceRepository {
     constructor(ctor: SpaceRepositoryCtor) {
         this.origin = ctor.host;
-        this.platformID = ctor.platformID;
+        this.platformId = ctor.platformId;
     }
 
     private readonly origin: string;
-    private readonly platformID: number;
+    private readonly platformId: number;
 
     /**
      * @param projectID Project ID
      */
-    async listSpaces(projectID: string): Promise<PaginationDTO<SpaceDTO>> {
+    async listSpaces(projectId: string): Promise<PaginationDTO<SpaceDTO>> {
         const baseURL = this.origin;
         const pathname = '/api/spaces';
         const params = {
-            platformID: this.platformID,
-            projectID: projectID,
+            platformId: this.platformId,
+            projectId: projectId,
         };
 
         const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
@@ -65,8 +65,8 @@ export default class SpaceRepository {
         const baseURL = this.origin;
         const pathname = `/api/spaces/${id}`;
         const params = {
-            platformID: this.platformID,
-            projectID: pid,
+            platformId: this.platformId,
+            projectId: pid,
         };
 
         console.log(pathname);

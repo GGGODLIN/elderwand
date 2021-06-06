@@ -65,6 +65,26 @@ export default class MigrationRepository {
             });
     }
 
+    async getProject(code: string): Promise<ProjectPreviewDTO> {
+        const baseURL = this.origin;
+        const pathname = `/api/migration/projects/${code}`;
+        const params = { ...this.query };
+
+        const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
+
+        return await axios
+            .get<ProjectPreviewDTO>(pathname, { params: params })
+            .then((res) => {
+                return res.data;
+            })
+            .catch((err: AxiosError<ErrorInfoDTO>) => {
+                if (err.isAxiosError) {
+                    // console.log('isAxiosError from repository');
+                }
+                throw err;
+            });
+    }
+
     async listSpaces(code: string): Promise<PaginationDTO<SpacePreviewDTO>> {
         const baseURL = this.origin;
         const pathname = `/api/migration/projects/${code}/spaces`;

@@ -8,7 +8,7 @@ import DeviceDTO from '../models/DeviceDTO';
 describe('Device Repository', function () {
     const ctor: DeviceRepositoryCtor = {
         host: TestEnvVar.SkymapApiHost,
-        platformID: Platform.ElderWand,
+        platformId: Platform.ElderWand,
     };
 
     it('list devices should be successful', async function () {
@@ -32,10 +32,10 @@ describe('Device Repository', function () {
 
         const device = dto.results[0] as DeviceDTO;
 
-        const actual = await repository.getDevice(device.ID, device.projectID);
+        const actual = await repository.getDevice(device.id, device.projectId);
 
         expect(actual).not.toBeNull();
-        expect(actual.ID).toEqual(device.ID);
+        expect(actual.id).toEqual(device.id);
     });
 });
 

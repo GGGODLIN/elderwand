@@ -32,7 +32,7 @@ export default class ExampleRouter {
         const middlewares = compose([before, after]);
 
         const options: KoaRouterFactoryOptions = {
-            me: {
+            example: {
                 name: 'api-get-example',
                 action: '/example',
                 method: 'GET',

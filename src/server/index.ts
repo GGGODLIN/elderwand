@@ -1,8 +1,10 @@
 import NextJS from 'next';
 import { ServerEnvVar } from './config/ServerEnvVar';
 import { AuthWhitelist } from './config/Whitelist';
+import AuthorizeMiddleware from './middlewares/AuthMiddleware';
 import DevelopmentMiddleware from './middlewares/DevelopmentMiddleware';
 import RouterHandleMiddleware from './middlewares/RouterHandleMiddleware';
+import AuthRouter from './routers/AuthRouter';
 import DeviceRouter from './routers/DeviceRouter';
 import ExampleRouter from './routers/ExampleRouter';
 import GatewayRouter from './routers/GatewayRouter';
@@ -24,14 +26,18 @@ if (ServerEnvVar.IsDev) {
 app.prepare().then(() => {
     const server = new KoaServer()
         .use([
-            DevelopmentMiddleware.displayRequestBody,
-            RouterHandleMiddleware.handleApiRouter,
+            RouterHandleMiddleware.getApiRouterHandler(),
+            DevelopmentMiddleware.getDisplayBodyHandler(),
+            AuthorizeMiddleware.getAuthorizeRouterHandler(
+                ServerEnvVar.TokenKey,
+                ServerEnvVar.JwtSecret,
+                AuthWhitelist
+            ),
         ])
         .use(ExampleRouter.getApiRouter(ServerEnvVar.IsDev))
         .use([
+            AuthRouter.getApiRouter(),
             MigrationRouter.getApiRouter(),
-            // AuthMiddleware(ServerEnvVar.TokenKey, ServerEnvVar.JwtSecret, AuthWhitelist),
-            // AuthRouter.getRouters(),
             RootRouter.getApiRouter(),
             UserRouter.getApiRouter(),
             ProjectRouter.getApiRouter(),
@@ -39,8 +45,8 @@ app.prepare().then(() => {
             SpaceRouter.getApiRouter(),
             DeviceRouter.getApiRouter(),
             DeviceRouter.getApiRouterVersion2(),
-            NextJsRouter.getPageRouter(handle),
         ])
+        .use([AuthRouter.getPageRouter(), NextJsRouter.getPageRouter(handle)])
         .getInstance();
 
     const host = ServerEnvVar.Host;

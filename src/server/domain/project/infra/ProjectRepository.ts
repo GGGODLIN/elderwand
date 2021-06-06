@@ -6,23 +6,23 @@ import PaginationDTO from '../../shared/models/PaginationDTO';
 
 export interface ProjectRepositoryCtor {
     host: string;
-    platformID: number;
+    platformId: number;
     version?: number;
 }
 
 export default class ProjectRepository {
     constructor(ctor: ProjectRepositoryCtor) {
         this.origin = ctor.host;
-        this.platformID = ctor.platformID;
+        this.platformId = ctor.platformId;
     }
 
     private readonly origin: string;
-    private readonly platformID: number;
+    private readonly platformId: number;
 
     async listProjects(): Promise<PaginationDTO<ProjectDTO>> {
         const baseURL = this.origin;
         const pathname = '/api/projects';
-        const params = { pid: this.platformID };
+        const params = { pid: this.platformId };
 
         const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
 
@@ -54,7 +54,7 @@ export default class ProjectRepository {
     async getProject(code: string) {
         const baseURL = this.origin;
         const pathname = `/api/projects/${code}`;
-        const params = { pid: this.platformID };
+        const params = { pid: this.platformId };
 
         const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
 

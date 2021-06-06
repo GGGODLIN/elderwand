@@ -1,230 +1,230 @@
-@import "src/client/styles/variable";
+@import 'src/client/styles/variable';
 
 .fab.create-project-btn {
-    color: $white;
-    background-color: $bg-red-primary;
-    
-    &:hover {
-        background-color: $bg-red-light;
-    }
+  color: $white;
+  background-color: $bg-red-primary;
 
-    svg {
-        font-size: 32px;
-    }
+  &:hover {
+    background-color: $bg-red-light;
+  }
+
+  svg {
+    font-size: 32px;
+  }
 }
 
 .fab.assign-user-btn {
-    background-color: $bg-blue-primary;
-    color: $white;
+  background-color: $bg-blue-primary;
+  color: $white;
 
-    &:hover {
-        background-color: $bg-blue-light;
-    }
+  &:hover {
+    background-color: $bg-blue-light;
+  }
 
-    &.hidden {
-        display: none;
-    }
+  &.hidden {
+    display: none;
+  }
 
-    svg {
-        font-size: 28px;
-    }
+  svg {
+    font-size: 28px;
+  }
 }
 
 .project-list-style-tab {
-    max-width: $max-width-1280;
-    margin: 0 auto;
+  max-width: $max-width-1280;
+  margin: 0 auto;
 
-    .MuiButtonBase-root {
-        min-height: 32px;
+  .MuiButtonBase-root {
+    min-height: 32px;
+  }
+
+  .MuiTabs-flexContainer {
+    justify-content: flex-end;
+    margin: 12px 0 0;
+
+    button {
+      width: 48px;
+      min-width: auto;
+      padding: 0px;
+
+      &[aria-selected='true'] {
+        border-bottom: solid 4px $bg-green-primary;
+      }
     }
-
-    .MuiTabs-flexContainer {
-        justify-content: flex-end;
-        margin: 12px 0 0;
-
-        button {
-            width: 48px;
-            min-width: auto;
-            padding: 0px;
-
-            &[aria-selected="true"] {
-                border-bottom: solid 4px $bg-green-primary;
-            }
-        }
-    }
-    .MuiTabs-indicator {
-        display: none;
-    }
+  }
+  .MuiTabs-indicator {
+    display: none;
+  }
 }
 
 .project-card-grid {
-    width: 100%;
-    max-width: $max-width-1280;
-    margin: 4px auto 0;
+  width: 100%;
+  max-width: $max-width-1280;
+  margin: 4px auto 0;
 }
 
 .project-card {
-    width: 300px;
-    margin: 12px auto;
-    -webkit-box-shadow: 6px 5px 14px 2px rgba(76, 175, 80, 0.55);
-    box-shadow: 6px 5px 14px 2px rgba(76, 175, 80, 0.55);
+  width: 300px;
+  margin: 12px auto;
+  -webkit-box-shadow: 6px 5px 14px 2px rgba(76, 175, 80, 0.55);
+  box-shadow: 6px 5px 14px 2px rgba(76, 175, 80, 0.55);
 
-    &.MuiPaper-rounded {
-        border-radius: 12px;
+  &.MuiPaper-rounded {
+    border-radius: 12px;
+  }
+
+  > div {
+    padding: 0px 16px;
+  }
+
+  .card-header-actions {
+    position: relative;
+    height: 32px;
+    padding: 0 4px;
+
+    button {
+      padding: 8px;
+    }
+  }
+  .card-header {
+    white-space: nowrap;
+  }
+
+  .card-avatar {
+    width: auto;
+    margin: 0 12px 0 12px;
+
+    .MuiAvatar-root {
+      height: 64px;
+      width: 64px;
     }
 
-    > div {
-        padding: 0px 16px;
+    img {
+      margin: 0 auto;
     }
+  }
 
-    .card-header-actions {
-        position: relative;
-        height: 32px;
-        padding: 0 4px;
+  .card-info {
+    margin: 0 auto;
+  }
 
-        button {
-            padding: 8px;
-        }
+  .card-content {
+    margin: 8px auto;
+    div {
+      width: 100%;
     }
-    .card-header {
-        white-space: nowrap;
+  }
+
+  .card-actions {
+    padding: 0 8px;
+
+    button {
+      padding: 8px 4px;
     }
-
-    .card-avatar {
-        width: auto;
-        margin: 0 12px 0 12px;
-
-        .MuiAvatar-root {
-            height: 64px;
-            width: 64px;
-        }
-
-        img {
-            margin: 0 auto;
-        }
-    }
-
-    .card-info {
-        margin: 0 auto;
-    }
-
-    .card-content {
-        margin: 8px auto;
-        div {
-            width: 100%;
-        }
-    }
-
-    .card-actions {
-        padding: 0 8px;
-
-        button {
-            padding: 8px 4px;
-        }
-    }
+  }
 }
 
 .project-list-table {
-    max-width: $max-width-1280;
-    margin: 12px auto 0;
+  max-width: $max-width-1280;
+  margin: 12px auto 0;
 
-    .MuiCard-root {
-        border-radius: 12px;
-    }
+  .MuiCard-root {
+    border-radius: 12px;
+  }
 
-    .ka-table {
-        width: 100%;
-    }
+  .ka-table {
+    width: 100%;
+  }
 
-    td::child {
-        order: 1;
-    }
+  td::child {
+    order: 1;
+  }
 
-    .row-actions {
-        button {
-            padding: 2px;
-        }
+  .row-actions {
+    button {
+      padding: 2px;
     }
+  }
 }
 
 .create-project-dialog {
-    .MuiDialogTitle-root {
-        color: $white;
-        background-color: $bg-blue-dark;
-    }
+  .MuiDialogTitle-root {
+    color: $white;
+    background-color: $bg-blue-dark;
+  }
 
-    .MuiDialogContent-root .MuiGrid-item {
-        padding: 12px 0;
-    }
+  .MuiDialogContent-root .MuiGrid-item {
+    padding: 12px 0;
+  }
 
+  .MuiFormLabel-root {
+    width: auto;
+    padding: 0 4px 0;
+    background-color: transparent;
+  }
+
+  .MuiSelect-root {
+    background-color: $white;
+    &:focus {
+      background-color: $white;
+    }
+  }
+
+  .cloud-code-select {
     .MuiFormLabel-root {
-        width: auto;
-        padding: 0 4px 0;
-        background-color: transparent;
+      background: $white;
     }
+  }
+  .MuiInputBase-root {
+    min-width: 240px;
+    background-color: $white;
+  }
 
-    .MuiSelect-root {
-        background-color: $white;
-        &:focus {
-            background-color: $white;
-        }
-    }
-
-    .cloud-code-select {
-        .MuiFormLabel-root {
-            background: $white;
-        }
-    }
-    .MuiInputBase-root {
-        min-width: 240px;
-        background-color: $white;
-    }
-
-    .clear {
-        color: $bg-green-dark;
-    }
-    .create {
-        color: $bg-blue-dark;
-    }
-    .cancel {
-        color: $bg-red-dark;
-    }
+  .clear {
+    color: $bg-green-dark;
+  }
+  .create {
+    color: $bg-blue-dark;
+  }
+  .cancel {
+    color: $bg-red-dark;
+  }
 }
 
 .assign-user-to-project-dialog {
-    .MuiDialogTitle-root {
-        color: $white;
-        background-color: $bg-blue-dark;
-    }
-    .MuiCard-root {
-        min-height: 100%;
-    }
+  .MuiDialogTitle-root {
+    color: $white;
+    background-color: $bg-blue-dark;
+  }
+  .MuiCard-root {
+    min-height: 100%;
+  }
 
-    .MuiDialogContent-root {
-        display: flex;
-        justify-content: center;
+  .MuiDialogContent-root {
+    display: flex;
+    justify-content: center;
 
-        .actions {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            padding: 0 24px;
-        }
+    .actions {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 0 24px;
     }
-    .available-user-list,
-    .allocate-user-list {
-        min-width: 360px;
-        overflow-y: auto;
-        border: $bg-green-primary solid 1px;
-    }
+  }
+  .available-user-list,
+  .allocate-user-list {
+    min-width: 360px;
+    overflow-y: auto;
+    border: $bg-green-primary solid 1px;
+  }
 
-    .clear {
-        color: $bg-green-dark;
-    }
-    .assign {
-        color: $bg-orange-dark;
-    }
-    .cancel {
-        color: $bg-red-dark;
-    }
+  .clear {
+    color: $bg-green-dark;
+  }
+  .assign {
+    color: $bg-orange-dark;
+  }
+  .cancel {
+    color: $bg-red-dark;
+  }
 }

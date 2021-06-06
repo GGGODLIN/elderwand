@@ -1,18 +1,18 @@
 export default interface UserVM {
-    ID: string;
+    id: string;
     displayName: string;
     email: string;
     address: string;
     tel: string;
-    accountID: string;
+    accountId: string;
     account: Account;
-    platformID: number;
+    platformId: number;
     platform: Platform;
-    roleID: number;
+    roleId: number;
     role: Role;
-    statusID: number;
+    statusId: number;
     status: Status;
-    parentID: string;
+    parentId: string;
     createdBy: string;
     updatedBy: string;
     createdAt: number;
@@ -20,7 +20,7 @@ export default interface UserVM {
 }
 
 interface Account {
-    ID: string;
+    id: string;
     username: string;
 }
 

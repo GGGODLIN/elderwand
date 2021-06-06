@@ -1,4 +1,3 @@
-
 export function groupBy(key: string | number): Function {
     return function group(array: any[]) {
         if (!Array.isArray(array)) {
