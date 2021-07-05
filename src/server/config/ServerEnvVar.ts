@@ -55,4 +55,6 @@ function GetServerEnvVar(): EnvironmentVariables {
     return env;
 }
 
-export let ServerEnvVar: EnvironmentVariables = GetServerEnvVar();
+let ServerEnvVar: EnvironmentVariables = GetServerEnvVar();
+
+export default ServerEnvVar;

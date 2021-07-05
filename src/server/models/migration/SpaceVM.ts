@@ -6,7 +6,7 @@ export default interface SpaceVM {
     parentId?: string;
     iconID: string;
     icon: Icon;
-    projectID: string;
+    projectId: string;
     createdBy: string;
     updatedBy: string;
     createdAt: number;

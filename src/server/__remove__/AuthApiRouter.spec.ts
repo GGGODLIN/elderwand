@@ -5,7 +5,7 @@ import supertest from 'supertest';
 import TestEnvVar from '../../test/config/TestEnvVar';
 import { AuthRouter } from '../routers/AuthRouter';
 import { AuthUtil } from 'g13-web-shared/server/user';
-import { ServerEnvVar } from '../config/ServerEnvVar';
+import ServerEnvVar from '../config/ServerEnvVar';
 import { UserDTO } from 'g13-web-shared/server/user/models';
 import { v4 as uuidv4 } from 'uuid';
 

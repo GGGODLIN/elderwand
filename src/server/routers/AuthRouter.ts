@@ -1,5 +1,5 @@
 import { IRouterContext } from 'koa-router';
-import { ServerEnvVar } from '../config/ServerEnvVar';
+import ServerEnvVar from '../config/ServerEnvVar';
 import AuthController from '../controllers/AuthController';
 import RequestToken from '../domain/shared/types/RequestToken';
 import KoaRouterFactory, {

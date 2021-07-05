@@ -1,4 +1,7 @@
 import * as Dotenv from 'dotenv';
+import supertest from 'supertest';
+import { AuthApiRouterActions } from '../../server/routers/AuthRouter';
+import TestEnvVar from '../config/TestEnvVar';
 
 export default class TestUtil {
     static loadDotEnv() {
@@ -11,5 +14,28 @@ export default class TestUtil {
         console.log(output);
 
         return output.parsed;
+    }
+
+    static async getToken(
+        server: supertest.SuperTest<supertest.Test>,
+        option?: { username?: string; password?: string }
+    ) {
+        const pathname = AuthApiRouterActions.login();
+
+        const body = {
+            username: TestEnvVar.SkymapAdminAccount,
+            password: TestEnvVar.SkymapAdminPassword,
+            ...option,
+        };
+
+        const response = await server
+            .post(pathname)
+            .set('Accept', 'application/json')
+            // .set(AuthUtil.AuthHeader, AuthUtil.newBearer(token))
+            // .query(query)
+            .send(body)
+            .expect(200);
+
+        return response.headers['authorization']?.slice(7);
     }
 }

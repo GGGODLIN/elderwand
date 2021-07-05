@@ -2,7 +2,7 @@
 // import { AuthUtil } from 'g13-web-shared/server/user';
 // import { InviteUserVO } from 'g13-web-shared/server/user/models';
 // import { ParameterizedContext } from 'koa';
-// import { ServerEnvVar } from '../config/ServerEnvVar';
+// import ServerEnvVar from '../config/ServerEnvVar';
 //
 // export class UserApiController {
 //     static getUserByToken(): compose.Middleware<
@@ -63,7 +63,7 @@
 //             // console.log(body);
 //             const vo: InviteUserVO = {
 //                 ...body,
-//                 parent_id: uid,
+//                 projectId: uid,
 //                 operator_id: uid,
 //             };
 //

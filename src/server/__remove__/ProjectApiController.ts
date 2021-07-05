@@ -2,7 +2,7 @@ import compose from 'koa-compose';
 import Router from 'koa-router';
 import { ParameterizedContext } from 'koa';
 import { AuthUtil } from 'g13-web-shared/server/user';
-import { ServerEnvVar } from '../config/ServerEnvVar';
+import ServerEnvVar from '../config/ServerEnvVar';
 import { PlatformEnum } from 'g13-web-shared/server/enums';
 
 export class ProjectApiController {

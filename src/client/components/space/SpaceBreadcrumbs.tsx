@@ -1,8 +1,10 @@
-import React from 'react';
 import { Breadcrumbs, Link } from '@material-ui/core';
-import { SpaceVM } from 'src/client/domain/space/SpaceVM';
+import React from 'react';
+import SpaceVM from 'src/client/domain/space/SpaceVM';
+import ProjectVM from 'src/client/domain/project/ProjectVM';
 
 interface SpaceBreadcrumbsProp {
+    project: ProjectVM;
     space: SpaceVM;
     spaces: SpaceVM[];
     onClick?: Function;
@@ -11,8 +13,20 @@ interface SpaceBreadcrumbsProp {
 const SpaceBreadcrumbs: React.FC<SpaceBreadcrumbsProp> = (props) => {
     const classname = 'space-breadcrumbs';
 
-    if (!props.space) {
+    if (!props.project) {
         return <Breadcrumbs aria-label="breadcrumb" className={classname} />;
+    }
+
+    const element = ((project) => {
+        return <Link key={project.id}>{project.name}</Link>;
+    })(props.project);
+
+    if (!props.space) {
+        return (
+            <Breadcrumbs aria-label="breadcrumb" className={classname}>
+                {element}
+            </Breadcrumbs>
+        );
     }
 
     const target = props.space;
@@ -23,16 +37,16 @@ const SpaceBreadcrumbs: React.FC<SpaceBreadcrumbsProp> = (props) => {
     let temp: SpaceVM = target;
 
     while (temp != null) {
-        const parent = props.spaces.find((item) => item.id == temp.parent_id);
+        const parent = props.spaces.find((item) => item.id == temp.parentId);
         temp = parent;
 
         if (!parent) {
             break;
         }
-        links.push(parent);
+        links.unshift(parent);
     }
 
-    const elements = links.reverse().map((item: SpaceVM) => {
+    const elements = links.map((item: SpaceVM) => {
         const handleClick = () => {
             if (!props.onClick) {
                 return;
@@ -48,6 +62,7 @@ const SpaceBreadcrumbs: React.FC<SpaceBreadcrumbsProp> = (props) => {
 
     return (
         <Breadcrumbs aria-label="breadcrumb" className={classname}>
+            {element}
             {elements}
         </Breadcrumbs>
     );

@@ -1,20 +1,35 @@
+import PaginationVM from 'src/server/models/PaginationVM';
 import supertest from 'supertest';
-import PaginationVM from '../../../client/models/PaginationVM';
 import TestEnvVar from '../../../test/config/TestEnvVar';
-import SpaceVM from '../../models/space/SpaceVM';
+import TestUtil from '../../../test/utils/TestUtil';
+import ServerEnvVar from '../../config/ServerEnvVar';
+import AuthWhitelist from '../../config/Whitelist';
+import AuthorizeMiddleware from '../../middlewares/AuthMiddleware';
+import SpaceVM, { SpaceTopology } from '../../models/space/SpaceVM';
 import KoaServer from '../../server';
+import AuthUtil from '../../utils/AuthUtil';
+import AuthRouter from '../AuthRouter';
 import SpaceRouter, { SpaceRouterActions } from '../SpaceRouter';
 
 describe('Space Router', function () {
     let server: supertest.SuperTest<supertest.Test>;
+    let token: string;
 
-    beforeAll(() => {
+    beforeAll(async () => {
         server = supertest(
             new KoaServer()
-                .use([SpaceRouter.getApiRouter()])
+                .use([
+                    AuthorizeMiddleware.getAuthorizeRouterHandler(
+                        ServerEnvVar.TokenKey,
+                        ServerEnvVar.JwtSecret,
+                        AuthWhitelist
+                    ),
+                ])
+                .use([AuthRouter.getApiRouter(), SpaceRouter.getApiRouter()])
                 .getInstance()
                 .callback()
         );
+        token = await TestUtil.getToken(server);
     });
 
     afterAll(() => {});
@@ -24,13 +39,13 @@ describe('Space Router', function () {
             const pathname = SpaceRouterActions.listSpaces();
 
             const query = {
-                projectID: TestEnvVar.NewTargetProjectCode,
+                projectId: TestEnvVar.NewTargetProjectCode,
             };
 
             const response = await server
                 .get(pathname)
                 .set('Accept', 'application/json')
-                // .set(AuthUtil.AuthHeader, AuthUtil.newBearer(token))
+                .set(AuthUtil.AuthHeader, AuthUtil.newBearer(token))
                 .query(query)
                 .expect(200);
 
@@ -40,25 +55,74 @@ describe('Space Router', function () {
         });
     });
 
+    async function getSpaces(): Promise<SpaceVM[]> {
+        const pathname = SpaceRouterActions.listSpaces();
+
+        const query = {
+            projectId: TestEnvVar.NewTargetProjectCode,
+        };
+
+        const response = await server
+            .get(pathname)
+            .set('Accept', 'application/json')
+            .set(AuthUtil.AuthHeader, AuthUtil.newBearer(token))
+            .query(query)
+            .expect(200);
+
+        const pvm = response.body as PaginationVM<SpaceVM>;
+
+        return pvm.results;
+    }
+
     describe('get the space', function () {
         it('should be 200', async function () {
-            // TODO variable
-            const id = '37549d52-c84f-4c04-ac7b-d1632e6c490b';
+            const spaces = await getSpaces();
+
+            const id = spaces[0].id;
 
             const pathname = SpaceRouterActions.getSpace(id);
 
             const query = {
-                projectID: TestEnvVar.NewTargetProjectCode,
+                projectId: TestEnvVar.NewTargetProjectCode,
             };
 
             const response = await server
                 .get(pathname)
                 .set('Accept', 'application/json')
-                // .set(AuthUtil.AuthHeader, AuthUtil.newBearer(token))
+                .set(AuthUtil.AuthHeader, AuthUtil.newBearer(token))
                 .query(query)
                 .expect(200);
 
             const actual = response.body as SpaceVM;
+
+            console.log(actual);
+        });
+    });
+
+    describe('get the space topology', function () {
+        it('should be 200', async function () {
+            const spaces = await getSpaces();
+
+            const space = spaces.find(
+                (space) => !space.parentId && space.name == '11号楼'
+            );
+
+            const id = space.id;
+
+            const pathname = SpaceRouterActions.getSpaceTopology(id);
+
+            const query = {
+                projectId: TestEnvVar.NewTargetProjectCode,
+            };
+
+            const response = await server
+                .get(pathname)
+                .set('Accept', 'application/json')
+                .set(AuthUtil.AuthHeader, AuthUtil.newBearer(token))
+                .query(query)
+                .expect(200);
+
+            const actual = response.body as SpaceTopology;
 
             console.log(actual);
         });

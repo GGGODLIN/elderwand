@@ -1,14 +1,14 @@
+import { combineReducers } from '@reduxjs/toolkit';
 import AllocateUserSlice from './slices/AllocateUserSlice';
+import AuthSlice from './slices/AuthSlice';
 import AvailableUserSlice from './slices/AvailableUserSlice';
 import DataMigrationSlice from './slices/DataMigrationSlice';
+import FetchSlice from './slices/FetchSlice';
+import InitSlice from './slices/InitSlice';
+import LayoutSlice from './slices/LayoutSlice';
 import ProjectSlice from './slices/ProjectSlice';
 import SpaceSlice from './slices/SpaceSlice';
-import { AuthSlice } from './slices/AuthSlice';
-import { combineReducers } from '@reduxjs/toolkit';
-import { FetchSlice } from './slices/FetchSlice';
-import { InitSlice } from './slices/InitSlice';
-import { LayoutSlice } from './slices/LayoutSlice';
-import { UserSlice } from './slices/UserSlice';
+import UserSlice from './slices/UserSlice';
 
 // TODO move reducers to default module
 export const RootReducer = combineReducers({

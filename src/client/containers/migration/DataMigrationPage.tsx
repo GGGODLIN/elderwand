@@ -10,6 +10,7 @@ import clsx from 'clsx';
 import React, { ChangeEvent, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import DeviceTreeView from 'src/client/components/migration/DeviceTreeView';
+import ImportProjectFAB from 'src/client/components/migration/ImportProjectFAB';
 import ProjectTreeView from 'src/client/components/migration/ProjectTreeView';
 import SpacePreviewTreeView from 'src/client/components/migration/SpacePreviewTreeView';
 import VersionSelector from 'src/client/components/migration/VersionSelector';
@@ -23,7 +24,6 @@ import { RootState } from 'src/client/reducer';
 import DataMigrationSlice from 'src/client/slices/DataMigrationSlice';
 import FetchSlice from 'src/client/slices/FetchSlice';
 import ScrollUtil from 'src/client/utils/ScrollUtil';
-import ImportProjectFAB from 'src/client/components/migration/ImportProjectFAB';
 
 export interface DataMigrationPageProps {
     title: string;
@@ -62,6 +62,10 @@ export const DataMigrationPage: React.FC<DataMigrationPageProps> = () => {
         const params = DataMigrationUtil.getConnectionParams();
 
         new AxiosFactory()
+            .useBearerToken()
+            .useBefore(() => {
+                dispatch(FetchSlice.start());
+            })
             .getInstance()
             .get<PaginationVM<ProjectPreviewVM>>(url, { params: params })
             .then((res) => {
@@ -237,3 +241,5 @@ export const DataMigrationPage: React.FC<DataMigrationPageProps> = () => {
         </React.Fragment>
     );
 };
+
+export default DataMigrationPage;

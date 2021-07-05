@@ -1,7 +1,3 @@
-import { PaginationVM } from 'src/client/models/PaginationVM';
-import { produce } from 'immer';
-import { ProjectVM } from 'src/client/domain/project/ProjectVM';
-import { SpaceVM } from 'src/client/domain/space/SpaceVM';
 import {
     ActionCreatorWithoutPayload,
     ActionCreatorWithPayload,
@@ -11,28 +7,59 @@ import {
     Reducer,
     SliceCaseReducers,
 } from '@reduxjs/toolkit';
+import { produce } from 'immer';
+import ProjectVM from 'src/client/domain/project/ProjectVM';
+import GatewayConnectionVM from 'src/client/domain/space/GatewayConnectionVM';
+import SpaceVM, {
+    DeviceVM,
+    SpaceTopology,
+} from 'src/client/domain/space/SpaceVM';
+import PaginationVM from 'src/client/models/PaginationVM';
 
 export interface SpaceMaintainState {
     projects: ProjectVM[];
-    project_selected: ProjectVM;
+    project_selected?: ProjectVM;
     spaces: SpaceVM[];
-    space_selected: SpaceVM;
+    space_selected?: SpaceVM;
     space_checked_map: {
         [key: string]: boolean;
     };
+    space_topology_map: {
+        [key: string]: SpaceTopology;
+    };
+    connections: GatewayConnectionVM[];
+    gc_bind_modal: {
+        open: boolean;
+        connection?: GatewayConnectionVM;
+        device?: DeviceVM;
+    };
+    gc_unbind_modal: {
+        open: boolean;
+        device?: DeviceVM;
+    };
+    client_ip?: string;
 }
 
 const getInitialState = (): SpaceMaintainState => {
-    // const spaces = require("src/test/fixture/spaces.json");
-    const state: SpaceMaintainState = {
+    return {
         projects: [],
-        spaces: [],
         project_selected: null,
+        spaces: [],
         space_selected: null,
         space_checked_map: {},
-    };
-
-    return state;
+        space_topology_map: {},
+        connections: [],
+        gc_bind_modal: {
+            open: false,
+            connection: null,
+            device: null,
+        },
+        gc_unbind_modal: {
+            open: false,
+            device: null,
+        },
+        client_ip: null,
+    } as SpaceMaintainState;
 };
 
 const SliceName = 'space';
@@ -50,6 +77,32 @@ const SpaceSlice = createSlice<
                 console.log('clear');
             });
         },
+        fetchGatewayConnections: (
+            state,
+            action: PayloadAction<PaginationVM<GatewayConnectionVM>>
+        ) => {
+            return produce(state, (draft) => {
+                // TODO from server side filter
+                const device_map: { [key: string]: DeviceVM } = {};
+
+                for (const key of Object.keys(state.space_topology_map)) {
+                    for (const node of state.space_topology_map[key].nodes) {
+                        for (const device of node.devices) {
+                            device_map[device.imei] = device;
+                        }
+                    }
+                }
+
+                draft.connections = action.payload.results.map((conn) => {
+                    return device_map[conn.imei]
+                        ? {
+                              ...conn,
+                              isBound: true,
+                          }
+                        : conn;
+                });
+            });
+        },
         fetchProjects: (
             state,
             action: PayloadAction<PaginationVM<ProjectVM>>
@@ -65,12 +118,16 @@ const SpaceSlice = createSlice<
         },
         fetchSpaces: (state, action: PayloadAction<PaginationVM<SpaceVM>>) => {
             return produce(state, (draft) => {
-                const spaces = action.payload.results.map((space) => {
-                    return Array.isArray(space.leaves)
-                        ? space
-                        : ({ ...space, leaves: [] } as SpaceVM);
-                });
-                draft.spaces = spaces;
+                draft.spaces = action.payload.results;
+            });
+        },
+        fetchSpaceTopology: (state, action: PayloadAction<SpaceTopology>) => {
+            return produce(state, (draft) => {
+                // const space = action.payload;
+                const root = action.payload.nodes.find(
+                    (item) => !item.parentId
+                );
+                draft.space_topology_map[root.id] = action.payload;
             });
         },
         selectSpace: (state, action: PayloadAction<SpaceVM>) => {
@@ -97,11 +154,50 @@ const SpaceSlice = createSlice<
                 });
             });
         },
+        selectGatewayConnection: (
+            state,
+            action: PayloadAction<GatewayConnectionVM>
+        ) => {
+            return produce(state, (draft) => {
+                draft.gc_bind_modal.connection = action.payload;
+            });
+        },
+        selectGateway: (state, action: PayloadAction<DeviceVM>) => {
+            return produce(state, (draft) => {
+                draft.gc_bind_modal.device = action.payload;
+                draft.gc_bind_modal.open = true;
+            });
+        },
+        closeBindModal: (state, action: PayloadAction) => {
+            return produce(state, (draft) => {
+                draft.gc_bind_modal.connection = null;
+                draft.gc_bind_modal.device = null;
+                draft.gc_bind_modal.open = false;
+            });
+        },
+
+        openUnBindModal: (state, action: PayloadAction<DeviceVM>) => {
+            return produce(state, (draft) => {
+                draft.gc_unbind_modal.device = action.payload;
+                draft.gc_unbind_modal.open = true;
+            });
+        },
+        closeUnBindModal: (state, action: PayloadAction) => {
+            return produce(state, (draft) => {
+                draft.gc_unbind_modal.device = null;
+                draft.gc_unbind_modal.open = false;
+            });
+        },
+        setClientIP: (state, action: PayloadAction<string>) => {
+            return produce(state, (draft) => {
+                draft.client_ip = action.payload;
+            });
+        },
     },
 });
 
 function getAllLeaves(target: SpaceVM, dest: string[], source: SpaceVM[]) {
-    let leaves = source.filter((space) => space.parent_id == target.id);
+    let leaves = source.filter((space) => space.parentId == target.id);
 
     if (!leaves) {
         return;
@@ -109,7 +205,7 @@ function getAllLeaves(target: SpaceVM, dest: string[], source: SpaceVM[]) {
 
     leaves.map((leaf: SpaceVM) => {
         dest.push(leaf.id);
-        const subs = source.filter((space) => space.parent_id == leaf.id);
+        const subs = source.filter((space) => space.parentId == leaf.id);
         if (!!subs) {
             getAllLeaves(leaf, dest, source);
         }
@@ -138,13 +234,39 @@ const selectSpace = SpaceSlice.actions.selectSpace as ActionCreatorWithPayload<
     string
 >;
 
+const fetchSpaceTopology = SpaceSlice.actions
+    .fetchSpaceTopology as ActionCreatorWithPayload<SpaceTopology, string>;
+
 const clearSelected = SpaceSlice.actions
-    .clearSelected as ActionCreatorWithPayload<any, string>;
+    .clearSelected as ActionCreatorWithoutPayload;
 
 const setCheckbox = SpaceSlice.actions.setCheckbox as ActionCreatorWithPayload<
     SpaceVM,
     string
 >;
+
+const fetchGatewayConnections = SpaceSlice.actions
+    .fetchGatewayConnections as ActionCreatorWithPayload<
+    PaginationVM<GatewayConnectionVM>
+>;
+
+const selectGatewayConnection = SpaceSlice.actions
+    .selectGatewayConnection as ActionCreatorWithPayload<GatewayConnectionVM>;
+
+const selectGateway = SpaceSlice.actions
+    .selectGateway as ActionCreatorWithPayload<DeviceVM>;
+
+const closeBindModal = SpaceSlice.actions
+    .closeBindModal as ActionCreatorWithoutPayload;
+
+const openUnBindModal = SpaceSlice.actions
+    .openUnBindModal as ActionCreatorWithPayload<DeviceVM>;
+
+const closeUnBindModal = SpaceSlice.actions
+    .closeUnBindModal as ActionCreatorWithoutPayload;
+
+const setClientIP = SpaceSlice.actions
+    .setClientIP as ActionCreatorWithPayload<string>;
 
 export default {
     reducer,
@@ -153,6 +275,14 @@ export default {
     selectProject,
     fetchSpaces,
     selectSpace,
+    fetchSpaceTopology,
     clearSelected,
     setCheckbox,
+    fetchGatewayConnections,
+    selectGatewayConnection,
+    selectGateway,
+    closeBindModal,
+    openUnBindModal,
+    closeUnBindModal,
+    setClientIP,
 };

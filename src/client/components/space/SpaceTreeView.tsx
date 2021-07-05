@@ -1,95 +1,94 @@
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import React from 'react';
-import SpaceSlice from 'src/client/slices/SpaceSlice';
-import { SpaceVM } from 'src/client/domain/space/SpaceVM';
 import { TreeItem, TreeView } from '@material-ui/lab';
+import React from 'react';
 import { useDispatch } from 'react-redux';
+import ProjectVM from 'src/client/domain/project/ProjectVM';
+import SpaceVM from 'src/client/domain/space/SpaceVM';
+import SpaceSlice from 'src/client/slices/SpaceSlice';
 
-const renderLeaf = (leaves: SpaceVM[]): JSX.Element[] => {
-    if (!Array.isArray(leaves)) {
-        return [];
+interface SpaceTreeViewProp {
+    project: ProjectVM;
+    spaces: SpaceVM[];
+}
+
+const SpaceTreeView: React.FC<SpaceTreeViewProp> = (props) => {
+    const dispatch = useDispatch();
+
+    if (!props.project) {
+        return (
+            <TreeView
+                defaultCollapseIcon={<ExpandMoreIcon />}
+                defaultExpandIcon={<ChevronRightIcon />}
+            />
+        );
     }
 
-    return leaves
-        .sort((a, b) => {
-            return a.name > b.name ? 1 : -1;
-        })
-        .map((item) => {
-            const id = item.id;
-            const name = `${item.name} - ${item.id}`;
+    if (!Array.isArray(props.spaces)) {
+        return null;
+    }
 
-            const dispatch = useDispatch();
-            const handelClick =
-                item.leaves.length > 0
-                    ? () => {
-                          dispatch(SpaceSlice.selectSpace(item));
-                      }
-                    : () => {};
+    const root_spaces = props.spaces.filter((space) => !space.parentId);
+
+    function renderLeaves(target: SpaceVM[], source: SpaceVM[]): JSX.Element[] {
+        if (!Array.isArray(target)) {
+            return [];
+        }
+
+        const elements = target.map((space) => {
+            const id = space.id;
+            const name = space.name;
+
+            const onLabelClick = () => {
+                dispatch(SpaceSlice.selectSpace(space));
+            };
+
+            const leaves = props.spaces.filter(
+                (node) => node.parentId == space.id
+            );
 
             return (
                 <TreeItem
                     key={id}
                     nodeId={id}
                     label={name}
-                    onClick={handelClick}
+                    onLabelClick={onLabelClick}
                 >
-                    {renderLeaf(item.leaves)}
+                    {renderLeaves(leaves, props.spaces)}
                 </TreeItem>
             );
         });
-};
 
-const setLeaves = (target: SpaceVM, source: SpaceVM[]): void => {
-    if (!Array.isArray(source)) {
-        return;
+        return elements;
     }
 
-    let items = source.filter((item) => item.parent_id == target.id);
+    const elements = root_spaces.map((space) => {
+        const id = space.id;
+        const name = space.name;
 
-    target.leaves = items;
+        const onLabelClick = () => {
+            dispatch(SpaceSlice.selectSpace(space));
+        };
 
-    const l = target.leaves.length;
+        const leaves = props.spaces.filter((node) => node.parentId == space.id);
 
-    for (let i = 0; i < l; i++) {
-        setLeaves(target.leaves[i], source);
-    }
-};
-
-interface SpaceTreeViewProp {
-    spaces: SpaceVM[];
-}
-
-const SpaceTreeView: React.FC<SpaceTreeViewProp> = (props) => {
-    if (!Array.isArray(props.spaces)) {
-        return null;
-    }
-
-    let root = props.spaces.find((item) => item.parent_id == '');
-
-    if (!root) {
-        return null;
-    }
-
-    root = { ...root, leaves: [] };
-    //   const spaces = props.spaces;
-    const spaces = props.spaces.map((space) => {
-        return { ...space, leaves: [] };
+        return (
+            <TreeItem
+                key={id}
+                nodeId={id}
+                label={name}
+                onLabelClick={onLabelClick}
+            >
+                {renderLeaves(leaves, props.spaces)}
+            </TreeItem>
+        );
     });
 
-    setLeaves(root, spaces);
+    const name = `${props.project.name} - ${props.project.code}`;
+    const id = props.project.id;
+    const expanded = [id];
 
-    const elements = renderLeaf(root.leaves);
-
-    const name = `${root.name} - ${root.id}`;
-    const id = root.id;
-    const expanded = [root.id];
-    //   const expanded = [root.id].concat(root.leaves.map((item) => item.id));
-
-    const dispatch = useDispatch();
-    const handleClick = () => {
-        dispatch(SpaceSlice.selectSpace(root));
-    };
+    expanded.push(...root_spaces.map((space) => space.id));
 
     return (
         <TreeView
@@ -97,7 +96,7 @@ const SpaceTreeView: React.FC<SpaceTreeViewProp> = (props) => {
             defaultExpandIcon={<ChevronRightIcon />}
             defaultExpanded={expanded}
         >
-            <TreeItem key={id} nodeId={id} label={name} onClick={handleClick}>
+            <TreeItem key={id} nodeId={id} label={name}>
                 {elements}
             </TreeItem>
         </TreeView>

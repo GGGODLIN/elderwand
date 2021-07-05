@@ -1,9 +1,10 @@
-import produce from 'immer';
 import {
     createSlice,
     PayloadAction,
+    Reducer,
     SliceCaseReducers,
 } from '@reduxjs/toolkit';
+import produce from 'immer';
 
 export class InitialState {
     title: string;
@@ -39,6 +40,8 @@ export const InitSlice = createSlice<
     },
 });
 
+const reducer = InitSlice.reducer as Reducer<InitialState>;
+
 const { initial } = InitSlice.actions;
 
-export default { initial };
+export default { reducer, initial };

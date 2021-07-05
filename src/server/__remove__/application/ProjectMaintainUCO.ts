@@ -1,6 +1,6 @@
 import axios, { AxiosError } from 'axios';
 // import { PaginationDTO } from '../../domain/shared/models/PaginationDTO';
-// import { ServerEnvVar } from '../../config/ServerEnvVar';
+// import ServerEnvVar from '../../config/ServerEnvVar';
 //
 // const ApiHost = `http://${ServerEnvVar.SkymapApiHost}`
 //

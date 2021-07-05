@@ -99,6 +99,10 @@
     .MuiTypography-root {
       white-space: nowrap;
     }
+
+    .tabpanel {
+      height: 100%;
+    }
   }
 
   .list-content {
@@ -146,12 +150,17 @@
       justify-content: space-between;
     }
   }
-  .space-card {
+  .space-card,
+  .device-card {
     border: 2px solid $bg-green-primary;
     margin: 16px;
     pointer-events: auto;
     box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.2);
     min-height: 320px;
+
+    &:hover {
+      box-shadow: 2px 2px 4px 4px rgba(0, 0, 0, 0.3);
+    }
 
     .card-header {
       // border-bottom: 2px solid $bg-green-primary;
@@ -185,11 +194,16 @@
     }
   }
 
-  .space-xs-card {
+  .space-xs-card,
+  .device-xs-card {
     width: 180px;
     margin: 8px;
     border: 2px solid $bg-green-primary;
     // pointer-events: none;
+
+    &:hover {
+      box-shadow: 2px 2px 4px 4px rgba(0, 0, 0, 0.3);
+    }
 
     > .MuiCardContent-root {
       display: flex;
@@ -198,12 +212,90 @@
       // align-items: center;
       height: 48px;
       padding: 4px 8px;
+
+      > div {
+        white-space: nowrap;
+      }
     }
     .card-footer {
       text-align: right;
     }
   }
 
+  .device-card,
+  .device-xs-card {
+    background-color: $bg-green-light;
+
+    &.GW {
+      border-color: $bg-blue-light;
+    }
+
+    &.A {
+      border-color: $bg-purple-dark;
+    }
+
+    &.SP {
+      border-color: $bg-orange-light;
+    }
+
+    &.is-over {
+      background-color: $bg-green-primary;
+    }
+
+    &.can-drop {
+      background-color: $bg-green-dark;
+    }
+
+    &.cannot-drop {
+      background-color: $bg-red-light;
+    }
+
+    &.is-bound {
+      border-color: $bg-red-light;
+    }
+  }
+
+  .gateway-connection-list {
+    //height: 100%;
+    //.cards {
+    //  height: auto;
+    //}
+  }
+  .gateway-connection-card {
+    //width: 180px;
+    margin: 8px 8px;
+    border: 2px solid $bg-green-primary;
+
+    &:hover {
+      box-shadow: 2px 2px 4px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    > .MuiCardContent-root {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 4px 8px;
+
+      > div {
+        white-space: nowrap;
+        //overflow: hidden;
+      }
+    }
+    .card-header {
+      padding: 4px 8px;
+    }
+    .card-footer {
+      text-align: right;
+    }
+
+    &.is-bound {
+      border-color: $bg-red-light;
+    }
+  }
+
+  .client-ip-box {
+    margin: 8px 8px 0;
+  }
   // Space-List-Table
   .space-list-table {
     table tr {

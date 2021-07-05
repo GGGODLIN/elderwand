@@ -8,7 +8,7 @@
 // } from 'g13-web-shared/server/user/models';
 // import { PlatformEnum } from 'g13-web-shared/server/enums';
 // import { QueryUserVO } from 'g13-web-shared/server/user/models/QueryUserVO';
-// import { ServerEnvVar } from '../../config/ServerEnvVar';
+// import ServerEnvVar from '../../config/ServerEnvVar';
 // import { PaginationDTO } from '../../domain/shared/models/PaginationDTO';
 //
 // const ApiHost = `http://${ServerEnvVar.SkymapApiHost}`;
@@ -59,7 +59,7 @@
 //         const body = {
 //             email: vo.email,
 //             role_id: vo.role_id,
-//             parent_id: vo.parent_id,
+//             projectId: vo.projectId,
 //             operator_id: vo.operator_id,
 //             platform_id: PlatformEnum.ElderWand,
 //         };

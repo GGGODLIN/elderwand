@@ -3,7 +3,6 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { TreeItem, TreeView } from '@material-ui/lab';
 import React from 'react';
 import { SpacePreviewVM } from 'src/client/domain/migration/MigraionPreviewVM';
-import { useEffect } from 'react';
 
 interface SpacePreviewTreeViewProp {
     spaces: SpacePreviewVM[];

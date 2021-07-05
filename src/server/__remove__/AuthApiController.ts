@@ -5,7 +5,7 @@
 // import { AuthUtil } from 'g13-web-shared/server/user';
 // import { LoginVO, UserDTO } from 'g13-web-shared/server/user/models';
 // import { ParameterizedContext } from 'koa';
-// import { ServerEnvVar } from '../config/ServerEnvVar';
+// import ServerEnvVar from '../config/ServerEnvVar';
 //
 // export class AuthApiController {
 //     static login(): compose.Middleware<

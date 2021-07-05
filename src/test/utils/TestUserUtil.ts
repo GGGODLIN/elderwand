@@ -1,7 +1,7 @@
 import axios from 'axios';
 import TestEnvVar from '../config/TestEnvVar';
 import { PlatformEnum } from 'g13-web-shared/server/enums';
-import { ServerEnvVar } from '../../server/config/ServerEnvVar';
+import ServerEnvVar from '../../server/config/ServerEnvVar';
 import { UserDTO } from 'g13-web-shared/server/user/models';
 
 const ApiHost = `http://${ServerEnvVar.SkymapApiHost}`;

@@ -37,4 +37,13 @@ export default class DeviceMaintainUCO {
     ): Promise<DeviceDTO> {
         return this.repository.bindGatewayConnection(id, pid, cid);
     }
+
+    /**
+     *
+     * @param id Device ID or DvID
+     * @param pid ProjectID
+     */
+    unbindGatewayConnection(id: string, pid: string): Promise<DeviceDTO> {
+        return this.repository.unbindGatewayConnection(id, pid);
+    }
 }

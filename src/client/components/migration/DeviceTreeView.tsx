@@ -1,12 +1,12 @@
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { TreeItem, TreeView } from '@material-ui/lab';
 import React from 'react';
 import {
     DevicePreviewVM,
     SpacePreviewVM,
 } from 'src/client/domain/migration/MigraionPreviewVM';
 import { groupBy } from 'src/client/utils/FunctionUtil';
-import { TreeItem, TreeView } from '@material-ui/lab';
 
 interface DeviceTreeViewProp {
     spaces: SpacePreviewVM[];

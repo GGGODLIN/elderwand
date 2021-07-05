@@ -1,15 +1,3 @@
-import AccountBoxIcon from '@material-ui/icons/AccountBox';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
-import IconButton from '@material-ui/core/IconButton';
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
-import React, { ChangeEvent, useState } from 'react';
-import SettingsIcon from '@material-ui/icons/Settings';
-import SpaceSlice from 'src/client/slices/SpaceSlice';
-import { CSSProperties } from '@material-ui/core/styles/withStyles';
-import { RootState } from 'src/client/reducer';
-import { SpaceVM } from 'src/client/domain/space/SpaceVM';
-import { useDispatch, useSelector } from 'react-redux';
 import {
     Checkbox,
     Collapse,
@@ -21,13 +9,25 @@ import {
     TableHead,
     TableRow,
 } from '@material-ui/core';
+import IconButton from '@material-ui/core/IconButton';
+import { CSSProperties } from '@material-ui/core/styles/withStyles';
+import AccountBoxIcon from '@material-ui/icons/AccountBox';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import SettingsIcon from '@material-ui/icons/Settings';
+import React, { ChangeEvent, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import SpaceVM from 'src/client/domain/space/SpaceVM';
+import { RootState } from 'src/client/reducer';
+import SpaceSlice from 'src/client/slices/SpaceSlice';
 
 interface SpaceListTableProp {
     spaces: SpaceVM[];
     selected: [];
 }
 
-const SpaceListTable: React.FC<SpaceListTableProp> = (props) => {
+const SpaceTableStyleList: React.FC<SpaceListTableProp> = (props) => {
     const classname = 'space-list-table';
 
     const { spaces_count, checked_list_count } = useSelector(
@@ -48,7 +48,7 @@ const SpaceListTable: React.FC<SpaceListTableProp> = (props) => {
         }
     );
 
-    const root = props.spaces.find((space) => space.parent_id == '');
+    const root = props.spaces.find((space) => space.parentId == '');
 
     const rows = !root
         ? []
@@ -105,7 +105,7 @@ const SpaceTableRow: React.FC<SpaceTableRowProps> = (props) => {
     const leaves = !props.spaces
         ? []
         : props.spaces
-              .filter((space) => space.parent_id == row.id)
+              .filter((space) => space.projectId == row.id)
               .sort((a, b) => a.name.localeCompare(b.name));
     const hasLeaves = leaves.length > 0;
 
@@ -210,7 +210,7 @@ const SpaceListRowTable: React.FC<SpaceListRowTableProp> = (props) => {
     const row = props.rowData;
     const leaves = !props.spaces
         ? []
-        : props.spaces.filter((space) => space.parent_id == row.id);
+        : props.spaces.filter((space) => space.projectId == row.id);
 
     const rows = leaves
         .sort((a, b) => a.name.localeCompare(b.name))
@@ -268,4 +268,4 @@ const ActionCell: React.FC<{}> = (props) => {
     );
 };
 
-export default SpaceListTable;
+export default SpaceTableStyleList;

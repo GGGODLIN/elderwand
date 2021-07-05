@@ -1,7 +1,3 @@
-import { PaginationVM } from 'src/client/models/PaginationVM';
-import { produce } from 'immer';
-import { ProjectVM } from 'src/client/domain/project/ProjectVM';
-
 import {
     ActionCreatorWithoutPayload,
     ActionCreatorWithPayload,
@@ -11,6 +7,9 @@ import {
     Reducer,
     SliceCaseReducers,
 } from '@reduxjs/toolkit';
+import { produce } from 'immer';
+import ProjectVM from 'src/client/domain/project/ProjectVM';
+import PaginationVM from 'src/client/models/PaginationVM';
 
 interface CreateProjectFrom {
     name?: string;

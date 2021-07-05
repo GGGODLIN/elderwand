@@ -12,6 +12,7 @@ export default class KoaServer {
 
     constructor() {
         this.server = new Koa();
+        this.server.proxy = true;
 
         this.use([
             KoaBodyParser(),

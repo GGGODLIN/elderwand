@@ -1,6 +1,21 @@
 # EladerWand Api
+
+# user login
+POST {{HOST}}/api/login
+Accept: application/json
+Content-Type: application/json
+
+{
+    "username": "{{USERNAME}}",
+    "password": "{{PASSWORD}}"
+}
+
+###
+
+
 # Get service info
 GET {{HOST}}/api/info
+Authorization: Bearer {{AUTH_TOKEN}}
 
 ###
 
@@ -9,6 +24,7 @@ GET {{HOST}}/api/info
 GET {{HOST}}/api/migration/projects?dbname={{MIGRATION_MONGODB_SAKE}}&conn={{MIGRATION_MONGODB_URI}}&version=200
 Accept: application/json
 Content-type: application/json
+Authorization: Bearer {{AUTH_TOKEN}}
 
 ###
 
@@ -17,6 +33,7 @@ Content-type: application/json
 GET {{HOST}}/api/migration/projects/{{MIGRATION_TARGET_PROJECT_CODE}}/spaces?dbname={{MIGRATION_MONGODB_SAKE}}&conn={{MIGRATION_MONGODB_URI}}&version=200
 Accept: application/json
 Content-type: application/json
+Authorization: Bearer {{AUTH_TOKEN}}
 
 ###
 
@@ -25,21 +42,24 @@ Content-type: application/json
 GET {{HOST}}/api/migration/projects/{{MIGRATION_TARGET_PROJECT_CODE}}/devices?dbname={{MIGRATION_MONGODB_SAKE}}&conn={{MIGRATION_MONGODB_URI}}&version=200
 Accept: application/json
 Content-type: application/json
+Authorization: Bearer {{AUTH_TOKEN}}
 
 ###
 
 
 # List source device template by project
 GET {{HOST}}/api/migration/device/templates?dbname={{MIGRATION_MONGODB_THINGS}}&conn={{MIGRATION_MONGODB_URI}}&version=200
-accept: application/json
+Accept: application/json
+Authorization: Bearer {{AUTH_TOKEN}}
 
 ###
 
 
 # Import device templates
 POST {{HOST}}/api/migration/device/templates?dbname={{MIGRATION_MONGODB_THINGS}}&conn={{MIGRATION_MONGODB_URI}}&version=200
-accept: application/json
+Accept: application/json
 Content-Type: application/json
+Authorization: Bearer {{AUTH_TOKEN}}
 
 {}
 
@@ -48,16 +68,18 @@ Content-Type: application/json
 
 # Import devices
 POST {{HOST}}/api/migration/projects/{{MIGRATION_TARGET_PROJECT_CODE}}/devices?dbname={{MIGRATION_MONGODB_SAKE}}&conn={{MIGRATION_MONGODB_URI}}&version=200
-accept: application/json
+Accept: application/json
 Content-Type: application/json
+Authorization: Bearer {{AUTH_TOKEN}}
 
 ###
 
 
 # Import devices with new project code
 POST {{HOST}}/api/migration/projects/{{MIGRATION_TARGET_PROJECT_CODE}}/devices?dbname={{MIGRATION_MONGODB_SAKE}}&conn={{MIGRATION_MONGODB_URI}}&version=200
-accept: application/json
+Accept: application/json
 Content-Type: application/json
+Authorization: Bearer {{AUTH_TOKEN}}
 
 {
     "code": "{{TARGET_PROJECT_CODE}}"
@@ -68,7 +90,7 @@ Content-Type: application/json
 
 // gateway connect
 PUT {{HOST}}/api/gateway/connections
-accept: application/json
+Accept: application/json
 Content-Type: application/json
 
 //  "id": "1a6a908e-3bdf-49a5-82a3-1258347adfb0",
@@ -78,17 +100,17 @@ Content-Type: application/json
   "networkCards": [
     {
       "enable": true,
-      "ip": "192.168.0.100",
+      "ip": "192.168.0.102",
       "name": "eth0",
       "network": "internet",
-      "mac": "22:00:21:33:66:22"
+      "mac": "55:00:21:33:66:33"
     },
     {
       "enable": true,
       "ip": "172.168.31.99",
       "name": "eth1",
       "network": "intranet",
-      "mac": "22:00:21:33:66:11"
+      "mac": "44:00:21:33:66:11"
     }
   ],
   "swInfos": {
@@ -107,39 +129,43 @@ Content-Type: application/json
 
 # List gateway connections
 GET {{HOST}}/api/gateway/connections?clientIP={{CLIENT_IP}}
-accept: application/json
+Accept: application/json
 Content-Type: application/json
 
 ###
 
 // List devices
-GET {{HOST}}/api/devices?projectID={{TARGET_PROJECT_CODE}}
-accept: application/json
+GET {{HOST}}/api/devices?projectId={{TARGET_PROJECT_CODE}}
+Accept: application/json
 Content-Type: application/json
+Authorization: Bearer {{AUTH_TOKEN}}
 
 ###
 
 
 // Get device
-GET {{HOST}}/api/devices/{{TARGET_DEVICE_ID}}?projectID={{TARGET_PROJECT_CODE}}
-accept: application/json
+GET {{HOST}}/api/devices/{{TARGET_DEVICE_ID}}?projectId={{TARGET_PROJECT_CODE}}
+Accept: application/json
 Content-Type: application/json
+Authorization: Bearer {{AUTH_TOKEN}}
 
 ###
 
 
 // Get device by DvID
-GET {{HOST}}/api/devices/{{TARGET_DEVICE_DVID}}?projectID={{TARGET_PROJECT_CODE}}
-accept: application/json
+GET {{HOST}}/api/devices/{{TARGET_DEVICE_DVID}}?projectId={{TARGET_PROJECT_CODE}}
+Accept: application/json
 Content-Type: application/json
+Authorization: Bearer {{AUTH_TOKEN}}
 
 ###
 
 
 // Bind the Gateway connection To the device
-PUT {{HOST}}/api/devices/{{TARGET_DEVICE_DVID}}/gateway?projectID={{TARGET_PROJECT_CODE}}
-accept: application/json
+PUT {{HOST}}/api/devices/{{TARGET_DEVICE_DVID}}/gateway?projectId={{TARGET_PROJECT_CODE}}
+Accept: application/json
 Content-Type: application/json
+Authorization: Bearer {{AUTH_TOKEN}}
 
 {
     "cid": "{{GATEWAY_CONNECTION_ID}}"
@@ -148,17 +174,45 @@ Content-Type: application/json
 ###
 
 
+// UnBind the Gateway connection To the device
+DELETE {{HOST}}/api/devices/{{TARGET_DEVICE_DVID}}/gateway?projectId={{TARGET_PROJECT_CODE}}
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{AUTH_TOKEN}}
+
+{}
+
+###
+
+
 // Get device repository
-GET {{HOST}}/api/devices/{{TARGET_DEVICE_DVID}}/repository?projectID=REXX
-accept: application/json
+GET {{HOST}}/api/devices/{{TARGET_DEVICE_DVID}}/repository?projectId={{TARGET_PROJECT_CODE}}
+Accept: application/json
 Content-Type: application/json
 
 ###
 
 
 // Get device repository from version2
-GET {{HOST}}/api/v2/devices/{{TARGET_DEVICE_DVID}}/repository?projectID=REXX
-accept: application/json
+GET {{HOST}}/api/v2/devices/{{TARGET_DEVICE_DVID}}/repository?projectId={{TARGET_PROJECT_CODE}}
+Accept: application/json
 Content-Type: application/json
 
 ###
+
+
+// TEMP
+# Import devices
+POST {{HOST}}/api/migration/projects/{{MIGRATION_TARGET_PROJECT_CODE}}/devices?dbname={{MIGRATION_MONGODB_SAKE}}&conn={{MIGRATION_MONGODB_URI}}&version=200
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{AUTH_TOKEN}}
+
+###
+
+
+// List devices
+GET {{HOST}}/api/devices?projectId={{TARGET_PROJECT_CODE}}
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{AUTH_TOKEN}}

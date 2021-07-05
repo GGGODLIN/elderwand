@@ -1,11 +1,12 @@
-import produce from 'immer';
 import {
     ActionCreatorWithoutPayload,
     ActionCreatorWithPayload,
     createSlice,
     PayloadAction,
+    Reducer,
     SliceCaseReducers,
 } from '@reduxjs/toolkit';
+import produce from 'immer';
 
 interface FetchState {
     isLoading: boolean;
@@ -15,10 +16,7 @@ interface FetchState {
     queue: any[];
 }
 
-export const FetchSlice = createSlice<
-    FetchState,
-    SliceCaseReducers<FetchState>
->({
+const FetchSlice = createSlice<FetchState, SliceCaseReducers<FetchState>>({
     name: 'fetch',
     initialState: {
         isLoading: false,
@@ -60,6 +58,8 @@ export const FetchSlice = createSlice<
     },
 });
 
+const reducer = FetchSlice.reducer as Reducer<FetchState>;
+
 const start = FetchSlice.actions.start as ActionCreatorWithoutPayload<string>;
 const end = FetchSlice.actions.end as ActionCreatorWithoutPayload<string>;
 const success = FetchSlice.actions.success as ActionCreatorWithPayload<{
@@ -69,4 +69,4 @@ const fail = FetchSlice.actions.fail as ActionCreatorWithPayload<{
     error: any;
 }>;
 
-export default { start, end, success, fail };
+export default { reducer, start, end, success, fail };

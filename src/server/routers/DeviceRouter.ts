@@ -8,6 +8,7 @@ export const DeviceRouterActions = {
     listDevices: () => `/api/devices`,
     getDevice: (id: string) => `/api/devices/${id}`,
     bindGatewayConnection: (id: string) => `/api/devices/${id}/gateway`,
+    unbindGatewayConnection: (id: string) => `/api/devices/${id}/gateway`,
     getRepository: (id: string) => `/api/devices/${id}/repository`,
 };
 
@@ -35,6 +36,12 @@ export default class DeviceRouter {
                 action: '/devices/:id/gateway',
                 method: 'PUT',
                 controller: DeviceMaintainController.bindGateway,
+            },
+            unbindGateway: {
+                name: 'unbind-gateway',
+                action: '/devices/:id/gateway',
+                method: 'DELETE',
+                controller: DeviceMaintainController.unbindGateway,
             },
             getRepository: {
                 name: 'get-repository',

@@ -2,7 +2,7 @@ import Router, { IRouterParamContext } from 'koa-router';
 import { AuthUserRepository } from 'g13-web-shared/server/user/repositories';
 import { AuthUtil } from 'g13-web-shared/server/user';
 import { ParameterizedContext } from 'koa';
-import { ServerEnvVar } from '../config/ServerEnvVar';
+import ServerEnvVar from '../config/ServerEnvVar';
 
 export class AuthPageController {
     static register() {

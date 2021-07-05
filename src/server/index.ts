@@ -1,6 +1,6 @@
 import NextJS from 'next';
-import { ServerEnvVar } from './config/ServerEnvVar';
-import { AuthWhitelist } from './config/Whitelist';
+import ServerEnvVar from './config/ServerEnvVar';
+import AuthWhitelist from './config/Whitelist';
 import AuthorizeMiddleware from './middlewares/AuthMiddleware';
 import DevelopmentMiddleware from './middlewares/DevelopmentMiddleware';
 import RouterHandleMiddleware from './middlewares/RouterHandleMiddleware';

@@ -1,28 +1,34 @@
+import { Card, CardContent, Tab, Tabs } from '@material-ui/core';
 import AccountTreeIcon from '@material-ui/icons/AccountTree';
 import AppsIcon from '@material-ui/icons/Apps';
 import AssignmentIcon from '@material-ui/icons/Assignment';
-import dynamic from 'next/dynamic';
-import FetchSlice from 'src/client/slices/FetchSlice';
 import ListAltIcon from '@material-ui/icons/ListAlt';
-import ProjectList from 'src/client/components/space/ProjectList';
-import React, { ChangeEvent, Dispatch, useEffect, useState } from 'react';
+import RouterIcon from '@material-ui/icons/Router';
 import ShareIcon from '@material-ui/icons/Share';
-import SpaceBreadcrumbs from 'src/client/components/space/SpaceBreadcrumbs';
-import SpaceCardStyleList from 'src/client/components/space/SpaceCardList';
-import SpaceListTable from 'src/client/components/space/SpaceListTable';
-import SpaceSlice from 'src/client/slices/SpaceSlice';
-import SpaceTreeView from 'src/client/components/space/SpaceTreeView';
 import ThreeDRotationIcon from '@material-ui/icons/ThreeDRotation';
-import { AxiosUtil } from 'src/client/utils/AxiosUtil';
-import { Card, CardContent, Tab, Tabs } from '@material-ui/core';
-import { PaginationVM } from 'src/client/models/PaginationVM';
-import { ProjectVM } from 'src/client/domain/project/ProjectVM';
-import { RootState } from 'src/client/reducer';
-import { ScrollUtil } from 'src/client/utils/ScrollUtil';
-import { SpaceVM } from 'src/client/domain/space/SpaceVM';
-import { TabPanel } from 'src/client/components/TabPanel';
+import dynamic from 'next/dynamic';
+import React, { ChangeEvent, Dispatch, useEffect, useState } from 'react';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import { useDispatch, useSelector } from 'react-redux';
-import { DevEnvVar } from 'src/client/configs/ClientEnvVar';
+import GatewayBindDialog from 'src/client/components/space/GatewayBindDialog';
+import GatewayConnectionCardList from 'src/client/components/space/GatewayConnectionCardList';
+import GatewayUnBindDialog from 'src/client/components/space/GatewayUnBindDialog';
+import ProjectList from 'src/client/components/space/ProjectList';
+import SpaceBreadcrumbs from 'src/client/components/space/SpaceBreadcrumbs';
+import SpaceCardStyleList from 'src/client/components/space/SpaceCardStyleList';
+import SpaceTableStyleList from 'src/client/components/space/SpaceTableStyleList';
+import SpaceTreeView from 'src/client/components/space/SpaceTreeView';
+import TabPanel from 'src/client/components/TabPanel';
+import ProjectVM from 'src/client/domain/project/ProjectVM';
+import GatewayConnectionVM from 'src/client/domain/space/GatewayConnectionVM';
+import SpaceVM, { SpaceTopology } from 'src/client/domain/space/SpaceVM';
+import AxiosFactory from 'src/client/helper/AxiosFactory';
+import PaginationVM from 'src/client/models/PaginationVM';
+import { RootState } from 'src/client/reducer';
+import FetchSlice from 'src/client/slices/FetchSlice';
+import SpaceSlice from 'src/client/slices/SpaceSlice';
+import ScrollUtil from 'src/client/utils/ScrollUtil';
 
 const Space2DTopologyGraphWithNoSSR = dynamic(
     () => import('src/client/components/space/Space2DTopologyGraph'),
@@ -57,51 +63,149 @@ const Space3DTopology: React.FC<Space3DTopologyProp> = (props) => {
     );
 };
 
+const fetchClientIP = (dispatch: Dispatch<any>): void => {
+    const url = 'https://api.ipify.org/?';
+    const params = {
+        format: 'json',
+    };
+
+    new AxiosFactory()
+        .useBefore(() => {
+            dispatch(FetchSlice.start());
+        })
+        .getInstance()
+        .get<{ ip: string }>(url, { params })
+        .then((res) => {
+            dispatch(SpaceSlice.setClientIP(res.data.ip));
+            // dispatch(SpaceSlice.closeUnBindModal());
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+        .finally(() => {
+            dispatch(FetchSlice.end());
+        });
+};
+
+const fetchGatewayConnections = (
+    dispatch: Dispatch<any>,
+    client_ip: string = ''
+): void => {
+    const url = '/api/gateway/connections';
+
+    const params = {
+        clientIP: client_ip || '',
+    };
+
+    new AxiosFactory()
+        .useBearerToken()
+        .useBefore(() => {
+            // dispatch(FetchSlice.start());
+        })
+        .getInstance()
+        .get<PaginationVM<GatewayConnectionVM>>(url, { params })
+        .then((res) => {
+            console.log(res.data);
+            dispatch(SpaceSlice.fetchGatewayConnections(res.data));
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+        .finally(() => {
+            // dispatch(FetchSlice.end());
+        });
+};
+
 const fetchProjects = (dispatch: Dispatch<any>): void => {
-    // const origin = AxiosUtil.getOriginWithPort();
-    const origin = `http://${DevEnvVar.SkymapApiHost}`;
-    const client = AxiosUtil.makeAxiosInstance(dispatch, origin);
-    // TODO const url = "/api/projects";
     const url = '/api/projects';
 
-    client
-        .get<PaginationVM<ProjectVM>>(url, { params: {} })
+    const params = {};
+
+    new AxiosFactory()
+        .useBearerToken()
+        .useBefore(() => {
+            dispatch(FetchSlice.start());
+        })
+        .getInstance()
+        .get<PaginationVM<ProjectVM>>(url, { params })
         .then((res) => {
-            ScrollUtil.GotoTop('main');
             dispatch(SpaceSlice.fetchProjects(res.data));
         })
-        .catch(() => {})
+        .catch((err) => {
+            console.log(err);
+        })
         .finally(() => {
             dispatch(FetchSlice.end());
         });
 };
 
 const fetchSpaces = (dispatch: Dispatch<any>, project: ProjectVM): void => {
-    // const origin = AxiosUtil.getOriginWithPort();
-    const origin = `http://${DevEnvVar.SkymapApiHost}`;
-    const client = AxiosUtil.makeAxiosInstance(dispatch, origin);
+    const url = '/api/spaces';
 
-    const url = `/api/projects/${project.id}/spaces`;
-    const params = {};
+    const params = {
+        projectId: project.id,
+    };
 
-    client
-        .get<PaginationVM<SpaceVM>>(url, { params: params })
-        .then((res) => {
-            console.log(res.data);
-            dispatch(SpaceSlice.fetchSpaces(res.data));
-            ScrollUtil.GotoTop('main');
+    new AxiosFactory()
+        .useBearerToken()
+        .useBefore(() => {
+            dispatch(FetchSlice.start());
         })
-        .catch(() => {})
+        .getInstance()
+        .get<PaginationVM<SpaceVM>>(url, { params })
+        .then((res) => {
+            dispatch(SpaceSlice.fetchSpaces(res.data));
+            const spaces = res.data.results.filter((item) => !item.parentId);
+            fetchSpaceTopology(dispatch, project, spaces);
+        })
+        .catch((err) => {
+            console.log(err);
+        })
         .finally(() => {
             dispatch(FetchSlice.end());
         });
-
-    // TODO remove
-    // const spaces = require("src/test/fixture/spaces.json");
-    // const pvm = { results: spaces } as PaginationVM<SpaceVM>;
-
-    // dispatch(SpaceSlice.fetchSpaces(pvm));
 };
+
+const fetchSpaceTopology = (
+    dispatch: Dispatch<any>,
+    project: ProjectVM,
+    spaces: SpaceVM[]
+): void => {
+    Promise.all(
+        spaces.map((space) => {
+            const url = `/api/spaces/${space.id}/topology`;
+
+            const params = {
+                projectId: project.code,
+            };
+
+            return new AxiosFactory()
+                .useBearerToken()
+                .useBefore(() => {
+                    dispatch(FetchSlice.start());
+                })
+                .getInstance()
+                .get<SpaceTopology>(url, { params })
+                .then((res) => {
+                    dispatch(SpaceSlice.fetchSpaceTopology(res.data));
+                    return true;
+                })
+                .catch((err) => {
+                    console.log(err);
+                    return false;
+                })
+                .finally(() => {
+                    dispatch(FetchSlice.end());
+                });
+        })
+    ).then((all) => {
+        if (all) {
+            fetchGatewayConnections(dispatch, client_ip_cache);
+        }
+    });
+};
+
+let client_ip_cache = null;
 
 export interface SpacePageProps {
     title: string;
@@ -113,7 +217,7 @@ export const SpacePage: React.FC<SpacePageProps> = () => {
     const classname = `${name} page`;
 
     /* Toolbox Panel */
-    const [toolbox_tab_index, setToolboxTabIndex] = useState(2);
+    const [toolbox_tab_index, setToolboxTabIndex] = useState(0);
     const toolbox_tab_name = 'tool-box';
 
     const handleToolboxTabChange = (e: ChangeEvent, value: number) => {
@@ -128,34 +232,43 @@ export const SpacePage: React.FC<SpacePageProps> = () => {
         setSpaceListTabIndex(value);
     };
 
-    const { projects, project_selected, spaces, space_selected } = useSelector(
-        (state: RootState) => {
-            return {
-                projects: state.space.projects,
-                project_selected: state.space.project_selected,
-                spaces: state.space.spaces || [],
-                space_selected: state.space.space_selected,
-            };
-        }
-    );
-
-    useEffect(() => {
-        const root = spaces.find((item) => item.parent_id == '');
-        dispatch(SpaceSlice.selectSpace(root));
-    }, [spaces]);
+    const {
+        projects,
+        project_selected,
+        spaces,
+        space_selected,
+        space_topology_map,
+        connections,
+        bind_modal,
+        unbind_modal,
+        client_ip,
+    } = useSelector((state: RootState) => {
+        return {
+            projects: state.space.projects || [],
+            project_selected: state.space.project_selected,
+            spaces: state.space.spaces || [],
+            space_selected: state.space.space_selected,
+            space_topology_map: state.space.space_topology_map,
+            connections: state.space.connections,
+            bind_modal: state.space.gc_bind_modal,
+            unbind_modal: state.space.gc_unbind_modal,
+            client_ip: state.space.client_ip,
+        };
+    });
 
     useEffect(() => {
         ScrollUtil.GotoTop('.list-content');
     }, [space_selected]);
 
-    const handleSelectSpaceCard = () => {};
-
     const handleSelectSpace = (item: SpaceVM) => {
         dispatch(SpaceSlice.selectSpace(item));
     };
 
+    const handleSelectSpaceCard = (item: SpaceVM) => {
+        dispatch(SpaceSlice.selectSpace(item));
+    };
+
     const handleSelectSmallSpaceCard = (item: SpaceVM) => {
-        console.log('handleSelectSmallSpaceCard');
         dispatch(SpaceSlice.selectSpace(item));
     };
 
@@ -169,6 +282,21 @@ export const SpacePage: React.FC<SpacePageProps> = () => {
         }
     }, [project_selected]);
 
+    useEffect(() => {
+        if (!client_ip) {
+            return;
+        }
+
+        fetchGatewayConnections(dispatch, client_ip);
+        client_ip_cache = client_ip;
+    }, [client_ip]);
+
+    useEffect(() => {
+        if (client_ip == null) {
+            fetchClientIP(dispatch);
+        }
+    }, [client_ip]);
+
     return (
         <React.Fragment>
             <div className={classname}>
@@ -176,6 +304,7 @@ export const SpacePage: React.FC<SpacePageProps> = () => {
                 <div className="space-page-top">
                     {/* Breadcrumbs */}
                     <SpaceBreadcrumbs
+                        project={project_selected}
                         space={space_selected}
                         spaces={spaces}
                         onClick={handleSelectSpace}
@@ -198,104 +327,162 @@ export const SpacePage: React.FC<SpacePageProps> = () => {
                 </div>
                 {/* Tool Box */}
 
-                <div className="space-page-left">{/* Tool Box */}</div>
-                <Card className={'space-maintain-card'}>
-                    <CardContent className={'content'}>
-                        {/* Toolbox tabs */}
-                        <div className={'toolbox'}>
-                            <div className={'toolbox-tabs'}>
-                                <Tabs
-                                    value={toolbox_tab_index}
-                                    onChange={handleToolboxTabChange}
-                                >
-                                    <Tab
-                                        icon={<AppsIcon />}
-                                        aria-label="space-cards"
-                                    />
-                                    <Tab
-                                        icon={<AccountTreeIcon />}
-                                        aria-label="space-tree-view"
-                                    />
-                                    <Tab
-                                        icon={<AssignmentIcon />}
-                                        aria-label="projects"
-                                        onClick={() => {
-                                            fetchProjects(dispatch);
-                                        }}
-                                    />
-                                </Tabs>
-                            </div>
-                            <div className="toolbox-panels">
-                                <TabPanel
-                                    name={toolbox_tab_name}
-                                    value={toolbox_tab_index}
-                                    index={0}
-                                >
-                                    {'Space Card Item list'}
-                                </TabPanel>
-                                <TabPanel
-                                    name={toolbox_tab_name}
-                                    value={toolbox_tab_index}
-                                    index={1}
-                                >
-                                    {/* Spaces tree view */}
-                                    <SpaceTreeView spaces={spaces} />
-                                </TabPanel>
-                                <TabPanel
-                                    name={toolbox_tab_name}
-                                    value={toolbox_tab_index}
-                                    index={2}
-                                >
-                                    {/* Space Card Item list */}
-                                    <ProjectList projects={projects} />
-                                </TabPanel>
-                            </div>
-                        </div>
+                <div className="space-page-left">
+                    <Card className={'space-maintain-card'}>
+                        <CardContent className={'content'}>
+                            <DndProvider backend={HTML5Backend}>
+                                {/* Toolbox tabs */}
+                                <div className={'toolbox'}>
+                                    <div className={'toolbox-tabs'}>
+                                        <Tabs
+                                            value={toolbox_tab_index}
+                                            onChange={handleToolboxTabChange}
+                                        >
+                                            <Tab
+                                                icon={<AssignmentIcon />}
+                                                aria-label="projects"
+                                                onClick={() => {
+                                                    fetchProjects(dispatch);
+                                                }}
+                                            />
+                                            <Tab
+                                                icon={<AccountTreeIcon />}
+                                                aria-label="space-tree-view"
+                                            />
+                                            <Tab
+                                                icon={<AppsIcon />}
+                                                aria-label="space-cards"
+                                            />
+                                            <Tab
+                                                icon={<RouterIcon />}
+                                                aria-label="gateway-connections"
+                                                onClick={() => {
+                                                    fetchGatewayConnections(
+                                                        dispatch,
+                                                        client_ip
+                                                    );
+                                                }}
+                                            />
+                                        </Tabs>
+                                    </div>
+                                    <div className="toolbox-panels">
+                                        <TabPanel
+                                            name={toolbox_tab_name}
+                                            value={toolbox_tab_index}
+                                            index={0}
+                                        >
+                                            {/* Space Card Item list */}
+                                            <ProjectList
+                                                projects={projects}
+                                                onClickCallback={() => {
+                                                    setToolboxTabIndex(1);
+                                                }}
+                                            />
+                                        </TabPanel>
 
-                        {/* Space view panels*/}
-                        <div className="list-content">
-                            {/* Space card style view in panel */}
-                            <TabPanel
-                                name={space_list_tab_name}
-                                value={space_list_tab_index}
-                                index={0}
-                            >
-                                {/* // TODO Rename */}
-                                <SpaceCardStyleList
-                                    space={space_selected}
-                                    spaces={spaces}
-                                    onSelectCard={handleSelectSpaceCard}
-                                    onSelectSmallCard={
-                                        handleSelectSmallSpaceCard
-                                    }
-                                />
-                            </TabPanel>
-                            {/* Space table style view in panel */}
-                            <TabPanel
-                                name={space_list_tab_name}
-                                value={space_list_tab_index}
-                                index={1}
-                            >
-                                <SpaceListTable spaces={spaces} selected={[]} />
-                            </TabPanel>
-                            {/* Space Topology Style view in panel */}
-                            <TabPanel
-                                name={space_list_tab_name}
-                                value={space_list_tab_index}
-                                index={2}
-                            >
-                                <Space2DTopology spaces={spaces} />
-                            </TabPanel>
-                            <TabPanel
-                                name={space_list_tab_name}
-                                value={space_list_tab_index}
-                                index={3}
-                            >
-                                <Space3DTopology spaces={spaces} />
-                            </TabPanel>
-                        </div>
-                    </CardContent>
-                </Card>
+                                        <TabPanel
+                                            name={toolbox_tab_name}
+                                            value={toolbox_tab_index}
+                                            index={1}
+                                        >
+                                            {/* Spaces tree view */}
+                                            <SpaceTreeView
+                                                project={project_selected}
+                                                spaces={spaces}
+                                            />
+                                        </TabPanel>
+
+                                        <TabPanel
+                                            name={toolbox_tab_name}
+                                            value={toolbox_tab_index}
+                                            index={2}
+                                        >
+                                            {'Space Card Item list'}
+                                        </TabPanel>
+
+                                        <TabPanel
+                                            name={toolbox_tab_name}
+                                            value={toolbox_tab_index}
+                                            index={3}
+                                        >
+                                            <GatewayConnectionCardList
+                                                connections={connections}
+                                            />
+                                        </TabPanel>
+                                    </div>
+                                </div>
+
+                                {/* Space view panels*/}
+                                <div className="list-content">
+                                    {/* Space card style view in panel */}
+                                    <TabPanel
+                                        name={space_list_tab_name}
+                                        value={space_list_tab_index}
+                                        index={0}
+                                    >
+                                        <SpaceCardStyleList
+                                            project_selected={project_selected}
+                                            space_selected={space_selected}
+                                            spaces={spaces}
+                                            space_topology_map={
+                                                space_topology_map
+                                            }
+                                            onSelectCard={handleSelectSpaceCard}
+                                            onSelectSmallCard={
+                                                handleSelectSmallSpaceCard
+                                            }
+                                        />
+                                    </TabPanel>
+                                    {/* Space table style view in panel */}
+                                    <TabPanel
+                                        name={space_list_tab_name}
+                                        value={space_list_tab_index}
+                                        index={1}
+                                    >
+                                        <SpaceTableStyleList
+                                            spaces={spaces}
+                                            selected={[]}
+                                        />
+                                    </TabPanel>
+                                    {/* Space Topology Style view in panel */}
+                                    <TabPanel
+                                        name={space_list_tab_name}
+                                        value={space_list_tab_index}
+                                        index={2}
+                                    >
+                                        <Space2DTopology spaces={spaces} />
+                                    </TabPanel>
+                                    <TabPanel
+                                        name={space_list_tab_name}
+                                        value={space_list_tab_index}
+                                        index={3}
+                                    >
+                                        <Space3DTopology spaces={spaces} />
+                                    </TabPanel>
+                                </div>
+                            </DndProvider>
+                        </CardContent>
+                    </Card>
+                </div>
+            </div>
+            <div>
+                <GatewayBindDialog
+                    project={project_selected}
+                    open={bind_modal.open}
+                    device={bind_modal.device}
+                    connection={bind_modal.connection}
+                    boundCallback={() => {
+                        fetchSpaces(dispatch, project_selected);
+                    }}
+                />
+                <GatewayUnBindDialog
+                    open={unbind_modal.open}
+                    project={project_selected}
+                    device={unbind_modal.device}
+                    boundCallback={() => {
+                        fetchSpaces(dispatch, project_selected);
+                    }}
+                />
             </div>
         </React.Fragment>
     );

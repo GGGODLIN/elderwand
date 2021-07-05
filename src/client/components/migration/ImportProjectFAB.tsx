@@ -63,6 +63,10 @@ const ImportProjectDialog: React.FC<ImportProjectDialogProp> = (props) => {
         const body = { code: code };
 
         new AxiosFactory()
+            .useBearerToken()
+            .useBefore(() => {
+                dispatch(FetchSlice.start());
+            })
             .getInstance()
             .post<any>(url, body, { params })
             .then((res) => {

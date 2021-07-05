@@ -1,13 +1,14 @@
+import { Dispatch } from '@reduxjs/toolkit';
+import { AxiosError } from 'axios';
+import { useEffect } from 'react';
 import AxiosFactory from '../helper/AxiosFactory';
+import FetchSlice from '../slices/FetchSlice';
 import InitSlice, { InitialPayload } from '../slices/InitSlice';
 import LayoutSlice, { LayoutPayload } from '../slices/LayoutSlice';
 import UserSlice from '../slices/UserSlice';
-import { AxiosError } from 'axios';
-import { AxiosUtil } from './AxiosUtil';
-import { Dispatch } from '@reduxjs/toolkit';
-import { useEffect } from 'react';
 
-export class PageInitialUtil {
+export default class PageInitialUtil {
+    // TODO rewrite
     static initPageLayoutWithUser(dispatch: Dispatch<any>) {
         useEffect(() => {
             const layout: LayoutPayload = {
@@ -33,6 +34,9 @@ export class PageInitialUtil {
         useEffect(() => {
             new AxiosFactory()
                 .useBearerToken()
+                .useBefore(() => {
+                    dispatch(FetchSlice.start());
+                })
                 .getInstance()
                 .get('/api/user/me')
                 .then((res) => {
@@ -47,7 +51,7 @@ export class PageInitialUtil {
                     document.location.replace('/logout');
                 })
                 .finally(() => {
-                    console.log('finally');
+                    dispatch(FetchSlice.end());
                 });
         }, []);
     }

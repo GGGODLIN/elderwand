@@ -1,37 +1,40 @@
 export default interface DeviceDTO {
     id: string;
-    dvId: string;
     name: string;
 
     typeId: number;
     type: Type;
-
-    spaceId: string;
-    projectId: string;
-    parentId?: string;
-
-    iconId: string;
-    icon: Icon;
-
-    images: object[]; // TODO
-
     modelId: string;
     model: Model;
+
+    projectId: string;
+    spaceId: string;
+    parentId?: string;
+    iconId: string;
+    icon: Icon;
+    images: Image[];
+
+    dvId: string;
+
+    protocols: Protocol[];
 
     specId: string;
     spec: Spec;
 
+    channelInfo: ChannelInfo[];
+    switchPanelControlInfo: SwitchPanelControlInfo[];
+
     attrs?: object[];
     period: number;
     heartbeat: number;
+    sendTelRules: number[];
 
-    softwareInfo: object;
+    softwareInfo: SoftwareInfo[];
 
-    networkCards: NetworkCardDTO[];
-
+    imei: string;
     publicIP: string;
     traceIP: string;
-    imei: string;
+    networkCards: NetworkCardDTO[];
 
     cloudKeys: string;
 
@@ -39,6 +42,39 @@ export default interface DeviceDTO {
     updatedBy: string;
     createdAt: number;
     updatedAt: number;
+}
+
+export interface ChannelInfo {
+    channelNo: number;
+    dvId: string;
+}
+
+export interface SwitchPanelControlInfo {
+    button: number;
+    lPress: boolean;
+    connectionInfo: ConnectionInfo[];
+}
+
+export interface ConnectionInfo {
+    objectId: number;
+    dvId: string;
+}
+
+interface Protocol {
+    id: string;
+    typeId: string;
+    type: ProtocolType;
+    commInfo: object;
+}
+
+interface ProtocolType {
+    id: string;
+    name: string;
+}
+
+interface SoftwareInfo {
+    name: string;
+    version?: string;
 }
 
 interface DeviceCategory {
@@ -55,6 +91,13 @@ interface Type {
 }
 
 interface Icon {
+    id: string;
+    name: string;
+    path: string;
+    tags: string[];
+}
+
+interface Image {
     id: string;
     name: string;
     path: string;

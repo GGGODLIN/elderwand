@@ -2,8 +2,10 @@ import produce from 'immer';
 import {
     createSlice,
     PayloadAction,
+    Reducer,
     SliceCaseReducers,
 } from '@reduxjs/toolkit';
+import { InitialState, InitSlice } from './InitSlice';
 
 export interface LayoutState {
     header: {
@@ -120,7 +122,15 @@ export const LayoutSlice = createSlice<
     },
 });
 
+const reducer = LayoutSlice.reducer as Reducer<LayoutState>;
+
 const { initial, openFeatureDrawer, openProfileDrawer, showGotoTop } =
     LayoutSlice.actions;
 
-export default { initial, openFeatureDrawer, openProfileDrawer, showGotoTop };
+export default {
+    reducer,
+    initial,
+    openFeatureDrawer,
+    openProfileDrawer,
+    showGotoTop,
+};

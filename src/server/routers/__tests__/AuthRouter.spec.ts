@@ -1,8 +1,8 @@
-import NextJS from 'next';
 import supertest from 'supertest';
 import TestEnvVar from '../../../test/config/TestEnvVar';
-import { ServerEnvVar } from '../../config/ServerEnvVar';
-import { AuthWhitelist } from '../../config/Whitelist';
+import TestUtil from '../../../test/utils/TestUtil';
+import ServerEnvVar from '../../config/ServerEnvVar';
+import AuthWhitelist from '../../config/Whitelist';
 import AuthorizeMiddleware from '../../middlewares/AuthMiddleware';
 import UserVM from '../../models/user/UserVM';
 import KoaServer from '../../server';
@@ -28,23 +28,7 @@ describe('Auth Router', function () {
                 .getInstance()
                 .callback()
         );
-
-        const pathname = AuthApiRouterActions.login();
-
-        const body = {
-            username: TestEnvVar.SkymapAdminAccount,
-            password: TestEnvVar.SkymapAdminPassword,
-        };
-
-        const response = await server
-            .post(pathname)
-            .set('Accept', 'application/json')
-            // .set(AuthUtil.AuthHeader, AuthUtil.newBearer(token))
-            // .query(query)
-            .send(body)
-            .expect(200);
-
-        token = response.headers['authorization']?.slice(7);
+        token = await TestUtil.getToken(server);
     });
 
     afterAll(() => {});

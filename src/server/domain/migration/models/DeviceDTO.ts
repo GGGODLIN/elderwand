@@ -5,7 +5,7 @@ export default interface DeviceDTO {
     typeID: number;
     type: Type;
     spaceID: string;
-    projectID: string;
+    projectId: string;
     parentId?: string;
     iconID: string;
     icon: Icon;

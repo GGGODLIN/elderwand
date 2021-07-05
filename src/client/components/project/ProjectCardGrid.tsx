@@ -1,6 +1,6 @@
 import React from 'react';
 import { ProjectCard } from './ProjectCard';
-import { ProjectVM } from '../../domain/project/ProjectVM';
+import { ProjectVM } from 'src/client/domain/project/ProjectVM';
 import { Grid } from '@material-ui/core';
 
 export interface ProjectCardListProps {

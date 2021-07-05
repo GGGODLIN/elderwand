@@ -2,7 +2,7 @@ import FileUtil from './FileUtil';
 import GoogleSheetUtil from './GoogleSheetUtil';
 import path from 'path';
 import StringUtil from './StringUtil';
-import { ServerEnvVar } from '../config/ServerEnvVar';
+import ServerEnvVar from '../config/ServerEnvVar';
 
 const exportTranslateFile = async (
     locale_folder: string,

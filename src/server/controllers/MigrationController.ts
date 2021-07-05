@@ -1,7 +1,7 @@
 import { AxiosError } from 'axios';
 import { Context } from 'koa';
 import { IRouterContext } from 'koa-router';
-import { ServerEnvVar } from '../config/ServerEnvVar';
+import ServerEnvVar from '../config/ServerEnvVar';
 import MigrationUCO from '../domain/migration/applications/MigrationUCO';
 import MigrationRepository, {
     MigrationRepositoryCtor,

@@ -1,15 +1,16 @@
-import produce from 'immer';
-import { Feature } from '../domain/user/Feature';
-import { FeatureIconEnum } from '../domain/user/FeatureIcon';
-import { PaginationVM } from '../models/PaginationVM';
-import { UserVM } from '../domain/user/UserVM';
 import {
     ActionCreatorWithoutPayload,
     ActionCreatorWithPayload,
     createSlice,
     PayloadAction,
+    Reducer,
     SliceCaseReducers,
 } from '@reduxjs/toolkit';
+import produce from 'immer';
+import Feature from 'src/client/domain/user/Feature';
+import { FeatureIconEnum } from 'src/client/domain/user/FeatureIcon';
+import UserVM from 'src/client/domain/user/UserVM';
+import PaginationVM from 'src/client/models/PaginationVM';
 
 export interface UserState {
     user?: UserVM;
@@ -211,7 +212,10 @@ const changeInviteUserForm = UserSlice.actions
 const clearInviteUserForm = UserSlice.actions
     .clearInviteUserForm as ActionCreatorWithoutPayload<string>;
 
+const reducer = UserSlice.reducer as Reducer<UserState>;
+
 export default {
+    reducer,
     initial,
     fetch,
     push,

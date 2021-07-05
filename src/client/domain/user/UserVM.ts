@@ -1,4 +1,4 @@
-export interface UserVM {
+export default interface UserVM {
     id: string;
     display_name: string;
     address: string;
@@ -17,7 +17,7 @@ export interface UserVM {
     role_id: number;
     role_code: string;
     role_name: string;
-    parent_id: string;
+    projectId: string;
     parent?: any;
     created_by: string;
     updated_by: string;

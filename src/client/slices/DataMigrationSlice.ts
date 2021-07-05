@@ -1,7 +1,6 @@
 import {
     ActionCreatorWithoutPayload,
     ActionCreatorWithPayload,
-    AnyAction,
     createSlice,
     PayloadAction,
     Reducer,
@@ -13,7 +12,7 @@ import {
     ProjectPreviewVM,
     SpacePreviewVM,
 } from 'src/client/domain/migration/MigraionPreviewVM';
-import { ProjectVM } from '../domain/project/ProjectVM';
+import ProjectVM from 'src/client/domain/project/ProjectVM';
 
 export interface DataMigrationState {
     projects: ProjectPreviewVM[];
@@ -77,13 +76,16 @@ const DataMigrationSlice = createSlice<
         },
         selectProject: (state, action: PayloadAction<ProjectPreviewVM>) => {
             return produce(state, (draft) => {
+                // draft.project_selected = {
+                //     displayName: action.payload.displayName,
+                //     projectCode: action.payload.projectCode,
+                //     projectName: action.payload.projectName,
+                //     cloudCode: action.payload.cloudCode,
+                //     expDate: action.payload.expDate,
+                //     owner: action.payload.owner,
+                // } as ProjectPreviewVM;
                 draft.project_selected = {
-                    displayName: action.payload.displayName,
-                    projectCode: action.payload.projectCode,
-                    projectName: action.payload.projectName,
-                    cloudCode: action.payload.cloudCode,
-                    expDate: action.payload.expDate,
-                    owner: action.payload.owner,
+                    ...action.payload,
                 } as ProjectPreviewVM;
                 draft.spaces = action.payload.spaces;
                 draft.devices = action.payload.devices;

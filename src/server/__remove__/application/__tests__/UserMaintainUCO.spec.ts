@@ -4,7 +4,7 @@
 // import UserMaintainUCO from '../UserMaintainUCO';
 // import { InviteUserDTO, InviteUserVO, LoginVO, RegisterVO, UserDTO } from 'g13-web-shared/server/user/models';
 // import { PlatformEnum, UserRoleEnum } from 'g13-web-shared/server/enums';
-// import { ServerEnvVar } from '../../../config/ServerEnvVar';
+// import ServerEnvVar from '../../../config/ServerEnvVar';
 //
 // const ApiHost = `http://${ServerEnvVar.SkymapApiHost}`;
 //
@@ -34,7 +34,7 @@
 //     const vo: InviteUserVO = {
 //         email: email,
 //         role_id: UserRoleEnum.ProjectEngineer,
-//         parent_id: operator.id,
+//         projectId: operator.id,
 //         operator_id: operator.id,
 //     };
 //

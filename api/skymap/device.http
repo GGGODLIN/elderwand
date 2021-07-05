@@ -1,5 +1,5 @@
 # list devices by project id
-GET {{HOST}}/api/devices?projectID={{TARGET_PROJECT_CODE}}&platformId=3
+GET {{HOST}}/api/devices?projectId={{TARGET_PROJECT_CODE}}&platformId=3
 accept: application/json
 
 ###
@@ -7,7 +7,7 @@ accept: application/json
 
 # get the device
 #
-GET {{HOST}}/api/devices/{{TARGET_DEVICE_ID}}?projectID={{TARGET_PROJECT_CODE}}&platformId=3
+GET {{HOST}}/api/devices/{{TARGET_DEVICE_ID}}?projectId={{TARGET_PROJECT_CODE}}&platformId=3
 accept: application/json
 Content-Type: application/json
 

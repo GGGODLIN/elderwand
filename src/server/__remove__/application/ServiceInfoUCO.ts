@@ -1,6 +1,6 @@
 // import axios, { AxiosError, AxiosResponse } from 'axios';
 // import { InfoDTO } from '../../domain/info/InfoDTO';
-// import { ServerEnvVar } from '../../config/ServerEnvVar';
+// import ServerEnvVar from '../../config/ServerEnvVar';
 //
 // const ApiHost = `http://${ServerEnvVar.SkymapApiHost}`;
 //

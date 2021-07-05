@@ -2,7 +2,7 @@ import AdminPage from 'src/client/containers/admin/AdminPage';
 import Layout from 'src/client/containers/layout/Layout';
 import React from 'react';
 import { NextPage } from 'next';
-import { PageInitialUtil } from 'src/client/utils/PageInitialUtil';
+import PageInitialUtil from 'src/client/utils/PageInitialUtil';
 import { useDispatch } from 'react-redux';
 
 export interface AdminIndexProps {

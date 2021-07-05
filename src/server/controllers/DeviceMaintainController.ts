@@ -1,6 +1,6 @@
 import { IRouterContext } from 'koa-router';
 import PaginationVM from '../../client/models/PaginationVM';
-import { ServerEnvVar } from '../config/ServerEnvVar';
+import ServerEnvVar from '../config/ServerEnvVar';
 import DeviceMaintainUCO from '../domain/device/applications/DeviceMaintainUCO';
 import DeviceRepository from '../domain/device/infra/DeviceRepository';
 import DeviceDTO from '../domain/device/models/DeviceDTO';
@@ -22,12 +22,12 @@ export default class DeviceMaintainController {
         });
 
         const query = {
-            projectID: '',
+            projectId: '',
             ...ctx.query,
         };
 
         await new DeviceMaintainUCO(repository)
-            .listDevices(query.projectID)
+            .listDevices(query.projectId)
             .then((res: PaginationDTO<DeviceDTO>) => {
                 const vm = {
                     ...res,
@@ -62,12 +62,12 @@ export default class DeviceMaintainController {
         };
 
         const query = {
-            projectID: '',
+            projectId: '',
             ...ctx.query,
         };
 
         await new DeviceMaintainUCO(repository)
-            .getDevice(params.id, query.projectID)
+            .getDevice(params.id, query.projectId)
             .then((res: DeviceDTO) => {
                 const vm = convertToDeviceVM(res);
 
@@ -86,7 +86,7 @@ export default class DeviceMaintainController {
             });
     };
 
-    // /api/devices/:id/gateway?projectID={projectID}
+    // /api/devices/:id/gateway?projectId={projectId}
     static bindGateway = async (
         ctx: IRouterContext & RequestBody<BindGatewayBody>
     ) => {
@@ -101,7 +101,7 @@ export default class DeviceMaintainController {
         };
 
         const query = {
-            projectID: '',
+            projectId: '',
             ...ctx.query,
         };
 
@@ -111,7 +111,7 @@ export default class DeviceMaintainController {
         };
 
         await new DeviceMaintainUCO(repository)
-            .bindGatewayConnection(params.id, query.projectID, body.cid)
+            .bindGatewayConnection(params.id, query.projectId, body.cid)
             .then((res: DeviceDTO) => {
                 const vm = convertToDeviceVM(res);
 
@@ -130,7 +130,46 @@ export default class DeviceMaintainController {
             });
     };
 
-    // /api/devices/:id/repository?projectID={projectID}
+    // /api/devices/:id/gateway?projectId={projectId}
+    static unbindGateway = async (
+        ctx: IRouterContext & RequestBody<BindGatewayBody>
+    ) => {
+        const repository = new DeviceRepository({
+            host: ServerEnvVar.SkymapApiHost,
+            platformId: Platform.ElderWand,
+        });
+
+        const params = {
+            id: '',
+            ...ctx.params,
+        };
+
+        const query = {
+            projectId: '',
+            ...ctx.query,
+        };
+
+        await new DeviceMaintainUCO(repository)
+            .unbindGatewayConnection(params.id, query.projectId)
+            .then((res: DeviceDTO) => {
+                const vm = convertToDeviceVM(res);
+
+                ctx.status = 200;
+                ctx.body = vm;
+
+                return;
+            })
+            .catch((err) => {
+                if (err.isAxiosError) {
+                    ctx.status = err.response.status;
+                    ctx.body = err.response.data;
+                    return;
+                }
+                throw err;
+            });
+    };
+
+    // /api/devices/:id/repository?projectId={projectId}
     static getRepository = async (ctx: IRouterContext) => {
         const ctor: ApiRepositoryCtor = {
             host: ServerEnvVar.SkymapApiHost,
@@ -143,7 +182,7 @@ export default class DeviceMaintainController {
         };
 
         const query = {
-            projectID: '',
+            projectId: '',
             ...ctx.query,
         };
 
@@ -151,27 +190,27 @@ export default class DeviceMaintainController {
         const device = await DeviceDataRepositoryHelper.getDevice(
             ctor,
             params.id,
-            query.projectID
+            query.projectId
         );
 
         // project
         const project = await DeviceDataRepositoryHelper.getProject(
             ctor,
-            query.projectID
+            query.projectId
         );
 
         // spaces
         const spaces = await DeviceDataRepositoryHelper.getSpaces(
             ctor,
             device.spaceId,
-            query.projectID
+            query.projectId
         );
 
         // devices
         const devices = await DeviceDataRepositoryHelper.getDevices(
             ctor,
             device,
-            query.projectID
+            query.projectId
         );
 
         const info = DataAccessHelper.getServiceInfo(ctx);
@@ -197,6 +236,10 @@ interface BindGatewayBody {
 }
 
 function convertToDeviceVMs(dtos: DeviceDTO[]): DeviceVM[] {
+    if (!dtos) {
+        return [];
+    }
+
     return dtos.map((dto) => {
         return convertToDeviceVM(dto);
     });

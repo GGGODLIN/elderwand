@@ -4,6 +4,7 @@ import Cookies from 'universal-cookie';
 interface AxiosFactoryCtor {
     baseURL?: string;
     responseType?: string;
+    timeout?: number;
 }
 
 type ResponseType =
@@ -56,12 +57,23 @@ export default class AxiosFactory {
         this.instance = Axios.create({
             baseURL: baseURL,
             responseType: responseType,
+            timeout: ctor.timeout,
         });
     }
 
     private readonly instance: AxiosInstance;
 
-    // TODO useBearerToken
+    useHeader(key: string, value: string) {
+        this.instance.interceptors.request.use(
+            (config) => {
+                config.headers.common[key] = value;
+                return config;
+            },
+            (error) => Promise.reject(error)
+        );
+
+        return this;
+    }
 
     useBearerToken(key: string = 'token') {
         this.instance.interceptors.request.use(
@@ -100,7 +112,7 @@ export default class AxiosFactory {
         return this;
     }
 
-    before(fn: Function) {
+    useBefore(fn: Function) {
         this.instance.interceptors.request.use(
             (config) => {
                 fn();

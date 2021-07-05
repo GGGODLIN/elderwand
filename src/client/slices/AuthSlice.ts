@@ -1,11 +1,12 @@
 import produce from 'immer';
-import { UserVM } from 'src/client/domain/user/UserVM';
+import UserVM from 'src/client/domain/user/UserVM';
 import { ClientEnvVar } from '../configs/ClientEnvVar';
 import { isUUID } from '../utils/ValidatorUtil';
 import {
     ActionCreatorWithPayload,
     createSlice,
     PayloadAction,
+    Reducer,
     SliceCaseReducers,
 } from '@reduxjs/toolkit';
 
@@ -95,6 +96,8 @@ export const AuthSlice = createSlice<
     },
 });
 
+const reducer = AuthSlice.reducer as Reducer<AuthState>;
+
 const setInvitingUser = AuthSlice.actions
     .setInvitingUser as ActionCreatorWithPayload<{ user: UserVM }>;
 
@@ -104,4 +107,4 @@ const changeRegisterUserForm = AuthSlice.actions
     value: any;
 }>;
 
-export default { setInvitingUser, changeRegisterUserForm };
+export default { reducer, setInvitingUser, changeRegisterUserForm };

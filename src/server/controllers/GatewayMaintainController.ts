@@ -1,6 +1,6 @@
 import { Context } from 'koa';
 import PaginationVM from '../../client/models/PaginationVM';
-import { ServerEnvVar } from '../config/ServerEnvVar';
+import ServerEnvVar from '../config/ServerEnvVar';
 import GatewayConnectionMaintainUCO from '../domain/gateway/applications/GatewayConnectionMaintainUCO';
 import GatewayConnectionRepository from '../domain/gateway/infra/GatewayConnectionRepository';
 import GatewayConnectionDTO from '../domain/gateway/models/GatewayConnectionDTO';
@@ -21,6 +21,8 @@ export default class GatewayMaintainController {
         };
 
         let ip = query.clientIP || ctx.request.ip;
+
+        console.log({ ip });
 
         await new GatewayConnectionMaintainUCO(repository)
             .listGatewayConnections(ip)

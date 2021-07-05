@@ -1,0 +1,11 @@
+# user login
+POST {{HOST}}/api/login
+accept: application/json
+Content-Type: application/json
+
+{
+    "username": "{{USERNAME}}",
+    "password": "{{PASSWORD}}"
+}
+
+###

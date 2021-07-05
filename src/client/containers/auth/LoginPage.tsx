@@ -76,7 +76,7 @@ const LoginPage: React.FC<LoginPageProps> = (props) => {
     const onSubmit = async (form: LoginForm) => {
         new AxiosFactory()
             .useBearerToken()
-            .before(() => {
+            .useBefore(() => {
                 dispatch(FetchSlice.start());
             })
             .getInstance()

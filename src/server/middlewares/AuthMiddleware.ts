@@ -1,4 +1,4 @@
-import { ServerEnvVar } from '../config/ServerEnvVar';
+import ServerEnvVar from '../config/ServerEnvVar';
 import AuthUtil from '../utils/AuthUtil';
 
 function matchesPath(url: URL, opts: { path: any }) {

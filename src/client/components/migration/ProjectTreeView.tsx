@@ -5,11 +5,11 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { ProjectPreviewVM } from 'src/client/domain/migration/MigraionPreviewVM';
 import { groupBy } from 'src/client/utils/FunctionUtil';
-import DataMigrationUtil from '../../domain/migration/DataMigrationUtil';
-import AxiosFactory from '../../helper/AxiosFactory';
-import DataMigrationSlice from '../../slices/DataMigrationSlice';
-import FetchSlice from '../../slices/FetchSlice';
-import ScrollUtil from '../../utils/ScrollUtil';
+import DataMigrationUtil from 'src/client/domain/migration/DataMigrationUtil';
+import AxiosFactory from 'src/client/helper/AxiosFactory';
+import DataMigrationSlice from 'src/client/slices/DataMigrationSlice';
+import FetchSlice from 'src/client/slices/FetchSlice';
+import ScrollUtil from 'src/client/utils/ScrollUtil';
 
 interface ProjectTreeViewProp {
     projects: ProjectPreviewVM[];
@@ -30,6 +30,10 @@ const ProjectTreeView: React.FC<ProjectTreeViewProp> = (props) => {
                 const url = `/api/migration/projects/${project.projectCode}`;
 
                 new AxiosFactory()
+                    .useBearerToken()
+                    .useBefore(() => {
+                        dispatch(FetchSlice.start());
+                    })
                     .getInstance()
                     .get<ProjectPreviewVM>(url, { params: params })
                     .then((res) => {

@@ -1,6 +1,7 @@
 import { IRouterContext } from 'koa-router';
-import { ServerEnvVar } from '../../config/ServerEnvVar';
+import ServerEnvVar from '../../config/ServerEnvVar';
 import DeviceDTO, {
+    ChannelInfo,
     NetworkCardDTO,
 } from '../../domain/device/models/DeviceDTO';
 import { Platform } from '../../domain/shared/enums/Enums';
@@ -53,12 +54,15 @@ export default class DeviceMaintainControllerVersion2 {
             query.projectId
         );
 
-        // const info = DataAccessHelper.getServiceInfo(ctx);
+        const filter_spaces_with_device = filterSpaceWithDevices(
+            spaces,
+            devices
+        );
 
         const vm: DeviceDataV2RepositoryVM = {
             rt: ['bh.r.zoneExchange'],
             project: project.code,
-            spaces: convertToSpaceVMs(spaces),
+            spaces: convertToSpaceVMs(filter_spaces_with_device),
             gw: convertToGatewayVM(device),
             hubs: filterHubs(devices),
             devices: filterEndpointDevices(devices),
@@ -74,6 +78,39 @@ export default class DeviceMaintainControllerVersion2 {
     };
 }
 
+function filterSpaceWithDevices(spaces, devices) {
+    const spaces_map = {};
+
+    for (const space of spaces) {
+        spaces_map[space.id] = space;
+    }
+
+    const filter = [];
+
+    for (const device of devices) {
+        if (filter.includes(device.spaceId)) {
+            continue;
+        }
+
+        filter.push(device.spaceId);
+
+        if (
+            !spaces_map[device.spaceId] ||
+            !spaces_map[device.spaceId].parentId
+        ) {
+            continue;
+        }
+        filter.push(spaces_map[device.spaceId].parentId);
+    }
+
+    const filter_spaces_with_device = spaces.filter((space) => {
+        if (filter.includes(space.id || space.projectId)) {
+            return space;
+        }
+    });
+    return filter_spaces_with_device;
+}
+
 function filterEndpointDevices(dtos: DeviceDTO[]): DeviceVM[] {
     const exclude = ['GW', 'A'];
 
@@ -85,37 +122,11 @@ function filterEndpointDevices(dtos: DeviceDTO[]): DeviceVM[] {
     });
 
     return endpoints.map((dto) => {
-        return {
-            id: dto.id,
-            dvId: dto.dvId,
-            name: dto.name,
-            spaceId: dto.spaceId,
-            parentId: dto.parentId,
-            deviceType: dto.typeId,
-            attrs: dto.attrs,
-            spec: {
-                comPortCnt: dto.spec.comPortCount,
-                manufacturerCode: dto.spec.manufacturerCode,
-                //TODO
-                isIPR: false,
-            },
-            heartbeat: dto.heartbeat,
-            period: dto.period,
-            hwInfo: {
-                model: dto.model.name,
-                brand: dto.model.brand.name,
-            },
-            iconId: dto.iconId, // chInfo: ChInfo[]; // TODO
-            // sendTelRules: number[];  // TODO
-            // status: number; // TODO
-            // commInfo: CommInfo; // TODO
-            // slaveDevices?: string[]; // TODO
-            // switchBindCh?: SwitchBindCh[]; // TODO
-        } as DeviceVM;
+        return convertToDeviceVM(dto);
     });
 }
 
-function filterHubs(dtos: DeviceDTO[]): HubVM[] {
+function filterHubs(dtos: DeviceDTO[]): DeviceVM[] {
     const include = ['A'];
 
     const hubs = dtos.filter((device) => {
@@ -124,64 +135,99 @@ function filterHubs(dtos: DeviceDTO[]): HubVM[] {
         }
     });
 
-    return hubs.map((hub) => {
-        return {
-            id: hub.id,
-            dvId: hub.dvId,
-            name: hub.name,
-            spaceId: hub.spaceId,
-            parentId: hub.parentId,
-            deviceType: hub.typeId,
-            attrs: hub.attrs,
-            spec: {
-                comPortCnt: hub.spec.comPortCount,
-                manufacturerCode: hub.spec.manufacturerCode,
-                //TODO
-                isIPR: false,
-            },
-            heartbeat: hub.heartbeat,
-            period: hub.period,
-            hwInfo: {
-                model: hub.model.name,
-                brand: hub.model.brand.name,
-            },
-            iconId: hub.icon.id,
-            // chInfo: ChInfo[]; // TODO
-            // sendTelRules: number[];  // TODO
-            // status: number; // TODO
-            // commInfo: CommInfo; // TODO
-            // slaveDevices?: string[]; // TODO
-        } as HubVM;
+    return hubs.map((dto) => {
+        return convertToDeviceVM(dto);
     });
 }
 
-function convertToGatewayVM(dto: DeviceDTO): GatewayVM {
+function convertToGatewayVM(dto: DeviceDTO): DeviceVM {
+    return convertToDeviceVM(dto);
+}
+
+function convertToDeviceVM(dto: DeviceDTO): DeviceVM {
+    let comm_info = {};
+
+    for (const protocol of dto.protocols) {
+        if (!protocol.commInfo) {
+            comm_info = {
+                protocol4GW: protocol.typeId,
+                [protocol.typeId]: protocol.commInfo,
+            };
+            break;
+        }
+    }
     return {
         id: dto.id,
-        dvId: dto.dvId,
-        spaceId: dto.spaceId,
         name: dto.name,
+        dvId: dto.dvId,
+
         deviceType: dto.typeId,
+        spaceId: dto.spaceId,
+        parentId: dto.parentId,
+
         hwInfo: {
             brand: dto.model.brand.name,
             model: dto.model.name,
         } as HwInfo,
         iconId: dto.iconId,
+
+        protocolInfo: dto.protocols.map((protocol) => {
+            return {
+                protocol: protocol.typeId,
+            };
+        }),
+
+        commInfo: comm_info,
+
         spec: {
             comPortCnt: dto.spec.comPortCount,
-            isIPR: false, // TODO
             manufacturerCode: dto.spec.manufacturerCode,
+            // isIPR: false, // TODO KNX
         } as Spec,
-        networkCards: convertToNetworkCards(dto.networkCards),
-        commInfo: null,
-        isBindedWithUser: false,
-        isBindedWithIoTCloud: false,
-        swInfo: dto.softwareInfo as any,
-        status: 0,
-    } as GatewayVM;
+
+        chInfo: dto.channelInfo?.map((info) => {
+            return {
+                ch: info.channelNo,
+                conDev: info.dvId,
+            } as ChInfo;
+        }),
+        switchBindCh: dto.switchPanelControlInfo?.map((info) => {
+            return {
+                btn: info.button,
+                lpress: info.lPress,
+                ctrlInfo: info.connectionInfo?.map((conn) => {
+                    return {
+                        objId: conn.objectId,
+                        dvId: conn.dvId,
+                    } as CtrlInfo;
+                }),
+            } as SwitchBindCh;
+        }),
+
+        attrs: dto.attrs,
+        heartbeat: dto.heartbeat,
+        period: dto.period,
+        sendTelRules: dto.sendTelRules,
+
+        networkCards: dto.networkCards?.map((card) => {
+            return {
+                id: card.id,
+                enable: card.enable,
+                ip: card.ip,
+                mac: card.mac,
+                name: card.name,
+                network: card.network,
+            } as NetworkCard;
+        }),
+        // status: 0,
+    };
 }
 
 function convertToNetworkCards(dtos: NetworkCardDTO[]): NetworkCard[] {
+    if (!dtos) {
+        return [];
+    }
+
     return dtos.map((dto) => {
         return convertToNetworkCard(dto);
     });
@@ -198,6 +244,10 @@ function convertToNetworkCard(dto: NetworkCardDTO): NetworkCard {
 }
 
 function convertToSpaceVMs(dtos: SpaceDTO[]): SpaceVM[] {
+    if (!dtos) {
+        return [];
+    }
+
     return dtos.map((dto) => {
         return convertToSpaceVM(dto);
     });
@@ -216,8 +266,8 @@ interface DeviceDataV2RepositoryVM {
     rt: string[];
     project: string;
     spaces: SpaceVM[];
-    gw: GatewayVM;
-    hubs: HubVM[];
+    gw: DeviceVM;
+    hubs: DeviceVM[];
     devices: DeviceVM[];
     cloud: number;
     license: number;
@@ -227,65 +277,80 @@ interface DeviceDataV2RepositoryVM {
 interface SpaceVM {
     id: string;
     name: string;
-    iconId: string;
+    // iconId: string;
     parentId?: string;
 }
 
 interface DeviceVM {
     id: string;
     dvId: string;
-    spaceId: string;
-    iconId: string;
-    parentId: string;
-    attrs: object[];
-    commInfo: CommInfo;
-    deviceType: number;
-    heartbeat?: number;
-    hwInfo: HwInfo;
     name: string;
-    spec: Spec;
-    sendTelRules: number[];
-    status: number;
-    switchBindCh?: SwitchBindCh[];
-    period?: number;
-}
+    deviceType: number;
+    spaceId: string;
+    parentId: string;
+    iconId: string;
 
-interface HubVM {
-    id: string;
-    dvId: string;
-    spaceId: string;
-    parentId: string;
-    attrs: Attr[];
-    commInfo: CommInfo;
-    deviceType: number;
-    heartbeat?: number;
-    period?: number;
     hwInfo: HwInfo;
-    iconId: string;
+
+    protocolInfo: ProtocolInfo[];
+    commInfo: object;
+
     spec: Spec;
-    name: string;
+
     chInfo: ChInfo[];
+    switchBindCh?: SwitchBindCh[];
+
+    attrs: object[];
+    heartbeat?: number;
+    period?: number;
     sendTelRules: number[];
-    status: number;
-    slaveDevices?: string[];
+
+    networkCards: NetworkCard[];
+    // status: number;
 }
 
-interface GatewayVM {
-    dvId: string;
-    spaceId: string;
-    name: string;
-    deviceType: number;
-    hwInfo: HwInfo;
-    iconId: string;
-    spec: Spec;
-    networkCards: NetworkCard[];
-    commInfo: CommInfo;
-    isBindedWithUser: boolean;
-    isBindedWithIoTCloud: boolean;
-    // swInfo: SwInfo[];
-    swInfo: object;
-    status: number;
-}
+// interface HubVM {
+//     id: string;
+//     dvId: string;
+//     spaceId: string;
+//     parentId: string;
+//     attrs: Attr[];
+//     commInfo: CommInfo;
+//     deviceType: number;
+//     heartbeat?: number;
+//     period?: number;
+//     hwInfo: HwInfo;
+//     iconId: string;
+//     spec: Spec;
+//     name: string;
+//     chInfo: ChInfo[];
+//     sendTelRules: number[];
+//     status: number;
+//     slaveDevices?: string[];
+// }
+//
+// interface GatewayVM {
+//     dvId: string;
+//     spaceId: string;
+//     name: string;
+//     deviceType: number;
+//     hwInfo: HwInfo;
+//     iconId: string;
+//     spec: Spec;
+//     networkCards: NetworkCard[];
+//     protocolInfo: ProtocolInfo[];
+//     commInfo: CommInfo;
+//     // isBindedWithUser: boolean;
+//     // isBindedWithIoTCloud: boolean;
+//     swInfo: object[];
+//     sendTelRules: number[];
+//     // status: number;
+// }
+
+// interface SwInfo {
+//     name: string;
+//     version: string;
+// }
 
 interface CommInfo {
     protocol4GW: string;
@@ -308,12 +373,14 @@ interface Spec {
     comPortCnt: number;
     isIPR: boolean;
     manufacturerCode: number;
-    protocolInfo: ProtocolInfo[];
+    EEPCode: number;
+
     RS485?: Rs485;
     switch?: Switch;
 }
 
 interface NetworkCard {
+    id: string;
     enable: boolean;
     ip: string;
     mac: string;

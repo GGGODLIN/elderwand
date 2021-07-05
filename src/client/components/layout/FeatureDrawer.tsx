@@ -1,16 +1,15 @@
-import * as React from 'react';
+import { Divider, Drawer, Tooltip, Typography } from '@material-ui/core';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import clsx from 'clsx';
-import LayoutSlice from 'src/client/slices/LayoutSlice';
-import { Divider, Drawer, Tooltip } from '@material-ui/core';
-import { Feature } from 'src/client/domain/user/Feature';
-import { RootState } from 'src/client/reducer';
-import { Typography } from '@material-ui/core';
+import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import Feature from 'src/client/domain/user/Feature';
 import {
     FeatureIconEnum,
     FeatureIconMap,
 } from 'src/client/domain/user/FeatureIcon';
+import { RootState } from 'src/client/reducer';
+import LayoutSlice from 'src/client/slices/LayoutSlice';
 
 export interface FeatureButtonProps {
     name: string;

@@ -13,7 +13,7 @@ export default interface DeviceVM {
     iconId: string;
     icon: Icon;
 
-    images: object[]; // TODO
+    images: Image[];
 
     modelId: string;
     model: Model;
@@ -39,6 +39,13 @@ export default interface DeviceVM {
     updatedBy: string;
     createdAt: number;
     updatedAt: number;
+}
+
+interface Image {
+    id: string;
+    name: string;
+    path: string;
+    tags: string[];
 }
 
 interface DeviceCategory {

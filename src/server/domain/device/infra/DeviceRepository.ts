@@ -125,4 +125,32 @@ export default class DeviceRepository {
                 throw err;
             });
     }
+
+    /**
+     * @param id device ID or DeID
+     * @param pid project ID
+     */
+    async unbindGatewayConnection(id: string, pid: string): Promise<DeviceDTO> {
+        const baseURL = this.origin;
+        const pathname = `/api/devices/${id}/gateway`;
+        const params = {
+            platformId: this.platformId,
+            projectId: pid,
+        };
+
+        const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
+
+        return await axios
+            .delete<DeviceDTO>(pathname, { params: params })
+            .then((res) => {
+                const dto: DeviceDTO = res.data;
+                return dto;
+            })
+            .catch((err: AxiosError<ErrorInfoDTO>) => {
+                if (err.isAxiosError) {
+                    // console.log('isAxiosError from repository');
+                }
+                throw err;
+            });
+    }
 }

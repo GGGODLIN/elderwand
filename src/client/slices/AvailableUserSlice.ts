@@ -1,13 +1,15 @@
-import { PaginationVM } from 'src/client/models/PaginationVM';
-import { produce } from 'immer';
-import { UserVM } from 'src/client/domain/user/UserVM';
 import {
     ActionCreatorWithoutPayload,
     ActionCreatorWithPayload,
     createSlice,
     PayloadAction,
+    Reducer,
     SliceCaseReducers,
 } from '@reduxjs/toolkit';
+import { produce } from 'immer';
+import UserVM from 'src/client/domain/user/UserVM';
+import PaginationVM from 'src/client/models/PaginationVM';
+import { AuthSlice, AuthState } from './AuthSlice';
 
 interface AvailableUserState {
     users: UserVM[];
@@ -107,7 +109,7 @@ const AvailableUserSlice = createSlice<
 
 type key = string | number;
 
-const reducer = AvailableUserSlice.reducer;
+const reducer = AvailableUserSlice.reducer as Reducer<AvailableUserState>;
 
 const clear = AvailableUserSlice.actions
     .clear as ActionCreatorWithoutPayload<string>;

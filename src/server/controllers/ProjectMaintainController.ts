@@ -1,6 +1,6 @@
 import { Context } from 'koa';
 import PaginationVM from '../../client/models/PaginationVM';
-import { ServerEnvVar } from '../config/ServerEnvVar';
+import ServerEnvVar from '../config/ServerEnvVar';
 import { ProjectMaintainUCO } from '../domain/project/applications/ProjectMaintainUCO';
 import ProjectRepository from '../domain/project/infra/ProjectRepository';
 import ProjectDTO from '../domain/project/models/ProjectDTO';

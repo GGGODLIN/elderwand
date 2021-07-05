@@ -65,14 +65,14 @@ export default class DeviceDataRepositoryHelper {
                     }
 
                     for (const item of items) {
-                        const filtered = origin.filter((dto) => {
-                            if (item.ID == dto.parentId) {
+                        const filtered = origin.filter((dto: SpaceDTO) => {
+                            if (item.id == dto.parentId) {
                                 return dto;
                             }
                         });
 
-                        for (const dto of filtered) {
-                            latest.push(dto);
+                        for (const space of filtered) {
+                            latest.push(space);
                         }
 
                         appendChildren(filtered);

@@ -1,5 +1,5 @@
 import { IRouterContext } from 'koa-router';
-import { ServerEnvVar } from '../config/ServerEnvVar';
+import ServerEnvVar from '../config/ServerEnvVar';
 import AuthorizationUCO from '../domain/shared/applications/AuthorizationUCO';
 import { Platform } from '../domain/shared/enums/Enums';
 import AuthRepository from '../domain/shared/infra/AuthRepository';
