@@ -1,0 +1,26 @@
+# feathc projects
+GET {{HOST}}/api/projects
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{AUTH_TOKEN}}
+
+###
+
+
+# list devices by project
+GET {{HOST}}/api/devices?projectId={{TARGET_PROJECT_CODE}}
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{AUTH_TOKEN}}
+
+###
+
+
+# list device templates
+GET {{HOST}}/api/device/templates
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{AUTH_TOKEN}}
+
+###
+

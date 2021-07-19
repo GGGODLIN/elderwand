@@ -1,16 +1,17 @@
 import { Card, CardContent } from '@material-ui/core';
+import GetAppIcon from '@material-ui/icons/GetApp';
+import LinkOffIcon from '@material-ui/icons/LinkOff';
 import clsx from 'clsx';
 import React from 'react';
 import { useDrop } from 'react-dnd';
 import { useDispatch } from 'react-redux';
 import ProjectVM from 'src/client/domain/project/ProjectVM';
+import SpaceMaintainItemTypes from 'src/client/domain/space/SpaceMaintainItemTypes';
 import SpaceVM, {
     DeviceVM,
     SpaceTopology,
 } from 'src/client/domain/space/SpaceVM';
-import SpaceMaintainItemTypes from 'src/client/domain/space/SpaceMaintainItemTypes';
 import SpaceSlice from 'src/client/slices/SpaceSlice';
-import LinkOffIcon from '@material-ui/icons/LinkOff';
 
 interface SpaceSmallCardProp {
     space: SpaceVM;
@@ -215,7 +216,15 @@ const DeviceSmallCard: React.FC<DeviceSmallCardProp> = (props) => {
                             <LinkOffIcon />
                         </a>
                     )}
-                    {'actions'}
+                    {isGateway && isBound && (
+                        <a
+                            onClick={() => {
+                                dispatch(SpaceSlice.openUnBindModal(device));
+                            }}
+                        >
+                            <GetAppIcon />
+                        </a>
+                    )}
                 </div>
             </div>
         </Card>
@@ -326,7 +335,17 @@ const DeviceCard: React.FC<DeviceCardProp> = (props) => {
                                     <LinkOffIcon />
                                 </a>
                             )}
-                            {'actions'}
+                            {isGateway && isBound && (
+                                <a
+                                    onClick={() => {
+                                        dispatch(
+                                            SpaceSlice.openUnBindModal(device)
+                                        );
+                                    }}
+                                >
+                                    <GetAppIcon />
+                                </a>
+                            )}
                         </div>
                     </div>
                     <CardContent>

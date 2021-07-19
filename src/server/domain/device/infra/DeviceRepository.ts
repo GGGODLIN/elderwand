@@ -1,5 +1,6 @@
 import { AxiosError } from 'axios';
 import AxiosFactory from '../../../helpers/AxiosFactory';
+import DeviceTemplateDTO from '../../migration/models/DeviceTemplateDTO';
 import ErrorInfoDTO from '../../shared/models/ErrorInfoDTO';
 import PaginationDTO from '../../shared/models/PaginationDTO';
 import DeviceDTO from '../../device/models/DeviceDTO';
@@ -145,6 +146,43 @@ export default class DeviceRepository {
             .then((res) => {
                 const dto: DeviceDTO = res.data;
                 return dto;
+            })
+            .catch((err: AxiosError<ErrorInfoDTO>) => {
+                if (err.isAxiosError) {
+                    // console.log('isAxiosError from repository');
+                }
+                throw err;
+            });
+    }
+
+    /**
+     *
+     */
+    async listDeviceTemplates(): Promise<PaginationDTO<DeviceTemplateDTO>> {
+        const baseURL = this.origin;
+        const pathname = '/api/device/templates';
+        const params = {
+            platformId: this.platformId,
+        };
+
+        const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
+
+        return await axios
+            .get<DeviceTemplateDTO[]>(pathname, { params: params })
+            .then((res) => {
+                const result: PaginationDTO<DeviceTemplateDTO> = {
+                    offset: 0,
+                    limit: 0,
+                    total: 0,
+                    results: [],
+                };
+
+                if (res.data) {
+                    result.total = res.data.length;
+                    result.results = res.data;
+                }
+
+                return result;
             })
             .catch((err: AxiosError<ErrorInfoDTO>) => {
                 if (err.isAxiosError) {

@@ -3,14 +3,13 @@
 export default interface DeviceTemplateDTO {
     id: string;
     typeId: number;
-    type: Type;
+    type: DeviceType;
     iconId: string;
     icon: Icon;
     modelId: string;
-    model: Model;
+    model: DeviceModel;
     specId: string;
     spec: Spec;
-    attrs: string;
     createdBy: string;
     updatedBy: string;
     createdAt: number;
@@ -18,7 +17,7 @@ export default interface DeviceTemplateDTO {
     period?: number;
 }
 
-interface Type {
+export interface DeviceType {
     id: number;
     name: string;
 }
@@ -30,7 +29,7 @@ interface Icon {
     tags: string[];
 }
 
-interface Model {
+interface DeviceModel {
     id: string;
     brandId: string;
     brand: Brand;
@@ -44,5 +43,18 @@ interface Brand {
 
 interface Spec {
     id: string;
-    manufacturerCode: number;
+    switchPanel: SwitchPanel;
+    comPortCount?: number;
+    channelCount?: number;
+    networkCardCount?: number;
+}
+
+interface SwitchPanel {
+    pageCount?: number;
+    btnCount?: number;
+    layout?: string;
+    isVRB?: boolean;
+    keyValues?: number[];
+    modifyStyle?: boolean;
+    hasLPress?: boolean;
 }

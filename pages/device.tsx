@@ -1,9 +1,9 @@
+import { NextPage } from 'next';
+import React from 'react';
+import { useDispatch } from 'react-redux';
 import DevicePage from 'src/client/containers/device/DevicePage';
 import Layout from 'src/client/containers/layout/Layout';
-import React from 'react';
-import { NextPage } from 'next';
 import PageInitialUtil from 'src/client/utils/PageInitialUtil';
-import { useDispatch } from 'react-redux';
 
 export interface DeviceIndexProps {
     title: string;

@@ -6,10 +6,28 @@ accept: application/json
 
 
 # get the device
-#
 GET {{HOST}}/api/devices/{{TARGET_DEVICE_ID}}?projectId={{TARGET_PROJECT_CODE}}&platformId=3
 accept: application/json
 Content-Type: application/json
 
 ###
 
+
+# Bind gateway connection to device
+PUT {{HOST}}/api/devices/{{DEVICE_ID}}/gateway?projectID={{TARGET_PROJECT_CODE}}
+accept: application/json
+Content-Type: application/json
+
+{
+  "cid":"{{CONNECTION_ID}}"
+}
+
+###
+
+
+# List deivce templates
+GET {{HOST}}/api/device/templates
+Accept: application/json
+Content-Type: application/json
+
+###

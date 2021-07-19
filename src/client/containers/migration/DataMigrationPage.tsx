@@ -24,6 +24,7 @@ import { RootState } from 'src/client/reducer';
 import DataMigrationSlice from 'src/client/slices/DataMigrationSlice';
 import FetchSlice from 'src/client/slices/FetchSlice';
 import ScrollUtil from 'src/client/utils/ScrollUtil';
+import ImportDeviceTemplateFAB from '../../components/migration/ImportDeviceTemplateFAB';
 
 export interface DataMigrationPageProps {
     title: string;
@@ -229,14 +230,16 @@ export const DataMigrationPage: React.FC<DataMigrationPageProps> = () => {
                 </Card>
 
                 {/* Import Model Action Buttons */}
-                {isImport && (
-                    <div className={actions}>
+                <div className={actions}>
+                    {isImport && (
                         <ImportProjectFAB
                             display={true}
                             disable={import_project_disable}
                         />
-                    </div>
-                )}
+                    )}
+                    {/* Import Device Template */}
+                    <ImportDeviceTemplateFAB display={true} disable={false} />
+                </div>
             </div>
         </React.Fragment>
     );

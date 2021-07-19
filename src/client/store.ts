@@ -1,4 +1,5 @@
 import { RootReducer } from './reducer';
+import createSagaMiddleware from 'redux-saga';
 
 import {
     configureStore,
@@ -19,9 +20,14 @@ const serializableMiddleware = createSerializableStateInvariantMiddleware({
     getEntries,
 });
 
+const sagaMiddleware = createSagaMiddleware();
+
 const RootStore = configureStore({
     reducer: RootReducer,
-    middleware: [serializableMiddleware],
+    middleware: [serializableMiddleware, sagaMiddleware],
 });
+
+// TODO
+// sagaMiddleware.run(RootSaga);
 
 export default RootStore;

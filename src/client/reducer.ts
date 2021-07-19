@@ -3,6 +3,7 @@ import AllocateUserSlice from './slices/AllocateUserSlice';
 import AuthSlice from './slices/AuthSlice';
 import AvailableUserSlice from './slices/AvailableUserSlice';
 import DataMigrationSlice from './slices/DataMigrationSlice';
+import DeviceSlice from './slices/DeviceSlice';
 import FetchSlice from './slices/FetchSlice';
 import InitSlice from './slices/InitSlice';
 import LayoutSlice from './slices/LayoutSlice';
@@ -26,6 +27,8 @@ export const RootReducer = combineReducers({
     allocate_users: AllocateUserSlice.reducer,
     // space maintain
     space: SpaceSlice.reducer,
+    // device maintain
+    device: DeviceSlice.reducer,
     // data migration
     migration: DataMigrationSlice.reducer,
 });

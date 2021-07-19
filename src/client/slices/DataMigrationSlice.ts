@@ -23,6 +23,9 @@ export interface DataMigrationState {
         show: boolean;
         projects: ProjectVM[];
     };
+    import_device_template_dialog: {
+        show: boolean;
+    };
 }
 
 const getInitialState = (): DataMigrationState => {
@@ -34,6 +37,9 @@ const getInitialState = (): DataMigrationState => {
         import_project_dialog: {
             show: false,
             projects: [],
+        },
+        import_device_template_dialog: {
+            show: false,
         },
     };
 
@@ -103,6 +109,14 @@ const DataMigrationSlice = createSlice<
                 draft.import_project_dialog.show = action.payload;
             });
         },
+        showImportDeviceTemplateDialog: (
+            state,
+            action: PayloadAction<boolean>
+        ) => {
+            return produce(state, (draft) => {
+                draft.import_device_template_dialog.show = action.payload;
+            });
+        },
     },
 });
 
@@ -130,6 +144,9 @@ const clearSelectedProject = DataMigrationSlice.actions
 const showImportProjectDialog = DataMigrationSlice.actions
     .showImportProjectDialog as ActionCreatorWithPayload<boolean>;
 
+const showImportDeviceTemplateDialog = DataMigrationSlice.actions
+    .showImportDeviceTemplateDialog as ActionCreatorWithPayload<boolean>;
+
 export default {
     reducer,
     clear,
@@ -139,4 +156,5 @@ export default {
     selectProject,
     clearSelectedProject,
     showImportProjectDialog,
+    showImportDeviceTemplateDialog,
 };

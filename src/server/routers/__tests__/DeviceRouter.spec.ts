@@ -2,6 +2,7 @@ import supertest from 'supertest';
 import PaginationVM from '../../../client/models/PaginationVM';
 import TestEnvVar from '../../../test/config/TestEnvVar';
 import DeviceVM from '../../models/device/DeviceVM';
+import DeviceTemplateVM from '../../models/migration/DeviceTemplateVM';
 import KoaServer from '../../server';
 import DeviceRouter, {
     DeviceRouterActions,
@@ -165,6 +166,25 @@ describe('Device Router', function () {
                 .expect(200);
 
             const actual = response.body;
+
+            console.log(actual);
+        });
+    });
+
+    describe('list device templates', function () {
+        it('should be 200', async function () {
+            const pathname = DeviceRouterActions.listDeviceTemplates();
+
+            const query = {};
+
+            const response = await server
+                .get(pathname)
+                .set('Accept', 'application/json')
+                // .set(AuthUtil.AuthHeader, AuthUtil.newBearer(token))
+                .query(query)
+                .expect(200);
+
+            const actual = response.body as PaginationVM<DeviceTemplateVM>;
 
             console.log(actual);
         });

@@ -148,6 +148,23 @@
       background-color: $bg-grey-light;
     }
   }
+
+  .import-device-template-btn {
+    color: $white;
+    background-color: $bg-green-primary;
+
+    &:hover {
+      background-color: $bg-green-light;
+    }
+
+    &.hidden {
+      display: none;
+    }
+
+    &[disabled] {
+      background-color: $bg-grey-light;
+    }
+  }
 }
 
 .import-project-dialog {

@@ -199,20 +199,3 @@ Accept: application/json
 Content-Type: application/json
 
 ###
-
-
-// TEMP
-# Import devices
-POST {{HOST}}/api/migration/projects/{{MIGRATION_TARGET_PROJECT_CODE}}/devices?dbname={{MIGRATION_MONGODB_SAKE}}&conn={{MIGRATION_MONGODB_URI}}&version=200
-Accept: application/json
-Content-Type: application/json
-Authorization: Bearer {{AUTH_TOKEN}}
-
-###
-
-
-// List devices
-GET {{HOST}}/api/devices?projectId={{TARGET_PROJECT_CODE}}
-Accept: application/json
-Content-Type: application/json
-Authorization: Bearer {{AUTH_TOKEN}}

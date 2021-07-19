@@ -148,7 +148,7 @@ function convertToDeviceVM(dto: DeviceDTO): DeviceVM {
     let comm_info = {};
 
     for (const protocol of dto.protocols) {
-        if (!protocol.commInfo) {
+        if (!protocol.commInfo || `${protocol.commInfo}` != '{}') {
             comm_info = {
                 protocol4GW: protocol.typeId,
                 [protocol.typeId]: protocol.commInfo,
@@ -156,6 +156,7 @@ function convertToDeviceVM(dto: DeviceDTO): DeviceVM {
             break;
         }
     }
+
     return {
         id: dto.id,
         name: dto.name,

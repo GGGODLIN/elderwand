@@ -4,6 +4,7 @@ import ServerEnvVar from '../config/ServerEnvVar';
 import DeviceMaintainUCO from '../domain/device/applications/DeviceMaintainUCO';
 import DeviceRepository from '../domain/device/infra/DeviceRepository';
 import DeviceDTO from '../domain/device/models/DeviceDTO';
+import DeviceTemplateDTO from '../domain/migration/models/DeviceTemplateDTO';
 import { Platform } from '../domain/shared/enums/Enums';
 import PaginationDTO from '../domain/shared/models/PaginationDTO';
 import RequestBody from '../domain/shared/types/RequestBody';
@@ -12,6 +13,7 @@ import DeviceDataRepositoryHelper, {
     ApiRepositoryCtor,
 } from '../helpers/DeviceDataRepositoryHelper';
 import DeviceVM from '../models/device/DeviceVM';
+import DeviceTemplateVM from '../models/migration/DeviceTemplateVM';
 
 export default class DeviceMaintainController {
     // /api/devices?projectID={projectID}
@@ -229,6 +231,41 @@ export default class DeviceMaintainController {
 
         return;
     };
+
+    // /api/device/templates
+    static listDeviceTemplates = async (ctx: IRouterContext) => {
+        const repository = new DeviceRepository({
+            host: ServerEnvVar.SkymapApiHost,
+            platformId: Platform.ElderWand,
+        });
+
+        const query = {
+            projectId: '',
+            ...ctx.query,
+        };
+
+        await new DeviceMaintainUCO(repository)
+            .listDeviceTemplates()
+            .then((res: PaginationDTO<DeviceTemplateDTO>) => {
+                const vm = {
+                    ...res,
+                    results: convertToDeviceTemplateVMs(res.results),
+                } as PaginationVM<DeviceVM>;
+
+                ctx.status = 200;
+                ctx.body = vm;
+
+                return;
+            })
+            .catch((err) => {
+                if (err.isAxiosError) {
+                    ctx.status = err.response.status;
+                    ctx.body = err.response.data;
+                    return;
+                }
+                throw err;
+            });
+    };
 }
 
 interface BindGatewayBody {
@@ -249,4 +286,22 @@ function convertToDeviceVM(dto: DeviceDTO): DeviceVM {
     return {
         ...dto,
     } as DeviceVM;
+}
+
+function convertToDeviceTemplateVMs(
+    dtos: DeviceTemplateDTO[]
+): DeviceTemplateVM[] {
+    if (!dtos) {
+        return [];
+    }
+
+    return dtos.map((dto) => {
+        return convertToDeviceTemplateVM(dto);
+    });
+}
+
+function convertToDeviceTemplateVM(dto: DeviceTemplateDTO): DeviceTemplateVM {
+    return {
+        ...dto,
+    } as DeviceTemplateVM;
 }

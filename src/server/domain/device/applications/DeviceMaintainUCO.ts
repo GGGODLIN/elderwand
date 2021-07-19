@@ -1,5 +1,6 @@
 import PaginationVM from '../../../../client/models/PaginationVM';
 import DeviceRepository from '../../device/infra/DeviceRepository';
+import DeviceTemplateDTO from '../../migration/models/DeviceTemplateDTO';
 import DeviceDTO from '../models/DeviceDTO';
 
 export default class DeviceMaintainUCO {
@@ -45,5 +46,12 @@ export default class DeviceMaintainUCO {
      */
     unbindGatewayConnection(id: string, pid: string): Promise<DeviceDTO> {
         return this.repository.unbindGatewayConnection(id, pid);
+    }
+
+    /**
+     *
+     */
+    listDeviceTemplates(): Promise<PaginationVM<DeviceTemplateDTO>> {
+        return this.repository.listDeviceTemplates();
     }
 }

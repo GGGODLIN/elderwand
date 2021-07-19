@@ -10,6 +10,7 @@ export const DeviceRouterActions = {
     bindGatewayConnection: (id: string) => `/api/devices/${id}/gateway`,
     unbindGatewayConnection: (id: string) => `/api/devices/${id}/gateway`,
     getRepository: (id: string) => `/api/devices/${id}/repository`,
+    listDeviceTemplates: () => `/api/device/templates`,
 };
 
 export const DeviceVersion2RouterActions = {
@@ -48,6 +49,12 @@ export default class DeviceRouter {
                 action: '/devices/:id/repository',
                 method: 'GET',
                 controller: DeviceMaintainController.getRepository,
+            },
+            listDeviceTemplates: {
+                name: 'list-device-templates',
+                action: '/device/templates',
+                method: 'GET',
+                controller: DeviceMaintainController.listDeviceTemplates,
             },
         };
 

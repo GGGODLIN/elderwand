@@ -185,7 +185,7 @@ export default class SpaceMaintainController {
         pushLeaves(filtered);
 
         const links = vms.map((item) => {
-            const target = !item.parentId ? query.projectId : item.parentId;
+            // const target = !item.parentId ? query.projectId : item.parentId;
 
             return {
                 source: item.id,
