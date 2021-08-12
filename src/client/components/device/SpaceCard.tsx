@@ -1,5 +1,6 @@
 import { Card, CardContent, IconButton } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
+import LinkOffIcon from '@material-ui/icons/LinkOff';
 import clsx from 'clsx';
 import React, { CSSProperties } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
@@ -16,32 +17,49 @@ import DeviceSlice from 'src/client/slices/DeviceSlice';
 
 interface DeviceSmallCardProp {
     device: DeviceVM;
-    devices: DeviceVM[];
     spaces: SpaceVM[];
+    devices: DeviceVM[];
 }
 
 const DeviceSmallCard: React.FC<DeviceSmallCardProp> = (props) => {
+    if (!props.device) {
+        return <React.Fragment />;
+    }
+
     const dispatch = useDispatch();
 
+    // const spaces = !props.spaces ? [] : props.spaces;
+    // const devices = !props.devices ? [] : props.devices;
     const device = props.device;
+
     const space = props.spaces.find((space) => space.id == device.spaceId);
     const parent = props.devices.find((item) => item.id == device.parentId);
 
-    // const id = device.id;
     const name = device.name;
     const isBound = !!device.imei;
-    // const isGateway = device.type.categoryId == 'GW';
 
-    const handleClick = (e) => {
-        e.stopPropagation();
-    };
-    const handleDoubleClick = (e) => {
+    // const handleClick = (e) => {
+    //     e.stopPropagation();
+    // };
+    //
+    // const handleDoubleClick = (e) => {
+    //     e.stopPropagation();
+    //     // dispatch(DeviceSlice.selectSpace(space));
+    // };
+
+    const handleSelectSpace = (e) => {
         e.stopPropagation();
         dispatch(DeviceSlice.selectSpace(space));
     };
 
-    const handleDragStart = () => {
+    const handleSelectDevice = (e) => {
+        e.stopPropagation();
         dispatch(DeviceSlice.selectDevice(device));
+    };
+
+    const handleUnlinkDevice = (e) => {
+        e.preventDefault();
+        dispatch(DeviceSlice.unlinkParentDevice(device));
     };
 
     const handleRemoveDevice = () => {
@@ -98,13 +116,13 @@ const DeviceSmallCard: React.FC<DeviceSmallCardProp> = (props) => {
 
     const [{ isDragging }, drag] = useDrag(() => ({
         type: DeviceMaintainCardTypes.DeviceSmallCard,
+        collect: (monitor) => ({
+            isDragging: !!monitor.isDragging(),
+        }),
         item: {
             type: DeviceMaintainCardTypes.DeviceSmallCard,
             payload: device,
         },
-        collect: (monitor) => ({
-            isDragging: !!monitor.isDragging(),
-        }),
     }));
 
     const style: CSSProperties = {
@@ -130,9 +148,12 @@ const DeviceSmallCard: React.FC<DeviceSmallCardProp> = (props) => {
             style={style}
             className={classname}
             variant="outlined"
-            onClick={handleClick}
-            onDoubleClick={handleDoubleClick}
-            onDragStart={handleDragStart}
+            onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+            }}
+            onDoubleClick={handleSelectSpace}
+            onMouseDown={handleSelectDevice}
         >
             <div className="card-header">
                 <div className="header-name">{name}</div>
@@ -145,6 +166,11 @@ const DeviceSmallCard: React.FC<DeviceSmallCardProp> = (props) => {
             </CardContent>
             <div className="card-footer">
                 <div className="footer-actions">
+                    {device.parentId && (
+                        <IconButton onClick={handleUnlinkDevice}>
+                            <LinkOffIcon />
+                        </IconButton>
+                    )}
                     <IconButton onClick={handleRemoveDevice}>
                         <DeleteIcon />
                     </IconButton>
@@ -162,12 +188,21 @@ interface SpaceCardProps {
 }
 
 const SpaceCard: React.FC<SpaceCardProps> = (props) => {
-    const dispatch = useDispatch();
-    const handleSpaceCardSelect = () => {
-        dispatch(DeviceSlice.selectSpace(props.space));
-    };
+    if (!props.space) {
+        return <React.Fragment />;
+    }
 
+    const dispatch = useDispatch();
+
+    // const spaces = !props.spaces ? [] : props.spaces;
+    const devices = !props.devices ? [] : props.devices;
     const space: SpaceVM = props.space;
+
+    // const parent = spaces.find((item) => item.id == space.parentId);
+
+    const id = space.id;
+    const icon = space.icon;
+    const header = `${space.name} - ${icon.name} - ${space.id}`;
 
     const image = ((item: SpaceVM) => {
         if (!item.photos || !item.photos.length) {
@@ -180,18 +215,28 @@ const SpaceCard: React.FC<SpaceCardProps> = (props) => {
         return item.photos[0];
     })(space);
 
-    // const elements = [];
-    const leaves = props.devices.filter((leaf) => leaf.spaceId == space.id);
-    const elements = leaves.map((leaf) => {
-        return (
-            <DeviceSmallCard
-                key={leaf.id}
-                device={leaf}
-                devices={props.devices}
-                spaces={props.spaces}
-            />
-        );
-    });
+    const handleSpaceCardSelect = () => {
+        dispatch(DeviceSlice.selectSpace(props.space));
+    };
+
+    const elements = [];
+
+    if (props.devices) {
+        const device_cards = devices
+            .filter((leaf) => leaf.spaceId == space.id)
+            .map((leaf) => {
+                return (
+                    <DeviceSmallCard
+                        key={leaf.id}
+                        device={leaf}
+                        spaces={props.spaces}
+                        devices={props.devices}
+                    />
+                );
+            });
+
+        elements.push(...device_cards);
+    }
 
     const accept = [
         DeviceMaintainCardTypes.DeviceTemplateCard,
@@ -224,7 +269,6 @@ const SpaceCard: React.FC<SpaceCardProps> = (props) => {
                 }
 
                 if (item.type == DeviceMaintainCardTypes.DeviceTemplateCard) {
-                    // console.log('place device template to space');
                     dispatch(DeviceSlice.placeDeviceToSpace(space));
                     return;
                 }
@@ -233,7 +277,6 @@ const SpaceCard: React.FC<SpaceCardProps> = (props) => {
                     item.type == DeviceMaintainCardTypes.DeviceCard ||
                     item.type == DeviceMaintainCardTypes.DeviceSmallCard
                 ) {
-                    // console.log('move device to the space');
                     dispatch(DeviceSlice.changeDeviceLocation(space));
                     return;
                 }
@@ -243,7 +286,7 @@ const SpaceCard: React.FC<SpaceCardProps> = (props) => {
                 canDrop: !!monitor.canDrop(),
             }),
         }),
-        [[props.devices, props.spaces]]
+        [[space]]
     );
 
     const classname = clsx(
@@ -253,24 +296,25 @@ const SpaceCard: React.FC<SpaceCardProps> = (props) => {
         isOver && !canDrop ? 'cannot-drop' : ''
     );
 
-    const id = space.id;
-    const icon = space.icon;
-    const header = `${space.name} - ${icon.name} - ${space.id}`;
-
     return (
         <React.Fragment>
             <input
                 name="space-cards-selected"
-                id={id}
+                id={`label-${id}`}
                 type="radio"
                 hidden={true}
             />
             <label
-                htmlFor={id}
-                // onClick={handleSpaceCardSelect}
-                onDoubleClick={handleSpaceCardSelect}
+                htmlFor={`label-${id}`}
+                onClick={handleSpaceCardSelect}
+                // onDoubleClick={handleSpaceCardSelect}
             >
-                <Card ref={drop} className={classname} variant="outlined">
+                <Card
+                    id={id}
+                    ref={drop}
+                    className={classname}
+                    variant="outlined"
+                >
                     <div className="card-header">
                         <div className="header-name">{header}</div>
                         <div className="header-actions">{'actions'}</div>

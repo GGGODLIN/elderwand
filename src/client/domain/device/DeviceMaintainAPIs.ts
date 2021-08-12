@@ -111,8 +111,6 @@ class DeviceMaintainAPIs {
             projectId: project.code,
         };
 
-        dispatch(DeviceSlice.clearDeviceTopologyResources());
-
         new AxiosFactory()
             .useBearerToken()
             .useBefore(() => {

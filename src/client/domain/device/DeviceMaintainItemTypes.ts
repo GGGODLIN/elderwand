@@ -208,7 +208,10 @@ export class DeviceMaintainCardTypeHelper {
                     target
                 );
             case DeviceMaintainCardTypes.DeviceSmallCard:
-                return false;
+                return DeviceMaintainCardTypeHelper.dropToDeviceCard(
+                    item,
+                    target
+                );
             case DeviceMaintainCardTypes.SpaceCard:
                 return DeviceMaintainCardTypeHelper.dropToSpaceCard(
                     item,

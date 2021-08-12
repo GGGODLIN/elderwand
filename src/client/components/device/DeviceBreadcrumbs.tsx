@@ -18,17 +18,17 @@ const DeviceBreadcrumbs: React.FC<DeviceBreadcrumbsProp> = (props) => {
     const dispatch = useDispatch();
 
     const classname = 'device-breadcrumbs';
-    let elements = [];
 
     if (!props.project) {
         return <Breadcrumbs aria-label="breadcrumb" className={classname} />;
     }
 
-    const element = ((project) => {
+    let elements = [];
+
+    const project_element = ((project) => {
         const handleClick = () => {
             dispatch(DeviceSlice.selectSpace(null));
             dispatch(DeviceSlice.selectDevice(null));
-            // DeviceMaintainAPIs.fetchDeviceTopologyResources(dispatch, project);
         };
 
         return (
@@ -38,21 +38,21 @@ const DeviceBreadcrumbs: React.FC<DeviceBreadcrumbsProp> = (props) => {
         );
     })(props.project);
 
-    elements.push(element);
+    elements.push(project_element);
 
     if (props.device_selected || props.space_selected) {
-        const spaces = [];
+        const spaces = !props.spaces ? [] : props.spaces;
+
+        const space_elements = [];
 
         const space = props.device_selected
-            ? props.spaces.find(
-                  (space) => space.id == props.device_selected.spaceId
-              )
+            ? spaces.find((space) => space.id == props.device_selected.spaceId)
             : props.space_selected;
 
         let parent = space;
 
         while (parent) {
-            const element = ((space) => {
+            const space_element = ((space) => {
                 return (
                     <Link
                         key={space.id}
@@ -66,20 +66,20 @@ const DeviceBreadcrumbs: React.FC<DeviceBreadcrumbsProp> = (props) => {
                 );
             })(parent);
 
-            spaces.unshift(element);
+            space_elements.unshift(space_element);
 
             if (!space.parentId) {
                 break;
             }
 
-            parent = props.spaces.find((space) => space.id == parent.parentId);
+            parent = spaces.find((space) => space.id == parent.parentId);
         }
 
-        elements.push(...spaces);
+        elements.push(...space_elements);
     }
 
     if (props.device_selected) {
-        elements.push(
+        const device_element = (
             <Link
                 key={props.device_selected.id}
                 onClick={() => {
@@ -89,6 +89,8 @@ const DeviceBreadcrumbs: React.FC<DeviceBreadcrumbsProp> = (props) => {
                 {props.device_selected.name}
             </Link>
         );
+
+        elements.push(device_element);
     }
 
     return (

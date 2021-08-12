@@ -1,20 +1,3 @@
-import AllocateUserSlice from 'src/client/slices/AllocateUserSlice';
-import AvailableUserSlice from 'src/client/slices/AvailableUserSlice';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import clsx from 'clsx';
-import FetchSlice from 'src/client/slices/FetchSlice';
-import GroupAddTwoToneIcon from '@material-ui/icons/GroupAddTwoTone';
-import ProjectSlice from 'src/client/slices/ProjectSlice';
-import React, { useEffect } from 'react';
-import { AllocateUserList } from './AllocateUserList';
-import { AvailableUserList } from './AvailableUserList';
-import { AxiosError } from 'axios';
-import { AxiosUtil } from 'src/client/utils/AxiosUtil';
-import { IconButton } from '@material-ui/core';
-import { RootState } from 'src/client/reducer';
-import { useDispatch, useSelector } from 'react-redux';
-// import { PaginationVM } from "src/client/models/user/PaginationVM";
 import {
     Button,
     Dialog,
@@ -22,9 +5,21 @@ import {
     DialogContent,
     DialogTitle,
     Fab,
+    IconButton,
     Zoom,
 } from '@material-ui/core';
-import { UserVM } from 'src/client/domain/user/UserVM';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import GroupAddTwoToneIcon from '@material-ui/icons/GroupAddTwoTone';
+import clsx from 'clsx';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from 'src/client/reducer';
+import AllocateUserSlice from 'src/client/slices/AllocateUserSlice';
+import AvailableUserSlice from 'src/client/slices/AvailableUserSlice';
+import ProjectSlice from 'src/client/slices/ProjectSlice';
+import { AllocateUserList } from './AllocateUserList';
+import { AvailableUserList } from './AvailableUserList';
 
 interface AssignUserToProjectGroupFABProp {
     disable: boolean;
@@ -129,8 +124,8 @@ export const AssignUserToProjectDialog: React.FC<{}> = () => {
         dispatch(ProjectSlice.showAssignUserDialog(false));
     };
 
-    const origin = AxiosUtil.getOriginWithPort();
-    const client = AxiosUtil.makeAxiosInstance(dispatch, origin);
+    // const origin = AxiosUtil.getOriginWithPort();
+    // const client = AxiosUtil.makeAxiosInstance(dispatch, origin);
 
     const handleAssignUser = () => {
         const url = '/api/project/group/user';
@@ -139,21 +134,22 @@ export const AssignUserToProjectDialog: React.FC<{}> = () => {
             users: users,
         };
 
-        client
-            .post(url, body)
-            .then((res) => {
-                // console.log(res.data);
-                dispatch(ProjectSlice.showAssignUserDialog(false));
-                dispatch(ProjectSlice.refresh());
-                dispatch(AllocateUserSlice.clear());
-                dispatch(AvailableUserSlice.clear());
-            })
-            .catch((err: AxiosError) => {
-                AxiosUtil.redirectUnAuthorization(err);
-            })
-            .finally(() => {
-                dispatch(FetchSlice.end());
-            });
+        // // TODO rewrite
+        // client
+        //     .post(url, body)
+        //     .then((res) => {
+        //         // console.log(res.data);
+        //         dispatch(ProjectSlice.showAssignUserDialog(false));
+        //         dispatch(ProjectSlice.refresh());
+        //         dispatch(AllocateUserSlice.clear());
+        //         dispatch(AvailableUserSlice.clear());
+        //     })
+        //     .catch((err: AxiosError) => {
+        //         AxiosUtil.redirectUnAuthorization(err);
+        //     })
+        //     .finally(() => {
+        //         dispatch(FetchSlice.end());
+        //     });
     };
 
     useEffect(() => {
@@ -166,18 +162,18 @@ export const AssignUserToProjectDialog: React.FC<{}> = () => {
             limit: 100,
             offset: 0,
         };
-
-        client
-            .get<PaginationVM<UserVM>>('/api/users', { params: params })
-            .then((res) => {
-                dispatch(AvailableUserSlice.fetch(res.data));
-            })
-            .catch((err: AxiosError) => {
-                AxiosUtil.redirectUnAuthorization(err);
-            })
-            .finally(() => {
-                dispatch(FetchSlice.end());
-            });
+        // TODO rewrite
+        // client
+        //     .get<PaginationVM<UserVM>>('/api/users', { params: params })
+        //     .then((res) => {
+        //         dispatch(AvailableUserSlice.fetch(res.data));
+        //     })
+        //     .catch((err: AxiosError) => {
+        //         AxiosUtil.redirectUnAuthorization(err);
+        //     })
+        //     .finally(() => {
+        //         dispatch(FetchSlice.end());
+        //     });
     }, [show]);
 
     const { available_users, available_users_selected } = useSelector(

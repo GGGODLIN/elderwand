@@ -1,21 +1,15 @@
+import { Tab, Tabs } from '@material-ui/core';
 import AppsIcon from '@material-ui/icons/Apps';
-import clsx from 'clsx';
-import FetchSlice from 'src/client/slices/FetchSlice';
 import ListAltIcon from '@material-ui/icons/ListAlt';
-import ProjectSlice from 'src/client/slices/ProjectSlice';
+import { AxiosInstance } from 'axios';
+import clsx from 'clsx';
 import React, { ChangeEvent, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { AssignUserToProjectGroupFAB } from 'src/client/components/project/AssignUserToProjectGroupFAB';
-import { AxiosError, AxiosInstance } from 'axios';
-import { AxiosUtil } from 'src/client/utils/AxiosUtil';
 import { CreateProjectFAB } from 'src/client/components/project/CreateProjectFAB';
-import { PaginationVM } from 'src/client/models/PaginationVM';
 import { ProjectCardGrid } from 'src/client/components/project/ProjectCardGrid';
 import { ProjectListTable } from 'src/client/components/project/ProjectListTable';
-import { ProjectVM } from 'src/client/domain/project/ProjectVM';
 import { RootState } from 'src/client/reducer';
-import { ScrollUtil } from 'src/client/utils/ScrollUtil';
-import { Tab, Tabs } from '@material-ui/core';
-import { useDispatch, useSelector } from 'react-redux';
 
 export interface ProjectMaintainPageProps {
     title: string;
@@ -37,25 +31,26 @@ const fetchProjectOnInitial = (
         };
 
         if (refresh) {
-            client
-                .get<PaginationVM<ProjectVM>>('/api/projects', {
-                    params: params,
-                })
-                .then((res) => {
-                    console.log(res.data);
-                    if (res.data.offset === 0) {
-                        ScrollUtil.GotoTop('main');
-                    }
-                    dispatch(ProjectSlice.fetch(res.data));
-                })
-                .catch((err: AxiosError) => {
-                    console.log(err.message);
-                    AxiosUtil.redirectUnAuthorization(err);
-                    dispatch(FetchSlice.fail({ error: err.message }));
-                })
-                .finally(() => {
-                    dispatch(FetchSlice.end());
-                });
+            // TODO rewrite
+            // client
+            //     .get<PaginationVM<ProjectVM>>('/api/projects', {
+            //         params: params,
+            //     })
+            //     .then((res) => {
+            //         console.log(res.data);
+            //         if (res.data.offset === 0) {
+            //             ScrollUtil.GotoTop('main');
+            //         }
+            //         dispatch(ProjectSlice.fetch(res.data));
+            //     })
+            //     .catch((err: AxiosError) => {
+            //         console.log(err.message);
+            //         AxiosUtil.redirectUnAuthorization(err);
+            //         dispatch(FetchSlice.fail({ error: err.message }));
+            //     })
+            //     .finally(() => {
+            //         dispatch(FetchSlice.end());
+            //     });
         }
     }, [refresh]);
 };
@@ -110,10 +105,10 @@ export const ProjectMaintainPage: React.FC<ProjectMaintainPageProps> = () => {
         };
     });
 
-    const origin = AxiosUtil.getOriginWithPort();
-    const client = AxiosUtil.makeAxiosInstance(dispatch, origin);
-
-    fetchProjectOnInitial(client, refresh);
+    // TODO rewrite
+    // const origin = AxiosUtil.getOriginWithPort();
+    // const client = AxiosUtil.makeAxiosInstance(dispatch, origin);
+    // fetchProjectOnInitial(client, refresh);
 
     return (
         <React.Fragment>

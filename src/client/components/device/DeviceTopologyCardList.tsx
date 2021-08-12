@@ -1,7 +1,7 @@
 import { IconButton } from '@material-ui/core';
 import EjectIcon from '@material-ui/icons/Eject';
 import clsx from 'clsx';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDrop } from 'react-dnd';
 import { useDispatch } from 'react-redux';
 import DeviceMaintainCardTypes, {
@@ -37,12 +37,15 @@ const DeviceTopologyCardList: React.FC<DeviceTopologyCardListProps> = (
         );
     }
 
+    const project = props.project;
+    const spaces = !props.spaces ? [] : props.spaces;
+    const devices = !props.devices ? [] : props.devices;
     const cards = [];
 
     if (props.spaces) {
         const filtered = !props.space_selected
-            ? props.spaces.filter((space) => space.parentId == null)
-            : props.spaces.filter(
+            ? spaces.filter((space) => space.parentId == null)
+            : spaces.filter(
                   (space) => space.parentId == props.space_selected.id
               );
 
@@ -60,7 +63,7 @@ const DeviceTopologyCardList: React.FC<DeviceTopologyCardListProps> = (
     }
 
     if (props.space_selected) {
-        const device_cards = props.devices
+        const device_cards = devices
             .filter((device) => device.spaceId == props.space_selected.id)
             .map((device) => {
                 return (
@@ -76,9 +79,7 @@ const DeviceTopologyCardList: React.FC<DeviceTopologyCardListProps> = (
     }
 
     const dispatch = useDispatch();
-
     const space = props.space_selected;
-
     const accept = [
         DeviceMaintainCardTypes.DeviceTemplateCard,
         DeviceMaintainCardTypes.DeviceSmallCard,
@@ -131,7 +132,7 @@ const DeviceTopologyCardList: React.FC<DeviceTopologyCardListProps> = (
                 isOver: !!monitor.isOver({ shallow: true }),
             }),
         }),
-        [props.spaces, props.devices]
+        [space]
     );
 
     const classname = clsx(
@@ -142,13 +143,13 @@ const DeviceTopologyCardList: React.FC<DeviceTopologyCardListProps> = (
     );
 
     const header = !space
-        ? `${props.project.name} - ${props.project.code} - ${props.project.id}`
+        ? `${project.name} - ${project.code} - ${project.id}`
         : `${space.name} - ${space.id}`;
 
-    const parent =
+    const parent_node =
         !space || !space.parentId
             ? null
-            : props.spaces.find((item) => item.id == space.parentId);
+            : spaces.find((item) => item.id == space.parentId);
 
     const handleSelectParentNode = (e) => {
         e.preventDefault();
@@ -162,11 +163,21 @@ const DeviceTopologyCardList: React.FC<DeviceTopologyCardListProps> = (
             return;
         }
 
-        if (!!parent) {
-            dispatch(DeviceSlice.selectSpace(parent));
+        if (!!parent_node) {
+            dispatch(DeviceSlice.selectSpace(parent_node));
             return;
         }
     };
+
+    useEffect(() => {
+        if (props.device_selected) {
+            console.log('GOTO', props.device_selected.id);
+        }
+
+        return () => {
+            console.log('effect');
+        };
+    }, [props.device_selected]);
 
     return (
         <div className={classname} ref={drop}>

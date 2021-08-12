@@ -8,13 +8,11 @@ import { useDispatch } from 'react-redux';
 import DeviceMaintainCardTypes, {
     DeviceMaintainCardType,
     DeviceMaintainCardTypeHelper,
-    DeviceTypeCategories,
 } from 'src/client/domain/device/DeviceMaintainItemTypes';
 import DeviceVM, {
     DeviceTemplateVM,
     SpaceVM,
 } from 'src/client/domain/device/DeviceVMs';
-import SpaceMaintainItemTypes from 'src/client/domain/space/SpaceMaintainItemTypes';
 import DeviceSlice from 'src/client/slices/DeviceSlice';
 
 interface DeviceSmallCardProp {
@@ -24,17 +22,21 @@ interface DeviceSmallCardProp {
 }
 
 const DeviceSmallCard: React.FC<DeviceSmallCardProp> = (props) => {
+    if (!props.device) {
+        return <React.Fragment />;
+    }
+
     const dispatch = useDispatch();
 
+    const spaces = !props.spaces ? [] : props.spaces;
+    const devices = !props.devices ? [] : props.devices;
     const device = props.device;
 
-    const space = props.spaces.find((space) => space.id == device.spaceId);
-    const parent = props.devices.find((item) => item.id == device.parentId);
+    const space = spaces.find((space) => space.id == device.spaceId);
+    const parent = devices.find((item) => item.id == device.parentId);
 
-    // const id = device.id;
     const name = device.name;
     const isBound = !!device.imei;
-    // const isGateway = device.type.categoryId == 'GW';
 
     const handleClick = (e) => {
         e.stopPropagation();
@@ -42,21 +44,34 @@ const DeviceSmallCard: React.FC<DeviceSmallCardProp> = (props) => {
 
     const handleDoubleClick = (e) => {
         e.stopPropagation();
+        dispatch(DeviceSlice.selectDevice(device));
+    };
+
+    const handleSelectSpace = (e) => {
+        e.stopPropagation();
         dispatch(DeviceSlice.selectSpace(space));
+    };
+
+    const handleSelectDevice = (e) => {
+        e.stopPropagation();
         dispatch(DeviceSlice.selectDevice(device));
     };
 
     const handleUnlinkDevice = (e) => {
-        e.stopPropagation();
+        e.preventDefault();
         dispatch(DeviceSlice.unlinkParentDevice(device));
     };
 
     const handleRemoveDevice = (e) => {
-        e.stopPropagation();
+        e.preventDefault();
         dispatch(DeviceSlice.removeDevice(device));
     };
 
-    const accept = [];
+    const accept = [
+        DeviceMaintainCardTypes.DeviceTemplateCard,
+        DeviceMaintainCardTypes.DeviceCard,
+        DeviceMaintainCardTypes.DeviceSmallCard,
+    ];
 
     const [{ isOver, canDrop }, drop] = useDrop(
         () => ({
@@ -100,16 +115,19 @@ const DeviceSmallCard: React.FC<DeviceSmallCardProp> = (props) => {
         [device]
     );
 
-    const [{ isDragging }, drag] = useDrag(() => ({
-        type: DeviceMaintainCardTypes.DeviceSmallCard,
-        collect: (monitor) => ({
-            isDragging: monitor.isDragging(),
-        }),
-        item: {
+    const [{ isDragging }, drag] = useDrag(
+        () => ({
             type: DeviceMaintainCardTypes.DeviceSmallCard,
-            payload: device,
-        },
-    }));
+            collect: (monitor) => ({
+                isDragging: monitor.isDragging(),
+            }),
+            item: {
+                type: DeviceMaintainCardTypes.DeviceSmallCard,
+                payload: device,
+            },
+        }),
+        [device]
+    );
 
     const style: CSSProperties = {
         opacity: isDragging ? 0.5 : 1,
@@ -134,8 +152,11 @@ const DeviceSmallCard: React.FC<DeviceSmallCardProp> = (props) => {
             style={style}
             className={classname}
             variant="outlined"
-            onClick={handleClick}
-            onDoubleClick={handleDoubleClick}
+            onClick={(e) => {
+                e.stopPropagation();
+            }}
+            onDoubleClick={handleSelectSpace}
+            onMouseDown={handleSelectDevice}
         >
             <div className="card-header">
                 <div className="header-name">{name}</div>
@@ -143,9 +164,10 @@ const DeviceSmallCard: React.FC<DeviceSmallCardProp> = (props) => {
             </div>
             <CardContent>
                 <div>{device.dvId}</div>
-                <div>{device.type.name}</div>
-                {/*<div>{parent ? `${parent.name} - ${parent.dvId}` : ''}</div>*/}
+                {/*<div>{device.type.name}</div>*/}
+                <div>{parent ? `${parent.name} - ${parent.dvId}` : ''}</div>
                 <div>{space ? `${space.name}` : ''}</div>
+                {}
             </CardContent>
             <div className="card-footer">
                 <div className="footer-actions">
@@ -157,7 +179,6 @@ const DeviceSmallCard: React.FC<DeviceSmallCardProp> = (props) => {
                     <IconButton onClick={handleRemoveDevice}>
                         <DeleteIcon />
                     </IconButton>
-                    {}
                 </div>
             </div>
         </Card>
@@ -171,10 +192,16 @@ interface DeviceCardProp {
 }
 
 const DeviceCard: React.FC<DeviceCardProp> = (props) => {
+    if (!props.device) {
+        return <React.Fragment />;
+    }
+
     const dispatch = useDispatch();
 
+    const devices = !props.devices ? [] : props.devices;
     const device = props.device;
-    const parent = props.devices.find((item) => item.id == device.parentId);
+
+    const parent = devices.find((item) => item.id == device.parentId);
 
     const id = device.id;
     const icon = device.icon;
@@ -194,29 +221,15 @@ const DeviceCard: React.FC<DeviceCardProp> = (props) => {
         return item.images[0];
     })(device);
 
-    const leaves = props.devices.filter((leaf) => leaf.parentId == device.id);
-    const elements = !leaves.length
-        ? []
-        : leaves.map((leaf) => {
-              return (
-                  <DeviceSmallCard
-                      key={leaf.id}
-                      device={leaf}
-                      spaces={props.spaces}
-                      devices={props.devices}
-                  />
-              );
-          });
-
-    // const isGateway = device.type.categoryId == 'GW';
     const isBound = !!device.imei;
 
-    const handleSelectCard = (e) => {
+    const handleSelectDeviceCard = (e) => {
         e.stopPropagation();
         dispatch(DeviceSlice.selectDevice(device));
     };
 
-    const handleDragStart = () => {
+    const handleSelectDevice = (e) => {
+        e.stopPropagation();
         dispatch(DeviceSlice.selectDevice(device));
     };
 
@@ -224,12 +237,30 @@ const DeviceCard: React.FC<DeviceCardProp> = (props) => {
         dispatch(DeviceSlice.removeDevice(device));
     };
 
+    const elements = [];
+
+    if (props.devices) {
+        const device_cards = devices
+            .filter((leaf) => leaf.parentId == device.id)
+            .map((leaf) => {
+                return (
+                    <DeviceSmallCard
+                        key={leaf.id}
+                        device={leaf}
+                        spaces={props.spaces}
+                        devices={props.devices}
+                    />
+                );
+            });
+
+        elements.push(...device_cards);
+    }
+
     const accept = [
         DeviceMaintainCardTypes.DeviceTemplateCard,
         DeviceMaintainCardTypes.DeviceCard,
         DeviceMaintainCardTypes.DeviceSmallCard,
     ];
-
     const [{ isOver, canDrop }, drop] = useDrop(
         () => ({
             accept: accept,
@@ -242,7 +273,7 @@ const DeviceCard: React.FC<DeviceCardProp> = (props) => {
             ) => {
                 const target = {
                     type: DeviceMaintainCardTypes.DeviceCard,
-                    payload: device,
+                    payload: device as DeviceVM,
                 };
                 return DeviceMaintainCardTypeHelper.canDrop(item, target);
             },
@@ -275,7 +306,7 @@ const DeviceCard: React.FC<DeviceCardProp> = (props) => {
                 canDrop: !!monitor.canDrop(),
             }),
         }),
-        [props.devices, props.spaces]
+        [device]
     );
 
     const [{ isDragging }, drag] = useDrag(
@@ -314,17 +345,22 @@ const DeviceCard: React.FC<DeviceCardProp> = (props) => {
         <React.Fragment>
             <input
                 name="device-cards-selected"
-                id={id}
+                id={`label-${id}`}
                 type="radio"
                 hidden={true}
             />
-            <label htmlFor={id} onClick={handleSelectCard}>
+            <label
+                htmlFor={`label-${id}`}
+                onClick={handleSelectDeviceCard}
+                // onDoubleClick={handleSpaceCardSelect}
+            >
                 <Card
+                    id={id}
                     ref={ref}
                     className={classname}
                     style={style}
                     variant="outlined"
-                    onDragStart={handleDragStart}
+                    onMouseDown={handleSelectDevice}
                 >
                     <div className="card-header">
                         <div className="header-name">{header}</div>
