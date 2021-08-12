@@ -1,127 +1,31 @@
-import {
-    Breadcrumbs,
-    Card,
-    CardContent,
-    Link,
-    Tab,
-    Tabs,
-} from '@material-ui/core';
+import { Card, CardContent, Tab, Tabs } from '@material-ui/core';
 import AccountTreeIcon from '@material-ui/icons/AccountTree';
 import AppsIcon from '@material-ui/icons/Apps';
 import AssignmentIcon from '@material-ui/icons/Assignment';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import DeviceHubIcon from '@material-ui/icons/DeviceHub';
 import ListAltIcon from '@material-ui/icons/ListAlt';
 import ShareIcon from '@material-ui/icons/Share';
 import ThreeDRotationIcon from '@material-ui/icons/ThreeDRotation';
-import { TreeItem, TreeView } from '@material-ui/lab';
-import clsx from 'clsx';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { useDispatch, useSelector } from 'react-redux';
+import ChangeDeviceLocationDialog from 'src/client/components/device/ChangeDeviceLocationDialog';
+import ChangeDeviceParentDialog from 'src/client/components/device/ChangeDeviceParentDialog';
+import DeviceBreadcrumbs from 'src/client/components/device/DeviceBreadcrumbs';
+import DeviceTemplateCardList from 'src/client/components/device/DeviceTemplateCardList';
+import DeviceTopologyCardList from 'src/client/components/device/DeviceTopologyCardList';
+import GatewayTreeView from 'src/client/components/device/GatewayTreeView';
+import PlaceDeviceToDeviceDialog from 'src/client/components/device/PlaceDeviceToDeviceDialog';
+import PlaceDeviceToSpaceDialog from 'src/client/components/device/PlaceDeviceToSpaceDialog';
+import ProjectTreeView from 'src/client/components/device/ProjectTreeView';
+import RemoveDeviceDialog from 'src/client/components/device/RemoveDeviceDialog';
+import SpaceTreeView from 'src/client/components/device/SpaceTreeView';
+import UnlinkParentDeviceDialog from 'src/client/components/device/UnlinkParentDeviceDialog';
 import TabPanel from 'src/client/components/TabPanel';
 import DeviceMaintainAPIs from 'src/client/domain/device/DeviceMaintainAPIs';
-import ProjectVM from 'src/client/domain/project/ProjectVM';
 import { RootState } from 'src/client/reducer';
 import DeviceSlice from 'src/client/slices/DeviceSlice';
-import SpaceSlice from 'src/client/slices/SpaceSlice';
-import { DeviceTemplateVM } from '../../domain/device/DeviceVMs';
-
-interface DeviceBreadcrumbsProp {
-    project: ProjectVM;
-    onClick?: Function;
-}
-
-const DeviceBreadcrumbs: React.FC<DeviceBreadcrumbsProp> = (props) => {
-    const classname = 'device-breadcrumbs';
-
-    if (!props.project) {
-        return <Breadcrumbs aria-label="breadcrumb" className={classname} />;
-    }
-
-    const element = ((project) => {
-        return <Link key={project.id}>{project.name}</Link>;
-    })(props.project);
-
-    // const target = props.device;
-    // const links = [] as DeviceVM[];
-    //
-    // const elements = links.map((item: DeviceVM) => {
-    //     const handleClick = () => {
-    //         if (!props.onClick) {
-    //             return;
-    //         }
-    //         props.onClick(item);
-    //     };
-    //     return (
-    //         <Link key={item.id} onClick={handleClick}>
-    //             {item.name}
-    //         </Link>
-    //     );
-    // });
-
-    // const elements = [];
-    const elements = (() => {
-        const handleClick = () => {
-            console.log('handleClick');
-        };
-
-        return [
-            <Link key={1} onClick={handleClick}>
-                {'Gateway'}
-            </Link>,
-            <Link key={2} onClick={handleClick}>
-                {'AG Device'}
-            </Link>,
-            <Link key={3} onClick={handleClick}>
-                {'Device'}
-            </Link>,
-        ];
-    })();
-
-    return (
-        <Breadcrumbs aria-label="breadcrumb" className={classname}>
-            {element}
-            {elements}
-        </Breadcrumbs>
-    );
-};
-
-function* selectProjectSaga() {}
-
-interface ProjectTreeViewProps {
-    projects: ProjectVM[];
-    onClickCallback?: Function;
-}
-
-const ProjectTreeView = (props: ProjectTreeViewProps) => {
-    const dispatch = useDispatch();
-
-    const items = Array.isArray(props.projects) ? props.projects : [];
-
-    const elements = items.map((item: ProjectVM) => {
-        const id = item.id;
-        const name = `${item.code}-${item.name}`;
-
-        const handleClick = () => {
-            dispatch(SpaceSlice.clearSelected());
-            dispatch(SpaceSlice.selectProject(item));
-        };
-        return (
-            <TreeItem key={id} nodeId={id} label={name} onClick={handleClick} />
-        );
-    });
-
-    return (
-        <TreeView
-            defaultCollapseIcon={<ExpandMoreIcon />}
-            defaultExpandIcon={<ChevronRightIcon />}
-        >
-            {elements}
-        </TreeView>
-    );
-};
 
 export interface DevicePageProps {
     title: string;
@@ -141,27 +45,53 @@ export const DevicePage: React.FC<DevicePageProps> = () => {
 
     // Tool box
     const toolbox_tab_name = 'device-tool-box';
-    const [toolbox_tab_index, setDeviceToolboxTabIndex] = useState(2);
+    const [toolbox_tab_index, setDeviceToolboxTabIndex] = useState(0);
     const handlesSelectDeviceToolboxTab = (e: ChangeEvent, value: number) => {
         setDeviceToolboxTabIndex(value);
     };
 
     // state selector
-    const { projects, project_selected, templates } = useSelector(
-        (state: RootState) => {
-            return {
-                projects: state.device.projects,
-                project_selected: state.device.project_selected,
-                templates: state.device.device_templates,
-            };
-        }
-    );
-
-    // TODO useSelector
-
-    const handleSelectDevice = () => {
-        console.log('SelectDevice');
-    };
+    const {
+        projects,
+        project_selected,
+        spaces,
+        space_selected,
+        devices,
+        device_selected,
+        templates,
+        device_templates_selected,
+        place_device_to_space_dialog,
+        place_device_to_device_dialog,
+        change_device_location_dialog,
+        append_device_to_device_dialog,
+        remove_device_dialog,
+        change_device_parent_dialog,
+        unlink_parent_device_dialog,
+    } = useSelector((state: RootState) => {
+        return {
+            projects: state.device.projects,
+            project_selected: state.device.project_selected,
+            spaces: state.device.spaces,
+            space_selected: state.device.space_selected,
+            devices: state.device.devices,
+            device_selected: state.device.device_selected,
+            templates: state.device.device_templates,
+            device_templates_selected: state.device.device_templates_selected,
+            place_device_to_space_dialog:
+                state.device.place_device_to_space_dialog,
+            place_device_to_device_dialog:
+                state.device.place_device_to_device_dialog,
+            append_device_to_device_dialog:
+                state.device.connect_device_to_device_dialog,
+            remove_device_dialog: state.device.remove_device_dialog,
+            change_device_location_dialog:
+                state.device.change_device_location_dialog,
+            change_device_parent_dialog:
+                state.device.change_device_parent_dialog,
+            unlink_parent_device_dialog:
+                state.device.unlink_parent_device_dialog,
+        };
+    });
 
     const handleSelectDeviceTopology = () => {
         console.log('handleSelectDeviceTopology');
@@ -182,8 +112,10 @@ export const DevicePage: React.FC<DevicePageProps> = () => {
                     {/* Breadcrumbs */}
                     <DeviceBreadcrumbs
                         project={project_selected}
-                        // space={space_selected}
-                        // spaces={spaces}
+                        spaces={spaces}
+                        space_selected={space_selected}
+                        devices={devices}
+                        device_selected={device_selected}
                         onClick={handleSelectDeviceTopologyTab}
                     />
 
@@ -219,25 +151,31 @@ export const DevicePage: React.FC<DevicePageProps> = () => {
                                             <Tab
                                                 icon={<AssignmentIcon />}
                                                 aria-label="projects"
-                                                onClick={() => {
+                                                onDoubleClick={() => {
                                                     DeviceSlice.clearProjectSelected();
                                                     DeviceMaintainAPIs.fetchProjects(
                                                         dispatch
                                                     );
                                                 }}
                                             />
+
                                             <Tab
                                                 icon={<AccountTreeIcon />}
                                                 aria-label="space-tree-view"
                                             />
                                             <Tab
-                                                icon={<AppsIcon />}
-                                                aria-label="space-cards"
+                                                icon={<DeviceHubIcon />}
+                                                aria-label="device-tree-view"
                                             />
-                                            {/*<Tab*/}
-                                            {/*    icon={<RouterIcon />}*/}
-                                            {/*    aria-label="gateway-connections"*/}
-                                            {/*/>*/}
+                                            <Tab
+                                                icon={<AppsIcon />}
+                                                aria-label="device-template-cards"
+                                                onDoubleClick={() => {
+                                                    DeviceMaintainAPIs.fetchDeviceTemplates(
+                                                        dispatch
+                                                    );
+                                                }}
+                                            />
                                         </Tabs>
                                     </div>
                                     <div className="toolbox-panels">
@@ -248,19 +186,42 @@ export const DevicePage: React.FC<DevicePageProps> = () => {
                                         >
                                             <ProjectTreeView
                                                 projects={projects}
+                                                onClickCallback={() => {
+                                                    // setDeviceToolboxTabIndex(1);
+                                                }}
+                                                onDoubleClickCallback={() => {
+                                                    // setDeviceToolboxTabIndex(1);
+                                                }}
                                             />
                                         </TabPanel>
+
                                         <TabPanel
                                             name={toolbox_tab_name}
                                             value={toolbox_tab_index}
                                             index={1}
                                         >
-                                            <div>Device Tree</div>
+                                            <SpaceTreeView
+                                                project={project_selected}
+                                                spaces={spaces}
+                                            />
                                         </TabPanel>
+
                                         <TabPanel
                                             name={toolbox_tab_name}
                                             value={toolbox_tab_index}
                                             index={2}
+                                        >
+                                            <GatewayTreeView
+                                                project={project_selected}
+                                                spaces={spaces}
+                                                devices={devices}
+                                            />
+                                        </TabPanel>
+
+                                        <TabPanel
+                                            name={toolbox_tab_name}
+                                            value={toolbox_tab_index}
+                                            index={3}
                                         >
                                             <DeviceTemplateCardList
                                                 templates={templates}
@@ -271,72 +232,61 @@ export const DevicePage: React.FC<DevicePageProps> = () => {
 
                                 {/* Device Topology Panels*/}
                                 <div className="topology-content">
-                                    {'Device Topology'}
+                                    <DeviceTopologyCardList
+                                        project={project_selected}
+                                        spaces={spaces}
+                                        space_selected={space_selected}
+                                        devices={devices}
+                                        device_selected={device_selected}
+                                    />
                                 </div>
                             </CardContent>
                         </Card>
                     </DndProvider>
                 </div>
+
+                <PlaceDeviceToSpaceDialog
+                    open={place_device_to_space_dialog.open}
+                    project={place_device_to_space_dialog.project}
+                    space={place_device_to_space_dialog.space}
+                    template={place_device_to_space_dialog.template}
+                    // appendSuccessCallback={() => {
+                    //     console.log('appendCallback');
+                    // }}
+                />
+                <PlaceDeviceToDeviceDialog
+                    open={place_device_to_device_dialog.open}
+                    project={place_device_to_device_dialog.project}
+                    device={place_device_to_device_dialog.device}
+                    template={place_device_to_device_dialog.template}
+                />
+                <ChangeDeviceLocationDialog
+                    open={change_device_location_dialog.open}
+                    project={change_device_location_dialog.project}
+                    space={change_device_location_dialog.space}
+                    device={change_device_location_dialog.device}
+                />
+                <ChangeDeviceParentDialog
+                    open={change_device_parent_dialog.open}
+                    project={change_device_parent_dialog.project}
+                    parent={change_device_parent_dialog.parent}
+                    device={change_device_parent_dialog.device}
+                />
+                <UnlinkParentDeviceDialog
+                    open={unlink_parent_device_dialog.open}
+                    project={unlink_parent_device_dialog.project}
+                    device={unlink_parent_device_dialog.device}
+                />
+                <RemoveDeviceDialog
+                    open={remove_device_dialog.open}
+                    project={remove_device_dialog.project}
+                    device={remove_device_dialog.device}
+                    // removeSuccessCallback={() => {
+                    //     console.log('removeCallback');
+                    // }}
+                />
             </div>
         </React.Fragment>
-    );
-};
-
-interface DeviceTemplateCardProps {
-    template: DeviceTemplateVM;
-}
-
-const DeviceTemplateCard: React.FC<DeviceTemplateCardProps> = (props) => {
-    const name = props.template.name;
-
-    const classname = clsx(
-        'device-template-card',
-        props.template.type.categoryId
-    );
-
-    return (
-        <Card
-            // ref={ drag}
-            // style={style}
-            // key={id}
-            className={classname}
-            variant="outlined"
-            // onClick={handleClick}
-            // onDragStart={handleDragStart}
-            // onDoubleClick={handleDoubleClick}
-        >
-            <div className="card-header">
-                <div className="header-name">{name}</div>
-                {/* <div className="header-actions">{"actions"}</div> */}
-            </div>
-            <CardContent>
-                <div>{props.template.model.name}</div>
-                <div>{props.template.icon.name}</div>
-            </CardContent>
-            <div className="card-footer">
-                {/*<div className="footer-actions">{'actions'}</div>*/}
-            </div>
-        </Card>
-    );
-};
-
-interface DeviceTemplateCardListProps {
-    templates: DeviceTemplateVM[];
-}
-
-export const DeviceTemplateCardList: React.FC<DeviceTemplateCardListProps> = (
-    props
-) => {
-    const dispatch = useDispatch();
-
-    const cards = props.templates.map((template) => {
-        return <DeviceTemplateCard key={template.id} template={template} />;
-    });
-
-    return (
-        <div className={'device-template-list'}>
-            <div className="cards">{cards}</div>
-        </div>
     );
 };
 

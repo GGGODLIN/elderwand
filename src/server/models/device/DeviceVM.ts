@@ -39,6 +39,7 @@ export default interface DeviceVM {
     updatedBy: string;
     createdAt: number;
     updatedAt: number;
+    deletedAt?: number;
 }
 
 interface Image {

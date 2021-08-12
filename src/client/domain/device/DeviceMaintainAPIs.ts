@@ -9,6 +9,19 @@ import PaginationVM from 'src/client/models/PaginationVM';
 import DeviceSlice from 'src/client/slices/DeviceSlice';
 import FetchSlice from 'src/client/slices/FetchSlice';
 
+export interface PlaceDeviceToSpaceOptions {
+    templateId?: string;
+    spaceId?: string;
+    dvId?: string;
+}
+
+export interface PlaceDeviceToDeviceOptions {
+    templateId?: string;
+    spaceId?: string;
+    parentId?: string;
+    dvId?: string;
+}
+
 class DeviceMaintainAPIs {
     static fetchProjects = (dispatch: Dispatch<any>): void => {
         const url = '/api/projects';
@@ -57,7 +70,11 @@ class DeviceMaintainAPIs {
             });
     };
 
-    static fetchDevices = (dispatch: Dispatch<any>, project: ProjectVM) => {
+    static fetchDevices = (
+        dispatch: Dispatch<any>,
+        project: ProjectVM,
+        callback?: Function
+    ) => {
         const url = `/api/devices`;
         const params = {
             projectId: project.code,
@@ -72,6 +89,45 @@ class DeviceMaintainAPIs {
             .get<PaginationVM<DeviceVM>>(url, { params: params })
             .then((res) => {
                 dispatch(DeviceSlice.fetchDevices(res.data));
+                if (callback) {
+                    callback();
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+            .finally(() => {
+                dispatch(FetchSlice.end());
+            });
+    };
+
+    static fetchDeviceTopologyResources = (
+        dispatch: Dispatch<any>,
+        project: ProjectVM,
+        callback?: Function
+    ) => {
+        const url = `/api/device/topology/resource`;
+        const params = {
+            projectId: project.code,
+        };
+
+        dispatch(DeviceSlice.clearDeviceTopologyResources());
+
+        new AxiosFactory()
+            .useBearerToken()
+            .useBefore(() => {
+                dispatch(FetchSlice.start());
+            })
+            .getInstance()
+            .get<{
+                spaces: PaginationVM<SpaceVM>;
+                devices: PaginationVM<DeviceVM>;
+            }>(url, { params: params })
+            .then((res) => {
+                dispatch(DeviceSlice.fetchDeviceTopologyResources(res.data));
+                if (callback) {
+                    callback();
+                }
             })
             .catch((err) => {
                 console.log(err);
@@ -94,6 +150,176 @@ class DeviceMaintainAPIs {
             .get<PaginationVM<DeviceTemplateVM>>(url, { params: params })
             .then((res) => {
                 dispatch(DeviceSlice.fetchDeviceTemplates(res.data));
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+            .finally(() => {
+                dispatch(FetchSlice.end());
+            });
+    };
+
+    static placeDeviceToSpace = (
+        dispatch: Dispatch<any>,
+        project: ProjectVM,
+        options: PlaceDeviceToSpaceOptions,
+        callback?: Function
+    ) => {
+        const url = `/api/devices`;
+        const params = {
+            projectId: project.id,
+        };
+        const body = {
+            ...options,
+        };
+
+        new AxiosFactory()
+            .useBearerToken()
+            .useBefore(() => {
+                dispatch(FetchSlice.start());
+            })
+            .getInstance()
+            .post<DeviceVM>(url, body, { params: params })
+            .then((res) => {
+                // console.log(res.data);
+                if (callback) {
+                    callback();
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+            .finally(() => {
+                dispatch(FetchSlice.end());
+            });
+    };
+
+    static placeDeviceToDevice = (
+        dispatch: Dispatch<any>,
+        project: ProjectVM,
+        options: PlaceDeviceToDeviceOptions,
+        callback?: Function
+    ) => {
+        const url = `/api/devices`;
+        const params = {
+            projectId: project.id,
+        };
+        const body = {
+            ...options,
+        };
+
+        new AxiosFactory()
+            .useBearerToken()
+            .useBefore(() => {
+                dispatch(FetchSlice.start());
+            })
+            .getInstance()
+            .post<DeviceVM>(url, body, { params: params })
+            .then((res) => {
+                // console.log(res.data);
+                if (callback) {
+                    callback();
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+            .finally(() => {
+                dispatch(FetchSlice.end());
+            });
+    };
+
+    static editDevice = (
+        dispatch: Dispatch<any>,
+        project: ProjectVM,
+        device: DeviceVM,
+        callback?: Function
+    ) => {
+        const url = `/api/devices/${device.id}`;
+        const params = {
+            projectId: project.id,
+        };
+        const data = {
+            spaceId: device.spaceId,
+            parentId: device.parentId,
+        };
+
+        new AxiosFactory()
+            .useBearerToken()
+            .useBefore(() => {
+                dispatch(FetchSlice.start());
+            })
+            .getInstance()
+            .put<DeviceVM>(url, data, { params: params })
+            .then((res) => {
+                // console.log(res.data);
+                if (callback) {
+                    callback();
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+            .finally(() => {
+                dispatch(FetchSlice.end());
+            });
+    };
+
+    static unlinkParentDevice = (
+        dispatch: Dispatch<any>,
+        project: ProjectVM,
+        device: DeviceVM,
+        callback?: Function
+    ) => {
+        const url = `/api/devices/${device.id}/parent`;
+        const params = {
+            projectId: project.code,
+        };
+
+        new AxiosFactory()
+            .useBearerToken()
+            .useBefore(() => {
+                dispatch(FetchSlice.start());
+            })
+            .getInstance()
+            .delete<DeviceVM>(url, { params: params })
+            .then((res) => {
+                // console.log(res.data);
+                if (callback) {
+                    callback();
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+            .finally(() => {
+                dispatch(FetchSlice.end());
+            });
+    };
+
+    static removeDevice = (
+        dispatch: Dispatch<any>,
+        project: ProjectVM,
+        device: DeviceVM,
+        callback?: Function
+    ) => {
+        const url = `/api/devices/${device.id}`;
+        const params = {
+            projectId: project.code,
+        };
+
+        new AxiosFactory()
+            .useBearerToken()
+            .useBefore(() => {
+                dispatch(FetchSlice.start());
+            })
+            .getInstance()
+            .delete<DeviceVM>(url, { params: params })
+            .then((res) => {
+                // console.log(res.data);
+                if (callback) {
+                    callback();
+                }
             })
             .catch((err) => {
                 console.log(err);

@@ -7,6 +7,7 @@ import KoaRouterFactory, {
 export const DeviceRouterActions = {
     listDevices: () => `/api/devices`,
     getDevice: (id: string) => `/api/devices/${id}`,
+    getDeviceTopologyResource: () => `/api/device/topology/resource`,
     bindGatewayConnection: (id: string) => `/api/devices/${id}/gateway`,
     unbindGatewayConnection: (id: string) => `/api/devices/${id}/gateway`,
     getRepository: (id: string) => `/api/devices/${id}/repository`,
@@ -31,6 +32,36 @@ export default class DeviceRouter {
                 action: '/devices/:id',
                 method: 'GET',
                 controller: DeviceMaintainController.getDevice,
+            },
+            getDeviceTopologyResource: {
+                name: 'get-device',
+                action: '/device/topology/resource',
+                method: 'GET',
+                controller: DeviceMaintainController.getDeviceTopologyResource,
+            },
+            placeDevice: {
+                name: 'get-device-resource',
+                action: '/devices',
+                method: 'POST',
+                controller: DeviceMaintainController.placeDevice,
+            },
+            editDevice: {
+                name: 'edit-device',
+                action: '/devices/:id',
+                method: 'PUT',
+                controller: DeviceMaintainController.editDevice,
+            },
+            unlinkParentDevice: {
+                name: 'unlink-parent-device',
+                action: '/devices/:id/parent',
+                method: 'DELETE',
+                controller: DeviceMaintainController.unlinkParentDevice,
+            },
+            removeDevice: {
+                name: 'remove-device',
+                action: '/devices/:id',
+                method: 'DELETE',
+                controller: DeviceMaintainController.removeDevice,
             },
             bindGateway: {
                 name: 'bind-gateway',

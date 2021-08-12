@@ -1,21 +1,20 @@
-import clsx from 'clsx';
+import {
+    Avatar,
+    Card,
+    Grid,
+    IconButton,
+    TextField,
+    Typography,
+} from '@material-ui/core';
 import ControlCameraIcon from '@material-ui/icons/ControlCamera';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import EditIcon from '@material-ui/icons/Edit';
 import EmailIcon from '@material-ui/icons/Email';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
+import clsx from 'clsx';
 import React, { useEffect } from 'react';
-import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 import { UserRoleIconMap } from 'src/client/configs/IconMap';
-import { UserVM } from 'src/client/domain/user/UserVM';
-import {
-    Card,
-    Typography,
-    IconButton,
-    Avatar,
-    TextField,
-    Grid,
-} from '@material-ui/core';
+import UserVM from 'src/client/domain/user/UserVM';
 
 export interface UserCardProps {
     classname?: string;

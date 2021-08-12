@@ -12,13 +12,13 @@ import clsx from 'clsx';
 import React, { Dispatch } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import DataMigrationUtil from '../../domain/migration/DataMigrationUtil';
-import { ProjectPreviewVM } from '../../domain/migration/MigraionPreviewVM';
-import AxiosFactory from '../../helper/AxiosFactory';
-import PaginationVM from '../../models/PaginationVM';
-import { RootState } from '../../reducer';
-import DataMigrationSlice from '../../slices/DataMigrationSlice';
-import FetchSlice from '../../slices/FetchSlice';
+import DataMigrationUtil from 'src/client/domain/migration/DataMigrationUtil';
+import { ProjectPreviewVM } from 'src/client/domain/migration/MigraionPreviewVM';
+import AxiosFactory from 'src/client/helper/AxiosFactory';
+import PaginationVM from 'src/client/models/PaginationVM';
+import { RootState } from 'src/client/reducer';
+import DataMigrationSlice from 'src/client/slices/DataMigrationSlice';
+import FetchSlice from 'src/client/slices/FetchSlice';
 
 interface ImportDeviceTemplateDialogProps {}
 

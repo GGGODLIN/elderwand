@@ -40,6 +40,15 @@ $text-green-light: #c9fcfb;
 $text-green-primary: #6adbd8;
 $text-green-dark: #0abab5;
 
+$device-border-width: 2px;
+$device-GW: #2979ff;
+$device-A: #43a047;
+$device-SP: #fb8c00;
+$device-S: #8bc34a;
+$device-SD: #8e24aa;
+$device-CPB: #a1887f;
+$device-is-bound: #ff1744;
+
 // Layout variables
 @function min-main-height($vh) {
   $total: $header-height + $footer-height;

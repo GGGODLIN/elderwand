@@ -42,6 +42,7 @@ export default interface DeviceDTO {
     updatedBy: string;
     createdAt: number;
     updatedAt: number;
+    deletedAt?: number;
 }
 
 export interface ChannelInfo {

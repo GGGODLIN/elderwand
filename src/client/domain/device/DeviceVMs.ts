@@ -123,7 +123,7 @@ interface DeviceVM {
     spec: object;
     channelInfo?: object[];
     switchPanelControlInfo?: object[];
-    attrs?: Attr[];
+    attrs: object[];
     sendTelRules?: number[];
     imei: string;
     publicIP: string;
@@ -156,8 +156,8 @@ export interface SpaceVM {
     createdAt: number;
     updatedAt: number;
 
-    leaves?: SpaceVM[];
-    devices?: DeviceVM[];
+    // leaves?: SpaceVM[];
+    // devices?: DeviceVM[];
     checked?: boolean;
 }
 

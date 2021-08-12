@@ -7,6 +7,14 @@ Authorization: Bearer {{AUTH_TOKEN}}
 ###
 
 
+# list spaces  by project
+GET {{HOST}}/api/spaces?projectId={{TARGET_PROJECT_CODE}}
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{AUTH_TOKEN}}
+
+###
+
 # list devices by project
 GET {{HOST}}/api/devices?projectId={{TARGET_PROJECT_CODE}}
 Accept: application/json
@@ -18,6 +26,28 @@ Authorization: Bearer {{AUTH_TOKEN}}
 
 # list device templates
 GET {{HOST}}/api/device/templates
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{AUTH_TOKEN}}
+
+###
+
+
+# Place device to space
+POST {{HOST}}/api/devices?projectId={{TARGET_PROJECT_CODE}}
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{AUTH_TOKEN}}
+
+{
+    "templateId": "36532e59-ee45-4aa9-857b-5e91134e1295",
+    "spaceId": "728dc0e8-cda4-4695-ac03-8e6f33488a8d"
+}
+
+###
+
+# Remove device to space
+DELETE {{HOST}}/api/devices/REXX-rJZdG2ZpMctF?projectId={{TARGET_PROJECT_CODE}}
 Accept: application/json
 Content-Type: application/json
 Authorization: Bearer {{AUTH_TOKEN}}

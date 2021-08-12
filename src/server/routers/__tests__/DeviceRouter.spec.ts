@@ -189,4 +189,23 @@ describe('Device Router', function () {
             console.log(actual);
         });
     });
+
+    describe('list device topology resource', function () {
+        it('should be 200', async function () {
+            const pathname = DeviceRouterActions.listDeviceTemplates();
+
+            const query = {};
+
+            const response = await server
+                .get(pathname)
+                .set('Accept', 'application/json')
+                // .set(AuthUtil.AuthHeader, AuthUtil.newBearer(token))
+                .query(query)
+                .expect(200);
+
+            const actual = response.body as PaginationVM<DeviceTemplateVM>;
+
+            console.log(actual);
+        });
+    });
 });

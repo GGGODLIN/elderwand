@@ -3,14 +3,11 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import React, { Dispatch } from 'react';
+import React from 'react';
 import { useDispatch } from 'react-redux';
 import ProjectVM from 'src/client/domain/project/ProjectVM';
 import GatewayConnectionVM from 'src/client/domain/space/GatewayConnectionVM';
-import SpaceVM, {
-    DeviceVM,
-    SpaceTopology,
-} from 'src/client/domain/space/SpaceVM';
+import { DeviceVM } from 'src/client/domain/space/SpaceVM';
 import AxiosFactory from 'src/client/helper/AxiosFactory';
 import FetchSlice from 'src/client/slices/FetchSlice';
 import SpaceSlice from 'src/client/slices/SpaceSlice';

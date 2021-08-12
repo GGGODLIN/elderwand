@@ -133,8 +133,20 @@
     }
   }
 
-  .device-template-list {
+  .space-tree-view {
+    .is-over {
+      background-color: $bg-green-primary;
+    }
+
+    .can-drop {
+      background-color: $bg-green-dark;
+    }
+
+    .cannot-drop {
+      background-color: $bg-red-light;
+    }
   }
+
   .device-template-card {
     margin: 8px;
     border: 2px solid $bg-green-primary;
@@ -160,21 +172,186 @@
     .card-footer {
       text-align: right;
     }
+  }
 
+  .device-category-filter {
+    display: flex;
+    flex-wrap: wrap;
+    overflow: hidden;
+
+    .MuiButton-root {
+      min-width: 20%;
+      width: 20%;
+      padding: 0;
+    }
+  }
+
+  // device topology cards
+
+  input[type='radio']:checked {
+    + label > .space-card {
+      border: 2px solid $bg-green-dark;
+      box-shadow: 2px 2px 4px 4px rgba(0, 0, 0, 0.3);
+    }
+  }
+  .root-card {
+    .card-header {
+      border-bottom: 2px solid $bg-green-primary;
+      display: flex;
+      flex-direction: row;
+      // justify-content: space-between;
+      align-items: center;
+      height: 36px;
+      margin: 0 8px;
+      justify-content: space-between;
+    }
+  }
+
+  // cards
+
+  .space-card,
+  .device-card {
+    border: 2px solid $bg-green-primary;
+    margin: 16px;
+    pointer-events: auto;
+    box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.2);
+    min-height: 320px;
+
+    &:hover {
+      box-shadow: 2px 2px 4px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    &.is-over {
+      background-color: $bg-green-primary;
+    }
+
+    &.can-drop {
+      background-color: $bg-green-dark;
+    }
+
+    &.cannot-drop {
+      background-color: $bg-red-light;
+    }
+
+    .card-header {
+      // border-bottom: 2px solid $bg-green-primary;
+      // display: flex;
+      // flex-direction: row;
+      // align-items: center;
+      // height: 36px;
+      justify-content: space-between;
+    }
+
+    > .MuiCardContent-root {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+
+      .leaves {
+        width: 65%;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        // justify-content: space-between;
+      }
+      .preview {
+        width: 35%;
+        > img {
+          width: 100%;
+          margin: 0 auto;
+        }
+      }
+    }
+  }
+
+  .space-xs-card,
+  .device-xs-card {
+    width: 180px;
+    margin: 8px;
+    border: 2px solid $bg-green-primary;
+    // pointer-events: none;
+
+    &:hover {
+      box-shadow: 2px 2px 4px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    > .MuiCardContent-root {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      // align-items: center;
+      height: 48px;
+      padding: 4px 8px;
+
+      > div {
+        white-space: nowrap;
+      }
+    }
+    .card-footer {
+      text-align: right;
+    }
+  }
+
+  .device-card,
+  .device-xs-card {
+    background-color: $bg-green-light;
+
+    &.is-over {
+      background-color: $bg-green-primary;
+    }
+
+    &.can-drop {
+      background-color: $bg-green-dark;
+    }
+
+    &.cannot-drop {
+      background-color: $bg-red-light;
+    }
+
+    .footer-actions {
+      .MuiIconButton-root {
+        padding: 2px;
+      }
+    }
+  }
+
+  .device-card,
+  .device-xs-card,
+  .device-template-card {
     &.GW {
-      border-color: $bg-red-light;
+      border-color: $device-GW;
+      border-width: $device-border-width;
     }
 
     &.A {
-      border-color: $bg-orange-light;
+      border-color: $device-A;
+      border-width: $device-border-width;
     }
 
     &.SP {
-      border-color: $bg-purple-light;
+      border-color: $device-SP;
+      border-width: $device-border-width;
     }
 
     &.S {
-      border-color: $bg-blue-light;
+      border-color: $device-S;
+      border-width: $device-border-width;
+    }
+
+    &.SD {
+      border-color: $device-SD;
+      border-width: $device-border-width;
+    }
+
+    &.CPB {
+      border-color: $device-CPB;
+      border-width: $device-border-width;
+    }
+
+    &.is-bound {
+      border-color: $device-is-bound;
+      border-width: $device-border-width;
     }
   }
 }

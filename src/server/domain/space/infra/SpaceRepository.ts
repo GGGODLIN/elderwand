@@ -20,7 +20,7 @@ export default class SpaceRepository {
     private readonly platformId: number;
 
     /**
-     * @param projectID Project ID
+     * @param projectId Project ID
      */
     async listSpaces(projectId: string): Promise<PaginationDTO<SpaceDTO>> {
         const baseURL = this.origin;

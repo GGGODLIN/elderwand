@@ -171,7 +171,7 @@ const DeviceSmallCard: React.FC<DeviceSmallCardProp> = (props) => {
                 dispatch(SpaceSlice.selectGateway(device));
             },
             collect: (monitor) => ({
-                isOver: !!monitor.isOver(),
+                isOver: !!monitor.isOver({ shallow: true }),
                 canDrop: !!monitor.canDrop(),
             }),
         }),

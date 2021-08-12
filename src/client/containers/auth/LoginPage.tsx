@@ -21,8 +21,7 @@ import { useDispatch } from 'react-redux';
 import { ClientEnvVar } from 'src/client/configs/ClientEnvVar';
 import kws from 'src/client/configs/Keywords';
 import AxiosFactory from 'src/client/helper/AxiosFactory';
-import { UserVM } from '../../domain/user/UserVM';
-import FetchSlice from '../../slices/FetchSlice';
+import FetchSlice from 'src/client/slices/FetchSlice';
 
 interface LoginForm {
     email: string;

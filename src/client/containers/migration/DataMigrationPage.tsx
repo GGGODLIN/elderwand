@@ -10,6 +10,7 @@ import clsx from 'clsx';
 import React, { ChangeEvent, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import DeviceTreeView from 'src/client/components/migration/DeviceTreeView';
+import ImportDeviceTemplateFAB from 'src/client/components/migration/ImportDeviceTemplateFAB';
 import ImportProjectFAB from 'src/client/components/migration/ImportProjectFAB';
 import ProjectTreeView from 'src/client/components/migration/ProjectTreeView';
 import SpacePreviewTreeView from 'src/client/components/migration/SpacePreviewTreeView';
@@ -24,7 +25,6 @@ import { RootState } from 'src/client/reducer';
 import DataMigrationSlice from 'src/client/slices/DataMigrationSlice';
 import FetchSlice from 'src/client/slices/FetchSlice';
 import ScrollUtil from 'src/client/utils/ScrollUtil';
-import ImportDeviceTemplateFAB from '../../components/migration/ImportDeviceTemplateFAB';
 
 export interface DataMigrationPageProps {
     title: string;

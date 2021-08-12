@@ -1,7 +1,5 @@
-import TestEnvVar from '../../test/config/TestEnvVar';
 import { ClientFunction, Selector } from 'testcafe';
 import TestUtil from '../../test/utils/TestUtil';
-import { ClientEnvVar } from '../configs/ClientEnvVar';
 
 const config = TestUtil.loadDotEnv();
 

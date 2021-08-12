@@ -24,6 +24,45 @@ export interface DeviceMaintainState {
     device_selected?: DeviceVM;
     device_templates: DeviceTemplateVM[];
     device_templates_selected?: DeviceTemplateVM;
+    place_device_to_space_dialog: {
+        open: boolean;
+        project?: ProjectVM;
+        space?: SpaceVM;
+        template?: DeviceTemplateVM;
+    };
+    place_device_to_device_dialog: {
+        open: boolean;
+        project?: ProjectVM;
+        device?: DeviceVM;
+        template?: DeviceTemplateVM;
+    };
+    change_device_location_dialog: {
+        open: boolean;
+        project?: ProjectVM;
+        space?: SpaceVM;
+        device?: DeviceVM;
+    };
+    change_device_parent_dialog: {
+        open: boolean;
+        project?: ProjectVM;
+        parent?: DeviceVM;
+        device?: DeviceVM;
+    };
+    unlink_parent_device_dialog: {
+        open: boolean;
+        project?: ProjectVM;
+        device?: DeviceVM;
+    };
+    remove_device_dialog: {
+        open: boolean;
+        project?: ProjectVM;
+        device: DeviceVM;
+    };
+    connect_device_to_device_dialog: {
+        open: boolean;
+        device?: DeviceVM;
+        template?: DeviceTemplateVM;
+    };
 }
 
 const getInitialState = (): DeviceMaintainState => {
@@ -36,7 +75,46 @@ const getInitialState = (): DeviceMaintainState => {
         device_selected: null,
         device_templates: [],
         device_templates_selected: null,
-    } as DeviceMaintainState;
+        place_device_to_space_dialog: {
+            open: false,
+            project: null,
+            space: null,
+            template: null,
+        },
+        place_device_to_device_dialog: {
+            open: false,
+            project: null,
+            device: null,
+            template: null,
+        },
+        change_device_location_dialog: {
+            open: false,
+            project: null,
+            space: null,
+            device: null,
+        },
+        change_device_parent_dialog: {
+            open: false,
+            project: null,
+            parent: null,
+            device: null,
+        },
+        unlink_parent_device_dialog: {
+            open: false,
+            project: null,
+            device: null,
+        },
+        remove_device_dialog: {
+            open: false,
+            project: null,
+            device: null,
+        },
+        connect_device_to_device_dialog: {
+            open: false,
+            device: null,
+            template: null,
+        },
+    };
 };
 
 const SliceName = 'device';
@@ -57,13 +135,13 @@ const DeviceSlice = createSlice<
         clearProjectSelected: (state, action: PayloadAction<any>) => {
             return produce(state, (draft) => {
                 draft.project_selected = null;
+                draft.spaces = [];
+                draft.space_selected = null;
+                draft.devices = [];
+                draft.device_selected = null;
             });
         },
-        selectProject: (state, action: PayloadAction<ProjectVM>) => {
-            return produce(state, (draft) => {
-                draft.project_selected = action.payload;
-            });
-        },
+
         fetchProjects: (
             state,
             action: PayloadAction<PaginationVM<ProjectVM>>
@@ -85,12 +163,175 @@ const DeviceSlice = createSlice<
                 draft.devices = action.payload.results as any;
             });
         },
+        fetchDeviceTopologyResources: (
+            state,
+            action: PayloadAction<{
+                spaces: PaginationVM<SpaceVM>;
+                devices: PaginationVM<DeviceVM>;
+            }>
+        ) => {
+            return produce(state, (draft) => {
+                draft.spaces = action.payload.spaces.results;
+                draft.devices = action.payload.devices.results;
+            });
+        },
+        clearDeviceTopologyResources: (state, action: PayloadAction<any>) => {
+            return produce(state, (draft) => {
+                draft.spaces = null;
+                draft.devices = null;
+            });
+        },
         fetchDeviceTemplates: (
             state,
             action: PayloadAction<PaginationVM<DeviceTemplateVM>>
         ) => {
             return produce(state, (draft) => {
-                draft.device_templates = action.payload.results as any;
+                draft.device_templates = action.payload.results;
+            });
+        },
+        selectProject: (state, action: PayloadAction<ProjectVM>) => {
+            return produce(state, (draft) => {
+                draft.project_selected = action.payload;
+            });
+        },
+        selectSpace: (state, action: PayloadAction<SpaceVM>) => {
+            return produce(state, (draft) => {
+                draft.space_selected = action.payload;
+            });
+        },
+        selectDevice: (state, action: PayloadAction<DeviceVM>) => {
+            return produce(state, (draft) => {
+                draft.device_selected = action.payload;
+            });
+        },
+        selectDeviceTemplate: (
+            state,
+            action: PayloadAction<DeviceTemplateVM>
+        ) => {
+            return produce(state, (draft) => {
+                draft.device_templates_selected = action.payload;
+            });
+        },
+        // Place Device To Space with Device Template
+        placeDeviceToSpace: (state, action: PayloadAction<SpaceVM>) => {
+            return produce(state, (draft) => {
+                draft.place_device_to_space_dialog = {
+                    open: true,
+                    project: state.project_selected,
+                    template: state.device_templates_selected,
+                    space: action.payload,
+                };
+            });
+        },
+        closePlaceDeviceToSpaceDialog: (state) => {
+            return produce(state, (draft) => {
+                draft.place_device_to_space_dialog = {
+                    open: false,
+                    project: null,
+                    space: null,
+                    template: null,
+                };
+            });
+        },
+        // Place Device To Device with Device Template
+        placeDeviceToDevice: (state, action: PayloadAction<DeviceVM>) => {
+            return produce(state, (draft) => {
+                draft.place_device_to_device_dialog = {
+                    open: true,
+                    project: state.project_selected,
+                    template: state.device_templates_selected,
+                    device: action.payload,
+                };
+            });
+        },
+        closePlaceDeviceToDeviceDialog: (state) => {
+            return produce(state, (draft) => {
+                draft.place_device_to_device_dialog = {
+                    open: false,
+                    project: null,
+                    device: null,
+                    template: null,
+                };
+            });
+        },
+        // Change Device Location
+        changeDeviceLocation: (state, action: PayloadAction<SpaceVM>) => {
+            return produce(state, (draft) => {
+                draft.change_device_location_dialog = {
+                    open: true,
+                    project: state.project_selected,
+                    device: state.device_selected,
+                    space: action.payload,
+                };
+            });
+        },
+        closeChangeDeviceLocationDialog: (state) => {
+            return produce(state, (draft) => {
+                draft.change_device_location_dialog = {
+                    open: false,
+                    project: null,
+                    device: null,
+                    space: null,
+                };
+            });
+        },
+        // DeviceParentDialog
+        changeDeviceParent: (state, action: PayloadAction<DeviceVM>) => {
+            return produce(state, (draft) => {
+                draft.change_device_parent_dialog = {
+                    open: true,
+                    project: state.project_selected,
+                    device: state.device_selected,
+                    parent: action.payload,
+                };
+            });
+        },
+        closeChangeDeviceParentDialog: (state) => {
+            return produce(state, (draft) => {
+                draft.change_device_parent_dialog = {
+                    open: false,
+                    project: null,
+                    device: null,
+                    parent: null,
+                };
+            });
+        },
+        // Unlink Parent Device
+        unlinkParentDevice: (state, action: PayloadAction<DeviceVM>) => {
+            return produce(state, (draft) => {
+                draft.unlink_parent_device_dialog = {
+                    open: true,
+                    project: state.project_selected,
+                    device: action.payload,
+                };
+            });
+        },
+        closeUnlinkParentDeviceDialog: (state) => {
+            return produce(state, (draft) => {
+                draft.unlink_parent_device_dialog = {
+                    open: false,
+                    project: null,
+                    device: null,
+                };
+            });
+        },
+        // Remove Device Dialog
+        removeDevice: (state, action: PayloadAction<DeviceVM>) => {
+            return produce(state, (draft) => {
+                draft.remove_device_dialog = {
+                    open: true,
+                    project: state.project_selected,
+                    device: action.payload,
+                };
+            });
+        },
+        closeRemoveDeviceDialog: (state) => {
+            return produce(state, (draft) => {
+                draft.remove_device_dialog = {
+                    open: false,
+                    project: null,
+                    device: null,
+                };
             });
         },
     },
@@ -104,29 +345,101 @@ const clear = DeviceSlice.actions.clear as ActionCreatorWithPayload<any>;
 const clearProjectSelected = DeviceSlice.actions
     .clearProjectSelected as ActionCreatorWithoutPayload;
 
-const selectProject = DeviceSlice.actions
-    .selectProject as ActionCreatorWithPayload<ProjectVM>;
-
 const fetchProjects = DeviceSlice.actions
     .fetchProjects as ActionCreatorWithPayload<PaginationVM<ProjectVM>>;
+
 const fetchSpaces = DeviceSlice.actions.fetchSpaces as ActionCreatorWithPayload<
     PaginationVM<SpaceVM>
 >;
 const fetchDevices = DeviceSlice.actions
     .fetchDevices as ActionCreatorWithPayload<PaginationVM<DeviceVM>>;
 
+const fetchDeviceTopologyResources = DeviceSlice.actions
+    .fetchDeviceTopologyResources as ActionCreatorWithPayload<{
+    spaces: PaginationVM<SpaceVM>;
+    devices: PaginationVM<DeviceVM>;
+}>;
+
+const clearDeviceTopologyResources = DeviceSlice.actions
+    .clearDeviceTopologyResources as ActionCreatorWithoutPayload;
+
 const fetchDeviceTemplates = DeviceSlice.actions
     .fetchDeviceTemplates as ActionCreatorWithPayload<
     PaginationVM<DeviceTemplateVM>
 >;
 
+const selectProject = DeviceSlice.actions
+    .selectProject as ActionCreatorWithPayload<ProjectVM>;
+
+const selectSpace = DeviceSlice.actions
+    .selectSpace as ActionCreatorWithPayload<SpaceVM>;
+
+const selectDevice = DeviceSlice.actions
+    .selectDevice as ActionCreatorWithPayload<DeviceVM>;
+
+const selectDeviceTemplate = DeviceSlice.actions
+    .selectDeviceTemplate as ActionCreatorWithPayload<DeviceTemplateVM>;
+
+const placeDeviceToSpace = DeviceSlice.actions
+    .placeDeviceToSpace as ActionCreatorWithPayload<SpaceVM>;
+
+const closePlaceDeviceToSpaceDialog = DeviceSlice.actions
+    .closePlaceDeviceToSpaceDialog as ActionCreatorWithoutPayload;
+
+const placeDeviceToDevice = DeviceSlice.actions
+    .placeDeviceToDevice as ActionCreatorWithPayload<DeviceVM>;
+
+const closePlaceDeviceToDeviceDialog = DeviceSlice.actions
+    .closePlaceDeviceToDeviceDialog as ActionCreatorWithoutPayload;
+
+const changeDeviceLocation = DeviceSlice.actions
+    .changeDeviceLocation as ActionCreatorWithPayload<SpaceVM>;
+
+const closeChangeDeviceLocationDialog = DeviceSlice.actions
+    .closeChangeDeviceLocationDialog as ActionCreatorWithoutPayload;
+
+const changeDeviceParent = DeviceSlice.actions
+    .changeDeviceParent as ActionCreatorWithPayload<DeviceVM>;
+
+const closeChangeDeviceParentDialog = DeviceSlice.actions
+    .closeChangeDeviceParentDialog as ActionCreatorWithoutPayload;
+
+const unlinkParentDevice = DeviceSlice.actions
+    .unlinkParentDevice as ActionCreatorWithPayload<DeviceVM>;
+
+const closeUnlinkParentDeviceDialog = DeviceSlice.actions
+    .closeUnlinkParentDeviceDialog as ActionCreatorWithoutPayload;
+
+const removeDevice = DeviceSlice.actions
+    .removeDevice as ActionCreatorWithPayload<DeviceVM>;
+
+const closeRemoveDeviceDialog = DeviceSlice.actions
+    .closeRemoveDeviceDialog as ActionCreatorWithoutPayload;
+
 export default {
     reducer,
     clear,
     clearProjectSelected,
-    selectProject,
     fetchProjects,
     fetchSpaces,
     fetchDevices,
+    fetchDeviceTopologyResources,
+    clearDeviceTopologyResources,
     fetchDeviceTemplates,
+    selectProject,
+    selectSpace,
+    selectDevice,
+    selectDeviceTemplate,
+    placeDeviceToSpace,
+    closePlaceDeviceToSpaceDialog,
+    placeDeviceToDevice,
+    closePlaceDeviceToDeviceDialog,
+    changeDeviceLocation,
+    closeChangeDeviceLocationDialog,
+    changeDeviceParent,
+    closeChangeDeviceParentDialog,
+    unlinkParentDevice,
+    closeUnlinkParentDeviceDialog,
+    removeDevice,
+    closeRemoveDeviceDialog,
 };

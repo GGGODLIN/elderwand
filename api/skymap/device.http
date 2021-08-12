@@ -1,4 +1,4 @@
-# list devices by project id
+3# list devices by project id
 GET {{HOST}}/api/devices?projectId={{TARGET_PROJECT_CODE}}&platformId=3
 accept: application/json
 
@@ -14,7 +14,7 @@ Content-Type: application/json
 
 
 # Bind gateway connection to device
-PUT {{HOST}}/api/devices/{{DEVICE_ID}}/gateway?projectID={{TARGET_PROJECT_CODE}}
+PUT {{HOST}}/api/devices/{{DEVICE_ID}}/gateway?projectId={{TARGET_PROJECT_CODE}}
 accept: application/json
 Content-Type: application/json
 
