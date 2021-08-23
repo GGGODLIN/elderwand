@@ -85,3 +85,14 @@ Content-Type: application/json
 }
 
 ###
+
+
+
+# Import space templates
+POST {{HOST}}/api/migration/space/templates?version=200
+accept: application/json
+Content-Type: application/json
+
+{}
+
+###

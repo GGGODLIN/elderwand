@@ -10,6 +10,7 @@ import {
 } from '../models/MigrationPreviewDTOs';
 import ProjectDTO from '../models/ProjectDTO';
 import SpaceDTO from '../models/SpaceDTO';
+import SpaceTemplateDTO from '../models/SpaceTemplateDTO';
 
 export default class MigrationUCO {
     private repository: MigrationRepository;
@@ -52,6 +53,10 @@ export default class MigrationUCO {
         vo: { code: string }
     ): Promise<PaginationDTO<SpaceDTO>> {
         return await this.repository.importSpaces(code, vo);
+    }
+
+    async importSpaceTemplates(): Promise<PaginationDTO<SpaceTemplateDTO>> {
+        return await this.repository.importSpaceTemplates();
     }
 
     async importDevices(

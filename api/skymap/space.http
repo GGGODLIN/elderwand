@@ -13,3 +13,10 @@ Content-Type: application/json
 
 ###
 
+
+# detele the space
+DELETE {{HOST}}/api/spaces/{{TARGET_SPACE_ID}}?projectId={{TARGET_PROJECT_CODE}}
+accept: application/json
+Content-Type: application/json
+
+###

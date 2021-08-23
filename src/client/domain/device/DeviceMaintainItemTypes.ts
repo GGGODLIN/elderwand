@@ -1,4 +1,8 @@
-import DeviceVM, { DeviceTemplateVM, SpaceVM } from './DeviceVMs';
+import DeviceVM, {
+    DeviceTemplateVM,
+    SpaceTemplateVM,
+    SpaceVM,
+} from './DeviceVMs';
 
 const DeviceMaintainCardTypes: {
     // [key: string]: DeviceMaintainCardType;
@@ -99,7 +103,7 @@ export class DeviceMaintainCardTypeHelper {
     private static dropToSpaceCard = (
         item: {
             type: DeviceMaintainCardType;
-            payload: DeviceTemplateVM | DeviceVM;
+            payload: DeviceTemplateVM | DeviceVM | SpaceTemplateVM;
         },
         target: {
             type: DeviceMaintainCardType;
@@ -111,15 +115,28 @@ export class DeviceMaintainCardTypeHelper {
             return true;
         }
 
+        if (item.type == DeviceMaintainCardTypes.SpaceTemplateCard) {
+            // add a space to the space ot project
+            return true;
+        }
+
         if (
             item.type == DeviceMaintainCardTypes.DeviceCard ||
             item.type == DeviceMaintainCardTypes.DeviceSmallCard
         ) {
             // move device to the other location
             return !DeviceMaintainCardTypeHelper.isMovingTheSameSpace(
-                item,
+                item as {
+                    type: DeviceMaintainCardType;
+                    payload: DeviceTemplateVM | DeviceVM;
+                },
                 target
             );
+        }
+
+        if (item.type == DeviceMaintainCardTypes.SpaceCard) {
+            // change space parent
+            return true;
         }
 
         return false;

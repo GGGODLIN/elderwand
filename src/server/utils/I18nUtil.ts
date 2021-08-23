@@ -28,7 +28,7 @@ export default class I18nUtil {
     ): Promise<boolean> {
         const key = ServerEnvVar.I18nGoogleSheetID;
 
-        const json = await GoogleSheetUtil.getＳpreadsheet(key);
+        const json = await GoogleSheetUtil.getSpreadsheet(key);
 
         if (!json) {
             console.log('Get GoogleSheet Error');

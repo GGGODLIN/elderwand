@@ -12,6 +12,7 @@ import {
 } from '../models/MigrationPreviewDTOs';
 import ProjectDTO from '../models/ProjectDTO';
 import SpaceDTO from '../models/SpaceDTO';
+import SpaceTemplateDTO from '../models/SpaceTemplateDTO';
 
 export interface MigrationRepositoryCtor {
     host: string;
@@ -238,6 +239,38 @@ export default class MigrationRepository {
             });
     }
 
+    async importSpaceTemplates() {
+        const baseURL = this.origin;
+        const pathname = `/api/migration/space/templates`;
+        const params = { ...this.query };
+        const body = {};
+
+        const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
+
+        return await axios
+            .post<SpaceTemplateDTO[]>(pathname, body, { params: params })
+            .then((res) => {
+                const result: PaginationDTO<SpaceTemplateDTO> = {
+                    offset: 0,
+                    limit: 0,
+                    total: res.data.length,
+                    results: res.data,
+                };
+
+                if (res.data) {
+                    result.total = res.data.length;
+                    result.results = res.data;
+                }
+
+                return result;
+            })
+            .catch((err: AxiosError<ErrorInfoDTO>) => {
+                if (err.isAxiosError) {
+                    // console.log('isAxiosError from repository');
+                }
+                throw err;
+            });
+    }
     async importDevices(
         code: string,
         vo: object

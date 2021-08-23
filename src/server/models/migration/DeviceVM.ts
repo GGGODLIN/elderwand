@@ -1,17 +1,17 @@
 export default interface DeviceVM {
     id: string;
-    dvID: string;
+    dvId: string;
     name: string;
-    typeID: number;
+    typeId: number;
     type: Type;
-    spaceID: string;
+    spaceId: string;
     projectId: string;
     parentId?: string;
-    iconID: string;
+    iconId: string;
     icon: Icon;
-    modelID: string;
+    modelId: string;
     model: Model;
-    specID: string;
+    specId: string;
     spec: Spec;
     attrs?: object[];
     softwareInfo: string;
@@ -35,7 +35,7 @@ export interface Icon {
 
 export interface Model {
     id: string;
-    brandID: string;
+    brandId: string;
     brand: Brand;
 }
 

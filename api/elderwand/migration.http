@@ -1,6 +1,7 @@
 # api get example
 GET {{HOST}}/api/example
 Accept: application/json
+Authorization: Bearer {{AUTH_TOKEN}}
 
 ###
 
@@ -9,6 +10,7 @@ Accept: application/json
 GET {{HOST}}/api/migration/projects?dbname={{MIGRATION_MONGODB_SAKE}}&conn={{MIGRATION_MONGODB_URI}}&version=200
 Accept: application/json
 Content-type: application/json
+Authorization: Bearer {{AUTH_TOKEN}}
 
 ###
 
@@ -17,6 +19,7 @@ Content-type: application/json
 GET {{HOST}}/api/migration/projects/{{MIGRATION_TARGET_PROJECT_CODE}}?dbname={{MIGRATION_MONGODB_SAKE}}&conn={{MIGRATION_MONGODB_URI}}&version=200
 Accept: application/json
 Content-type: application/json
+Authorization: Bearer {{AUTH_TOKEN}}
 
 ###
 
@@ -25,6 +28,7 @@ Content-type: application/json
 GET {{HOST}}/api/migration/projects
 Accept: application/json
 Content-type: application/json
+Authorization: Bearer {{AUTH_TOKEN}}
 
 ###
 
@@ -33,6 +37,7 @@ Content-type: application/json
 GET {{HOST}}/api/migration/projects/{{MIGRATION_TARGET_PROJECT_CODE}}/spaces?dbname={{MIGRATION_MONGODB_SAKE}}&conn={{MIGRATION_MONGODB_URI}}&version=200
 Accept: application/json
 Content-type: application/json
+Authorization: Bearer {{AUTH_TOKEN}}
 
 ###
 
@@ -41,6 +46,7 @@ Content-type: application/json
 GET {{HOST}}/api/migration/projects/{{MIGRATION_TARGET_PROJECT_CODE}}/devices?dbname={{MIGRATION_MONGODB_SAKE}}&conn={{MIGRATION_MONGODB_URI}}&version=200
 Accept: application/json
 Content-type: application/json
+Authorization: Bearer {{AUTH_TOKEN}}
 
 ###
 
@@ -48,6 +54,7 @@ Content-type: application/json
 # List source device template by project
 GET {{HOST}}/api/migration/device/templates?dbname={{MIGRATION_MONGODB_THINGS}}&conn={{MIGRATION_MONGODB_URI}}&version=200
 accept: application/json
+Authorization: Bearer {{AUTH_TOKEN}}
 
 ###
 
@@ -56,6 +63,7 @@ accept: application/json
 POST {{HOST}}/api/migration/device/templates?dbname={{MIGRATION_MONGODB_THINGS}}&conn={{MIGRATION_MONGODB_URI}}&version=200
 accept: application/json
 Content-Type: application/json
+Authorization: Bearer {{AUTH_TOKEN}}
 
 {}
 
@@ -66,6 +74,7 @@ Content-Type: application/json
 POST {{HOST}}/api/migration/projects/{{MIGRATION_TARGET_PROJECT_CODE}}?dbname={{MIGRATION_MONGODB_SAKE}}&conn={{MIGRATION_MONGODB_URI}}&version=200
 accept: application/json
 Content-Type: application/json
+Authorization: Bearer {{AUTH_TOKEN}}
 
 ###
 
@@ -74,6 +83,7 @@ Content-Type: application/json
 POST {{HOST}}/api/migration/projects/{{MIGRATION_TARGET_PROJECT_CODE}}?dbname={{MIGRATION_MONGODB_SAKE}}&conn={{MIGRATION_MONGODB_URI}}&version=200
 accept: application/json
 Content-Type: application/json
+Authorization: Bearer {{AUTH_TOKEN}}
 
 {
     "code": "TEST"
@@ -87,6 +97,7 @@ Content-Type: application/json
 POST {{HOST}}/api/migration/projects/{{MIGRATION_TARGET_PROJECT_CODE}}/spaces?dbname={{MIGRATION_MONGODB_SAKE}}&conn={{MIGRATION_MONGODB_URI}}&version=200
 accept: application/json
 Content-Type: application/json
+Authorization: Bearer {{AUTH_TOKEN}}
 
 ###
 
@@ -96,6 +107,7 @@ Content-Type: application/json
 POST {{HOST}}/api/migration/projects/{{MIGRATION_TARGET_PROJECT_CODE}}/devices?dbname={{MIGRATION_MONGODB_SAKE}}&conn={{MIGRATION_MONGODB_URI}}&version=200
 accept: application/json
 Content-Type: application/json
+Authorization: Bearer {{AUTH_TOKEN}}
 
 ###
 
@@ -105,6 +117,7 @@ Content-Type: application/json
 POST {{HOST}}/api/migration/projects/{{MIGRATION_TARGET_PROJECT_CODE}}/devices?dbname={{MIGRATION_MONGODB_SAKE}}&conn={{MIGRATION_MONGODB_URI}}&version=200
 accept: application/json
 Content-Type: application/json
+Authorization: Bearer {{AUTH_TOKEN}}
 
 {
     "code": "{{TARGET_PROJECT_CODE}}"

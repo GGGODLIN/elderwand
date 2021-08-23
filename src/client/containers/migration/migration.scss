@@ -165,6 +165,23 @@
       background-color: $bg-grey-light;
     }
   }
+
+  .import-space-template-btn {
+    color: $white;
+    background-color: $bg-purple-primary;
+
+    &:hover {
+      background-color: $bg-purple-light;
+    }
+
+    &.hidden {
+      display: none;
+    }
+
+    &[disabled] {
+      background-color: $bg-grey-light;
+    }
+  }
 }
 
 .import-project-dialog {
@@ -181,6 +198,19 @@
     padding: 12px 0;
   }
 
+  button.import {
+    color: $bg-blue-light;
+  }
+  button.clear {
+    color: $bg-green-dark;
+  }
+  button.cancel {
+    color: $bg-red-dark;
+  }
+}
+
+.import-device-template-dialog,
+.import-space-template-dialog {
   button.import {
     color: $bg-blue-light;
   }

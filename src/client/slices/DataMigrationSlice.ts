@@ -26,6 +26,9 @@ export interface DataMigrationState {
     import_device_template_dialog: {
         show: boolean;
     };
+    import_space_template_dialog: {
+        open: boolean;
+    };
 }
 
 const getInitialState = (): DataMigrationState => {
@@ -40,6 +43,9 @@ const getInitialState = (): DataMigrationState => {
         },
         import_device_template_dialog: {
             show: false,
+        },
+        import_space_template_dialog: {
+            open: false,
         },
     };
 
@@ -117,6 +123,17 @@ const DataMigrationSlice = createSlice<
                 draft.import_device_template_dialog.show = action.payload;
             });
         },
+        importSpaceTemplate: (state, action: PayloadAction<unknown>) => {
+            return produce(state, (draft) => {
+                // TODO action payload
+                draft.import_space_template_dialog.open = true;
+            });
+        },
+        closeImportSpaceTemplateDialog: (state) => {
+            return produce(state, (draft) => {
+                draft.import_space_template_dialog.open = false;
+            });
+        },
     },
 });
 
@@ -147,6 +164,12 @@ const showImportProjectDialog = DataMigrationSlice.actions
 const showImportDeviceTemplateDialog = DataMigrationSlice.actions
     .showImportDeviceTemplateDialog as ActionCreatorWithPayload<boolean>;
 
+const importSpaceTemplate = DataMigrationSlice.actions
+    .importSpaceTemplate as ActionCreatorWithPayload<unknown>;
+
+const closeImportSpaceTemplateDialog = DataMigrationSlice.actions
+    .closeImportSpaceTemplateDialog as ActionCreatorWithoutPayload;
+
 export default {
     reducer,
     clear,
@@ -157,4 +180,7 @@ export default {
     clearSelectedProject,
     showImportProjectDialog,
     showImportDeviceTemplateDialog,
+
+    importSpaceTemplate,
+    closeImportSpaceTemplateDialog,
 };

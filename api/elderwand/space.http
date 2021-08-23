@@ -23,6 +23,39 @@ Authorization: Bearer {{AUTH_TOKEN}}
 
 ###
 
+# update the space
+PUT {{HOST}}/api/spaces/{{TARGET_SPACE_ID}}?projectId={{TARGET_PROJECT_CODE}}
+accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{AUTH_TOKEN}}
+
+{
+  "parentId" : "{{TARGET_SPACE_PARENT_ID}}"
+}
+
+###
+
+# edit the space
+PUT {{HOST}}/api/spaces/{{TARGET_SPACE_ID}}?projectId={{TARGET_PROJECT_CODE}}
+accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{AUTH_TOKEN}}
+
+{
+  "name": "Update-Space"
+}
+
+###
+
+
+# detele the space
+DELETE {{HOST}}/api/spaces/{{TARGET_SPACE_ID}}?projectId={{TARGET_PROJECT_CODE}}
+accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{AUTH_TOKEN}}
+
+###
+
 
 # get the space topology
 GET {{HOST}}/api/spaces/{{TARGET_SPACE_ID}}/topology?projectId={{TARGET_PROJECT_CODE}}
@@ -32,3 +65,10 @@ Authorization: Bearer {{AUTH_TOKEN}}
 
 ###
 
+# list space templates by project
+GET {{HOST}}/api/space/templates
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{AUTH_TOKEN}}
+
+###

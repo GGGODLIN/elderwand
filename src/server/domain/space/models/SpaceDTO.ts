@@ -13,6 +13,21 @@ export default interface SpaceDTO {
     updatedAt: number;
 }
 
+export interface SpaceTemplateDTO {
+    id: string;
+    name: string;
+    typeId: number;
+    type: Type;
+    // projectId: string;
+    parentId?: string;
+    iconId: string;
+    icon: Icon;
+    createdBy: string;
+    updatedBy: string;
+    createdAt: number;
+    updatedAt: number;
+}
+
 interface Type {
     id: number;
     name: string;

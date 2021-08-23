@@ -13,6 +13,7 @@ import DeviceVM, {
     DeviceTemplateVM,
     SpaceVM,
 } from 'src/client/domain/device/DeviceVMs';
+import AssetsHelper from 'src/client/helper/AssetsHelper';
 import DeviceSlice from 'src/client/slices/DeviceSlice';
 
 interface DeviceSmallCardProp {
@@ -22,11 +23,11 @@ interface DeviceSmallCardProp {
 }
 
 const DeviceSmallCard: React.FC<DeviceSmallCardProp> = (props) => {
+    const dispatch = useDispatch();
+
     if (!props.device) {
         return <React.Fragment />;
     }
-
-    const dispatch = useDispatch();
 
     // const spaces = !props.spaces ? [] : props.spaces;
     // const devices = !props.devices ? [] : props.devices;
@@ -188,36 +189,18 @@ interface SpaceCardProps {
 }
 
 const SpaceCard: React.FC<SpaceCardProps> = (props) => {
+    const dispatch = useDispatch();
+
     if (!props.space) {
         return <React.Fragment />;
     }
 
-    const dispatch = useDispatch();
-
-    // const spaces = !props.spaces ? [] : props.spaces;
+    const spaces = !props.spaces ? [] : props.spaces;
     const devices = !props.devices ? [] : props.devices;
     const space: SpaceVM = props.space;
-
     // const parent = spaces.find((item) => item.id == space.parentId);
 
-    const id = space.id;
-    const icon = space.icon;
-    const header = `${space.name} - ${icon.name} - ${space.id}`;
-
-    const image = ((item: SpaceVM) => {
-        if (!item.photos || !item.photos.length) {
-            return {
-                name: 'default',
-                path: 'http://placeimg.com/640/480/technics',
-            };
-        }
-
-        return item.photos[0];
-    })(space);
-
-    const handleSpaceCardSelect = () => {
-        dispatch(DeviceSlice.selectSpace(props.space));
-    };
+    let canDelete = true;
 
     const elements = [];
 
@@ -236,9 +219,23 @@ const SpaceCard: React.FC<SpaceCardProps> = (props) => {
             });
 
         elements.push(...device_cards);
+
+        if (device_cards.length) {
+            canDelete = false;
+        }
+    }
+
+    if (props.spaces) {
+        const children = spaces.filter((item) => item.parentId == space.id);
+
+        if (children.length) {
+            canDelete = false;
+        }
     }
 
     const accept = [
+        DeviceMaintainCardTypes.SpaceTemplateCard,
+        DeviceMaintainCardTypes.SpaceCard,
         DeviceMaintainCardTypes.DeviceTemplateCard,
         DeviceMaintainCardTypes.DeviceCard,
         DeviceMaintainCardTypes.DeviceSmallCard,
@@ -261,7 +258,10 @@ const SpaceCard: React.FC<SpaceCardProps> = (props) => {
                 return DeviceMaintainCardTypeHelper.canDrop(item, target);
             },
             drop: (
-                item: { type: string; payload: DeviceTemplateVM | DeviceVM },
+                item: {
+                    type: DeviceMaintainCardType;
+                    payload: DeviceTemplateVM | DeviceVM | SpaceVM;
+                },
                 monitor
             ) => {
                 if (monitor.didDrop() || !monitor.isOver({ shallow: true })) {
@@ -280,6 +280,21 @@ const SpaceCard: React.FC<SpaceCardProps> = (props) => {
                     dispatch(DeviceSlice.changeDeviceLocation(space));
                     return;
                 }
+
+                if (item.type == DeviceMaintainCardTypes.SpaceTemplateCard) {
+                    dispatch(DeviceSlice.addSpace(space));
+                    return;
+                }
+
+                if (item.type == DeviceMaintainCardTypes.SpaceCard) {
+                    dispatch(
+                        DeviceSlice.changeSpaceParent({
+                            space: space,
+                            parent: item.payload as SpaceVM,
+                        })
+                    );
+                    return;
+                }
             },
             collect: (monitor) => ({
                 isOver: !!monitor.isOver({ shallow: true }),
@@ -289,12 +304,65 @@ const SpaceCard: React.FC<SpaceCardProps> = (props) => {
         [[space]]
     );
 
+    const item = {
+        type: DeviceMaintainCardTypes.SpaceCard,
+        payload: space,
+    };
+
+    const [{ isDragging }, drag] = useDrag(
+        () => ({
+            type: item.type,
+            item: item,
+            collect: (monitor) => ({
+                isDragging: monitor.isDragging(),
+            }),
+        }),
+        [space]
+    );
+
+    function ref(elem) {
+        drop(elem);
+        drag(elem);
+    }
+
+    const handleStopPropagation = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+    };
+
+    const handleSelectSpaceCard = (e) => {
+        e.stopPropagation();
+        dispatch(DeviceSlice.selectSpace(space));
+    };
+
+    const handleSelectSpace = (e) => {
+        e.stopPropagation();
+        dispatch(DeviceSlice.selectSpace(space));
+    };
+
+    const handleRemoveSpace = (e) => {
+        e.stopPropagation();
+        dispatch(DeviceSlice.removeSpace(space));
+    };
+
     const classname = clsx(
         'space-card',
         isOver ? 'is-over' : '',
         isOver && canDrop ? 'can-drop' : '',
         isOver && !canDrop ? 'cannot-drop' : ''
     );
+
+    const id = space.id;
+    const icon = space.icon;
+    const header = `${space.name} - ${icon.name} - ${space.id}`;
+    const image =
+        !space.photos || !space.photos.length
+            ? {
+                  name: 'default',
+                  path: 'http://placeimg.com/640/480/technics',
+              }
+            : space.photos[0];
+    const path = AssetsHelper.generatePhotoPath(icon.path);
 
     return (
         <React.Fragment>
@@ -306,18 +374,30 @@ const SpaceCard: React.FC<SpaceCardProps> = (props) => {
             />
             <label
                 htmlFor={`label-${id}`}
-                onClick={handleSpaceCardSelect}
-                // onDoubleClick={handleSpaceCardSelect}
+                // onClick={handleSelectSpaceCard}
+                onDoubleClick={handleSelectSpaceCard}
             >
                 <Card
                     id={id}
-                    ref={drop}
+                    ref={ref}
                     className={classname}
                     variant="outlined"
+                    // onMouseDown={handleSelectSpace}
+                    // onDragStart={handleSelectSpace}
                 >
                     <div className="card-header">
                         <div className="header-name">{header}</div>
-                        <div className="header-actions">{'actions'}</div>
+                        <div
+                            className="header-actions"
+                            onDoubleClick={handleStopPropagation}
+                        >
+                            {canDelete && (
+                                <IconButton onClick={handleRemoveSpace}>
+                                    <DeleteIcon />
+                                </IconButton>
+                            )}
+                            {}
+                        </div>
                     </div>
                     <CardContent>
                         <div className="leaves">{elements}</div>

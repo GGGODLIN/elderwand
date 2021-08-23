@@ -8,14 +8,14 @@ export interface Project {
     id: string;
     name: string;
     code: string;
-    typeID: number;
+    typeId: number;
     type: Type;
-    cloudCodeID: number;
+    cloudCodeId: number;
     cloudCode: CloudCode;
-    statusID: number;
+    statusId: number;
     status: Status;
     expireDate: number;
-    ownerID: string;
+    ownerId: string;
     createdBy: string;
     updatedBy: string;
     createdAt: number;

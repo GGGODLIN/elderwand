@@ -7,6 +7,7 @@ export const SpaceRouterActions = {
     listSpaces: () => `/api/spaces`,
     getSpace: (id: string) => `/api/spaces/${id}`,
     getSpaceTopology: (id: string) => `/api/spaces/${id}/topology`,
+    listSpaceTemplates: () => `/api/space/templates`,
 };
 
 export default class SpaceRouter {
@@ -24,11 +25,35 @@ export default class SpaceRouter {
                 method: 'GET',
                 controller: SpaceMaintainController.getSpace,
             },
+            addSpace: {
+                name: 'add-space',
+                action: '/spaces',
+                method: 'POST',
+                controller: SpaceMaintainController.addSpace,
+            },
+            editSpace: {
+                name: 'edit-space',
+                action: '/spaces/:id',
+                method: 'PUT',
+                controller: SpaceMaintainController.editSpace,
+            },
+            removeSpace: {
+                name: 'remove-space',
+                action: '/spaces/:id',
+                method: 'DELETE',
+                controller: SpaceMaintainController.removeSpace,
+            },
             getSpaceTopology: {
                 name: 'get-space-topology',
                 action: '/spaces/:id/topology',
                 method: 'GET',
                 controller: SpaceMaintainController.getSpaceTopology,
+            },
+            listSpaceTemplates: {
+                name: 'list-space-templates',
+                action: '/space/templates',
+                method: 'GET',
+                controller: SpaceMaintainController.listSpaceTemplates,
             },
         };
 

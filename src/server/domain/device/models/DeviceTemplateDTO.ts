@@ -1,6 +1,4 @@
-// noinspection DuplicatedCode
-
-export default interface DeviceTemplateVM {
+export default interface DeviceTemplateDTO {
     id: string;
     name: string;
     typeId: number;

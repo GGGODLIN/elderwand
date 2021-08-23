@@ -1,7 +1,10 @@
 import supertest from 'supertest';
 import PaginationVM from '../../../client/models/PaginationVM';
 import TestEnvVar from '../../../test/config/TestEnvVar';
+import ServerEnvVar from '../../config/ServerEnvVar';
+import AuthWhitelist from '../../config/Whitelist';
 import ErrorInfoDTO from '../../domain/shared/models/ErrorInfoDTO';
+import AuthorizeMiddleware from '../../middlewares/AuthMiddleware';
 import DeviceVM from '../../models/migration/DeviceVM';
 import {
     DeviceTemplatePreviewVM,
@@ -18,6 +21,13 @@ describe('Migration Router', () => {
     beforeAll(() => {
         server = supertest(
             new KoaServer()
+                // .use([
+                //     AuthorizeMiddleware.getAuthorizeRouterHandler(
+                //         ServerEnvVar.TokenKey,
+                //         ServerEnvVar.JwtSecret,
+                //         AuthWhitelist
+                //     ),
+                // ])
                 .use([MigrationRouter.getApiRouter()])
                 .getInstance()
                 .callback()
@@ -203,6 +213,41 @@ describe('Migration Router', () => {
                 const code = TestEnvVar.MigrationTargetProjectCode;
 
                 const pathname = MigrationRouterActions.importSpaces(code);
+
+                const query = {
+                    dbname: TestEnvVar.MigrationMongodbSake,
+                    conn: TestEnvVar.MigrationSourceMongodbUri,
+                    version: 200,
+                };
+
+                const body = {
+                    // todo from generate api
+                    code: TestEnvVar.NewTargetProjectCode,
+                };
+
+                const response = await server
+                    .post(pathname)
+                    // .set(AuthUtil.AuthHeader, AuthUtil.newBearer(token))
+                    .set('Accept', 'application/json')
+                    .query(query)
+                    .send(body)
+                    .expect(201);
+
+                const actual = response.body as PaginationVM<SpaceVM>;
+
+                console.log(actual);
+            },
+            10 * 60 * 1000
+        );
+    });
+
+    describe('import space templates', function () {
+        it(
+            'should be successful',
+            async function () {
+                const code = TestEnvVar.MigrationTargetProjectCode;
+
+                const pathname = MigrationRouterActions.importSpaceTemplates();
 
                 const query = {
                     dbname: TestEnvVar.MigrationMongodbSake,

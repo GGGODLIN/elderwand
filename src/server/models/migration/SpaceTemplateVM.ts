@@ -1,8 +1,8 @@
-export default interface SpaceDTO {
+export default interface SpaceTemplateDTO {
     id: string;
     name: string;
     typeId: number;
-    type: Type;
+    type: SpaceType;
     parentId?: string;
     iconId: string;
     icon: Icon;
@@ -13,7 +13,7 @@ export default interface SpaceDTO {
     updatedAt: number;
 }
 
-interface Type {
+interface SpaceType {
     id: number;
     name: string;
 }

@@ -89,7 +89,23 @@ describe('Migration Repository', function () {
         console.log(actual);
     });
 
-    it('import spaces with new project code should be successful', async () => {
+    it('import space templates should be successful', async () => {
+        const repository = new MigrationRepository(params);
+
+        const code = TestEnvVar.MigrationTargetProjectCode;
+
+        const vo = {
+            code: TestEnvVar.NewTargetProjectCode,
+        };
+
+        const actual = await repository.importSpaceTemplates();
+
+        expect(actual).not.toBeNull();
+
+        console.log(actual);
+    });
+
+    it('import device with new project code should be successful', async () => {
         const repository = new MigrationRepository(params);
 
         const code = TestEnvVar.MigrationTargetProjectCode;

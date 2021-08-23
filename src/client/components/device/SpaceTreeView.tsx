@@ -5,7 +5,10 @@ import clsx from 'clsx';
 import React from 'react';
 import { useDrop } from 'react-dnd';
 import { useDispatch } from 'react-redux';
-import DeviceMaintainCardTypes from 'src/client/domain/device/DeviceMaintainItemTypes';
+import DeviceMaintainCardTypes, {
+    DeviceMaintainCardType,
+    DeviceMaintainCardTypeHelper,
+} from 'src/client/domain/device/DeviceMaintainItemTypes';
 import DeviceVM, {
     DeviceTemplateVM,
     ProjectVM,
@@ -56,25 +59,36 @@ const SpaceTreeView: React.FC<SpaceTreeViewProp> = (props) => {
                 dispatch(DeviceSlice.selectDevice(null));
             };
 
-            const accept = [DeviceMaintainCardTypes.DeviceSmallCard];
+            const accept = [
+                // DeviceMaintainCardTypes.SpaceCard, // performance issue
+                DeviceMaintainCardTypes.DeviceSmallCard,
+            ];
 
             const [{ isOver, canDrop }, drop] = useDrop(
                 () => ({
                     accept: accept,
                     canDrop: (
                         item: {
-                            type: string;
+                            type: DeviceMaintainCardType;
                             payload: DeviceTemplateVM | DeviceVM;
                         },
                         monitor
                     ) => {
-                        const source = item.payload as DeviceVM;
-                        return source.spaceId != space.id;
+                        // const source = item.payload as DeviceVM;
+                        // return source.spaceId != space.id;
+                        const target = {
+                            type: DeviceMaintainCardTypes.SpaceCard,
+                            payload: space as SpaceVM,
+                        };
+                        return DeviceMaintainCardTypeHelper.canDrop(
+                            item,
+                            target
+                        );
                     },
                     drop: (
                         item: {
-                            type: string;
-                            payload: DeviceTemplateVM | DeviceVM;
+                            type: DeviceMaintainCardType;
+                            payload: DeviceTemplateVM | DeviceVM | SpaceVM;
                         },
                         monitor
                     ) => {
@@ -102,6 +116,16 @@ const SpaceTreeView: React.FC<SpaceTreeViewProp> = (props) => {
                             dispatch(DeviceSlice.changeDeviceLocation(space));
                             return;
                         }
+
+                        // if (item.type == DeviceMaintainCardTypes.SpaceCard) {
+                        //     dispatch(
+                        //         DeviceSlice.changeSpaceParent({
+                        //             space: space,
+                        //             parent: item.payload as SpaceVM,
+                        //         })
+                        //     );
+                        //     return;
+                        // }
                     },
                     collect: (monitor) => ({
                         isOver: !!monitor.isOver({ shallow: true }),

@@ -4,15 +4,22 @@ import ServerEnvVar from '../config/ServerEnvVar';
 import DeviceMaintainUCO from '../domain/device/applications/DeviceMaintainUCO';
 import DeviceRepository from '../domain/device/infra/DeviceRepository';
 import DeviceDTO from '../domain/device/models/DeviceDTO';
+import { PlaceDeviceOptions } from '../domain/device/models/DeviceVOs';
 import { Platform } from '../domain/shared/enums/Enums';
 import PaginationDTO from '../domain/shared/models/PaginationDTO';
+import RequestBody from '../domain/shared/types/RequestBody';
 import SpaceMaintainUCO from '../domain/space/applications/SpaceMaintainUCO';
 import SpaceRepository from '../domain/space/infra/SpaceRepository';
-import SpaceDTO from '../domain/space/models/SpaceDTO';
-import SpaceVM, { DeviceVM } from '../models/space/SpaceVM';
+import SpaceDTO, { SpaceTemplateDTO } from '../domain/space/models/SpaceDTO';
+import {
+    AddSpaceOptions,
+    EditSpaceOptions,
+} from '../domain/space/models/SpaceVOs';
+import SpaceVM, { DeviceVM, SpaceTemplateVM } from '../models/space/SpaceVM';
 import { groupBy } from '../utils/FunctionUtil';
 
 export default class SpaceMaintainController {
+    // /api/spaces?projectId={projectId}
     static listSpaces = async (ctx: IRouterContext) => {
         const repository = new SpaceRepository({
             host: ServerEnvVar.SkymapApiHost,
@@ -65,6 +72,131 @@ export default class SpaceMaintainController {
 
         await new SpaceMaintainUCO(repository)
             .getSpace(params.id, query.projectId)
+            .then((res: SpaceDTO) => {
+                const vm = convertToSpaceVM(res);
+
+                ctx.status = 200;
+                ctx.body = vm;
+
+                return;
+            })
+            .catch((err) => {
+                if (err.isAxiosError) {
+                    ctx.status = err.response.status;
+                    ctx.body = err.response.data;
+                    return;
+                }
+                throw err;
+            });
+    };
+
+    static addSpace = async (
+        ctx: IRouterContext & RequestBody<AddSpaceOptions>
+    ) => {
+        const repository = new SpaceRepository({
+            host: ServerEnvVar.SkymapApiHost,
+            platformId: Platform.ElderWand,
+        });
+
+        const params = {
+            ...ctx.params,
+        };
+
+        const query = {
+            projectId: '',
+            ...ctx.query,
+        };
+
+        const options: AddSpaceOptions = {
+            templateId: null,
+            parentId: null,
+            iconId: null,
+            name: null,
+            ...ctx.request.body,
+        };
+
+        await new SpaceMaintainUCO(repository)
+            .addSpace(query.projectId, options)
+            .then((res: SpaceDTO) => {
+                const vm = convertToSpaceVM(res);
+
+                ctx.status = 201;
+                ctx.body = vm;
+
+                return;
+            })
+            .catch((err) => {
+                if (err.isAxiosError) {
+                    ctx.status = err.response.status;
+                    ctx.body = err.response.data;
+                    return;
+                }
+                throw err;
+            });
+    };
+
+    static editSpace = async (
+        ctx: IRouterContext & RequestBody<EditSpaceOptions>
+    ) => {
+        const repository = new SpaceRepository({
+            host: ServerEnvVar.SkymapApiHost,
+            platformId: Platform.ElderWand,
+        });
+
+        const params = {
+            id: null,
+            ...ctx.params,
+        };
+
+        const query = {
+            projectId: '',
+            ...ctx.query,
+        };
+
+        const options: EditSpaceOptions = {
+            parentId: null,
+            iconId: null,
+            name: null,
+            ...ctx.request.body,
+        };
+
+        await new SpaceMaintainUCO(repository)
+            .editSpace(params.id, query.projectId, options)
+            .then((res: SpaceDTO) => {
+                const vm = convertToSpaceVM(res);
+
+                ctx.status = 200;
+                ctx.body = vm;
+
+                return;
+            })
+            .catch((err) => {
+                if (err.isAxiosError) {
+                    ctx.status = err.response.status;
+                    ctx.body = err.response.data;
+                    return;
+                }
+                throw err;
+            });
+    };
+
+    static removeSpace = async (ctx: IRouterContext) => {
+        const repository = new SpaceRepository({
+            host: ServerEnvVar.SkymapApiHost,
+            platformId: Platform.ElderWand,
+        });
+
+        const params = {
+            ...ctx.params,
+        };
+
+        const query = {
+            projectId: '',
+            ...ctx.query,
+        };
+
+        await new SpaceMaintainUCO(repository)
+            .removeSpace(params.id, query.projectId)
             .then((res: SpaceDTO) => {
                 const vm = convertToSpaceVM(res);
 
@@ -200,6 +332,40 @@ export default class SpaceMaintainController {
         ctx.status = 200;
         ctx.body = topology;
     };
+
+    static listSpaceTemplates = async (ctx: IRouterContext) => {
+        const repository = new SpaceRepository({
+            host: ServerEnvVar.SkymapApiHost,
+            platformId: Platform.ElderWand,
+        });
+
+        const query = {
+            projectId: '',
+            ...ctx.query,
+        };
+
+        await new SpaceMaintainUCO(repository)
+            .listSpaceTemplates()
+            .then((res: PaginationDTO<SpaceDTO>) => {
+                const vm = {
+                    ...res,
+                    results: convertToSpaceVMs(res.results),
+                } as PaginationVM<SpaceTemplateVM>;
+
+                ctx.status = 200;
+                ctx.body = vm;
+
+                return;
+            })
+            .catch((err) => {
+                if (err.isAxiosError) {
+                    ctx.status = err.response.status;
+                    ctx.body = err.response.data;
+                    return;
+                }
+                throw err;
+            });
+    };
 }
 
 function convertToSpaceVMs(dtos: SpaceDTO[]): SpaceVM[] {
@@ -213,6 +379,22 @@ function convertToSpaceVMs(dtos: SpaceDTO[]): SpaceVM[] {
 }
 
 function convertToSpaceVM(dto: SpaceDTO): SpaceVM {
+    return {
+        ...dto,
+    } as SpaceVM;
+}
+
+function convertToSpaceTemplateVMs(dtos: SpaceDTO[]): SpaceTemplateVM[] {
+    if (!dtos) {
+        return [];
+    }
+
+    return dtos.map((dto) => {
+        return convertToSpaceTemplateVM(dto);
+    });
+}
+
+function convertToSpaceTemplateVM(dto: SpaceTemplateDTO): SpaceTemplateVM {
     return {
         ...dto,
     } as SpaceVM;

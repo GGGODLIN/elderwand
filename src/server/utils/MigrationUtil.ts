@@ -1,3 +1,4 @@
+import SpaceTemplates, { SpaceTemplate } from './fixture/SpaceTemplates';
 import StringUtil from './StringUtil';
 import { Brand, Brands } from './fixture/Brand';
 import { Device, ThingsSchema } from './fixture/ThingsSchema';
@@ -163,6 +164,47 @@ type Brand struct{
 }
 
 var BrandMap = map[string]Brand{${text}\n}`;
+
+        return content;
+    }
+
+    /**
+     * @returns string
+     * @summary map key is brand of origin field
+     */
+    static getSpaceTemplateMapToGolang(): string {
+        const template_map = {};
+
+        for (const template of SpaceTemplates) {
+            template_map[template.value] = template;
+        }
+
+        const items = Object.keys(template_map).map((key) => template_map[key]);
+
+        const text =
+            items.map((item: SpaceTemplate) => {
+                const name = StringUtil.toPascalCase(item.value);
+
+                const tpl = `
+    "${item.value}": {
+        ID: "${name}",
+        Value: "${name}",
+        Name: "${item.en}",
+        Icon: "${item.icon}",
+    }`;
+                return tpl;
+            }) + ',';
+
+        const content = `package default_variables
+
+type SpaceTemplate struct{
+    ID    string
+    Value string
+    Name  string
+    Icon  string
+}
+
+var SpaceTemplateMap = map[string]SpaceTemplate{${text}\n}`;
 
         return content;
     }

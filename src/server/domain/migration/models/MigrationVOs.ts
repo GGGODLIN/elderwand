@@ -24,6 +24,8 @@ export interface ImportProjectVO extends ImportVO {}
 
 export interface ImportSpacesVO extends ImportVO {}
 
+export interface ImportSpaceTemplatesVO extends ListSourceVO {}
+
 export interface ImportDevicesVO extends ImportVO {}
 
 export interface ImportDeviceTemplatesVO extends ListSourceVO {}

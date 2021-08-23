@@ -19,6 +19,7 @@ dist/
 
 # log
 *.log
+*-log.http
 
 # env
 .env*

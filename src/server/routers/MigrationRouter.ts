@@ -11,6 +11,7 @@ export const MigrationRouterActions = {
     listDeviceTemplates: () => `/api/migration/device/templates`,
     importProject: (code: string) => `/api/migration/projects/${code}`,
     importSpaces: (code: string) => `/api/migration/projects/${code}/spaces`,
+    importSpaceTemplates: () => `/api/migration/space/templates`,
     importDevices: (code: string) => `/api/migration/projects/${code}/devices`,
     importDeviceTemplates: () => `/api/migration/device/templates`,
 };
@@ -59,6 +60,12 @@ export default class MigrationRouter {
                 action: '/projects/:code/spaces',
                 method: 'POST',
                 controller: MigrationController.importSpaces,
+            },
+            importSpaceTemplates: {
+                name: 'import-space-templates',
+                action: '/space/templates',
+                method: 'POST',
+                controller: MigrationController.importSpaceTemplates,
             },
             importDevices: {
                 name: 'import-devices',

@@ -3,15 +3,19 @@ import AccountTreeIcon from '@material-ui/icons/AccountTree';
 import AppsIcon from '@material-ui/icons/Apps';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import DeviceHubIcon from '@material-ui/icons/DeviceHub';
+import HomeWorkIcon from '@material-ui/icons/HomeWork';
 import ListAltIcon from '@material-ui/icons/ListAlt';
+import MemoryIcon from '@material-ui/icons/Memory';
 import ShareIcon from '@material-ui/icons/Share';
 import ThreeDRotationIcon from '@material-ui/icons/ThreeDRotation';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { useDispatch, useSelector } from 'react-redux';
+import AddSpaceDialog from 'src/client/components/device/AddSpaceDialog';
 import ChangeDeviceLocationDialog from 'src/client/components/device/ChangeDeviceLocationDialog';
 import ChangeDeviceParentDialog from 'src/client/components/device/ChangeDeviceParentDialog';
+import ChangeSpaceParentDialog from 'src/client/components/device/ChangeSpaceParentDialog';
 import DeviceBreadcrumbs from 'src/client/components/device/DeviceBreadcrumbs';
 import DeviceTemplateCardList from 'src/client/components/device/DeviceTemplateCardList';
 import DeviceTopologyCardList from 'src/client/components/device/DeviceTopologyCardList';
@@ -20,6 +24,8 @@ import PlaceDeviceToDeviceDialog from 'src/client/components/device/PlaceDeviceT
 import PlaceDeviceToSpaceDialog from 'src/client/components/device/PlaceDeviceToSpaceDialog';
 import ProjectTreeView from 'src/client/components/device/ProjectTreeView';
 import RemoveDeviceDialog from 'src/client/components/device/RemoveDeviceDialog';
+import RemoveSpaceDialog from 'src/client/components/device/RemoveSpaceDialog';
+import SpaceTemplateCardList from 'src/client/components/device/SpaceTemplateCardList';
 import SpaceTreeView from 'src/client/components/device/SpaceTreeView';
 import UnlinkParentDeviceDialog from 'src/client/components/device/UnlinkParentDeviceDialog';
 import TabPanel from 'src/client/components/TabPanel';
@@ -50,6 +56,10 @@ export const DevicePage: React.FC<DevicePageProps> = () => {
         setDeviceToolboxTabIndex(value);
     };
 
+    const handleSelectDeviceTopology = () => {
+        console.log('handleSelectDeviceTopology');
+    };
+
     // state selector
     const {
         projects,
@@ -58,7 +68,9 @@ export const DevicePage: React.FC<DevicePageProps> = () => {
         space_selected,
         devices,
         device_selected,
-        templates,
+        space_templates,
+        space_template_selected,
+        device_templates,
         device_templates_selected,
         place_device_to_space_dialog,
         place_device_to_device_dialog,
@@ -67,6 +79,9 @@ export const DevicePage: React.FC<DevicePageProps> = () => {
         remove_device_dialog,
         change_device_parent_dialog,
         unlink_parent_device_dialog,
+        add_space_dialog,
+        change_space_parent_dialog,
+        remove_space_dialog,
     } = useSelector((state: RootState) => {
         return {
             projects: state.device.projects,
@@ -74,8 +89,10 @@ export const DevicePage: React.FC<DevicePageProps> = () => {
             spaces: state.device.spaces,
             space_selected: state.device.space_selected,
             devices: state.device.devices,
+            space_template_selected: state.device.space_template_selected,
+            space_templates: state.device.space_templates,
             device_selected: state.device.device_selected,
-            templates: state.device.device_templates,
+            device_templates: state.device.device_templates,
             device_templates_selected: state.device.device_templates_selected,
             place_device_to_space_dialog:
                 state.device.place_device_to_space_dialog,
@@ -90,16 +107,16 @@ export const DevicePage: React.FC<DevicePageProps> = () => {
                 state.device.change_device_parent_dialog,
             unlink_parent_device_dialog:
                 state.device.unlink_parent_device_dialog,
+            add_space_dialog: state.device.add_space_dialog,
+            remove_space_dialog: state.device.remove_space_dialog,
+            change_space_parent_dialog: state.device.change_space_parent_dialog,
         };
     });
-
-    const handleSelectDeviceTopology = () => {
-        console.log('handleSelectDeviceTopology');
-    };
 
     useEffect(() => {
         DeviceSlice.clearProjectSelected();
         DeviceMaintainAPIs.fetchProjects(dispatch);
+        DeviceMaintainAPIs.fetchSpaceTemplates(dispatch);
         DeviceMaintainAPIs.fetchDeviceTemplates(dispatch);
         return () => {};
     }, []);
@@ -168,10 +185,19 @@ export const DevicePage: React.FC<DevicePageProps> = () => {
                                                 aria-label="device-tree-view"
                                             />
                                             <Tab
-                                                icon={<AppsIcon />}
+                                                icon={<MemoryIcon />}
                                                 aria-label="device-template-cards"
                                                 onDoubleClick={() => {
                                                     DeviceMaintainAPIs.fetchDeviceTemplates(
+                                                        dispatch
+                                                    );
+                                                }}
+                                            />
+                                            <Tab
+                                                icon={<HomeWorkIcon />}
+                                                aria-label=" space-template-cards"
+                                                onDoubleClick={() => {
+                                                    DeviceMaintainAPIs.fetchSpaceTemplates(
                                                         dispatch
                                                     );
                                                 }}
@@ -224,7 +250,17 @@ export const DevicePage: React.FC<DevicePageProps> = () => {
                                             index={3}
                                         >
                                             <DeviceTemplateCardList
-                                                templates={templates}
+                                                templates={device_templates}
+                                            />
+                                        </TabPanel>
+
+                                        <TabPanel
+                                            name={toolbox_tab_name}
+                                            value={toolbox_tab_index}
+                                            index={4}
+                                        >
+                                            <SpaceTemplateCardList
+                                                templates={space_templates}
                                             />
                                         </TabPanel>
                                     </div>
@@ -250,9 +286,6 @@ export const DevicePage: React.FC<DevicePageProps> = () => {
                     project={place_device_to_space_dialog.project}
                     space={place_device_to_space_dialog.space}
                     template={place_device_to_space_dialog.template}
-                    // appendSuccessCallback={() => {
-                    //     console.log('appendCallback');
-                    // }}
                 />
                 <PlaceDeviceToDeviceDialog
                     open={place_device_to_device_dialog.open}
@@ -281,9 +314,23 @@ export const DevicePage: React.FC<DevicePageProps> = () => {
                     open={remove_device_dialog.open}
                     project={remove_device_dialog.project}
                     device={remove_device_dialog.device}
-                    // removeSuccessCallback={() => {
-                    //     console.log('removeCallback');
-                    // }}
+                />
+                <AddSpaceDialog
+                    open={add_space_dialog.open}
+                    project={add_space_dialog.project}
+                    space={add_space_dialog.space}
+                    template={add_space_dialog.space_template}
+                />
+                <ChangeSpaceParentDialog
+                    open={change_space_parent_dialog.open}
+                    project={change_space_parent_dialog.project}
+                    parent={change_space_parent_dialog.parent}
+                    space={change_space_parent_dialog.space}
+                />
+                <RemoveSpaceDialog
+                    open={remove_space_dialog.open}
+                    project={remove_space_dialog.project}
+                    space={remove_space_dialog.space}
                 />
             </div>
         </React.Fragment>

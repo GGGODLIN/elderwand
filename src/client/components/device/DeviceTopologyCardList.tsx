@@ -1,7 +1,7 @@
 import { IconButton } from '@material-ui/core';
 import EjectIcon from '@material-ui/icons/Eject';
 import clsx from 'clsx';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useDrop } from 'react-dnd';
 import { useDispatch } from 'react-redux';
 import DeviceMaintainCardTypes, {
@@ -80,7 +80,9 @@ const DeviceTopologyCardList: React.FC<DeviceTopologyCardListProps> = (
 
     const dispatch = useDispatch();
     const space = props.space_selected;
+
     const accept = [
+        DeviceMaintainCardTypes.SpaceTemplateCard,
         DeviceMaintainCardTypes.DeviceTemplateCard,
         DeviceMaintainCardTypes.DeviceSmallCard,
     ];
@@ -95,15 +97,19 @@ const DeviceTopologyCardList: React.FC<DeviceTopologyCardListProps> = (
                 },
                 monitor
             ) => {
-                if (!space) {
-                    // Root Card may be project card
-                    return false;
-                }
-
                 const target = {
                     type: DeviceMaintainCardTypes.SpaceCard,
                     payload: space as SpaceVM,
                 };
+
+                if (item.type == DeviceMaintainCardTypes.SpaceTemplateCard) {
+                    return DeviceMaintainCardTypeHelper.canDrop(item, target);
+                }
+
+                if (!space) {
+                    // Root Card may be project card
+                    return false;
+                }
 
                 return DeviceMaintainCardTypeHelper.canDrop(item, target);
             },
@@ -124,6 +130,11 @@ const DeviceTopologyCardList: React.FC<DeviceTopologyCardListProps> = (
                 if (item.type == DeviceMaintainCardTypes.DeviceSmallCard) {
                     // console.log('move device to the space');
                     dispatch(DeviceSlice.changeDeviceLocation(space));
+                    return;
+                }
+
+                if (item.type == DeviceMaintainCardTypes.SpaceTemplateCard) {
+                    dispatch(DeviceSlice.addSpace(space));
                     return;
                 }
             },
@@ -168,16 +179,6 @@ const DeviceTopologyCardList: React.FC<DeviceTopologyCardListProps> = (
             return;
         }
     };
-
-    useEffect(() => {
-        if (props.device_selected) {
-            console.log('GOTO', props.device_selected.id);
-        }
-
-        return () => {
-            console.log('effect');
-        };
-    }, [props.device_selected]);
 
     return (
         <div className={classname} ref={drop}>

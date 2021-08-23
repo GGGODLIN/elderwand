@@ -20,6 +20,7 @@ import {
     ImportDeviceTemplatesVO,
     ImportProjectVO,
     ImportSpacesVO,
+    ImportSpaceTemplatesVO,
     ListSourceDevicesVO,
     ListSourceDeviceTemplatesVO,
     ListSourceProjectsVO,
@@ -28,6 +29,7 @@ import {
 } from '../domain/migration/models/MigrationVOs';
 import ProjectDTO from '../domain/migration/models/ProjectDTO';
 import SpaceDTO from '../domain/migration/models/SpaceDTO';
+import SpaceTemplateDTO from '../domain/migration/models/SpaceTemplateDTO';
 import ErrorInfoDTO from '../domain/shared/models/ErrorInfoDTO';
 import PaginationDTO from '../domain/shared/models/PaginationDTO';
 import DeviceTemplateVM from '../models/migration/DeviceTemplateVM';
@@ -42,6 +44,7 @@ import ProjectVM from '../models/migration/ProjectVM';
 import SpaceVM from '../models/migration/SpaceVM';
 
 import PaginationVM from '../models/PaginationVM';
+import { SpaceTemplateVM } from '../models/space/SpaceVM';
 
 export default class MigrationController {
     static listSourceProjects = async (ctx: Context) => {
@@ -425,6 +428,46 @@ export default class MigrationController {
             });
     };
 
+    static importSpaceTemplates = async (ctx: Context) => {
+        ctx.request.socket.setTimeout(10 * 60 * 1000);
+
+        const vo: ImportSpaceTemplatesVO = {
+            dbname: '',
+            conn: '',
+            version: 200,
+            ...ctx.query,
+        };
+
+        const params: MigrationRepositoryCtor = {
+            host: ServerEnvVar.SkymapApiHost,
+            ...vo,
+        };
+
+        const repository = new MigrationRepository(params);
+
+        await new MigrationUCO({ repository })
+            .importSpaceTemplates()
+            .then((res: PaginationDTO<SpaceTemplateDTO>) => {
+                const vm = {
+                    ...res,
+                    results: convertToSpaceTemplateVMs(res.results),
+                } as PaginationVM<SpaceTemplateVM>;
+
+                ctx.status = 201;
+                ctx.body = vm;
+
+                return;
+            })
+            .catch((err: AxiosError<ErrorInfoDTO>) => {
+                if (err.isAxiosError) {
+                    ctx.status = err.response.status;
+                    ctx.body = err.response.data;
+                    return;
+                }
+                throw err;
+            });
+    };
+
     static importDevices = async (
         ctx: Context & {
             request: {
@@ -445,7 +488,6 @@ export default class MigrationController {
             version: 200,
             ...ctx.query,
         };
-
         const body = { code: '', ...ctx.request.body };
 
         const vo: ImportDevicesVO = {
@@ -593,6 +635,20 @@ function convertToSpaceVM(dto: SpaceDTO): SpaceVM {
     return {
         ...dto,
     } as SpaceVM;
+}
+
+function convertToSpaceTemplateVMs(
+    dtos: SpaceTemplateDTO[]
+): SpaceTemplateVM[] {
+    return dtos.map((dto) => {
+        return convertToSpaceTemplateVM(dto);
+    });
+}
+
+function convertToSpaceTemplateVM(dto: SpaceTemplateDTO): SpaceTemplateVM {
+    return {
+        ...dto,
+    } as SpaceTemplateVM;
 }
 
 function convertToDeviceVMs(dtos: DeviceDTO[]) {

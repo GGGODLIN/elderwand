@@ -13,6 +13,7 @@ import DeviceVM, {
     DeviceTemplateVM,
     SpaceVM,
 } from 'src/client/domain/device/DeviceVMs';
+import AssetsHelper from 'src/client/helper/AssetsHelper';
 import DeviceSlice from 'src/client/slices/DeviceSlice';
 
 interface DeviceSmallCardProp {
@@ -22,11 +23,11 @@ interface DeviceSmallCardProp {
 }
 
 const DeviceSmallCard: React.FC<DeviceSmallCardProp> = (props) => {
+    const dispatch = useDispatch();
+
     if (!props.device) {
         return <React.Fragment />;
     }
-
-    const dispatch = useDispatch();
 
     const spaces = !props.spaces ? [] : props.spaces;
     const devices = !props.devices ? [] : props.devices;
@@ -34,6 +35,16 @@ const DeviceSmallCard: React.FC<DeviceSmallCardProp> = (props) => {
 
     const space = spaces.find((space) => space.id == device.spaceId);
     const parent = devices.find((item) => item.id == device.parentId);
+
+    let canDelete = false;
+
+    if (!props.devices) {
+        const children = devices.filter((leaf) => leaf.parentId == device.id);
+
+        if (!children.length) {
+            canDelete = true;
+        }
+    }
 
     const name = device.name;
     const isBound = !!device.imei;
@@ -176,9 +187,11 @@ const DeviceSmallCard: React.FC<DeviceSmallCardProp> = (props) => {
                             <LinkOffIcon />
                         </IconButton>
                     )}
-                    <IconButton onClick={handleRemoveDevice}>
-                        <DeleteIcon />
-                    </IconButton>
+                    {canDelete && (
+                        <IconButton onClick={handleRemoveDevice}>
+                            <DeleteIcon />
+                        </IconButton>
+                    )}
                 </div>
             </div>
         </Card>
@@ -192,50 +205,17 @@ interface DeviceCardProp {
 }
 
 const DeviceCard: React.FC<DeviceCardProp> = (props) => {
+    const dispatch = useDispatch();
+
     if (!props.device) {
         return <React.Fragment />;
     }
 
-    const dispatch = useDispatch();
-
     const devices = !props.devices ? [] : props.devices;
     const device = props.device;
-
     const parent = devices.find((item) => item.id == device.parentId);
 
-    const id = device.id;
-    const icon = device.icon;
-    const name = `${device.name} - ${device.dvId} - ${device.id} - ${icon.name}`;
-    const header = !parent
-        ? `${name}`
-        : `${name} - ${parent.name} - ${parent.dvId} - ${parent.id}`;
-
-    const image = ((item: DeviceVM) => {
-        if (!item.images || !item.images.length) {
-            return {
-                name: 'default',
-                path: 'http://placeimg.com/640/480/technics',
-            };
-        }
-
-        return item.images[0];
-    })(device);
-
-    const isBound = !!device.imei;
-
-    const handleSelectDeviceCard = (e) => {
-        e.stopPropagation();
-        dispatch(DeviceSlice.selectDevice(device));
-    };
-
-    const handleSelectDevice = (e) => {
-        e.stopPropagation();
-        dispatch(DeviceSlice.selectDevice(device));
-    };
-
-    const handleRemoveDevice = () => {
-        dispatch(DeviceSlice.removeDevice(device));
-    };
+    let canDelete = true;
 
     const elements = [];
 
@@ -254,6 +234,10 @@ const DeviceCard: React.FC<DeviceCardProp> = (props) => {
             });
 
         elements.push(...device_cards);
+
+        if (device_cards.length) {
+            canDelete = false;
+        }
     }
 
     const accept = [
@@ -327,10 +311,31 @@ const DeviceCard: React.FC<DeviceCardProp> = (props) => {
         opacity: isDragging ? 0.5 : 1,
     };
 
+    const handleStopPropagation = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+    };
+
+    const handleSelectDeviceCard = (e) => {
+        e.stopPropagation();
+        dispatch(DeviceSlice.selectDevice(device));
+    };
+
+    const handleSelectDevice = (e) => {
+        e.stopPropagation();
+        dispatch(DeviceSlice.selectDevice(device));
+    };
+
+    const handleRemoveDevice = () => {
+        dispatch(DeviceSlice.removeDevice(device));
+    };
+
     function ref(elem) {
         drop(elem);
         drag(elem);
     }
+
+    const isBound = !!device.imei;
 
     const classname = clsx(
         'device-card',
@@ -340,6 +345,23 @@ const DeviceCard: React.FC<DeviceCardProp> = (props) => {
         isOver && !canDrop ? 'cannot-drop' : '',
         isBound ? 'is-bound' : ''
     );
+
+    const id = device.id;
+    const icon = device.icon;
+    const name = `${device.name} - ${device.dvId} - ${device.id} - ${icon.name}`;
+    const header = !parent
+        ? `${name}`
+        : `${name} - ${parent.name} - ${parent.dvId} - ${parent.id}`;
+
+    const image =
+        !device.images || !device.images.length
+            ? {
+                  name: 'default',
+                  path: 'http://placeimg.com/640/480/technics',
+              }
+            : device.images[0];
+
+    const path = AssetsHelper.generateImagePath(['device', image.path]);
 
     return (
         <React.Fragment>
@@ -364,17 +386,22 @@ const DeviceCard: React.FC<DeviceCardProp> = (props) => {
                 >
                     <div className="card-header">
                         <div className="header-name">{header}</div>
-                        <div className="header-actions">
-                            <IconButton onClick={handleRemoveDevice}>
-                                <DeleteIcon />
-                            </IconButton>
+                        <div
+                            className="header-actions"
+                            onDoubleClick={handleStopPropagation}
+                        >
+                            {canDelete && (
+                                <IconButton onClick={handleRemoveDevice}>
+                                    <DeleteIcon />
+                                </IconButton>
+                            )}
                             {}
                         </div>
                     </div>
                     <CardContent>
                         <div className="leaves">{elements}</div>
                         <div className="preview">
-                            <img src={image.path} alt={image.name} />
+                            <img src={path} alt={image.name} />
                         </div>
                     </CardContent>
                 </Card>

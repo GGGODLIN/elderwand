@@ -11,6 +11,7 @@ import { produce } from 'immer';
 import DeviceVM, {
     DeviceTemplateVM,
     ProjectVM,
+    SpaceTemplateVM,
     SpaceVM,
 } from 'src/client/domain/device/DeviceVMs';
 import PaginationVM from 'src/client/models/PaginationVM';
@@ -22,6 +23,8 @@ export interface DeviceMaintainState {
     space_selected?: SpaceVM;
     devices: DeviceVM[];
     device_selected?: DeviceVM;
+    space_templates: SpaceTemplateVM[];
+    space_template_selected?: SpaceTemplateVM;
     device_templates: DeviceTemplateVM[];
     device_templates_selected?: DeviceTemplateVM;
     place_device_to_space_dialog: {
@@ -63,6 +66,23 @@ export interface DeviceMaintainState {
         device?: DeviceVM;
         template?: DeviceTemplateVM;
     };
+    add_space_dialog: {
+        open: boolean;
+        project?: ProjectVM;
+        space_template?: SpaceTemplateVM;
+        space?: SpaceVM;
+    };
+    change_space_parent_dialog: {
+        open: boolean;
+        project?: ProjectVM;
+        space?: SpaceVM;
+        parent?: SpaceVM;
+    };
+    remove_space_dialog: {
+        open: boolean;
+        project?: ProjectVM;
+        space?: SpaceVM;
+    };
 }
 
 const getInitialState = (): DeviceMaintainState => {
@@ -72,6 +92,8 @@ const getInitialState = (): DeviceMaintainState => {
         spaces: [],
         space_selected: null,
         devices: [],
+        space_template_selected: null,
+        space_templates: [],
         device_selected: null,
         device_templates: [],
         device_templates_selected: null,
@@ -113,6 +135,23 @@ const getInitialState = (): DeviceMaintainState => {
             open: false,
             device: null,
             template: null,
+        },
+        add_space_dialog: {
+            open: false,
+            project: null,
+            space_template: null,
+            space: null,
+        },
+        change_space_parent_dialog: {
+            open: false,
+            project: null,
+            space: null,
+            parent: null,
+        },
+        remove_space_dialog: {
+            open: false,
+            project: null,
+            space: null,
         },
     };
 };
@@ -181,6 +220,14 @@ const DeviceSlice = createSlice<
                 draft.devices = null;
             });
         },
+        fetchSpaceTemplates: (
+            state,
+            action: PayloadAction<PaginationVM<SpaceTemplateVM>>
+        ) => {
+            return produce(state, (draft) => {
+                draft.space_templates = action.payload.results;
+            });
+        },
         fetchDeviceTemplates: (
             state,
             action: PayloadAction<PaginationVM<DeviceTemplateVM>>
@@ -210,6 +257,14 @@ const DeviceSlice = createSlice<
         ) => {
             return produce(state, (draft) => {
                 draft.device_templates_selected = action.payload;
+            });
+        },
+        selectSpaceTemplate: (
+            state,
+            action: PayloadAction<SpaceTemplateVM>
+        ) => {
+            return produce(state, (draft) => {
+                draft.space_template_selected = action.payload;
             });
         },
         // Place Device To Space with Device Template
@@ -334,6 +389,70 @@ const DeviceSlice = createSlice<
                 };
             });
         },
+        // add space
+        addSpace: (state, action: PayloadAction<SpaceVM>) => {
+            return produce(state, (draft) => {
+                draft.add_space_dialog = {
+                    open: true,
+                    project: state.project_selected,
+                    space_template: state.space_template_selected,
+                    space: action.payload,
+                };
+            });
+        },
+        closeAddSpaceDialog: (state) => {
+            return produce(state, (draft) => {
+                draft.add_space_dialog = {
+                    open: false,
+                    project: null,
+                    space_template: null,
+                    space: null,
+                };
+            });
+        },
+        // change space parent
+        changeSpaceParent: (
+            state,
+            action: PayloadAction<{ space: SpaceVM; parent: SpaceVM }>
+        ) => {
+            return produce(state, (draft) => {
+                draft.change_space_parent_dialog = {
+                    open: true,
+                    project: state.project_selected,
+                    space: action.payload.space,
+                    parent: action.payload.parent,
+                };
+            });
+        },
+        closeChangeSpaceParentDialog: (state) => {
+            return produce(state, (draft) => {
+                draft.change_space_parent_dialog = {
+                    open: false,
+                    project: null,
+                    space: null,
+                    parent: null,
+                };
+            });
+        },
+        // remove space
+        removeSpace: (state, action: PayloadAction<SpaceVM>) => {
+            return produce(state, (draft) => {
+                draft.remove_space_dialog = {
+                    open: true,
+                    project: state.project_selected,
+                    space: action.payload,
+                };
+            });
+        },
+        closeRemoveSpaceDialog: (state) => {
+            return produce(state, (draft) => {
+                draft.remove_space_dialog = {
+                    open: false,
+                    project: null,
+                    space: null,
+                };
+            });
+        },
     },
 });
 
@@ -363,6 +482,11 @@ const fetchDeviceTopologyResources = DeviceSlice.actions
 const clearDeviceTopologyResources = DeviceSlice.actions
     .clearDeviceTopologyResources as ActionCreatorWithoutPayload;
 
+const fetchSpaceTemplates = DeviceSlice.actions
+    .fetchSpaceTemplates as ActionCreatorWithPayload<
+    PaginationVM<SpaceTemplateVM>
+>;
+
 const fetchDeviceTemplates = DeviceSlice.actions
     .fetchDeviceTemplates as ActionCreatorWithPayload<
     PaginationVM<DeviceTemplateVM>
@@ -379,6 +503,9 @@ const selectDevice = DeviceSlice.actions
 
 const selectDeviceTemplate = DeviceSlice.actions
     .selectDeviceTemplate as ActionCreatorWithPayload<DeviceTemplateVM>;
+
+const selectSpaceTemplate = DeviceSlice.actions
+    .selectSpaceTemplate as ActionCreatorWithPayload<SpaceTemplateVM>;
 
 const placeDeviceToSpace = DeviceSlice.actions
     .placeDeviceToSpace as ActionCreatorWithPayload<SpaceVM>;
@@ -416,6 +543,24 @@ const removeDevice = DeviceSlice.actions
 const closeRemoveDeviceDialog = DeviceSlice.actions
     .closeRemoveDeviceDialog as ActionCreatorWithoutPayload;
 
+const addSpace = DeviceSlice.actions
+    .addSpace as ActionCreatorWithPayload<SpaceVM>;
+
+const closeAddSpaceDialog = DeviceSlice.actions
+    .closeAddSpaceDialog as ActionCreatorWithoutPayload;
+
+const changeSpaceParent = DeviceSlice.actions
+    .changeSpaceParent as ActionCreatorWithPayload<{ space: SpaceVM; parent: SpaceVM }>;
+
+const closeChangeSpaceParentDialog = DeviceSlice.actions
+    .closeChangeSpaceParentDialog as ActionCreatorWithoutPayload;
+
+const removeSpace = DeviceSlice.actions
+    .removeSpace as ActionCreatorWithPayload<SpaceVM>;
+
+const closeRemoveSpaceDialog = DeviceSlice.actions
+    .closeRemoveSpaceDialog as ActionCreatorWithoutPayload;
+
 export default {
     reducer,
     clear,
@@ -425,11 +570,13 @@ export default {
     fetchDevices,
     fetchDeviceTopologyResources,
     clearDeviceTopologyResources,
+    fetchSpaceTemplates,
     fetchDeviceTemplates,
     selectProject,
     selectSpace,
     selectDevice,
     selectDeviceTemplate,
+    selectSpaceTemplate,
     placeDeviceToSpace,
     closePlaceDeviceToSpaceDialog,
     placeDeviceToDevice,
@@ -442,4 +589,10 @@ export default {
     closeUnlinkParentDeviceDialog,
     removeDevice,
     closeRemoveDeviceDialog,
+    addSpace,
+    closeAddSpaceDialog,
+    changeSpaceParent,
+    closeChangeSpaceParentDialog,
+    removeSpace,
+    closeRemoveSpaceDialog,
 };

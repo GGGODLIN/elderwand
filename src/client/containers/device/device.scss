@@ -75,7 +75,7 @@
     }
 
     .device-tool-box {
-      width: 20%;
+      width: 24%;
       display: flex;
       flex-direction: column;
       align-items: stretch;
@@ -83,7 +83,7 @@
     }
 
     .topology-content {
-      width: 78%;
+      width: 74%;
       overflow: hidden;
       overflow-y: auto;
     }
@@ -94,9 +94,10 @@
   .toolbox-tabs {
     // Tab Buttons
     .MuiTab-root {
-      min-width: 64px;
+      min-width: 48px;
       overflow: hidden;
     }
+
     .MuiTabs-flexContainer {
       display: flex;
       justify-content: space-around;
@@ -104,6 +105,11 @@
 
       button {
         padding: 4px 0 0;
+
+        .MuiSvgIcon-root {
+          width: 30px;
+          height: 30px;
+        }
 
         &[aria-selected='true'] {
           border-bottom: solid 4px $bg-green-primary;
@@ -147,33 +153,7 @@
     }
   }
 
-  .device-template-card {
-    margin: 8px;
-    border: 2px solid $bg-green-primary;
-
-    &:hover {
-      box-shadow: 2px 2px 4px 4px rgba(0, 0, 0, 0.3);
-    }
-
-    > .MuiCardContent-root {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 4px 8px;
-
-      > div {
-        white-space: nowrap;
-        //overflow: hidden;
-      }
-    }
-    .card-header {
-      padding: 4px 8px;
-    }
-    .card-footer {
-      text-align: right;
-    }
-  }
-
+  // device template
   .device-category-filter {
     display: flex;
     flex-wrap: wrap;
@@ -186,8 +166,91 @@
     }
   }
 
-  // device topology cards
+  .device-template-card {
+    margin: 8px;
+    border: 2px solid $bg-green-primary;
 
+    &:hover {
+      box-shadow: 2px 2px 4px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    > .MuiCardContent-root {
+      padding: 4px 8px;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+
+      > div {
+        white-space: nowrap;
+        overflow: hidden;
+      }
+
+      .info {
+        > div {
+          padding: 2px 0;
+          vertical-align: middle;
+        }
+      }
+
+      .icon {
+        img {
+          max-width: 64px;
+        }
+      }
+    }
+    .card-header {
+      padding: 4px 8px;
+    }
+    .card-footer {
+      text-align: right;
+    }
+  }
+
+  // space template
+  .space-template-list {
+    .cards {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+    }
+  }
+
+  .space-template-card {
+    margin: 4px 4px;
+    border: 2px solid $bg-green-primary;
+    //min-width: 45%;
+    width: 46%;
+
+    &:hover {
+      box-shadow: 2px 2px 4px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    > .MuiCardContent-root {
+      padding: 4px 8px;
+      display: flex;
+      justify-content: center;
+
+      .info {
+        > div {
+          padding: 2px 0;
+          vertical-align: middle;
+        }
+      }
+
+      .icon > img {
+        max-width: 64px;
+      }
+    }
+    .card-header {
+      padding: 4px 8px;
+      text-align: center;
+    }
+    .card-footer {
+      text-align: right;
+    }
+  }
+
+  // device topology cards
   input[type='radio']:checked {
     + label > .space-card {
       border: 2px solid $bg-green-dark;
@@ -208,7 +271,6 @@
   }
 
   // cards
-
   .space-card,
   .device-card {
     border: 2px solid $bg-green-primary;

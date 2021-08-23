@@ -30,12 +30,26 @@ describe('Space Repository', function () {
 
         const dto = await repository.listSpaces(pid);
 
+        console.log(dto);
+
         const space = dto.results[0] as SpaceDTO;
 
-        const actual = await repository.getSpace(space.ID, space.projectId);
+        const actual = await repository.getSpace(space.id, space.projectId);
 
         expect(actual).not.toBeNull();
-        expect(actual.ID).toEqual(space.ID);
+        expect(actual.id).toEqual(space.id);
+
+        console.log(actual);
+    });
+
+    it('list space templates should be successful', async function () {
+        const pid = TestEnvVar.NewTargetProjectCode;
+
+        const repository = new SpaceRepository(ctor);
+
+        const actual = await repository.listSpaceTemplates();
+
+        expect(actual).not.toBeNull();
 
         console.log(actual);
     });

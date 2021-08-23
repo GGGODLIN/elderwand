@@ -7,7 +7,7 @@ import {
     Fab,
     Zoom,
 } from '@material-ui/core';
-import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
+import MemoryIcon from '@material-ui/icons/Memory';
 import clsx from 'clsx';
 import React, { Dispatch } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -52,7 +52,7 @@ const ImportDeviceTemplateDialog = (props: ImportDeviceTemplateDialogProps) => {
     const dispatch = useDispatch();
     const { t } = useTranslation();
 
-    const name = 'import-project-dialog';
+    const name = 'import-device-template-dialog';
     const classname = clsx([name]);
 
     const { show } = useSelector((state: RootState) => {
@@ -87,7 +87,7 @@ const ImportDeviceTemplateDialog = (props: ImportDeviceTemplateDialogProps) => {
                     className={'import'}
                     onClick={handleImportDeviceTemplates}
                 >
-                    {'import'}
+                    {'Import'}
                 </Button>
                 <Button className={'cancel'} onClick={handleCloseDialog}>
                     {'Close'}
@@ -121,7 +121,7 @@ const ImportDeviceTemplateFAB = (props: ImportDeviceTemplateFABProps) => {
                     disabled={disable}
                     onClick={handleOpenDialog}
                 >
-                    <LibraryBooksIcon />
+                    <MemoryIcon />
                 </Fab>
             </Zoom>
             <ImportDeviceTemplateDialog />

@@ -22,7 +22,7 @@ import DeviceVM from '../models/device/DeviceVM';
 import DeviceTemplateVM from '../models/migration/DeviceTemplateVM';
 
 export default class DeviceMaintainController {
-    // /api/devices?projectID={projectId}
+    // /api/devices?projectId={projectId}
     static listDevices = async (ctx: IRouterContext) => {
         const repository = new DeviceRepository({
             host: ServerEnvVar.SkymapApiHost,
@@ -169,7 +169,7 @@ export default class DeviceMaintainController {
             .then((res: DeviceDTO) => {
                 const vm = convertToDeviceVM(res);
 
-                ctx.status = 200;
+                ctx.status = 201;
                 ctx.body = vm;
 
                 return;
@@ -471,7 +471,7 @@ export default class DeviceMaintainController {
                 const vm = {
                     ...res,
                     results: convertToDeviceTemplateVMs(res.results),
-                } as PaginationVM<DeviceVM>;
+                } as PaginationVM<DeviceTemplateDTO>;
 
                 ctx.status = 200;
                 ctx.body = vm;

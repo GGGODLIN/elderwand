@@ -76,11 +76,13 @@ describe('Migration Util Test', () => {
         expect(actual).toBeTruthy();
     });
 
-    test('get 2.0 device model list to go file', async () => {
-        // const text = MigrationUtil.getDeviceModelMapToGolang()
-        // const full = path.join(file_path, "device_models.go");
-        // const actual = await FileUtil.createFile(full, text);
-        // expect(actual).toBeTruthy();
-        // ThingsSchema
+    test('get 2.0 space templates to go file', async () => {
+        const text = MigrationUtil.getSpaceTemplateMapToGolang();
+
+        const full = path.join(file_path, 'space_templates.go');
+
+        const actual = await FileUtil.createFile(full, text);
+
+        expect(actual).toBeTruthy();
     });
 });

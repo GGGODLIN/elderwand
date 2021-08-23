@@ -60,11 +60,13 @@ export interface Id {
 }
 
 class GoogleSheetUtil {
-    static async getＳpreadsheet(
+    static async getSpreadsheet(
         key: string,
         no: number = 1
     ): Promise<GoogleSheet | null> {
         const url = `https://spreadsheets.google.com/feeds/cells/${key}/${no}/public/full?alt=json`;
+
+        console.log(url);
 
         return await axios
             .get<GoogleSheet>(url)

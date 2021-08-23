@@ -376,6 +376,7 @@ export const getIconTypeName = function (IconTypePath: string) {
 };
 
 export const Icons = [
+    'b-1.png',
     'b-10.png',
     'b-11.png',
     'b-12.png',

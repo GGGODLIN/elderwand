@@ -33,8 +33,6 @@ export default class DeviceRepository {
             projectId: projectId,
         };
 
-        console.log(params);
-
         const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
 
         return await axios

@@ -19,6 +19,22 @@ export default interface SpaceVM {
     checked?: boolean;
 }
 
+export interface SpaceTemplateVM {
+    id: string;
+    name: string;
+    typeId: number;
+    type: Type;
+    parentId?: string;
+    iconId: string;
+    icon: Icon;
+    photos: Photo[];
+
+    createdBy: string;
+    updatedBy: string;
+    createdAt: number;
+    updatedAt: number;
+}
+
 export interface SpaceTopology {
     nodes: SpaceVM[];
     links: {

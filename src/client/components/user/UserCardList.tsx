@@ -1,7 +1,7 @@
-import React from 'react';
 import { Grid } from '@material-ui/core';
+import React from 'react';
 import { UserCard } from 'src/client/components/user/UserCard';
-import { UserVM } from 'src/client/domain/user/UserVM';
+import UserVM from 'src/client/domain/user/UserVM';
 
 export const UserCardList: React.FC<{ users: UserVM[] }> = (props) => {
     if (!props.users.length) {

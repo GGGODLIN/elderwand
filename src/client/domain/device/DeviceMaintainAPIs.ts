@@ -2,6 +2,7 @@ import { Dispatch } from 'react';
 import DeviceVM, {
     DeviceTemplateVM,
     ProjectVM,
+    SpaceTemplateVM,
     SpaceVM,
 } from 'src/client/domain/device/DeviceVMs';
 import AxiosFactory from 'src/client/helper/AxiosFactory';
@@ -20,6 +21,11 @@ export interface PlaceDeviceToDeviceOptions {
     spaceId?: string;
     parentId?: string;
     dvId?: string;
+}
+
+export interface AddSpaceOptions {
+    templateId?: string;
+    parentId?: string;
 }
 
 class DeviceMaintainAPIs {
@@ -126,6 +132,28 @@ class DeviceMaintainAPIs {
                 if (callback) {
                     callback();
                 }
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+            .finally(() => {
+                dispatch(FetchSlice.end());
+            });
+    };
+
+    static fetchSpaceTemplates = (dispatch: Dispatch<any>) => {
+        const url = `/api/space/templates`;
+        const params = {};
+
+        new AxiosFactory()
+            .useBearerToken()
+            .useBefore(() => {
+                dispatch(FetchSlice.start());
+            })
+            .getInstance()
+            .get<PaginationVM<SpaceTemplateVM>>(url, { params: params })
+            .then((res) => {
+                dispatch(DeviceSlice.fetchSpaceTemplates(res.data));
             })
             .catch((err) => {
                 console.log(err);
@@ -326,6 +354,111 @@ class DeviceMaintainAPIs {
                 dispatch(FetchSlice.end());
             });
     };
+
+    static addSpace = (
+        dispatch: Dispatch<any>,
+        project: ProjectVM,
+        options: AddSpaceOptions,
+        callback?: Function
+    ) => {
+        const url = `/api/spaces`;
+        const params = {
+            projectId: project.id,
+        };
+        const body = {
+            ...options,
+        };
+
+        new AxiosFactory()
+            .useBearerToken()
+            .useBefore(() => {
+                dispatch(FetchSlice.start());
+            })
+            .getInstance()
+            .post<SpaceVM>(url, body, { params: params })
+            .then((res) => {
+                // console.log(res.data);
+                if (callback) {
+                    callback();
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+            .finally(() => {
+                dispatch(FetchSlice.end());
+            });
+    };
+
+    static editSpace(
+        dispatch: Dispatch<any>,
+        project: ProjectVM,
+        space: SpaceVM,
+        callback?: Function
+    ) {
+        const url = `/api/spaces/${space.id}`;
+        const params = {
+            projectId: project.id,
+        };
+        const data = {
+            name: space.name,
+            parentId: space.parentId,
+            iconId: space.iconId,
+            // todo photo
+        };
+
+        new AxiosFactory()
+            .useBearerToken()
+            .useBefore(() => {
+                dispatch(FetchSlice.start());
+            })
+            .getInstance()
+            .put<SpaceVM>(url, data, { params: params })
+            .then((res) => {
+                // console.log(res.data);
+                if (callback) {
+                    callback();
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+            .finally(() => {
+                dispatch(FetchSlice.end());
+            });
+    }
+
+    static removeSpace(
+        dispatch: Dispatch<any>,
+        project: ProjectVM,
+        space: SpaceVM,
+        callback: () => void
+    ) {
+        const url = `/api/spaces/${space.id}`;
+        const params = {
+            projectId: project.id,
+        };
+
+        new AxiosFactory()
+            .useBearerToken()
+            .useBefore(() => {
+                dispatch(FetchSlice.start());
+            })
+            .getInstance()
+            .delete<SpaceVM>(url, { params: params })
+            .then((res) => {
+                // console.log(res.data);
+                if (callback) {
+                    callback();
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+            .finally(() => {
+                dispatch(FetchSlice.end());
+            });
+    }
 }
 
 export default DeviceMaintainAPIs;
