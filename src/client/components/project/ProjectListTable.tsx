@@ -10,8 +10,8 @@ import VisibilityIcon from '@material-ui/icons/Visibility';
 import { DataType, EditingMode, SortingMode } from 'ka-table/enums';
 import { ICellTextProps, IHeadCellProps } from 'ka-table/props';
 import { ITableProps, Table } from 'ka-table';
-import { ProjectVM } from 'src/client/domain/project/ProjectVM';
-import { TimeUtil } from 'src/client/utils/TimeUtil';
+import ProjectVM from 'src/client/domain/project/ProjectVM';
+import TimeUtil from 'src/client/utils/TimeUtil';
 import { useDispatch } from 'react-redux';
 import {
     Card,
@@ -68,13 +68,13 @@ const SelectionCell: React.FC<ICellTextProps> = (props) => {
 
 const UpdatedTimeCell: React.FC<ICellTextProps> = (props) => {
     const data: ProjectVM = props.rowData;
-    const value = TimeUtil.new(data.updated_at).format('YYYY-MM-DD HH:mm');
+    const value = TimeUtil.new(data.updatedAt).format('YYYY-MM-DD HH:mm');
     return <div>{value}</div>;
 };
 
 const ExpireDateCell: React.FC<ICellTextProps> = (props) => {
     const data: ProjectVM = props.rowData;
-    const value = TimeUtil.new(data.expire_date).format('YYYY-MM-DD');
+    const value = TimeUtil.new(data.expireDate).format('YYYY-MM-DD');
     return <div>{value}</div>;
 };
 

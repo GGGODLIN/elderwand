@@ -10,7 +10,7 @@ nginx-renew:
 	docker-compose -f docker/nginx/docker-compose.yaml up -d --build --force-recreate
 	$(MAKE) nginx-logs
 nginx-down:
-	docker-compose -f docker/nginx/docker-compose.yaml down -v --remove-orphans 
+	docker-compose -f docker/nginx/docker-compose.yaml down -v --remove-orphans
 nginx-logs:
 	sh docker/nginx/logs.sh
 nginx-reload:
@@ -21,11 +21,14 @@ nginx-reload:
 dev-up:
 	docker-compose -f docker/web/docker-compose.yaml up -d --force-recreate
 	$(MAKE) dev-logs
+dev-restart:
+	docker-compose -f docker/web/docker-compose.yaml restart
+	$(MAKE) dev-logs
 dev-build:
 	sh docker/network.sh && \
 	docker-compose -f docker/web/docker-compose.yaml build --force-rm
 dev-down:
-	docker-compose -f docker/web/docker-compose.yaml down -v --remove-orphans 
+	docker-compose -f docker/web/docker-compose.yaml down -v --remove-orphans
 dev-renew:
 	$(MAKE) dev-down
 	$(MAKE) dev-build

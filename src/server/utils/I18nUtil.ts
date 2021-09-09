@@ -19,7 +19,8 @@ const exportTranslateFile = async (
 
 export default class I18nUtil {
     /**
-     * @param  {string} out output locale folder
+     * @param output
+     * @param filename
      * @returns Promise<boolean>
      */
     static async generateIconsLocaleFiles(

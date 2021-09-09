@@ -37,6 +37,10 @@ const DeviceTemplateCard: React.FC<DeviceTemplateCardProps> = (props) => {
         [template]
     );
 
+    const style: CSSProperties = {
+        opacity: isDragging ? 0.5 : 1,
+    };
+
     const handleClick = (e) => {
         e.stopPropagation();
     };
@@ -46,11 +50,8 @@ const DeviceTemplateCard: React.FC<DeviceTemplateCardProps> = (props) => {
         dispatch(DeviceSlice.selectDeviceTemplate(template));
     };
 
-    const style: CSSProperties = {
-        opacity: isDragging ? 0.5 : 1,
-    };
-
     const classname = clsx('device-template-card', template.type.categoryId);
+
     const name = template.name;
     const type = `${template.type.categoryId} - ${template.type.name}`;
     const model = `${template.model.name} - ${template.model.brand.name}`;
@@ -61,8 +62,11 @@ const DeviceTemplateCard: React.FC<DeviceTemplateCardProps> = (props) => {
         : template.protocols.map((protocol) => protocol.typeId).join(',');
 
     const image = !template.images ? null : template.images[0];
+    const image_path = !image
+        ? ''
+        : AssetsHelper.generateImagePath(['device', image.path]);
     const icon = template.icon;
-    const path = !icon ? '' : AssetsHelper.generateIconPath(icon.path);
+    const icon_path = !icon ? '' : AssetsHelper.generateIconPath(icon.path);
 
     return (
         <Card
@@ -84,10 +88,23 @@ const DeviceTemplateCard: React.FC<DeviceTemplateCardProps> = (props) => {
                     <div>{type}</div>
                     <div>{model}</div>
                     <div>{protocols}</div>
-                    {image && <div>{`${image.path}`}</div>}
+                    {/*{image && <div>{`${image.path}`}</div>}*/}
                 </div>
-                <div className="icon">
-                    {path && <img src={path} alt={icon.name} />}
+                <div className="preview">
+                    {image && (
+                        <div className="image">
+                            {image_path && (
+                                <img src={image_path} alt={image.name} />
+                            )}
+                        </div>
+                    )}
+                    {!image && (
+                        <div className="icon">
+                            {icon_path && (
+                                <img src={icon_path} alt={icon.name} />
+                            )}
+                        </div>
+                    )}
                 </div>
             </CardContent>
             <div className="card-footer">

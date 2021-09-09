@@ -5,9 +5,9 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import DeviceMaintainAPIs from '../../domain/device/DeviceMaintainAPIs';
-import DeviceVM, { ProjectVM, SpaceVM } from '../../domain/device/DeviceVMs';
-import DeviceSlice from '../../slices/DeviceSlice';
+import DeviceMaintainAPIs from 'src/client/domain/device/DeviceMaintainAPIs';
+import { ProjectVM, SpaceVM } from 'src/client/domain/device/DeviceVMs';
+import DeviceSlice from 'src/client/slices/DeviceSlice';
 
 interface ChangeSpaceParentDialogProps {
     open: boolean;
@@ -38,8 +38,6 @@ const ChangeSpaceParentDialog: React.FC<ChangeSpaceParentDialogProps> = (
             ...props.space,
             parentId: !props.parent ? null : props.parent.id,
         };
-
-        console.log('handleChangeParent');
 
         DeviceMaintainAPIs.editSpace(dispatch, props.project, space, () => {
             DeviceMaintainAPIs.fetchDeviceTopologyResources(
@@ -76,7 +74,7 @@ const ChangeSpaceParentDialog: React.FC<ChangeSpaceParentDialogProps> = (
                 <DialogActions>
                     {props.space && props.parent && (
                         <Button
-                            className={'add'}
+                            className={'change'}
                             onClick={handleChangeParent}
                             style={{ color: 'orange' }}
                         >

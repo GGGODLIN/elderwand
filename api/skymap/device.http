@@ -1,4 +1,4 @@
-3# list devices by project id
+# list devices by project id
 GET {{HOST}}/api/devices?projectId={{TARGET_PROJECT_CODE}}&platformId=3
 accept: application/json
 

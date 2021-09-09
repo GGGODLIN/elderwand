@@ -1,19 +1,3 @@
-import AddIcon from '@material-ui/icons/Add';
-import clsx from 'clsx';
-import FetchSlice from 'src/client/slices/FetchSlice';
-import kws from 'src/client/configs/Keywords';
-import ProjectSlice from 'src/client/slices/ProjectSlice';
-import React, { ChangeEvent, useEffect } from 'react';
-import { AxiosError, AxiosResponse } from 'axios';
-import { AxiosUtil } from 'src/client/utils/AxiosUtil';
-import { ClientEnvVar } from 'src/client/configs/ClientEnvVar';
-import { CloudCodeEnum } from 'src/client/configs/Enum';
-import { RootState } from 'src/client/reducer';
-import { TimeUtil } from 'src/client/utils/TimeUtil';
-import { useDispatch, useSelector } from 'react-redux';
-import { useForm } from 'react-hook-form';
-import { UserVM } from 'src/client/domain/user/UserVM';
-import { useTranslation } from 'react-i18next';
 import {
     Button,
     Dialog,
@@ -29,6 +13,22 @@ import {
     TextField,
     Zoom,
 } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
+import { AxiosError, AxiosResponse } from 'axios';
+import clsx from 'clsx';
+import React, { ChangeEvent } from 'react';
+import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
+import { ClientEnvVar } from 'src/client/configs/ClientEnvVar';
+import { CloudCodeEnum } from 'src/client/configs/Enum';
+import kws from 'src/client/configs/Keywords';
+import { UserVM } from 'src/client/domain/user/UserVM';
+import { RootState } from 'src/client/reducer';
+import FetchSlice from 'src/client/slices/FetchSlice';
+import ProjectSlice from 'src/client/slices/ProjectSlice';
+import { AxiosUtil } from 'src/client/utils/AxiosUtil';
+import TimeUtil from 'src/client/utils/TimeUtil';
 
 export const CreateProjectFAB: React.FC<any> = () => {
     const dispatch = useDispatch();

@@ -1,3 +1,4 @@
+import knxDataFormat from './fixture/KNXDataFormat';
 import SpaceTemplates, { SpaceTemplate } from './fixture/SpaceTemplates';
 import StringUtil from './StringUtil';
 import { Brand, Brands } from './fixture/Brand';
@@ -125,10 +126,6 @@ var DeviceTypeMap = map[uint32]DeviceType{${text}\n}`;
         return content;
     }
 
-    // static getDeviceModelMapToGolang(): string {
-    //     return ""
-    // }
-
     /**
      * @returns string
      * @summary map key is brand of origin field
@@ -205,6 +202,95 @@ type SpaceTemplate struct{
 }
 
 var SpaceTemplateMap = map[string]SpaceTemplate{${text}\n}`;
+
+        return content;
+    }
+
+    static getKNXFlagMapToJson(): string {
+        const items = knxDataFormat.flagRules
+            .sort((left, right) => {
+                const a = left.fValue;
+                const b = right.fValue;
+
+                if (!a || a > b) {
+                    return 1;
+                }
+
+                if (!b || a < b) {
+                    return -1;
+                }
+
+                return 0;
+            })
+            .map((rule) => {
+                let text = `\t"${rule.fValue}": ${JSON.stringify(
+                    rule,
+                    null,
+                    2
+                )}`;
+
+                text = text
+                    .replace('commumication', 'communication')
+                    .replace('trasmit', 'transmit');
+
+                return text;
+            })
+            .join(',\r\n');
+
+        const content = `{\r\n${items}\r\n}`;
+
+        return content;
+
+        // to typescript
+        //         const content = `export const KNXFlagRuleMap: {
+        //     [key: string]: KNXFlagRule;
+        //     // '4': KNXFlagRule;
+        //     // '148': KNXFlagRule;
+        //     // '196': KNXFlagRule;
+        //     // '212': KNXFlagRule;
+        // } = {\r\n${items},\r\n};`;
+        //
+        //         return content;
+    }
+
+    static getKNXFlagMapToTypeScript(): string {
+        const items = knxDataFormat.flagRules
+            .sort((left, right) => {
+                const a = left.fValue;
+                const b = right.fValue;
+
+                if (!a || a > b) {
+                    return 1;
+                }
+
+                if (!b || a < b) {
+                    return -1;
+                }
+
+                return 0;
+            })
+            .map((rule) => {
+                let text = `\t"${rule.fValue}": ${JSON.stringify(
+                    rule,
+                    null,
+                    4
+                )}`;
+
+                text = text
+                    .replace('commumication', 'communication')
+                    .replace('trasmit', 'transmit');
+
+                return text;
+            })
+            .join(',\r\n');
+
+        const content = `export const KNXFlagRuleMap: {
+            [key: string]: KNXFlagRule;
+            // '4': KNXFlagRule;
+            // '148': KNXFlagRule;
+            // '196': KNXFlagRule;
+            // '212': KNXFlagRule;
+        } = {\r\n${items},\r\n};`;
 
         return content;
     }

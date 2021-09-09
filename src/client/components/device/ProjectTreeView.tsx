@@ -3,9 +3,8 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { TreeItem, TreeView } from '@material-ui/lab';
 import React from 'react';
 import { useDispatch } from 'react-redux';
-
 import DeviceMaintainAPIs from 'src/client/domain/device/DeviceMaintainAPIs';
-import ProjectVM from 'src/client/domain/project/ProjectVM';
+import { ProjectVM } from 'src/client/domain/device/ProjectVM';
 import DeviceSlice from 'src/client/slices/DeviceSlice';
 
 interface ProjectTreeViewProps {

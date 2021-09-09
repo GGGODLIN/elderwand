@@ -1,6 +1,8 @@
 import { Card, CardContent, IconButton } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import LinkOffIcon from '@material-ui/icons/LinkOff';
+
+import SettingsIcon from '@material-ui/icons/Settings';
 import clsx from 'clsx';
 import React, { CSSProperties } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
@@ -15,6 +17,7 @@ import DeviceVM, {
 } from 'src/client/domain/device/DeviceVMs';
 import AssetsHelper from 'src/client/helper/AssetsHelper';
 import DeviceSlice from 'src/client/slices/DeviceSlice';
+import DeviceHelper from 'src/client/domain/device/DeviceHelper';
 
 interface DeviceSmallCardProp {
     device: DeviceVM;
@@ -35,19 +38,10 @@ const DeviceSmallCard: React.FC<DeviceSmallCardProp> = (props) => {
 
     const space = spaces.find((space) => space.id == device.spaceId);
     const parent = devices.find((item) => item.id == device.parentId);
+    const leaves = devices.filter((leaf) => leaf.parentId == device.id);
 
-    let canDelete = false;
-
-    if (!props.devices) {
-        const children = devices.filter((leaf) => leaf.parentId == device.id);
-
-        if (!children.length) {
-            canDelete = true;
-        }
-    }
-
-    const name = device.name;
     const isBound = !!device.imei;
+    const canDelete = !leaves.length;
 
     const handleClick = (e) => {
         e.stopPropagation();
@@ -71,6 +65,16 @@ const DeviceSmallCard: React.FC<DeviceSmallCardProp> = (props) => {
     const handleUnlinkDevice = (e) => {
         e.preventDefault();
         dispatch(DeviceSlice.unlinkParentDevice(device));
+    };
+
+    const handleEditSettings = (e) => {
+        e.stopPropagation();
+        const payload: DeviceVM = {
+            ...device,
+            parent: parent,
+            leaves: leaves,
+        };
+        dispatch(DeviceSlice.editDeviceSetting(payload));
     };
 
     const handleRemoveDevice = (e) => {
@@ -123,7 +127,7 @@ const DeviceSmallCard: React.FC<DeviceSmallCardProp> = (props) => {
                 canDrop: !!monitor.canDrop(),
             }),
         }),
-        [device]
+        [props.device]
     );
 
     const [{ isDragging }, drag] = useDrag(
@@ -137,8 +141,13 @@ const DeviceSmallCard: React.FC<DeviceSmallCardProp> = (props) => {
                 payload: device,
             },
         }),
-        [device]
+        [props.device]
     );
+
+    function ref(elem) {
+        drop(elem);
+        drag(elem);
+    }
 
     const style: CSSProperties = {
         opacity: isDragging ? 0.5 : 1,
@@ -152,10 +161,9 @@ const DeviceSmallCard: React.FC<DeviceSmallCardProp> = (props) => {
         isBound ? 'is-bound' : ''
     );
 
-    function ref(elem) {
-        drop(elem);
-        drag(elem);
-    }
+    const helper = new DeviceHelper({ device });
+    const name = device.name;
+    const protocols = helper.getProtocols().join(',');
 
     return (
         <Card
@@ -175,18 +183,24 @@ const DeviceSmallCard: React.FC<DeviceSmallCardProp> = (props) => {
             </div>
             <CardContent>
                 <div>{device.dvId}</div>
-                {/*<div>{device.type.name}</div>*/}
-                <div>{parent ? `${parent.name} - ${parent.dvId}` : ''}</div>
+                <div>{parent ? `${parent.name}` : ''}</div>
                 <div>{space ? `${space.name}` : ''}</div>
-                {}
             </CardContent>
             <div className="card-footer">
+                <div className="footer-header">
+                    {protocols}, {leaves.length}
+                </div>
                 <div className="footer-actions">
                     {device.parentId && (
                         <IconButton onClick={handleUnlinkDevice}>
                             <LinkOffIcon />
                         </IconButton>
                     )}
+                    {
+                        <IconButton onClick={handleEditSettings}>
+                            <SettingsIcon />
+                        </IconButton>
+                    }
                     {canDelete && (
                         <IconButton onClick={handleRemoveDevice}>
                             <DeleteIcon />
@@ -212,32 +226,28 @@ const DeviceCard: React.FC<DeviceCardProp> = (props) => {
     }
 
     const devices = !props.devices ? [] : props.devices;
+
     const device = props.device;
     const parent = devices.find((item) => item.id == device.parentId);
+    const leaves = devices.filter((item) => item.parentId == device.id);
 
-    let canDelete = true;
+    let canDelete = !leaves.length;
 
     const elements = [];
 
     if (props.devices) {
-        const device_cards = devices
-            .filter((leaf) => leaf.parentId == device.id)
-            .map((leaf) => {
-                return (
-                    <DeviceSmallCard
-                        key={leaf.id}
-                        device={leaf}
-                        spaces={props.spaces}
-                        devices={props.devices}
-                    />
-                );
-            });
+        const device_cards = leaves.map((leaf) => {
+            return (
+                <DeviceSmallCard
+                    key={leaf.id}
+                    device={leaf}
+                    spaces={props.spaces}
+                    devices={props.devices}
+                />
+            );
+        });
 
         elements.push(...device_cards);
-
-        if (device_cards.length) {
-            canDelete = false;
-        }
     }
 
     const accept = [
@@ -245,6 +255,7 @@ const DeviceCard: React.FC<DeviceCardProp> = (props) => {
         DeviceMaintainCardTypes.DeviceCard,
         DeviceMaintainCardTypes.DeviceSmallCard,
     ];
+
     const [{ isOver, canDrop }, drop] = useDrop(
         () => ({
             accept: accept,
@@ -290,7 +301,7 @@ const DeviceCard: React.FC<DeviceCardProp> = (props) => {
                 canDrop: !!monitor.canDrop(),
             }),
         }),
-        [device]
+        [props.device]
     );
 
     const [{ isDragging }, drag] = useDrag(
@@ -304,8 +315,13 @@ const DeviceCard: React.FC<DeviceCardProp> = (props) => {
                 payload: device,
             },
         }),
-        [device]
+        [props.device]
     );
+
+    function ref(elem) {
+        drop(elem);
+        drag(elem);
+    }
 
     const style: CSSProperties = {
         opacity: isDragging ? 0.5 : 1,
@@ -326,14 +342,20 @@ const DeviceCard: React.FC<DeviceCardProp> = (props) => {
         dispatch(DeviceSlice.selectDevice(device));
     };
 
-    const handleRemoveDevice = () => {
-        dispatch(DeviceSlice.removeDevice(device));
+    const handleEditSettings = (e) => {
+        e.stopPropagation();
+        const payload: DeviceVM = {
+            ...device,
+            parent: parent,
+            leaves: leaves,
+        };
+        dispatch(DeviceSlice.editDeviceSetting(payload));
     };
 
-    function ref(elem) {
-        drop(elem);
-        drag(elem);
-    }
+    const handleRemoveDevice = (e) => {
+        e.stopPropagation();
+        dispatch(DeviceSlice.removeDevice(device));
+    };
 
     const isBound = !!device.imei;
 
@@ -348,20 +370,31 @@ const DeviceCard: React.FC<DeviceCardProp> = (props) => {
 
     const id = device.id;
     const icon = device.icon;
-    const name = `${device.name} - ${device.dvId} - ${device.id} - ${icon.name}`;
-    const header = !parent
-        ? `${name}`
-        : `${name} - ${parent.name} - ${parent.dvId} - ${parent.id}`;
+    const name = `${device.name} - ${device.dvId} - ${device.id}`;
+    const header = !parent ? (
+        <div>{`${name}`}</div>
+    ) : (
+        [
+            <div key={'name'}>{`${name}`}</div>,
+            <div key={'parent'}>
+                {`${parent.name} - ${parent.dvId} - ${parent.id}`}
+            </div>,
+        ]
+    );
 
     const image =
         !device.images || !device.images.length
             ? {
                   name: 'default',
-                  path: 'http://placeimg.com/640/480/technics',
+                  path: 'http://placeimg.com/640/480/tech',
               }
             : device.images[0];
 
     const path = AssetsHelper.generateImagePath(['device', image.path]);
+
+    const protocols = !device.protocols
+        ? ''
+        : device.protocols.map((protocol) => protocol.typeId).join(',');
 
     return (
         <React.Fragment>
@@ -390,12 +423,16 @@ const DeviceCard: React.FC<DeviceCardProp> = (props) => {
                             className="header-actions"
                             onDoubleClick={handleStopPropagation}
                         >
+                            {
+                                <IconButton onClick={handleEditSettings}>
+                                    <SettingsIcon />
+                                </IconButton>
+                            }
                             {canDelete && (
                                 <IconButton onClick={handleRemoveDevice}>
                                     <DeleteIcon />
                                 </IconButton>
                             )}
-                            {}
                         </div>
                     </div>
                     <CardContent>
@@ -404,6 +441,12 @@ const DeviceCard: React.FC<DeviceCardProp> = (props) => {
                             <img src={path} alt={image.name} />
                         </div>
                     </CardContent>
+                    <div className="card-footer">
+                        <div className="footer-header">
+                            {protocols}, {leaves.length}
+                        </div>
+                        <div className="footer-actions">{}</div>
+                    </div>
                 </Card>
             </label>
         </React.Fragment>

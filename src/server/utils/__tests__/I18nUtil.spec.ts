@@ -1,7 +1,8 @@
 import I18nUtil from '../I18nUtil';
 
 describe('I18n Util Test', () => {
-    test('icons convert to new model from old version source code.', async () => {
+    // TODO google sheet json share url has problem.
+    test.skip('icons convert to new model from old version source code.', async () => {
         const root = process.cwd();
 
         const locale = `${root}/.temp/locale`;

@@ -1,7 +1,7 @@
 // import faker from 'faker';
 // import ProjectMaintainUCO from '../ProjectMaintainUCO';
 // import { TestUserUtils } from '../../../../test/utils/TestUserUtil';
-// import { TimeUtil } from '../../../utils/TimeUtil';
+// import TimeUtil from 'src/client/utils/TimeUtil';
 // import { ProjectDTO } from '../../domain/project/ProjectDTO';
 //
 // async function generateProjectCode(vo: any): Promise<string> {

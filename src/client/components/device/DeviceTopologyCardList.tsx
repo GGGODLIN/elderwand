@@ -37,6 +37,8 @@ const DeviceTopologyCardList: React.FC<DeviceTopologyCardListProps> = (
         );
     }
 
+    const dispatch = useDispatch();
+
     const project = props.project;
     const spaces = !props.spaces ? [] : props.spaces;
     const devices = !props.devices ? [] : props.devices;
@@ -54,8 +56,8 @@ const DeviceTopologyCardList: React.FC<DeviceTopologyCardListProps> = (
                 <SpaceCard
                     key={space.id}
                     space={space}
-                    spaces={props.spaces}
-                    devices={props.devices}
+                    spaces={spaces}
+                    devices={devices}
                 />
             );
         });
@@ -70,15 +72,14 @@ const DeviceTopologyCardList: React.FC<DeviceTopologyCardListProps> = (
                     <DeviceCard
                         key={device.id}
                         device={device}
-                        devices={props.devices}
-                        spaces={props.spaces}
+                        spaces={spaces}
+                        devices={devices}
                     />
                 );
             });
         cards.unshift(...device_cards);
     }
 
-    const dispatch = useDispatch();
     const space = props.space_selected;
 
     const accept = [
@@ -143,7 +144,12 @@ const DeviceTopologyCardList: React.FC<DeviceTopologyCardListProps> = (
                 isOver: !!monitor.isOver({ shallow: true }),
             }),
         }),
-        [space]
+        [
+            props.spaces,
+            props.space_selected,
+            props.devices,
+            props.space_selected,
+        ]
     );
 
     const classname = clsx(
@@ -190,7 +196,6 @@ const DeviceTopologyCardList: React.FC<DeviceTopologyCardListProps> = (
                             <EjectIcon />
                         </IconButton>
                     )}
-                    {}
                 </div>
             </div>
             <div className="card-list">{cards}</div>

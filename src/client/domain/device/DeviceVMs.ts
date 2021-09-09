@@ -49,96 +49,25 @@ export interface Account {
     username: string;
 }
 
-interface DeviceCategory {
-    id: string;
-    name: string;
-}
-
-interface DeviceType {
-    id: number;
-    name: string;
-
-    categoryId: string;
-    category: DeviceCategory;
-}
-
-interface DeviceModel {
-    id: string;
-    name: string;
-    brandId: string;
-    brand: Brand;
-}
-
-interface Brand {
-    id: string;
-    code: string;
-    name: string;
-}
-
-interface Icon {
+export interface Icon {
     id: string;
     name: string;
     path: string;
     tags: string[];
 }
 
-interface Image {
+export interface Image {
     id: string;
     name: string;
     path: string;
     tags: string[];
 }
 
-interface Photo {
+export interface Photo {
     id: string;
     name: string;
     path: string;
     tags: string[];
-}
-
-interface NetworkCard {
-    id: string;
-    primary?: boolean;
-    enable: boolean;
-    name: string;
-    ip: string;
-    mac: string;
-    network: string;
-}
-
-interface DeviceVM {
-    id: string;
-    name: string;
-    dvId: string;
-    typeId: number;
-    type: DeviceType;
-    modelId: string;
-    model: DeviceModel;
-    projectId: string;
-    spaceId: string;
-    parentId?: string;
-    iconId: string;
-    icon: Icon;
-    protocols: object[];
-    specId: string;
-    spec: object;
-    channelInfo?: object[];
-    switchPanelControlInfo?: object[];
-    attrs: object[];
-    sendTelRules?: number[];
-    imei: string;
-    publicIP: string;
-    traceIP: string;
-    heartbeat?: number;
-    images?: Image[];
-    period?: number;
-    softwareInfo?: object[];
-    networkCards?: NetworkCard[];
-
-    createdBy: string;
-    updatedBy: string;
-    createdAt: number;
-    updatedAt: number;
 }
 
 export interface SpaceVM {
@@ -178,6 +107,89 @@ export interface SpaceTemplateVM {
     updatedAt: number;
 }
 
+interface Brand {
+    id: string;
+    code: string;
+    name: string;
+}
+
+interface DeviceCategory {
+    id: string;
+    name: string;
+}
+
+interface DeviceType {
+    id: number;
+    name: string;
+
+    categoryId: string;
+    category: DeviceCategory;
+}
+
+interface DeviceModel {
+    id: string;
+    name: string;
+    brandId: string;
+    brand: Brand;
+}
+
+export interface Protocol {
+    id: string;
+    typeId: string;
+    type: ProtocolType;
+    commInfo?: CommInfo;
+}
+
+interface ProtocolType {
+    id: string;
+    name: string;
+}
+
+export interface CommInfo {
+    // KNX Gateway
+    pAddr?: string;
+    filters?: object[];
+    UPDs?: UDP[];
+    // KNX actuator
+    objs?: CommObject[];
+    // KNX Sensor
+    // objs: {
+    //     gAddrs: string[];
+    //     objId: number;
+    // }[];
+}
+
+interface UDP {
+    enableIpTunneling: boolean;
+    ip: string;
+    name: string;
+    obtainIpType: number;
+    port: number;
+    type: string;
+}
+
+export interface CommObject {
+    ch?: number;
+    gAddrs: string[];
+    objId: number;
+    attrObjId?: number;
+    ebtn?: boolean;
+
+    // btn
+    btn?: number;
+    lpress?: boolean;
+}
+
+interface SwitchPanel {
+    pageCount: number;
+    btnCount: number;
+    layout: string;
+    hasLPress?: boolean;
+    modifyStyle?: boolean;
+    keyValues?: number[];
+    isVRB?: boolean;
+}
+
 export interface DeviceTemplateVM {
     id: string;
     name: string;
@@ -191,7 +203,7 @@ export interface DeviceTemplateVM {
 
     protocols: Protocol[];
     specId: string;
-    spec: Spec;
+    spec: DeviceTemplateSpec;
 
     attrs: object[];
     period?: number;
@@ -205,7 +217,7 @@ export interface DeviceTemplateVM {
     deletedAt?: number;
 }
 
-interface Spec {
+interface DeviceTemplateSpec {
     id: string;
     comPortCount?: number;
     networkCardCount?: number;
@@ -216,30 +228,84 @@ interface Spec {
     switchPanel?: SwitchPanel;
 }
 
-interface SwitchPanel {
-    pageCount: number;
-    btnCount: number;
-    layout: string;
-    hasLPress?: boolean;
-    modifyStyle?: boolean;
-    keyValues?: number[];
-    isVRB?: boolean;
-}
-
-interface Protocol {
-    id: string;
-    typeId: string;
-    type: ProtocolType;
-    commInfo?: CommInfo;
-}
-
-interface ProtocolType {
+interface DeviceVM {
     id: string;
     name: string;
+    dvId: string;
+
+    typeId: number;
+    type: DeviceType;
+    modelId: string;
+    model: DeviceModel;
+
+    projectId: string;
+    spaceId: string;
+    parentId?: string;
+    parent?: DeviceVM;
+
+    iconId: string;
+    icon: Icon;
+    images?: Image[];
+
+    protocols: Protocol[];
+    specId: string;
+    spec: DeviceSpec;
+
+    attrs: object[];
+    heartbeat?: number;
+    period?: number;
+    sendTelRules?: number[];
+
+    channelInfo?: object[];
+    switchPanelControlInfo?: SwitchPanelControlInfo[];
+    imei: string;
+    publicIP: string;
+    traceIP: string;
+    softwareInfo?: SoftwareInfo[];
+    networkCards?: NetworkCard[];
+
+    createdBy: string;
+    updatedBy: string;
+    createdAt: number;
+    updatedAt: number;
+
+    leaves?: DeviceVM[];
 }
 
-interface CommInfo {
-    pAddr: string;
+export interface SwitchPanelControlInfo {
+    button: number;
+    connectionInfo: ConnectionInfo[];
+}
+
+export interface ConnectionInfo {
+    // objectId: number;
+    dvId: string;
+}
+
+export interface SoftwareInfo {
+    name: string;
+    version?: string;
+}
+
+export interface DeviceSpec {
+    id: string;
+    comPortCount?: number;
+    networkCardCount?: number;
+    channelCount?: number;
+    KNX?: any;
+    RS485?: any;
+    EEPCode?: any;
+    switchPanel?: SwitchPanel;
+}
+
+export interface NetworkCard {
+    id: string;
+    primary?: boolean;
+    enable: boolean;
+    network: string;
+    name: string;
+    ip: string;
+    mac: string;
 }
 
 export default DeviceVM;

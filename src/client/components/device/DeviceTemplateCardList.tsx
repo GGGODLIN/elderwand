@@ -1,6 +1,8 @@
 import { Button } from '@material-ui/core';
 import React, { useState } from 'react';
 import {
+    DeviceProtocolTypes,
+    DeviceProtocolTypeTags,
     DeviceTypeCategories,
     DeviceTypeCategoryTags,
 } from 'src/client/domain/device/DeviceMaintainItemTypes';
@@ -14,24 +16,44 @@ interface DeviceTemplateCardListProps {
 const DeviceTemplateCardList: React.FC<DeviceTemplateCardListProps> = (
     props
 ) => {
-    const default_filter = DeviceTypeCategories.Gateway;
-    // const default_filter = DeviceTypeCategory.Actuator;
-
-    const [filter, setFilter] = useState(default_filter);
+    const [category_filter, setCategoryFilter] = useState(
+        DeviceTypeCategories.All
+    );
 
     const categories = [...DeviceTypeCategoryTags];
 
-    const elements = categories.map((category, idx) => {
+    const category_elements = categories.map((category, idx) => {
         const handleChange = (e) => {
             e.preventDefault();
-            setFilter(category);
+            setCategoryFilter(category);
         };
 
-        const color = filter == category ? 'default' : 'primary';
+        const color = category_filter == category ? 'default' : 'primary';
 
         return (
             <Button key={category} color={color} onClick={handleChange}>
                 {category}
+            </Button>
+        );
+    });
+
+    const [protocol_filter, setProtocolFilter] = useState(
+        DeviceProtocolTypes.All
+    );
+
+    const protocols = [...DeviceProtocolTypeTags];
+
+    const protocol_elements = protocols.map((protocol, idx) => {
+        const handleChange = (e) => {
+            e.preventDefault();
+            setProtocolFilter(protocol);
+        };
+
+        const color = protocol_filter == protocol ? 'default' : 'primary';
+
+        return (
+            <Button key={protocol} color={color} onClick={handleChange}>
+                {protocol}
             </Button>
         );
     });
@@ -51,16 +73,23 @@ const DeviceTemplateCardList: React.FC<DeviceTemplateCardListProps> = (
         return 0;
     });
 
-    let filtered =
-        filter == 'All'
-            ? templates
-            : templates.filter(
-                  (template) => template.type.categoryId == filter
-              );
+    if (category_filter != 'All') {
+        templates = templates.filter(
+            (template) => template.type.categoryId == category_filter
+        );
+    }
 
-    const cards = !filtered.length
+    if (protocol_filter != 'All') {
+        templates = templates.filter((template) => {
+            return template.protocols
+                .map((protocol) => protocol.typeId)
+                .includes(protocol_filter);
+        });
+    }
+
+    const cards = !templates.length
         ? []
-        : filtered.map((template) => {
+        : templates.map((template) => {
               return (
                   <DeviceTemplateCard key={template.id} template={template} />
               );
@@ -68,7 +97,10 @@ const DeviceTemplateCardList: React.FC<DeviceTemplateCardListProps> = (
 
     return (
         <React.Fragment>
-            <div className={'device-category-filter'}>{elements}</div>
+            <div className={'device-category-filter'}>{category_elements}</div>
+            <div className="dotted" />
+            <div className={'device-protocol-filter'}>{protocol_elements}</div>
+            <div className="dotted" />
             <div className={'device-template-list'}>
                 <div className="cards">{cards}</div>
             </div>

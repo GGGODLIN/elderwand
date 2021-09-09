@@ -104,15 +104,16 @@ const GatewayTreeView: React.FC<GatewayTreeViewProp> = (props) => {
     const id = props.project.id;
     const name = `${props.project.name} - ${props.project.code}`;
     const expanded = [id];
-    // if (Array.isArray(props.spaces)) {
-    //     const ids = props.spaces
-    //         .filter((space) => space.parentId == null)
-    //         .map((space) => {
-    //             return space.id;
-    //         });
-    //
-    //     expanded.push(...ids);
-    // }
+
+    if (Array.isArray(props.spaces)) {
+        const ids = props.spaces
+            .filter((space) => space.parentId == null)
+            .map((space) => {
+                return space.id;
+            });
+
+        expanded.push(...ids);
+    }
 
     const handleLabelClick = (e) => {
         e.preventDefault();

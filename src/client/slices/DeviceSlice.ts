@@ -83,6 +83,11 @@ export interface DeviceMaintainState {
         project?: ProjectVM;
         space?: SpaceVM;
     };
+    edit_device_setting_dialog: {
+        open: boolean;
+        project?: ProjectVM;
+        device?: DeviceVM;
+    };
 }
 
 const getInitialState = (): DeviceMaintainState => {
@@ -152,6 +157,11 @@ const getInitialState = (): DeviceMaintainState => {
             open: false,
             project: null,
             space: null,
+        },
+        edit_device_setting_dialog: {
+            open: false,
+            project: null,
+            device: null,
         },
     };
 };
@@ -453,6 +463,26 @@ const DeviceSlice = createSlice<
                 };
             });
         },
+        // edit device setting
+        editDeviceSetting: (state, action: PayloadAction<DeviceVM>) => {
+            return produce(state, (draft) => {
+                const device = action.payload;
+                draft.edit_device_setting_dialog = {
+                    open: true,
+                    project: state.project_selected,
+                    device: device,
+                };
+            });
+        },
+        closeEditDeviceSettingDialog: (state) => {
+            return produce(state, (draft) => {
+                draft.edit_device_setting_dialog = {
+                    open: false,
+                    project: null,
+                    device: null,
+                };
+            });
+        },
     },
 });
 
@@ -550,7 +580,10 @@ const closeAddSpaceDialog = DeviceSlice.actions
     .closeAddSpaceDialog as ActionCreatorWithoutPayload;
 
 const changeSpaceParent = DeviceSlice.actions
-    .changeSpaceParent as ActionCreatorWithPayload<{ space: SpaceVM; parent: SpaceVM }>;
+    .changeSpaceParent as ActionCreatorWithPayload<{
+    space: SpaceVM;
+    parent: SpaceVM;
+}>;
 
 const closeChangeSpaceParentDialog = DeviceSlice.actions
     .closeChangeSpaceParentDialog as ActionCreatorWithoutPayload;
@@ -560,6 +593,12 @@ const removeSpace = DeviceSlice.actions
 
 const closeRemoveSpaceDialog = DeviceSlice.actions
     .closeRemoveSpaceDialog as ActionCreatorWithoutPayload;
+
+const editDeviceSetting = DeviceSlice.actions
+    .editDeviceSetting as ActionCreatorWithPayload<DeviceVM>;
+
+const closeEditDeviceSettingDialog = DeviceSlice.actions
+    .closeEditDeviceSettingDialog as ActionCreatorWithoutPayload;
 
 export default {
     reducer,
@@ -595,4 +634,6 @@ export default {
     closeChangeSpaceParentDialog,
     removeSpace,
     closeRemoveSpaceDialog,
+    editDeviceSetting,
+    closeEditDeviceSettingDialog,
 };

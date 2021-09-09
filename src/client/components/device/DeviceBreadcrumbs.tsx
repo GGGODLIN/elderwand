@@ -1,8 +1,11 @@
 import { Breadcrumbs, Link } from '@material-ui/core';
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import DeviceVM, { SpaceVM } from 'src/client/domain/device/DeviceVMs';
-import ProjectVM from 'src/client/domain/project/ProjectVM';
+import DeviceVM, {
+    ProjectVM,
+    SpaceVM,
+} from 'src/client/domain/device/DeviceVMs';
+
 import DeviceSlice from 'src/client/slices/DeviceSlice';
 
 interface DeviceBreadcrumbsProp {

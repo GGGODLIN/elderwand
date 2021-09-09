@@ -7,7 +7,7 @@ dayjs.extend(timezone);
 dayjs.extend(utc);
 dayjs.extend(customParseFormat);
 
-export class TimeUtil {
+class TimeUtil {
     static now(): dayjs.Dayjs {
         return dayjs();
     }
@@ -20,3 +20,5 @@ export class TimeUtil {
         return dayjs(time);
     }
 }
+
+export default TimeUtil;

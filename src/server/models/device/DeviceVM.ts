@@ -24,6 +24,7 @@ export default interface DeviceVM {
     attrs?: object[];
     period: number;
     heartbeat: number;
+    sendTelRules: number[];
 
     softwareInfo: object;
 

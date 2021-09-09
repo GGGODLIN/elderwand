@@ -15,6 +15,9 @@ export default interface ProjectVM {
     updatedBy: string;
     createdAt: number;
     updatedAt: number;
+
+    groups: any[];
+    users: any[];
 }
 
 export interface Type {

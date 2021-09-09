@@ -61,18 +61,42 @@ export class DeviceMaintainCardTypeHelper {
         return device.spaceId == space.id;
     }
 
-    private static isMovingTheSameDevice(item: DeviceVM, target: DeviceVM) {
+    private static isMovingTheSameDevice = (
+        item: DeviceVM,
+        target: DeviceVM
+    ): boolean => {
         return item.id == target.id;
-    }
+    };
 
-    private static isSameParentDevice(item: DeviceVM, target: DeviceVM) {
+    private static isSameParentDevice = (
+        item: DeviceVM,
+        target: DeviceVM
+    ): boolean => {
         return item.parentId == target.id;
-    }
+    };
+
+    private static isSupportProtocol = (
+        item: DeviceTemplateVM | DeviceVM,
+        target: DeviceVM
+    ): boolean => {
+        const src = item.protocols.map((protocol) => protocol.typeId);
+        const dest = target.protocols.map((protocol) => protocol.typeId);
+
+        const result = src.filter((value) => {
+            return dest.indexOf(value) >= 0;
+        });
+
+        return result.length > 0;
+    };
 
     private static isLinkableDevice = (
         item: DeviceTemplateVM | DeviceVM,
         target: DeviceVM
     ): boolean => {
+        if (!DeviceMaintainCardTypeHelper.isSupportProtocol(item, target)) {
+            return false;
+        }
+
         const src = item.type.categoryId as DeviceTypeCategory;
         const dest = target.type.categoryId;
 
@@ -136,7 +160,12 @@ export class DeviceMaintainCardTypeHelper {
 
         if (item.type == DeviceMaintainCardTypes.SpaceCard) {
             // change space parent
-            return true;
+
+            if ((item.payload as SpaceVM).id == target.payload.id) {
+                return false;
+            }
+
+            return (item.payload as SpaceVM).parentId != target.payload.id;
         }
 
         return false;
@@ -271,18 +300,84 @@ export const DeviceTypeCategoryTags = [
     DeviceTypeCategories.ContactBridge,
 ];
 
-export class DeviceTypeCategoryHelper {
-    static canLink = (
-        source: DeviceVM | DeviceTemplateVM,
-        target: DeviceVM | DeviceTemplateVM
-    ): boolean => {
-        // TODO protocols
-        if (source.id == target.id) {
-            return false;
-        }
+// 2G	2G	2G	2G
+// BLE	BLE	BLE	BLE
+// BT	Bluetooth	蓝牙	藍牙
+// BsP	Buspro	Buspro	Buspro
+// CP	Contact Point	干接点	乾接點
+// EnO	EnOcean	EnOcean	EnOcean
+// EtN	Ethernet	乙太网	乙太網
+// KNX	KNX	KNX	KNX
+// MdB	Modbus	Modbus	Modbus
+// NBI	NB-IoT	NB-IoT	NB-IoT
+// LoR	LoRa	LoRa	LoRa
+// SgF	SigFox	SigFox	SigFox
+// WiF	Wifi	Wifi	Wifi
+// ZgB	ZigBee	ZigBee	ZigBee
 
-        return;
-    };
-}
+export type DeviceProtocolType =
+    | 'All'
+    | '2G'
+    | 'BLE'
+    | 'BT'
+    | 'BsP'
+    | 'CP'
+    | 'EnO'
+    | 'EtN'
+    | 'KNX'
+    | 'MdB'
+    | 'NBI'
+    | 'LoR'
+    | 'SgF'
+    | 'WiF'
+    | 'ZgB';
+
+export const DeviceProtocolTypes: {
+    // [key: string]: DeviceProtocolType;
+    All: DeviceProtocolType;
+    SecondGeneration: DeviceProtocolType;
+    BLE: DeviceProtocolType;
+    Bluetooth: DeviceProtocolType;
+    Buspro: DeviceProtocolType;
+    Contact: DeviceProtocolType;
+    EnOcean: DeviceProtocolType;
+    Ethernet: DeviceProtocolType;
+    KNX: DeviceProtocolType;
+    Modbus: DeviceProtocolType;
+    NBIoT: DeviceProtocolType;
+    LoRa: DeviceProtocolType;
+    SigFox: DeviceProtocolType;
+    Wifi: DeviceProtocolType;
+    ZigBee: DeviceProtocolType;
+} = {
+    All: 'All',
+    SecondGeneration: '2G',
+    BLE: 'BLE',
+    Bluetooth: 'BT',
+    Buspro: 'BsP',
+    Contact: 'CP',
+    EnOcean: 'EnO',
+    Ethernet: 'EtN',
+    KNX: 'KNX',
+    Modbus: 'MdB',
+    NBIoT: 'NBI',
+    LoRa: 'LoR',
+    SigFox: 'SgF',
+    Wifi: 'WiF',
+    ZigBee: 'ZgB',
+};
+
+export const DeviceProtocolTypeTags: DeviceProtocolType[] = [
+    DeviceProtocolTypes.All,
+    DeviceProtocolTypes.KNX,
+    DeviceProtocolTypes.Modbus,
+    DeviceProtocolTypes.EnOcean,
+    DeviceProtocolTypes.Ethernet,
+    DeviceProtocolTypes.Buspro,
+    DeviceProtocolTypes.Wifi,
+    DeviceProtocolTypes.Bluetooth,
+    DeviceProtocolTypes.SecondGeneration,
+    DeviceProtocolTypes.Contact,
+];
 
 export default DeviceMaintainCardTypes;

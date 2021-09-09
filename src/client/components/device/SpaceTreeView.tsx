@@ -2,7 +2,7 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { TreeItem, TreeView } from '@material-ui/lab';
 import clsx from 'clsx';
-import React from 'react';
+import React, { Dispatch } from 'react';
 import { useDrop } from 'react-dnd';
 import { useDispatch } from 'react-redux';
 import DeviceMaintainCardTypes, {
@@ -21,6 +21,86 @@ interface SpaceTreeViewProp {
     spaces: SpaceVM[];
 }
 
+function useTreeItemDND(
+    dispatch: Dispatch<any>,
+    spaces: SpaceVM[],
+    space: SpaceVM
+) {
+    const accept = [
+        DeviceMaintainCardTypes.SpaceCard, // performance issue
+        DeviceMaintainCardTypes.DeviceSmallCard,
+    ];
+
+    const [{ isOver, canDrop }, drop] = useDrop(
+        () => ({
+            accept: accept,
+            canDrop: (
+                item: {
+                    type: DeviceMaintainCardType;
+                    payload: DeviceTemplateVM | DeviceVM;
+                },
+                monitor
+            ) => {
+                // const source = item.payload as DeviceVM;
+                // return source.spaceId != space.id;
+                const target = {
+                    type: DeviceMaintainCardTypes.SpaceCard,
+                    payload: space as SpaceVM,
+                };
+                return DeviceMaintainCardTypeHelper.canDrop(item, target);
+            },
+            drop: (
+                item: {
+                    type: DeviceMaintainCardType;
+                    payload: DeviceTemplateVM | DeviceVM | SpaceVM;
+                },
+                monitor
+            ) => {
+                if (monitor.didDrop() || !monitor.isOver({ shallow: true })) {
+                    return;
+                }
+
+                if (item.type == DeviceMaintainCardTypes.DeviceTemplateCard) {
+                    // console.log('place device template to space');
+                    dispatch(DeviceSlice.placeDeviceToSpace(space));
+                    return;
+                }
+
+                if (
+                    item.type == DeviceMaintainCardTypes.DeviceCard ||
+                    item.type == DeviceMaintainCardTypes.DeviceSmallCard
+                ) {
+                    // console.log('move device to the space');
+                    dispatch(DeviceSlice.changeDeviceLocation(space));
+                    return;
+                }
+
+                if (item.type == DeviceMaintainCardTypes.SpaceCard) {
+                    dispatch(
+                        DeviceSlice.changeSpaceParent({
+                            space: item.payload as SpaceVM,
+                            parent: space,
+                        })
+                    );
+                    return;
+                }
+            },
+            collect: (monitor) => ({
+                isOver: !!monitor.isOver({ shallow: true }),
+                canDrop: !!monitor.canDrop(),
+            }),
+        }),
+        [spaces]
+    );
+
+    const classname = clsx(
+        isOver ? 'is-over' : '',
+        isOver && canDrop ? 'can-drop' : '',
+        isOver && !canDrop ? 'cannot-drop' : ''
+    );
+    return { drop, classname };
+}
+
 const SpaceTreeView: React.FC<SpaceTreeViewProp> = (props) => {
     const dispatch = useDispatch();
 
@@ -32,6 +112,7 @@ const SpaceTreeView: React.FC<SpaceTreeViewProp> = (props) => {
             />
         );
     }
+
     const space_map: { [key: string]: SpaceVM } = {};
 
     for (const space of props.spaces) {
@@ -59,87 +140,10 @@ const SpaceTreeView: React.FC<SpaceTreeViewProp> = (props) => {
                 dispatch(DeviceSlice.selectDevice(null));
             };
 
-            const accept = [
-                // DeviceMaintainCardTypes.SpaceCard, // performance issue
-                DeviceMaintainCardTypes.DeviceSmallCard,
-            ];
-
-            const [{ isOver, canDrop }, drop] = useDrop(
-                () => ({
-                    accept: accept,
-                    canDrop: (
-                        item: {
-                            type: DeviceMaintainCardType;
-                            payload: DeviceTemplateVM | DeviceVM;
-                        },
-                        monitor
-                    ) => {
-                        // const source = item.payload as DeviceVM;
-                        // return source.spaceId != space.id;
-                        const target = {
-                            type: DeviceMaintainCardTypes.SpaceCard,
-                            payload: space as SpaceVM,
-                        };
-                        return DeviceMaintainCardTypeHelper.canDrop(
-                            item,
-                            target
-                        );
-                    },
-                    drop: (
-                        item: {
-                            type: DeviceMaintainCardType;
-                            payload: DeviceTemplateVM | DeviceVM | SpaceVM;
-                        },
-                        monitor
-                    ) => {
-                        if (
-                            monitor.didDrop() ||
-                            !monitor.isOver({ shallow: true })
-                        ) {
-                            return;
-                        }
-
-                        if (
-                            item.type ==
-                            DeviceMaintainCardTypes.DeviceTemplateCard
-                        ) {
-                            // console.log('place device template to space');
-                            dispatch(DeviceSlice.placeDeviceToSpace(space));
-                            return;
-                        }
-
-                        if (
-                            item.type == DeviceMaintainCardTypes.DeviceCard ||
-                            item.type == DeviceMaintainCardTypes.DeviceSmallCard
-                        ) {
-                            // console.log('move device to the space');
-                            dispatch(DeviceSlice.changeDeviceLocation(space));
-                            return;
-                        }
-
-                        // if (item.type == DeviceMaintainCardTypes.SpaceCard) {
-                        //     dispatch(
-                        //         DeviceSlice.changeSpaceParent({
-                        //             space: space,
-                        //             parent: item.payload as SpaceVM,
-                        //         })
-                        //     );
-                        //     return;
-                        // }
-                    },
-                    collect: (monitor) => ({
-                        isOver: !!monitor.isOver({ shallow: true }),
-                        canDrop: !!monitor.canDrop(),
-                    }),
-                }),
-                [space]
-            );
-
-            // TODO
-            const classname = clsx(
-                isOver ? 'is-over' : '',
-                isOver && canDrop ? 'can-drop' : '',
-                isOver && !canDrop ? 'cannot-drop' : ''
+            const { drop, classname } = useTreeItemDND(
+                dispatch,
+                props.spaces,
+                space
             );
 
             return (
@@ -169,8 +173,16 @@ const SpaceTreeView: React.FC<SpaceTreeViewProp> = (props) => {
                   dispatch(DeviceSlice.selectDevice(null));
               };
 
+              const { drop, classname } = useTreeItemDND(
+                  dispatch,
+                  props.spaces,
+                  space
+              );
+
               return (
                   <TreeItem
+                      className={classname}
+                      ref={drop}
                       key={space.id}
                       nodeId={space.id}
                       label={space.name}
@@ -185,7 +197,7 @@ const SpaceTreeView: React.FC<SpaceTreeViewProp> = (props) => {
     const name = `${props.project.name} - ${props.project.code}`;
     const expanded = [id];
 
-    // expanded.push(...root_spaces.map((space) => space.id));
+    expanded.push(...root_spaces.map((space) => space.id));
 
     const handleLabelClick = (e) => {
         e.preventDefault();

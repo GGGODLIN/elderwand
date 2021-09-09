@@ -32,6 +32,7 @@ import TabPanel from 'src/client/components/TabPanel';
 import DeviceMaintainAPIs from 'src/client/domain/device/DeviceMaintainAPIs';
 import { RootState } from 'src/client/reducer';
 import DeviceSlice from 'src/client/slices/DeviceSlice';
+import EditDeviceSettingDialog from 'src/client/components/device/EditDeviceSettingDialog';
 
 export interface DevicePageProps {
     title: string;
@@ -82,6 +83,7 @@ export const DevicePage: React.FC<DevicePageProps> = () => {
         add_space_dialog,
         change_space_parent_dialog,
         remove_space_dialog,
+        edit_device_setting_dialog,
     } = useSelector((state: RootState) => {
         return {
             projects: state.device.projects,
@@ -110,6 +112,7 @@ export const DevicePage: React.FC<DevicePageProps> = () => {
             add_space_dialog: state.device.add_space_dialog,
             remove_space_dialog: state.device.remove_space_dialog,
             change_space_parent_dialog: state.device.change_space_parent_dialog,
+            edit_device_setting_dialog: state.device.edit_device_setting_dialog,
         };
     });
 
@@ -151,7 +154,6 @@ export const DevicePage: React.FC<DevicePageProps> = () => {
                         />
                     </Tabs>
                 </div>
-
                 <div className="device-page-content">
                     <DndProvider backend={HTML5Backend}>
                         <Card>
@@ -280,7 +282,6 @@ export const DevicePage: React.FC<DevicePageProps> = () => {
                         </Card>
                     </DndProvider>
                 </div>
-
                 <PlaceDeviceToSpaceDialog
                     open={place_device_to_space_dialog.open}
                     project={place_device_to_space_dialog.project}
@@ -331,6 +332,11 @@ export const DevicePage: React.FC<DevicePageProps> = () => {
                     open={remove_space_dialog.open}
                     project={remove_space_dialog.project}
                     space={remove_space_dialog.space}
+                />
+                <EditDeviceSettingDialog
+                    open={edit_device_setting_dialog.open}
+                    project={edit_device_setting_dialog.project}
+                    device={edit_device_setting_dialog.device}
                 />
             </div>
         </React.Fragment>

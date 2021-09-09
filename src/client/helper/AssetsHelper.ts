@@ -32,7 +32,23 @@ const joinPaths = (target: string, value: string | string[]): string => {
     return path.join(target, value);
 };
 
+interface Assets {
+    id: string;
+    name: string;
+    path: string;
+    tags: string[];
+}
+
 class AssetsHelper {
+    static generateIcon = (value: Assets): Assets => {
+        const path = joinPaths(ICON_STATIC_PATH, value.path);
+
+        return {
+            ...value,
+            path: path,
+        };
+    };
+
     static generateIconPath = (value: string | string[]): string => {
         return joinPaths(ICON_STATIC_PATH, value);
     };
