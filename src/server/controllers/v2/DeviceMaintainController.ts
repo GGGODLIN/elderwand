@@ -1,9 +1,7 @@
 import { IRouterContext } from 'koa-router';
+
 import ServerEnvVar from '../../config/ServerEnvVar';
-import DeviceDTO, {
-    ChannelInfo,
-    NetworkCardDTO,
-} from '../../domain/device/models/DeviceDTO';
+import DeviceDTO from '../../domain/device/models/DeviceDTO';
 import { Platform } from '../../domain/shared/enums/Enums';
 import SpaceDTO from '../../domain/space/models/SpaceDTO';
 import DeviceDataRepositoryHelper, {
@@ -182,8 +180,8 @@ function convertToDeviceVM(dto: DeviceDTO): DeviceVM {
 
         spec: {
             comPortCnt: dto.spec.comPortCount,
-            manufacturerCode: dto.spec.manufacturerCode,
-            // isIPR: false, // TODO KNX
+            // manufacturerCode: dto.spec.manufacturerCode,
+            isIPR: dto.spec.KNX?.isIPR ? dto.spec.KNX?.isIPR : false,
         } as Spec,
 
         chInfo: dto.channelInfo?.map((info) => {
@@ -224,7 +222,7 @@ function convertToDeviceVM(dto: DeviceDTO): DeviceVM {
     };
 }
 
-function convertToNetworkCards(dtos: NetworkCardDTO[]): NetworkCard[] {
+function convertToNetworkCards(dtos: NetworkCard[]): NetworkCard[] {
     if (!dtos) {
         return [];
     }
@@ -234,7 +232,7 @@ function convertToNetworkCards(dtos: NetworkCardDTO[]): NetworkCard[] {
     });
 }
 
-function convertToNetworkCard(dto: NetworkCardDTO): NetworkCard {
+function convertToNetworkCard(dto: NetworkCard): NetworkCard {
     return {
         enable: dto.enable,
         ip: dto.ip,
@@ -378,6 +376,18 @@ interface Spec {
 
     RS485?: Rs485;
     switch?: Switch;
+
+    // id: string;
+    // comPortCount?: number;
+    // networkCardCount?: number;
+    // channelCount?: number;
+    // maxChannelCount?: number;
+    //
+    // switchPanel?: SwitchPanel;
+    //
+    // KNX?: KNX;
+    // RS485?: RS485;
+    // EnOcean?: EnOcean;
 }
 
 interface NetworkCard {

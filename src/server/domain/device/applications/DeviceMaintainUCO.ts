@@ -3,7 +3,11 @@ import DeviceRepository from '../../device/infra/DeviceRepository';
 import DeviceTemplateDTO from '../../migration/models/DeviceTemplateDTO';
 import SpaceDTO from '../../space/models/SpaceDTO';
 import DeviceDTO from '../models/DeviceDTO';
-import { EditDeviceOptions, PlaceDeviceOptions } from '../models/DeviceVOs';
+import {
+    EditDeviceOptions,
+    EditDeviceProtocolsOptions,
+    PlaceDeviceOptions,
+} from '../models/DeviceVOs';
 
 export default class DeviceMaintainUCO {
     private repository: DeviceRepository;
@@ -38,6 +42,19 @@ export default class DeviceMaintainUCO {
         options: EditDeviceOptions
     ): Promise<DeviceDTO> {
         return this.repository.editDevice(id, pid, options);
+    }
+
+    /**
+     * @param id Device ID or DvID
+     * @param pid ProjectID
+     * @param options Edit Device Options
+     */
+    editDeviceProtocols(
+        id: string,
+        pid: string,
+        options: EditDeviceProtocolsOptions
+    ): Promise<DeviceDTO> {
+        return this.repository.editDeviceProtocols(id, pid, options);
     }
 
     /**

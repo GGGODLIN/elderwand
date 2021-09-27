@@ -1,6 +1,11 @@
 import {
     Checkbox,
+    FormControl,
     FormControlLabel,
+    FormHelperText,
+    InputLabel,
+    MenuItem,
+    Select,
     Switch,
     TextField,
 } from '@material-ui/core';
@@ -10,18 +15,24 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import clsx from 'clsx';
-import React from 'react';
-import { useDispatch } from 'react-redux';
+import { produce } from 'immer';
+import React, { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useDispatch, useSelector } from 'react-redux';
+import KNXConfiguration from 'src/client/components/device/KNX/KNXConfiguration';
 import DeviceHelper from 'src/client/domain/device/DeviceHelper';
+import DeviceMaintainAPIs from 'src/client/domain/device/DeviceMaintainAPIs';
 import DeviceVM, {
     DeviceSpec,
     NetworkCard,
     ProjectVM,
     SoftwareInfo,
+    SpaceVM,
 } from 'src/client/domain/device/DeviceVMs';
+import AssetsHelper from 'src/client/helper/AssetsHelper';
+import { RootState } from 'src/client/reducer';
 import DeviceSlice from 'src/client/slices/DeviceSlice';
 import TimeUtil from 'src/client/utils/TimeUtil';
-import KNXConfiguration from './KNX/KNXConfiguration';
 
 interface NetworkCardsProps {
     cards: NetworkCard[];
@@ -34,7 +45,7 @@ const NetworkCards: React.FC<NetworkCardsProps> = (props) => {
 
     return (
         <div className={'network-cards'}>
-            {props.cards.map((card) => {
+            {props.cards.map((card, idx) => {
                 const primary = card.primary ? 'primary' : '';
                 const classname = clsx(['network-card', primary]);
 
@@ -79,7 +90,7 @@ const NetworkCards: React.FC<NetworkCardsProps> = (props) => {
                         <Switch
                             name="enable"
                             checked={card.enable}
-                            disabled={!!primary}
+                            disabled={!!primary || idx == 0}
                             color={'primary'}
                         />
                     </div>
@@ -142,6 +153,48 @@ const ProjectInformation: React.FC<ProjectInformationProps> = (
     );
 };
 
+interface SpaceInformationProps {
+    space: SpaceVM;
+}
+
+const SpaceInformation: React.FC<SpaceInformationProps> = (
+    props
+): JSX.Element => {
+    if (!props.space) {
+        return <React.Fragment />;
+    }
+
+    const space = props.space;
+
+    return (
+        <div className={'space-info'}>
+            <div>
+                <div className="name">{'Space ID'}</div>
+                <div className="value">{space.id}</div>
+            </div>
+            <div>
+                <div className="name">{'Space Name'}</div>
+                <div className="value">{space.name}</div>
+            </div>
+            {space.icon && (
+                <div>
+                    <div className="name">{'Icon'}</div>
+                    <div className="value">{space.icon.name}</div>
+                </div>
+            )}
+            <div>
+                <div className="name">{'Photo Count'}</div>
+                <div className="value">{space?.photos?.length || 0}</div>
+            </div>
+
+            {/*<div>*/}
+            {/*    <div className="name">{'Cloud Code'}</div>*/}
+            {/*    <div className="value">{project.cloudCode.name}</div>*/}
+            {/*</div>*/}
+        </div>
+    );
+};
+
 interface SoftwareInfoProps {
     info: SoftwareInfo[];
 }
@@ -175,7 +228,7 @@ const ParentDeviceInfo: React.FC<ParentDeviceInfoProps> = (
     props
 ): JSX.Element => {
     if (!props.device || !props.device.parent) {
-        return null;
+        return <React.Fragment />;
     }
 
     const device = props.device.parent;
@@ -262,9 +315,18 @@ const Specification: React.FC<SpecificationProps> = (props): JSX.Element => {
 
             {
                 <div>
+                    <div className={'name'}>{'MaxChannel'}</div>
+                    <div className={'value'}>
+                        {props.spec.maxChannelCount || '0'}
+                    </div>
+                </div>
+            }
+
+            {
+                <div>
                     <div className={'name'}>{'KNX'}</div>
                     <div className={'value'}>
-                        {props.spec.KNX ? 'true' : 'false'}
+                        {props.spec?.KNX ? 'true' : 'false'}
                     </div>
                 </div>
             }
@@ -280,9 +342,9 @@ const Specification: React.FC<SpecificationProps> = (props): JSX.Element => {
 
             {
                 <div>
-                    <div className={'name'}>{'EEPCode'}</div>
+                    <div className={'name'}>{'EnOcean'}</div>
                     <div className={'value'}>
-                        {props.spec.EEPCode ? 'true' : 'false'}
+                        {props.spec?.EnOcean ? 'true' : 'false'}
                     </div>
                 </div>
             }
@@ -301,40 +363,27 @@ const Specification: React.FC<SpecificationProps> = (props): JSX.Element => {
     );
 };
 
-interface EditDeviceDialogProps {
-    open: boolean;
+interface DeviceEditForm {
+    name: string;
+    iconId: string;
+}
+
+interface DeviceProfileProps {
     project: ProjectVM;
+    space: SpaceVM;
     device: DeviceVM;
 }
 
-interface EditDeviceSettingForm {
-    name: string;
-}
-
-const EditDeviceSettingDialog: React.FC<EditDeviceDialogProps> = (props) => {
-    const dispatch = useDispatch();
-
-    if (!props.open || !props.device) {
-        return null;
+const DeviceProfile: React.FC<DeviceProfileProps> = (props) => {
+    if (!props.project || !props.device) {
+        return <React.Fragment />;
     }
 
-    const open = props.open;
-    const device = props.device;
+    const dispatch = useDispatch();
+
     const project = props.project;
-    // TODO get project from device vm after imp get the device data include project.
-
-    const handleTest = () => {
-        // console.log(JSON.stringify(device.protocols, null, 2));
-        // console.log(JSON.stringify(device.attrs, null, 2));
-    };
-
-    const handleClose = () => {
-        dispatch(DeviceSlice.closeEditDeviceSettingDialog());
-    };
-
-    const handleSave = () => {
-        dispatch(DeviceSlice.closeEditDeviceSettingDialog());
-    };
+    const space = props.space;
+    const device = props.device;
 
     const helper = new DeviceHelper({ device: device });
     const image = helper.getImage();
@@ -344,6 +393,449 @@ const EditDeviceSettingDialog: React.FC<EditDeviceDialogProps> = (props) => {
     const { isKNX } = helper.isKNX();
 
     const routine = true;
+    const profile = true;
+    const info = true;
+
+    const protocols = helper.getProtocols();
+
+    const { icons } = useSelector((state: RootState) => {
+        return {
+            icons: state.device.icons,
+        };
+    });
+
+    const {
+        register,
+        control,
+        setValue,
+        handleSubmit,
+        clearErrors,
+        formState: { errors },
+    } = useForm<DeviceEditForm>({
+        mode: 'onChange',
+        reValidateMode: 'onChange',
+        defaultValues: {
+            name: device.name,
+        },
+    });
+
+    const [stateOfDeviceProfile, setDeviceProfile] = useState({
+        profile: {
+            name: device.name,
+            iconId: device.iconId,
+        },
+        changed: false,
+    });
+
+    const handleEditDeviceProfile = (e) => {
+        const name = e.target.name;
+        const value = e.target.value;
+
+        const nextState = produce(stateOfDeviceProfile, (draft) => {
+            draft.profile[name] = value;
+            draft.changed = true;
+        });
+
+        setDeviceProfile(nextState);
+    };
+
+    const handleResetDeviceProfile = (e) => {
+        setDeviceProfile({
+            profile: {
+                name: device.name,
+                iconId: device.iconId,
+            },
+            changed: false,
+        });
+
+        clearErrors();
+    };
+
+    const handleSubmitDeviceProfile = (e) => {
+        const device_vo = {
+            ...device,
+            name: stateOfDeviceProfile.profile.name,
+            iconId: stateOfDeviceProfile.profile.iconId,
+        };
+
+        DeviceMaintainAPIs.editDevice(dispatch, project, device_vo, (data) => {
+            dispatch(
+                DeviceSlice.editDeviceSetting({ ...data, project, space })
+            );
+            DeviceMaintainAPIs.fetchDeviceTopologyResources(dispatch, project);
+        });
+    };
+
+    useEffect(() => {
+        setDeviceProfile({
+            profile: {
+                name: device.name,
+                iconId: device.iconId,
+            },
+            changed: false,
+        });
+        return () => {
+            // effect;
+        };
+    }, [device]);
+
+    return (
+        <div className="device-profile">
+            <div className="info">
+                <form onSubmit={(e) => e.preventDefault()}>
+                    {/* device name and id */}
+                    <div>
+                        <TextField
+                            variant="outlined"
+                            size={'small'}
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                            label="Name"
+                            value={stateOfDeviceProfile.profile.name}
+                            onChange={handleEditDeviceProfile}
+                            error={!!errors.name}
+                            helperText={
+                                !errors.name ? ' ' : errors.name.message
+                            }
+                            disabled={false}
+                            required={true}
+                            inputProps={{
+                                ...register('name', {
+                                    minLength: {
+                                        value: 4,
+                                        message: 'minLength',
+                                    },
+                                    maxLength: {
+                                        value: 32,
+                                        message: 'maxLength',
+                                    },
+                                    required: {
+                                        value: true,
+                                        message: 'is required',
+                                    },
+                                }),
+                            }}
+                        />
+
+                        <TextField
+                            variant="outlined"
+                            size={'small'}
+                            label="ID"
+                            value={device.id}
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                            helperText={' '}
+                            disabled={true}
+                            style={{ width: '340px' }}
+                        />
+
+                        <FormControl
+                            variant={'outlined'}
+                            size={'small'}
+                            fullWidth={true}
+                        >
+                            <InputLabel shrink={true} id="icon-selector-label">
+                                {'Icon'}
+                            </InputLabel>
+                            <Select
+                                className={'icon-selector'}
+                                labelId="icon-selector-label"
+                                value={stateOfDeviceProfile.profile.iconId}
+                                label="Icon"
+                                name={'iconId'}
+                                onChange={handleEditDeviceProfile}
+                            >
+                                {icons.map((icon) => {
+                                    return (
+                                        <MenuItem key={icon.id} value={icon.id}>
+                                            <div>
+                                                <img
+                                                    src={AssetsHelper.generateIconPath(
+                                                        icon.path
+                                                    )}
+                                                    alt={icon.name}
+                                                />
+                                                <span>{icon.name}</span>
+                                            </div>
+                                        </MenuItem>
+                                    );
+                                })}
+                            </Select>
+                            <FormHelperText>{` `}</FormHelperText>
+                        </FormControl>
+                    </div>
+
+                    {/* device type amd model */}
+                    <div>
+                        {device.type && (
+                            <React.Fragment>
+                                <TextField
+                                    variant="outlined"
+                                    size={'small'}
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                    label="Type"
+                                    value={device.type.name}
+                                    helperText={' '}
+                                    disabled={true}
+                                />
+                                <TextField
+                                    variant="outlined"
+                                    size={'small'}
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                    label="Category"
+                                    value={device.type.category.name}
+                                    helperText={' '}
+                                    disabled={true}
+                                />
+                            </React.Fragment>
+                        )}
+                        {device.model && (
+                            <React.Fragment>
+                                <TextField
+                                    variant="outlined"
+                                    size={'small'}
+                                    label="Model"
+                                    value={device.model.name}
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                    disabled={true}
+                                    helperText={' '}
+                                />
+                                <TextField
+                                    variant="outlined"
+                                    size={'small'}
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                    label="Brand"
+                                    value={device.model.brand.name}
+                                    helperText={' '}
+                                    disabled={true}
+                                />
+                            </React.Fragment>
+                        )}
+                    </div>
+
+                    <div>
+                        {/* platform info */}
+                        <React.Fragment>
+                            <TextField
+                                variant="outlined"
+                                size={'small'}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                                label="Platform"
+                                value={project.cloudCode.name}
+                                helperText={' '}
+                                disabled={true}
+                            />
+                            <TextField
+                                variant="outlined"
+                                size={'small'}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                                label="Device ID"
+                                value={device.dvId}
+                                helperText={' '}
+                                disabled={true}
+                                style={{ width: '240px' }}
+                            />
+                        </React.Fragment>
+
+                        {/* device routine time */}
+                        <React.Fragment>
+                            {(routine || device.heartbeat) && (
+                                <TextField
+                                    variant="outlined"
+                                    size={'small'}
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                    label="Heartbeat"
+                                    value={
+                                        !device.heartbeat ? 0 : device.heartbeat
+                                    }
+                                    helperText={`( 0~65535 )`}
+                                    disabled={!device.heartbeat}
+                                    style={{ width: '160px' }}
+                                />
+                            )}
+                            {(routine || device.period) && (
+                                <TextField
+                                    variant="outlined"
+                                    size={'small'}
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                    label="Period"
+                                    value={!device.period ? 0 : device.period}
+                                    helperText={`( 0~65535 )`}
+                                    disabled={!device.period}
+                                    style={{
+                                        width: '160px',
+                                    }}
+                                />
+                            )}
+                        </React.Fragment>
+                    </div>
+                    {/* Protocols */}
+                    <div className={'actions'}>
+                        <div>
+                            <TextField
+                                variant="outlined"
+                                size={'small'}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                                label="Protocols"
+                                value={protocols.join(', ')}
+                                helperText={' '}
+                                disabled={true}
+                                style={{ width: '240px' }}
+                            />
+                            {device.spec?.EnOcean?.EEPCode && (
+                                <TextField
+                                    variant="outlined"
+                                    size={'small'}
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                    label="EEPCode"
+                                    value={device.spec?.EnOcean?.EEPCode}
+                                    helperText={' '}
+                                    disabled={true}
+                                    style={{ width: '240px' }}
+                                />
+                            )}
+                        </div>
+                        <div>
+                            {stateOfDeviceProfile.changed && (
+                                <React.Fragment>
+                                    <Button
+                                        className={'save'}
+                                        type={'button'}
+                                        onClick={handleSubmitDeviceProfile}
+                                    >
+                                        {'SAVE'}
+                                    </Button>
+                                    <Button
+                                        className={'reset'}
+                                        type={'reset'}
+                                        onClick={handleResetDeviceProfile}
+                                    >
+                                        {'RESET'}
+                                    </Button>
+                                </React.Fragment>
+                            )}
+                        </div>
+                    </div>
+                </form>
+                {/* network info */}
+                <form onSubmit={(e) => e.preventDefault()} noValidate>
+                    <div className="network-info">
+                        {/* connection info */}
+                        {device.imei && (
+                            <div>
+                                <TextField
+                                    variant="outlined"
+                                    size={'small'}
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                    label="Public IP"
+                                    value={device.publicIP}
+                                    // helperText={` `}
+                                    disabled={true}
+                                />
+
+                                <TextField
+                                    variant="outlined"
+                                    size={'small'}
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                    label="Trace IP"
+                                    value={device.traceIP}
+                                    // helperText={` `}
+                                    disabled={true}
+                                    style={{ width: '390px' }}
+                                />
+                                <FormControlLabel
+                                    className={'is-bound'}
+                                    label=""
+                                    value={device.imei}
+                                    control={
+                                        <Checkbox
+                                            checked={!!device.imei}
+                                            name="is-bound"
+                                            style={{
+                                                color: 'red',
+                                            }}
+                                            disabled={true}
+                                        />
+                                    }
+                                />
+                            </div>
+                        )}
+
+                        {/* cards info */}
+                        {device.networkCards && (
+                            <div>
+                                <NetworkCards cards={device.networkCards} />
+                            </div>
+                        )}
+                    </div>
+                </form>
+            </div>
+            <div className="preview">
+                <div className="image">
+                    {image && <img src={image.path} alt={image.name} />}
+                </div>
+                <div className="icon">
+                    {icon && <img src={icon.path} alt={icon.name} />}
+                </div>
+            </div>
+        </div>
+    );
+};
+
+interface EditDeviceDialogProps {
+    open: boolean;
+    project: ProjectVM;
+    space: SpaceVM;
+    device: DeviceVM;
+}
+
+const EditDeviceSettingDialog: React.FC<EditDeviceDialogProps> = (props) => {
+    if (!props.open || !props.project || !props.space || !props.device) {
+        return <React.Fragment />;
+    }
+
+    const dispatch = useDispatch();
+
+    const open = props.open;
+    const project = props.project;
+    const space = props.space;
+    const device = props.device;
+
+    const handleClose = () => {
+        dispatch(DeviceSlice.closeEditDeviceSettingDialog());
+    };
+
+    const helper = new DeviceHelper({ device: device });
+
+    const { isGateway } = helper.isGateway();
+    // const { isKNX } = helper.isKNX();
+
     const profile = true;
     const info = true;
 
@@ -358,254 +850,13 @@ const EditDeviceSettingDialog: React.FC<EditDeviceDialogProps> = (props) => {
             >
                 <DialogTitle>{'Edit Device Setting'}</DialogTitle>
                 <DialogContent>
+                    {/* device-profile */}
                     {profile && (
-                        <div className="device-profile">
-                            <div className="info">
-                                <form onSubmit={(e) => e.preventDefault()}>
-                                    {/* device name and id */}
-                                    <div>
-                                        <TextField
-                                            variant="outlined"
-                                            size={'small'}
-                                            InputLabelProps={{
-                                                shrink: true,
-                                            }}
-                                            required={true}
-                                            label="Name"
-                                            value={device.name}
-                                            helperText={' '}
-                                            disabled={false}
-                                        />
-                                        <TextField
-                                            variant="outlined"
-                                            size={'small'}
-                                            label="ID"
-                                            value={device.id}
-                                            InputLabelProps={{
-                                                shrink: true,
-                                            }}
-                                            helperText={' '}
-                                            disabled={true}
-                                            style={{ width: '340px' }}
-                                        />
-
-                                        <TextField
-                                            variant="outlined"
-                                            size={'small'}
-                                            InputLabelProps={{
-                                                shrink: true,
-                                            }}
-                                            label="Icon"
-                                            value={device.icon.name}
-                                            helperText={' '}
-                                            disabled={true}
-                                        />
-                                    </div>
-
-                                    {/* device type amd model */}
-                                    <div>
-                                        {device.type && (
-                                            <React.Fragment>
-                                                <TextField
-                                                    variant="outlined"
-                                                    size={'small'}
-                                                    InputLabelProps={{
-                                                        shrink: true,
-                                                    }}
-                                                    label="Type"
-                                                    value={device.type.name}
-                                                    helperText={' '}
-                                                    disabled={true}
-                                                />
-                                                <TextField
-                                                    variant="outlined"
-                                                    size={'small'}
-                                                    InputLabelProps={{
-                                                        shrink: true,
-                                                    }}
-                                                    label="Category"
-                                                    value={
-                                                        device.type.category
-                                                            .name
-                                                    }
-                                                    helperText={' '}
-                                                    disabled={true}
-                                                />
-                                            </React.Fragment>
-                                        )}
-                                        {device.model && (
-                                            <React.Fragment>
-                                                <TextField
-                                                    variant="outlined"
-                                                    size={'small'}
-                                                    label="Model"
-                                                    value={device.model.name}
-                                                    InputLabelProps={{
-                                                        shrink: true,
-                                                    }}
-                                                    disabled={true}
-                                                    helperText={' '}
-                                                />
-                                                <TextField
-                                                    variant="outlined"
-                                                    size={'small'}
-                                                    InputLabelProps={{
-                                                        shrink: true,
-                                                    }}
-                                                    label="Brand"
-                                                    value={
-                                                        device.model.brand.name
-                                                    }
-                                                    helperText={' '}
-                                                    disabled={true}
-                                                />
-                                            </React.Fragment>
-                                        )}
-                                    </div>
-
-                                    <div>
-                                        {/* platform info */}
-                                        <React.Fragment>
-                                            <TextField
-                                                variant="outlined"
-                                                size={'small'}
-                                                InputLabelProps={{
-                                                    shrink: true,
-                                                }}
-                                                label="Platform"
-                                                value={project.cloudCode.name}
-                                                helperText={' '}
-                                                disabled={true}
-                                            />
-                                            <TextField
-                                                variant="outlined"
-                                                size={'small'}
-                                                InputLabelProps={{
-                                                    shrink: true,
-                                                }}
-                                                label="Device ID"
-                                                value={device.dvId}
-                                                helperText={' '}
-                                                disabled={true}
-                                            />
-                                        </React.Fragment>
-
-                                        {/* device routine time */}
-                                        <React.Fragment>
-                                            {(routine || device.heartbeat) && (
-                                                <TextField
-                                                    variant="outlined"
-                                                    size={'small'}
-                                                    InputLabelProps={{
-                                                        shrink: true,
-                                                    }}
-                                                    label="Heartbeat"
-                                                    value={
-                                                        !device.heartbeat
-                                                            ? 0
-                                                            : device.heartbeat
-                                                    }
-                                                    helperText={`( 0~65535 )`}
-                                                    disabled={!device.heartbeat}
-                                                />
-                                            )}
-                                            {(routine || device.period) && (
-                                                <TextField
-                                                    variant="outlined"
-                                                    size={'small'}
-                                                    InputLabelProps={{
-                                                        shrink: true,
-                                                    }}
-                                                    label="Period"
-                                                    value={
-                                                        !device.period
-                                                            ? 0
-                                                            : device.period
-                                                    }
-                                                    helperText={`( 0~65535 )`}
-                                                    disabled={!device.period}
-                                                />
-                                            )}
-                                        </React.Fragment>
-                                    </div>
-                                </form>
-                                {/* network info */}
-                                <form onSubmit={(e) => e.preventDefault()}>
-                                    <div className="network-info">
-                                        {/* connection info */}
-                                        {device.imei && (
-                                            <div>
-                                                <TextField
-                                                    variant="outlined"
-                                                    size={'small'}
-                                                    InputLabelProps={{
-                                                        shrink: true,
-                                                    }}
-                                                    label="Public IP"
-                                                    value={device.publicIP}
-                                                    // helperText={` `}
-                                                    disabled={true}
-                                                />
-
-                                                <TextField
-                                                    variant="outlined"
-                                                    size={'small'}
-                                                    InputLabelProps={{
-                                                        shrink: true,
-                                                    }}
-                                                    label="Trace IP"
-                                                    value={device.traceIP}
-                                                    // helperText={` `}
-                                                    disabled={true}
-                                                    style={{ width: '390px' }}
-                                                />
-                                                <FormControlLabel
-                                                    className={'is-bound'}
-                                                    label=""
-                                                    value={device.imei}
-                                                    control={
-                                                        <Checkbox
-                                                            checked={
-                                                                !!device.imei
-                                                            }
-                                                            name="is-bound"
-                                                            style={{
-                                                                color: 'red',
-                                                            }}
-                                                            disabled={true}
-                                                        />
-                                                    }
-                                                />
-                                            </div>
-                                        )}
-
-                                        {/* cards info */}
-                                        {device.networkCards && (
-                                            <div>
-                                                <NetworkCards
-                                                    cards={device.networkCards}
-                                                />
-                                            </div>
-                                        )}
-                                    </div>
-                                </form>
-                            </div>
-                            <div className="preview">
-                                <div className="image">
-                                    {image && (
-                                        <img
-                                            src={image.path}
-                                            alt={image.name}
-                                        />
-                                    )}
-                                </div>
-                                <div className="icon">
-                                    {icon && (
-                                        <img src={icon.path} alt={icon.name} />
-                                    )}
-                                </div>
-                            </div>
-                        </div>
+                        <DeviceProfile
+                            project={project}
+                            space={space}
+                            device={device}
+                        />
                     )}
                     {info && (
                         <div className="other-info">
@@ -657,6 +908,10 @@ const EditDeviceSettingDialog: React.FC<EditDeviceDialogProps> = (props) => {
                                     <ProjectInformation project={project} />
                                 )}
 
+                                {props.space && (
+                                    <SpaceInformation space={space} />
+                                )}
+
                                 {device.softwareInfo && (
                                     <SoftwareInformation
                                         info={device.softwareInfo}
@@ -674,22 +929,16 @@ const EditDeviceSettingDialog: React.FC<EditDeviceDialogProps> = (props) => {
                         </div>
                     )}
                     <div className="device-config">
-                        <KNXConfiguration device={device} />
+                        <KNXConfiguration
+                            project={project}
+                            space={space}
+                            device={device}
+                        />
                     </div>
                 </DialogContent>
                 <DialogActions>
-                    {/*<Button*/}
-                    {/*    className={'save'}*/}
-                    {/*    onClick={handleSave}*/}
-                    {/*    style={{ color: 'blue' }}*/}
-                    {/*>*/}
-                    {/*    {'Save'}*/}
-                    {/*</Button>*/}
-                    {/*<Button className={'test'} onClick={handleTest}>*/}
-                    {/*    {'Test'}*/}
-                    {/*</Button>*/}
-                    <Button className={'cancel'} onClick={handleClose}>
-                        {'Cancel'}
+                    <Button className={'close'} onClick={handleClose}>
+                        {'Close'}
                     </Button>
                 </DialogActions>
             </Dialog>

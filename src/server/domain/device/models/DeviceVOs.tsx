@@ -7,4 +7,9 @@ export interface PlaceDeviceOptions {
 export interface EditDeviceOptions {
     spaceId?: string;
     parentId?: string;
+    // TODO
+}
+
+export interface EditDeviceProtocolsOptions {
+    protocols: object[]; // TODO
 }

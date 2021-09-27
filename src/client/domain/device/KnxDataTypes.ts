@@ -1,8 +1,4 @@
-import DeviceVM, { CommObject } from './DeviceVMs';
-
-export interface KNXSettingProp {
-    device: DeviceVM;
-}
+import DeviceVM, { CommObject, ProjectVM } from './DeviceVMs';
 
 export interface Filter {
     networkName: string;
@@ -13,14 +9,6 @@ export interface Filter {
 export interface ChannelInfo {
     channelNo: number;
     dvId: string;
-}
-
-export interface Channel {
-    channelNo: number;
-    dvId: string;
-    device: DeviceVM;
-    attrs: ChannelAttr[];
-    objs: CommObject[];
 }
 
 export interface ChannelAttr {
@@ -99,21 +87,59 @@ export interface SensorAttr {
 
     unit?: string;
     unitName?: string;
-    valueDefs?: ValueDefs;
+    valueDefs?: SensorAttrValueDefs;
 
     valueKey: string;
     valueType: string;
 }
 
-export interface ValueDefs {
+export interface SensorAttrValueDefs {
     down?: string;
     up?: string;
     start?: string;
     stop?: string;
 }
 
-// ExtraAttr TODO rewrite
+export interface GeneralDeviceAttr {
+    objId: number;
+    valueKey: string;
+    bsuffixId: string;
+    valueType: string;
+    appHidden?: boolean;
+    createdRT: string;
+    dpt: string;
+    flags: number;
+    funId: string;
+    name: string;
+    suffixes?: string;
+    rt: string[];
+    valueDefs?: GeneralDeviceAttrValueDefs;
+}
+
+export interface GeneralDeviceAttrValueDefs {
+    flase: string;
+    true: string;
+}
+
 export interface ExtraAttr {
-    attrs: ChannelAttr[];
-    objs: CommObject[];
+    createdRT: string;
+    dpt: string;
+    flags: number;
+    lpress?: boolean;
+    bIdx?: number;
+    funId: string;
+    name: string;
+    rt: string[];
+    valueKey: string;
+    appHidden?: boolean;
+    objId: number;
+    style?: number;
+    valueType: string;
+    btn?: number;
+    page: number;
+    suffix: string;
+    value?: string;
+    ebtn?: boolean;
+    range?: number[];
+    step?: number;
 }

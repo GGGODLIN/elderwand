@@ -1,18 +1,3 @@
-import clsx from 'clsx';
-import FetchSlice from 'src/client/slices/FetchSlice';
-import FileCopyIcon from '@material-ui/icons/FileCopy';
-import kws from 'src/client/configs/Keywords';
-import PersonAddIcon from '@material-ui/icons/PersonAdd';
-import React, { ChangeEvent, useEffect } from 'react';
-import UserSlice from 'src/client/slices/UserSlice';
-import { AxiosError, AxiosResponse } from 'axios';
-import { AxiosUtil } from 'src/client/utils/AxiosUtil';
-import { RootState } from 'src/client/reducer';
-import { useDispatch, useSelector } from 'react-redux';
-import { useForm } from 'react-hook-form';
-import { UserRoleEnum } from 'src/client/configs/Enum';
-import { UserVM } from 'src/client/domain/user/UserVM';
-import { useTranslation } from 'react-i18next';
 import {
     Button,
     Dialog,
@@ -29,6 +14,18 @@ import {
     TextField,
     Zoom,
 } from '@material-ui/core';
+import FileCopyIcon from '@material-ui/icons/FileCopy';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import clsx from 'clsx';
+import React, { ChangeEvent, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
+import { UserRoleEnum } from 'src/client/configs/Enum';
+import kws from 'src/client/configs/Keywords';
+import { RootState } from 'src/client/reducer';
+import UserSlice from 'src/client/slices/UserSlice';
+// import AxiosUtil from 'src/client/utils/AxiosUtil';
 
 export const AddUserFAB: React.FC<any> = () => {
     const dispatch = useDispatch();
@@ -80,27 +77,27 @@ export const InviteUserDialog: React.FC<{}> = () => {
         mode: 'all',
     });
 
-    const origin = AxiosUtil.getOriginWithPort();
-
-    const client = AxiosUtil.makeAxiosInstance(dispatch, origin);
+    // const origin = AxiosUtil.getOriginWithPort();
+    //
+    // const client = AxiosUtil.makeAxiosInstance(dispatch, origin);
 
     const onSubmit = (form: CreateUserForm) => {
         const body = {
             ...form,
             role_id: parseInt(form.role_id),
         };
-
-        client
-            .post<{ user: UserVM; token: string }>('/api/invite/user', body)
-            .then((res: AxiosResponse<any>) => {
-                dispatch(UserSlice.setInvitingUserInfo(res.data));
-            })
-            .catch((err: AxiosError<any>) => {
-                AxiosUtil.redirectUnAuthorization(err);
-            })
-            .finally(() => {
-                dispatch(FetchSlice.end());
-            });
+        //
+        // client
+        //     .post<{ user: UserVM; token: string }>('/api/invite/user', body)
+        //     .then((res: AxiosResponse<any>) => {
+        //         dispatch(UserSlice.setInvitingUserInfo(res.data));
+        //     })
+        //     .catch((err: AxiosError<any>) => {
+        //         AxiosUtil.redirectUnAuthorization(err);
+        //     })
+        //     .finally(() => {
+        //         dispatch(FetchSlice.end());
+        //     });
     };
 
     const handleErrorMessage = (error: any) => {

@@ -4,6 +4,7 @@ import AuthWhitelist from './config/Whitelist';
 import AuthorizeMiddleware from './middlewares/AuthMiddleware';
 import DevelopmentMiddleware from './middlewares/DevelopmentMiddleware';
 import RouterHandleMiddleware from './middlewares/RouterHandleMiddleware';
+import AssetsRouter from './routers/AssetsRouter';
 import AuthRouter from './routers/AuthRouter';
 import DeviceRouter from './routers/DeviceRouter';
 import ExampleRouter from './routers/ExampleRouter';
@@ -45,6 +46,7 @@ app.prepare().then(() => {
             SpaceRouter.getApiRouter(),
             DeviceRouter.getApiRouter(),
             DeviceRouter.getApiRouterVersion2(),
+            AssetsRouter.getApiRouter(),
         ])
         .use([AuthRouter.getPageRouter(), NextJsRouter.getPageRouter(handle)])
         .getInstance();

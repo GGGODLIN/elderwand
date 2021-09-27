@@ -19,6 +19,7 @@ import ChangeSpaceParentDialog from 'src/client/components/device/ChangeSpacePar
 import DeviceBreadcrumbs from 'src/client/components/device/DeviceBreadcrumbs';
 import DeviceTemplateCardList from 'src/client/components/device/DeviceTemplateCardList';
 import DeviceTopologyCardList from 'src/client/components/device/DeviceTopologyCardList';
+import EditDeviceSettingDialog from 'src/client/components/device/EditDeviceSettingDialog';
 import GatewayTreeView from 'src/client/components/device/GatewayTreeView';
 import PlaceDeviceToDeviceDialog from 'src/client/components/device/PlaceDeviceToDeviceDialog';
 import PlaceDeviceToSpaceDialog from 'src/client/components/device/PlaceDeviceToSpaceDialog';
@@ -32,7 +33,6 @@ import TabPanel from 'src/client/components/TabPanel';
 import DeviceMaintainAPIs from 'src/client/domain/device/DeviceMaintainAPIs';
 import { RootState } from 'src/client/reducer';
 import DeviceSlice from 'src/client/slices/DeviceSlice';
-import EditDeviceSettingDialog from 'src/client/components/device/EditDeviceSettingDialog';
 
 export interface DevicePageProps {
     title: string;
@@ -121,6 +121,7 @@ export const DevicePage: React.FC<DevicePageProps> = () => {
         DeviceMaintainAPIs.fetchProjects(dispatch);
         DeviceMaintainAPIs.fetchSpaceTemplates(dispatch);
         DeviceMaintainAPIs.fetchDeviceTemplates(dispatch);
+        DeviceMaintainAPIs.fetchIcons(dispatch);
         return () => {};
     }, []);
 
@@ -336,6 +337,7 @@ export const DevicePage: React.FC<DevicePageProps> = () => {
                 <EditDeviceSettingDialog
                     open={edit_device_setting_dialog.open}
                     project={edit_device_setting_dialog.project}
+                    space={edit_device_setting_dialog.space}
                     device={edit_device_setting_dialog.device}
                 />
             </div>

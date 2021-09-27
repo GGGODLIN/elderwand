@@ -1,48 +1,145 @@
 export default interface DeviceDTO {
     id: string;
     name: string;
-
+    dvId: string;
     typeId: number;
-    type: Type;
+    type: DeviceType;
     modelId: string;
-    model: Model;
+    model: DeviceModel;
 
     projectId: string;
     spaceId: string;
     parentId?: string;
+    parent?: DeviceDTO;
+
     iconId: string;
     icon: Icon;
-    images: Image[];
-
-    dvId: string;
+    images?: Image[];
 
     protocols: Protocol[];
+    channelInfo?: ChannelInfo[];
+    switchPanelControlInfo?: SwitchPanelControlInfo[];
 
     specId: string;
-    spec: Spec;
+    spec: DeviceSpec;
 
-    channelInfo: ChannelInfo[];
-    switchPanelControlInfo: SwitchPanelControlInfo[];
+    attrs: object[];
+    sendTelRules?: number[];
+    heartbeat?: number;
+    period?: number;
+    softwareInfo?: SoftwareInfo[];
 
-    attrs?: object[];
-    period: number;
-    heartbeat: number;
-    sendTelRules: number[];
-
-    softwareInfo: SoftwareInfo[];
-
+    networkCards?: NetworkCard[];
     imei: string;
     publicIP: string;
     traceIP: string;
-    networkCards: NetworkCardDTO[];
-
-    cloudKeys: string;
 
     createdBy: string;
     updatedBy: string;
     createdAt: number;
     updatedAt: number;
     deletedAt?: number;
+}
+
+export interface DeviceType {
+    id: number;
+    name: string;
+    categoryId: string;
+    category: Category;
+}
+
+export interface Category {
+    id: string;
+    name: string;
+}
+
+export interface DeviceModel {
+    id: string;
+    name: string;
+    brandId: string;
+    brand: Brand;
+}
+
+export interface Brand {
+    id: string;
+    code: string;
+    name: string;
+}
+
+export interface Icon {
+    id: string;
+    name: string;
+    path: string;
+    tags: string[];
+}
+
+export interface Image {
+    id: string;
+    name: string;
+    path: string;
+    tags: string[];
+}
+
+export interface Protocol {
+    id: string;
+    typeId: string;
+    type: ProtocolType;
+    commInfo: any;
+}
+
+export interface ProtocolType {
+    id: string;
+    name: string;
+}
+
+export interface DeviceSpec {
+    id: string;
+    comPortCount?: number;
+    networkCardCount?: number;
+    channelCount?: number;
+    maxChannelCount?: number;
+    switchPanel?: SwitchPanel;
+    KNX?: KNX;
+    RS485?: RS485;
+    EnOcean?: EnOcean;
+}
+
+export interface KNX {
+    // chCnt?: number;
+    // maxCh?: number;
+    isIPR?: boolean;
+}
+
+export interface RS485 {
+    chCnt?: number;
+    maxCh?: number;
+    mdbConf: MdbConf;
+    phyConf: PhyConf;
+}
+
+export interface MdbConf {
+    RTU: boolean;
+    master: boolean;
+    std: boolean;
+}
+
+export interface PhyConf {
+    bRate: number;
+    dBit: number;
+    ptyBit: number;
+    sBit: number;
+}
+
+export interface EnOcean {
+    EEPCode: string;
+}
+
+export interface SwitchPanel {
+    pageCount: number;
+    btnCount: number;
+    hasLPress?: boolean;
+    layout: string;
+    modifyStyle: boolean;
 }
 
 export interface ChannelInfo {
@@ -52,8 +149,8 @@ export interface ChannelInfo {
 
 export interface SwitchPanelControlInfo {
     button: number;
-    lPress: boolean;
     connectionInfo: ConnectionInfo[];
+    lPress?: boolean;
 }
 
 export interface ConnectionInfo {
@@ -61,78 +158,23 @@ export interface ConnectionInfo {
     dvId: string;
 }
 
-interface Protocol {
-    id: string;
-    typeId: string;
-    type: ProtocolType;
-    commInfo: object;
-}
-
-interface ProtocolType {
-    id: string;
-    name: string;
-}
-
-interface SoftwareInfo {
+export interface SoftwareInfo {
     name: string;
     version?: string;
 }
 
-interface DeviceCategory {
+export interface NetworkCard {
     id: string;
-    name: string;
-}
-
-interface Type {
-    id: number;
-    name: string;
-
-    categoryId: string;
-    category: DeviceCategory;
-}
-
-interface Icon {
-    id: string;
-    name: string;
-    path: string;
-    tags: string[];
-}
-
-interface Image {
-    id: string;
-    name: string;
-    path: string;
-    tags: string[];
-}
-
-interface Model {
-    id: string;
-    name: string;
-    brandId: string;
-    brand: Brand;
-}
-
-interface Brand {
-    id: string;
-    code: string;
-    name: string;
-}
-
-interface Spec {
-    id: string;
-    comPortCount?: number;
-    channelCount?: number;
-    networkCardCount?: number;
-    manufacturerCode?: number;
-    switchPanel?: object;
-}
-
-export interface NetworkCardDTO {
-    id: string;
-    primary?: boolean;
-    enable: boolean;
     name: string;
     ip: string;
     mac: string;
     network: string;
+
+    primary: boolean;
+    enable: boolean;
+
+    createdBy: string;
+    updatedBy: string;
+    createdAt: number;
+    updatedAt: number;
 }

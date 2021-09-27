@@ -10,6 +10,7 @@ import {
 import { produce } from 'immer';
 import DeviceVM, {
     DeviceTemplateVM,
+    Icon,
     ProjectVM,
     SpaceTemplateVM,
     SpaceVM,
@@ -17,6 +18,7 @@ import DeviceVM, {
 import PaginationVM from 'src/client/models/PaginationVM';
 
 export interface DeviceMaintainState {
+    icons: Icon[];
     projects: ProjectVM[];
     project_selected?: ProjectVM;
     spaces: SpaceVM[];
@@ -86,12 +88,14 @@ export interface DeviceMaintainState {
     edit_device_setting_dialog: {
         open: boolean;
         project?: ProjectVM;
+        space?: SpaceVM;
         device?: DeviceVM;
     };
 }
 
 const getInitialState = (): DeviceMaintainState => {
     return {
+        icons: [],
         projects: [],
         project_selected: null,
         spaces: [],
@@ -161,6 +165,7 @@ const getInitialState = (): DeviceMaintainState => {
         edit_device_setting_dialog: {
             open: false,
             project: null,
+            space: null,
             device: null,
         },
     };
@@ -190,7 +195,11 @@ const DeviceSlice = createSlice<
                 draft.device_selected = null;
             });
         },
-
+        fetchIcons: (state, action: PayloadAction<PaginationVM<Icon>>) => {
+            return produce(state, (draft) => {
+                draft.icons = action.payload.results;
+            });
+        },
         fetchProjects: (
             state,
             action: PayloadAction<PaginationVM<ProjectVM>>
@@ -467,9 +476,11 @@ const DeviceSlice = createSlice<
         editDeviceSetting: (state, action: PayloadAction<DeviceVM>) => {
             return produce(state, (draft) => {
                 const device = action.payload;
+
                 draft.edit_device_setting_dialog = {
                     open: true,
-                    project: state.project_selected,
+                    project: device.project,
+                    space: device.space,
                     device: device,
                 };
             });
@@ -478,7 +489,6 @@ const DeviceSlice = createSlice<
             return produce(state, (draft) => {
                 draft.edit_device_setting_dialog = {
                     open: false,
-                    project: null,
                     device: null,
                 };
             });
@@ -493,6 +503,10 @@ const reducer = DeviceSlice.reducer as Reducer<DeviceMaintainState, AnyAction>;
 const clear = DeviceSlice.actions.clear as ActionCreatorWithPayload<any>;
 const clearProjectSelected = DeviceSlice.actions
     .clearProjectSelected as ActionCreatorWithoutPayload;
+
+const fetchIcons = DeviceSlice.actions.fetchIcons as ActionCreatorWithPayload<
+    PaginationVM<Icon>
+>;
 
 const fetchProjects = DeviceSlice.actions
     .fetchProjects as ActionCreatorWithPayload<PaginationVM<ProjectVM>>;
@@ -604,6 +618,7 @@ export default {
     reducer,
     clear,
     clearProjectSelected,
+    fetchIcons,
     fetchProjects,
     fetchSpaces,
     fetchDevices,

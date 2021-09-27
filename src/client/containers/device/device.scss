@@ -532,6 +532,24 @@
 
     > .info {
       width: 65%;
+
+      .actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        button {
+          color: white;
+          margin: 0 4px;
+        }
+
+        .save {
+          background-color: $bg-orange-primary;
+        }
+        .reset {
+          background-color: $bg-grey-primary;
+        }
+      }
     }
 
     > .preview {
@@ -615,6 +633,7 @@
     height: 100%;
 
     .project-info,
+    .space-info,
     .parent-info,
     .software-info,
     .specification {
@@ -636,6 +655,15 @@
       }
       .version,
       .value {
+        white-space: nowrap;
+        overflow: hidden;
+        max-width: 160px;
+      }
+    }
+
+    .space-info {
+      .value {
+        max-width: 120px;
       }
     }
 
@@ -668,6 +696,7 @@
 
   .KNX-group {
     padding-top: 12px;
+    padding-bottom: 32px;
 
     .group-label {
       position: relative;
@@ -676,6 +705,21 @@
       left: 12px;
       font-weight: bold;
       padding: 0 8px;
+    }
+
+    .actions {
+      text-align: right;
+      button {
+        color: white;
+        margin: 8px 4px;
+      }
+
+      .save {
+        background-color: $bg-orange-primary;
+      }
+      .reset {
+        background-color: $bg-grey-primary;
+      }
     }
   }
 
@@ -693,6 +737,11 @@
 
     .address-group {
       height: calc(100% - 34px);
+
+      label {
+        white-space: nowrap;
+      }
+
       .address {
         border: $bg-green-primary solid 1px;
         border-radius: 8px;
@@ -721,6 +770,7 @@
 
       > label {
         white-space: nowrap;
+        min-width: 40px;
 
         &:after {
           content: ' :';
@@ -803,8 +853,42 @@
     }
   }
 
-  // for dev temp
-  .other-info {
-    //display: none;
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 16px 0 4px 0;
+  }
+}
+
+// icon-selector
+.icon-selector {
+  .MuiSelect-select {
+    > div {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      img {
+        width: 20px;
+        margin-right: 4px;
+      }
+    }
+  }
+}
+ul[aria-labelledby='icon-selector-label'] {
+  //background-color: red;
+  max-height: 640px;
+  li {
+    > div {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      img {
+        width: 20px;
+        margin-right: 4px;
+      }
+    }
   }
 }

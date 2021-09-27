@@ -55,6 +55,7 @@ const DeviceTopologyCardList: React.FC<DeviceTopologyCardListProps> = (
             return (
                 <SpaceCard
                     key={space.id}
+                    project={project}
                     space={space}
                     spaces={spaces}
                     devices={devices}
@@ -71,6 +72,7 @@ const DeviceTopologyCardList: React.FC<DeviceTopologyCardListProps> = (
                 return (
                     <DeviceCard
                         key={device.id}
+                        project={project}
                         device={device}
                         spaces={spaces}
                         devices={devices}

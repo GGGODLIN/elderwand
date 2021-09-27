@@ -131,7 +131,10 @@ const actuator: DeviceVM = {
         switchPanel: null,
         KNX: null,
         RS485: null,
-        EEPCode: null,
+        // EEPCode: null,
+        EnOcean: {
+            EEPCode: null,
+        },
     },
     channelInfo: [
         {
@@ -512,7 +515,9 @@ const actuator: DeviceVM = {
                 switchPanel: null,
                 KNX: null,
                 RS485: null,
-                EEPCode: null,
+                EnOcean: {
+                    EEPCode: null,
+                },
             },
             channelInfo: null,
             switchPanelControlInfo: null,
@@ -623,7 +628,9 @@ const actuator: DeviceVM = {
                 switchPanel: null,
                 KNX: null,
                 RS485: null,
-                EEPCode: null,
+                EnOcean: {
+                    EEPCode: null,
+                },
             },
             channelInfo: null,
             switchPanelControlInfo: null,
@@ -734,7 +741,9 @@ const actuator: DeviceVM = {
                 switchPanel: null,
                 KNX: null,
                 RS485: null,
-                EEPCode: null,
+                EnOcean: {
+                    EEPCode: null,
+                },
             },
             channelInfo: null,
             switchPanelControlInfo: null,
@@ -845,7 +854,9 @@ const actuator: DeviceVM = {
                 switchPanel: null,
                 KNX: null,
                 RS485: null,
-                EEPCode: null,
+                EnOcean: {
+                    EEPCode: null,
+                },
             },
             channelInfo: null,
             switchPanelControlInfo: null,

@@ -11,7 +11,7 @@ export default interface DeviceTemplateDTO {
 
     protocols: Protocol[];
     specId: string;
-    spec: Spec;
+    spec: DeviceTemplateSpec;
 
     attrs: object[];
     period?: number;
@@ -25,15 +25,46 @@ export default interface DeviceTemplateDTO {
     deletedAt?: number;
 }
 
-interface Spec {
+interface DeviceTemplateSpec {
     id: string;
     comPortCount?: number;
     networkCardCount?: number;
-    KNX?: any;
-    RS485?: any;
-    EEPCode?: any;
     channelCount?: number;
+    maxChannelCount?: number;
     switchPanel?: SwitchPanel;
+    KNX?: KNX;
+    RS485?: RS485;
+    EnOcean?: EnOcean;
+}
+
+export interface KNX {
+    // chCnt?: number;
+    // maxCh?: number;
+    isIPR?: boolean;
+}
+
+export interface RS485 {
+    chCnt?: number;
+    maxCh?: number;
+    mdbConf: MdbConf;
+    phyConf: PhyConf;
+}
+
+export interface MdbConf {
+    RTU: boolean;
+    master: boolean;
+    std: boolean;
+}
+
+export interface PhyConf {
+    bRate: number;
+    dBit: number;
+    ptyBit: number;
+    sBit: number;
+}
+
+export interface EnOcean {
+    EEPCode: string;
 }
 
 interface SwitchPanel {

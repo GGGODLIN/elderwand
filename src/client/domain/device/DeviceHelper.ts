@@ -3,8 +3,8 @@ import {
     DeviceProtocolTypes,
     DeviceTypeCategories,
 } from './DeviceMaintainItemTypes';
-import DeviceVM, { Protocol } from './DeviceVMs';
-import { Channel, ChannelAttr, ExtraAttr } from './KnxDataTypes';
+import DeviceVM, { CommObject, Protocol } from './DeviceVMs';
+import { ChannelAttr, ExtraAttr } from './KnxDataTypes';
 
 interface DeviceHelperCtor {
     device: DeviceVM;
@@ -139,9 +139,21 @@ class DeviceHelper {
         };
     }
 
+    isGeneralDevice(): { isGeneralDevice: boolean } {
+        const device: DeviceVM = this.device;
+
+        // SensorAndGeneralDevice
+        const isGeneralDevice =
+            device.type.categoryId == DeviceTypeCategories.Sensor;
+
+        return {
+            isGeneralDevice: isGeneralDevice,
+        };
+    }
+
     hasExtraAttrs(protocol): {
         hasExtraAttrs: boolean;
-        extraAttrs: ExtraAttr[];
+        extraAttrs: { attr: ExtraAttr; obj: CommObject }[];
     } {
         const device = this.device;
 
@@ -150,16 +162,14 @@ class DeviceHelper {
         let extras = objects
             .filter((obj) => !!obj.attrObjId)
             .map((obj) => {
-                const attrs = !device.attrs
-                    ? []
-                    : device.attrs.filter(
-                          (attr: ChannelAttr) => attr.objId == obj.attrObjId
-                      );
+                const attr = device.attrs.find(
+                    (attr: ExtraAttr) => attr.objId == obj.attrObjId
+                );
 
                 return {
-                    attrs: attrs,
-                    objs: [obj],
-                } as ExtraAttr;
+                    attr: attr,
+                    obj: obj,
+                };
             });
 
         let hasExtraAttrs = !!extras.length;
@@ -167,15 +177,57 @@ class DeviceHelper {
         return { hasExtraAttrs: hasExtraAttrs, extraAttrs: extras };
     }
 
+    hasParentExtraAttrs(protocol: Protocol): {
+        hasParentExtraAttrs: boolean;
+        parentExtraAttrs: { attr: ChannelAttr; obj: CommObject }[];
+    } {
+        if (!this.device.parent) {
+            return {
+                hasParentExtraAttrs: false,
+                parentExtraAttrs: [],
+            };
+        }
+
+        const parent_protocol = this.device.parent?.protocols.find(
+            (pp) => pp.typeId == protocol.typeId
+        );
+
+        if (!parent_protocol) {
+            return {
+                hasParentExtraAttrs: false,
+                parentExtraAttrs: [],
+            };
+        }
+
+        const attrs = !this.device.parent.attrs
+            ? []
+            : this.device.parent?.attrs
+                  .filter((attr: ChannelAttr) => !attr.chId)
+                  .map((attr: ChannelAttr) => {
+                      const obj = parent_protocol.commInfo.objs.find(
+                          (obj) => obj.attrObjId == attr.objId
+                      );
+                      return {
+                          attr: attr,
+                          obj: obj,
+                      };
+                  });
+
+        return {
+            hasParentExtraAttrs: !!attrs && !!attrs.length,
+            parentExtraAttrs: attrs,
+        };
+    }
+
     static parseFlagRule = (flags: number = 0): FlagRule => {
         // Bit index	KNX Description	Modbus
         // 0 -1	Priority calls for the object, the default is 0	Unused
-        // 2	Ojbect in eabled for communication (C), the default is 1 (on)	It is same with KNX. Default is On
-        // 3	Ojbect value can be read via bus(R), The read flag is not set by default in most cases.	Function point (Object) value can be read (R)
-        // 4	Ojbect value can be written via bus(W) , The write flag is set by default for all switch objects,	Function point (Ojbect) value can be written (W)
-        // 5	Ojbect performs value read on Initialization (RI)	Unused
+        // 2	object in enabled for communication (C), the default is 1 (on)	It is same with KNX. Default is On
+        // 3	object value can be read via bus(R), The read flag is not set by default in most cases.	Function point (Object) value can be read (R)
+        // 4	object value can be written via bus(W) , The write flag is set by default for all switch objects,	Function point (Ojbect) value can be written (W)
+        // 5	object performs value read on Initialization (RI)	Unused
         // 6	object is enabled to Transmit (T), sensor (temperature, humidity… ) value should be set as enable.	Function Point (Ojbect) is enabled to Transmit (T)
-        // 7	object accepts values from respnose frames as Updates (U)	Unused
+        // 7	object accepts values from respon se frames as Updates (U)	Unused
         //  xa = [ U,  T, RI,  W,  R,  C,  P,  P ];
         const str = flags.toString(2).padStart(8, '0');
 

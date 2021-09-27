@@ -51,6 +51,12 @@ export default class DeviceRouter {
                 method: 'PUT',
                 controller: DeviceMaintainController.editDevice,
             },
+            editDeviceProtocols: {
+                name: 'edit-device',
+                action: '/devices/:id/protocols',
+                method: 'PUT',
+                controller: DeviceMaintainController.editDeviceProtocols,
+            },
             unlinkParentDevice: {
                 name: 'unlink-parent-device',
                 action: '/devices/:id/parent',

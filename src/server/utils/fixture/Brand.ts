@@ -110,7 +110,7 @@ export const Brands = [
     },
     {
         _id: { $oid: '5f47690af4b15e6f546f9763' },
-        Name_en_US: 'Embedded Systems',
+        Name_en_US: 'embedded systems',
         Name_zh_CN: '亦备德',
         brand: 'embedded systems',
     },
@@ -119,5 +119,11 @@ export const Brands = [
         Name_en_US: 'Sation',
         Name_zh_CN: '世讯',
         brand: 'Sation',
+    },
+    {
+        _id: { $oid: '6132055eb23ad4d2f018ea31' },
+        Name_en_US: 'JWM',
+        Name_zh_CN: '劲卫',
+        brand: 'JWM',
     },
 ];

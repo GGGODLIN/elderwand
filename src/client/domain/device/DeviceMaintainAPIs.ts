@@ -1,6 +1,7 @@
 import { Dispatch } from 'react';
 import DeviceVM, {
     DeviceTemplateVM,
+    Icon,
     ProjectVM,
     SpaceTemplateVM,
     SpaceVM,
@@ -29,6 +30,29 @@ export interface AddSpaceOptions {
 }
 
 class DeviceMaintainAPIs {
+    // fetchIcons
+    static fetchIcons = (dispatch: Dispatch<any>) => {
+        const url = `/api/assets/icons`;
+        const params = {};
+
+        new AxiosFactory()
+            .useBearerToken()
+            .useBefore(() => {
+                dispatch(FetchSlice.start());
+            })
+            .getInstance()
+            .get<PaginationVM<Icon>>(url, { params: params })
+            .then((res) => {
+                dispatch(DeviceSlice.fetchIcons(res.data));
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+            .finally(() => {
+                dispatch(FetchSlice.end());
+            });
+    };
+
     static fetchProjects = (dispatch: Dispatch<any>): void => {
         const url = '/api/projects';
 
@@ -266,6 +290,8 @@ class DeviceMaintainAPIs {
             projectId: project.id,
         };
         const data = {
+            name: device.name,
+            iconId: device.iconId,
             spaceId: device.spaceId,
             parentId: device.parentId,
         };
@@ -280,7 +306,42 @@ class DeviceMaintainAPIs {
             .then((res) => {
                 // console.log(res.data);
                 if (callback) {
-                    callback();
+                    callback(res.data);
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+            .finally(() => {
+                dispatch(FetchSlice.end());
+            });
+    };
+
+    static editDeviceProtocols = (
+        dispatch: Dispatch<any>,
+        project: ProjectVM,
+        device: DeviceVM,
+        callback?: Function
+    ) => {
+        const url = `/api/devices/${device.id}/protocols`;
+        const params = {
+            projectId: project.id,
+        };
+        const data = {
+            protocols: device.protocols,
+        };
+
+        new AxiosFactory()
+            .useBearerToken()
+            .useBefore(() => {
+                dispatch(FetchSlice.start());
+            })
+            .getInstance()
+            .put<DeviceVM>(url, data, { params: params })
+            .then((res) => {
+                // console.log(res.data);
+                if (callback) {
+                    callback(res.data);
                 }
             })
             .catch((err) => {

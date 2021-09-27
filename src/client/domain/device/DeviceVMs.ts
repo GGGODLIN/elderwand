@@ -1,3 +1,5 @@
+import { Filter } from './KnxDataTypes';
+
 export interface ProjectVM {
     id: string;
     name: string;
@@ -107,87 +109,170 @@ export interface SpaceTemplateVM {
     updatedAt: number;
 }
 
-interface Brand {
-    id: string;
-    code: string;
-    name: string;
-}
-
-interface DeviceCategory {
-    id: string;
-    name: string;
-}
-
-interface DeviceType {
+export interface DeviceType {
     id: number;
     name: string;
-
     categoryId: string;
-    category: DeviceCategory;
+    category: Category;
 }
 
-interface DeviceModel {
+export interface Category {
+    id: string;
+    name: string;
+}
+
+export interface DeviceModel {
     id: string;
     name: string;
     brandId: string;
     brand: Brand;
 }
 
+export interface Brand {
+    id: string;
+    code: string;
+    name: string;
+}
+
+export interface Icon {
+    id: string;
+    name: string;
+    path: string;
+    tags: string[];
+}
+
+export interface Image {
+    id: string;
+    name: string;
+    path: string;
+    tags: string[];
+}
+
 export interface Protocol {
     id: string;
     typeId: string;
     type: ProtocolType;
-    commInfo?: CommInfo;
-}
-
-interface ProtocolType {
-    id: string;
-    name: string;
+    commInfo: CommInfo;
 }
 
 export interface CommInfo {
-    // KNX Gateway
-    pAddr?: string;
-    filters?: object[];
-    UPDs?: UDP[];
-    // KNX actuator
-    objs?: CommObject[];
-    // KNX Sensor
-    // objs: {
-    //     gAddrs: string[];
-    //     objId: number;
-    // }[];
-}
-
-interface UDP {
-    enableIpTunneling: boolean;
-    ip: string;
-    name: string;
-    obtainIpType: number;
-    port: number;
-    type: string;
+    UDPs?: object[];
+    pAddr: string;
+    objs: CommObject[];
+    filters?: Filter[];
 }
 
 export interface CommObject {
     ch?: number;
-    gAddrs: string[];
+    btn?: number;
     objId: number;
     attrObjId?: number;
+    gAddrs: string[];
     ebtn?: boolean;
-
-    // btn
-    btn?: number;
-    lpress?: boolean;
 }
 
-interface SwitchPanel {
+export interface ProtocolType {
+    id: string;
+    name: string;
+}
+
+export interface DeviceSpec {
+    id: string;
+    comPortCount?: number;
+    networkCardCount?: number;
+    channelCount?: number;
+    maxChannelCount?: number;
+    switchPanel?: SwitchPanel;
+    KNX?: KNX;
+    RS485?: RS485;
+    EnOcean?: EnOcean;
+}
+
+export interface KNX {
+    // chCnt?: number;
+    // maxCh?: number;
+    isIPR?: boolean;
+}
+
+export interface RS485 {
+    chCnt?: number;
+    maxCh?: number;
+    mdbConf: MdbConf;
+    phyConf: PhyConf;
+}
+
+export interface MdbConf {
+    RTU: boolean;
+    master: boolean;
+    std: boolean;
+}
+
+export interface PhyConf {
+    bRate: number;
+    dBit: number;
+    ptyBit: number;
+    sBit: number;
+}
+
+export interface EnOcean {
+    EEPCode: string;
+}
+
+export interface SwitchPanel {
     pageCount: number;
     btnCount: number;
-    layout: string;
     hasLPress?: boolean;
-    modifyStyle?: boolean;
-    keyValues?: number[];
-    isVRB?: boolean;
+    layout: string;
+    modifyStyle: boolean;
+}
+
+export interface ChannelInfo {
+    channelNo: number;
+    dvId: string;
+}
+
+export interface SwitchPanelControlInfo {
+    button: number;
+    connectionInfo: ConnectionInfo[];
+    lPress?: boolean;
+}
+
+export interface ConnectionInfo {
+    objectId: number;
+    dvId: string;
+}
+
+export interface SoftwareInfo {
+    name: string;
+    version?: string;
+}
+
+export interface NetworkCard {
+    id: string;
+    name: string;
+    ip: string;
+    mac: string;
+    network: string;
+
+    primary: boolean;
+    enable: boolean;
+
+    createdBy: string;
+    updatedBy: string;
+    createdAt: number;
+    updatedAt: number;
+}
+
+interface DeviceTemplateSpec {
+    id: string;
+    comPortCount?: number;
+    networkCardCount?: number;
+    channelCount?: number;
+    maxChannelCount?: number;
+    switchPanel?: SwitchPanel;
+    KNX?: KNX;
+    RS485?: RS485;
+    EnOcean?: EnOcean;
 }
 
 export interface DeviceTemplateVM {
@@ -217,29 +302,20 @@ export interface DeviceTemplateVM {
     deletedAt?: number;
 }
 
-interface DeviceTemplateSpec {
-    id: string;
-    comPortCount?: number;
-    networkCardCount?: number;
-    KNX?: any;
-    RS485?: any;
-    EEPCode?: any;
-    channelCount?: number;
-    switchPanel?: SwitchPanel;
-}
-
 interface DeviceVM {
     id: string;
     name: string;
     dvId: string;
-
     typeId: number;
     type: DeviceType;
     modelId: string;
     model: DeviceModel;
 
     projectId: string;
+    project: ProjectVM;
     spaceId: string;
+    space: SpaceVM;
+
     parentId?: string;
     parent?: DeviceVM;
 
@@ -248,64 +324,30 @@ interface DeviceVM {
     images?: Image[];
 
     protocols: Protocol[];
+    channelInfo?: ChannelInfo[];
+    switchPanelControlInfo?: SwitchPanelControlInfo[];
+
     specId: string;
     spec: DeviceSpec;
 
     attrs: object[];
+    sendTelRules?: number[];
     heartbeat?: number;
     period?: number;
-    sendTelRules?: number[];
+    softwareInfo?: SoftwareInfo[];
 
-    channelInfo?: object[];
-    switchPanelControlInfo?: SwitchPanelControlInfo[];
+    networkCards?: NetworkCard[];
     imei: string;
     publicIP: string;
     traceIP: string;
-    softwareInfo?: SoftwareInfo[];
-    networkCards?: NetworkCard[];
 
     createdBy: string;
     updatedBy: string;
     createdAt: number;
     updatedAt: number;
+    deletedAt?: number;
 
     leaves?: DeviceVM[];
-}
-
-export interface SwitchPanelControlInfo {
-    button: number;
-    connectionInfo: ConnectionInfo[];
-}
-
-export interface ConnectionInfo {
-    // objectId: number;
-    dvId: string;
-}
-
-export interface SoftwareInfo {
-    name: string;
-    version?: string;
-}
-
-export interface DeviceSpec {
-    id: string;
-    comPortCount?: number;
-    networkCardCount?: number;
-    channelCount?: number;
-    KNX?: any;
-    RS485?: any;
-    EEPCode?: any;
-    switchPanel?: SwitchPanel;
-}
-
-export interface NetworkCard {
-    id: string;
-    primary?: boolean;
-    enable: boolean;
-    network: string;
-    name: string;
-    ip: string;
-    mac: string;
 }
 
 export default DeviceVM;

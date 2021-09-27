@@ -7,6 +7,7 @@ import DeviceRepository from '../domain/device/infra/DeviceRepository';
 import DeviceDTO from '../domain/device/models/DeviceDTO';
 import {
     EditDeviceOptions,
+    EditDeviceProtocolsOptions,
     PlaceDeviceOptions,
 } from '../domain/device/models/DeviceVOs';
 import DeviceTemplateDTO from '../domain/migration/models/DeviceTemplateDTO';
@@ -209,6 +210,49 @@ export default class DeviceMaintainController {
 
         await new DeviceMaintainUCO(repository)
             .editDevice(params.id, query.projectId, body)
+            .then((res: DeviceDTO) => {
+                const vm = convertToDeviceVM(res);
+
+                ctx.status = 200;
+                ctx.body = vm;
+
+                return;
+            })
+            .catch((err) => {
+                if (err.isAxiosError) {
+                    ctx.status = err.response.status;
+                    ctx.body = err.response.data;
+                    return;
+                }
+                throw err;
+            });
+    };
+
+    // /api/devices/:id?projectId={projectId}
+    static editDeviceProtocols = async (
+        ctx: IRouterContext & RequestBody<EditDeviceProtocolsOptions>
+    ) => {
+        const repository = new DeviceRepository({
+            host: ServerEnvVar.SkymapApiHost,
+            platformId: Platform.ElderWand,
+        });
+
+        const params = {
+            id: '',
+            ...ctx.params,
+        };
+
+        const query = {
+            projectId: '',
+            ...ctx.query,
+        };
+
+        const body: EditDeviceProtocolsOptions = {
+            ...ctx.request.body,
+        };
+
+        await new DeviceMaintainUCO(repository)
+            .editDeviceProtocols(params.id, query.projectId, body)
             .then((res: DeviceDTO) => {
                 const vm = convertToDeviceVM(res);
 
@@ -471,7 +515,7 @@ export default class DeviceMaintainController {
                 const vm = {
                     ...res,
                     results: convertToDeviceTemplateVMs(res.results),
-                } as PaginationVM<DeviceTemplateDTO>;
+                } as PaginationVM<DeviceTemplateVM>;
 
                 ctx.status = 200;
                 ctx.body = vm;

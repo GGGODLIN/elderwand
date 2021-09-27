@@ -5,7 +5,11 @@ import ErrorInfoDTO from '../../shared/models/ErrorInfoDTO';
 import PaginationDTO from '../../shared/models/PaginationDTO';
 import DeviceDTO from '../../device/models/DeviceDTO';
 import SpaceDTO from '../../space/models/SpaceDTO';
-import { EditDeviceOptions, PlaceDeviceOptions } from '../models/DeviceVOs';
+import {
+    EditDeviceOptions,
+    EditDeviceProtocolsOptions,
+    PlaceDeviceOptions,
+} from '../models/DeviceVOs';
 
 export interface DeviceRepositoryCtor {
     host: string;
@@ -183,6 +187,37 @@ export default class DeviceRepository {
         const data = {
             ...options,
         };
+        const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
+
+        return await axios
+            .put<DeviceDTO>(pathname, data, { params: params })
+            .then((res) => {
+                const dto: DeviceDTO = res.data;
+                return dto;
+            })
+            .catch((err: AxiosError<ErrorInfoDTO>) => {
+                if (err.isAxiosError) {
+                    // console.log('isAxiosError from repository');
+                }
+                throw err;
+            });
+    }
+
+    async editDeviceProtocols(
+        id: string,
+        pid: string,
+        options: EditDeviceProtocolsOptions
+    ): Promise<DeviceDTO> {
+        const baseURL = this.origin;
+        const pathname = `/api/devices/${id}/protocols`;
+        const params = {
+            platformId: this.platformId,
+            projectId: pid,
+        };
+        const data = {
+            ...options,
+        };
+
         const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
 
         return await axios

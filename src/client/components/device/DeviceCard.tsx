@@ -1,27 +1,29 @@
 import { Card, CardContent, IconButton } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import LinkOffIcon from '@material-ui/icons/LinkOff';
-
 import SettingsIcon from '@material-ui/icons/Settings';
 import clsx from 'clsx';
 import React, { CSSProperties } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import { useDispatch } from 'react-redux';
+import DeviceHelper from 'src/client/domain/device/DeviceHelper';
 import DeviceMaintainCardTypes, {
     DeviceMaintainCardType,
     DeviceMaintainCardTypeHelper,
+    DeviceTypeCategories,
 } from 'src/client/domain/device/DeviceMaintainItemTypes';
 import DeviceVM, {
     DeviceTemplateVM,
+    ProjectVM,
     SpaceVM,
 } from 'src/client/domain/device/DeviceVMs';
 import AssetsHelper from 'src/client/helper/AssetsHelper';
 import DeviceSlice from 'src/client/slices/DeviceSlice';
-import DeviceHelper from 'src/client/domain/device/DeviceHelper';
 
 interface DeviceSmallCardProp {
-    device: DeviceVM;
+    project: ProjectVM;
     spaces: SpaceVM[];
+    device: DeviceVM;
     devices: DeviceVM[];
 }
 
@@ -32,13 +34,23 @@ const DeviceSmallCard: React.FC<DeviceSmallCardProp> = (props) => {
         return <React.Fragment />;
     }
 
+    const project = props.project;
     const spaces = !props.spaces ? [] : props.spaces;
     const devices = !props.devices ? [] : props.devices;
     const device = props.device;
 
     const space = spaces.find((space) => space.id == device.spaceId);
     const parent = devices.find((item) => item.id == device.parentId);
-    const leaves = devices.filter((leaf) => leaf.parentId == device.id);
+    let leaves = devices.filter((leaf) => leaf.parentId == device.id);
+
+    if (device.type.categoryId == DeviceTypeCategories.SwitchPanel) {
+        const ids = !device.switchPanelControlInfo
+            ? []
+            : device.switchPanelControlInfo
+                  .filter((info) => !!info?.connectionInfo[0]?.dvId)
+                  .map((info) => info.connectionInfo[0].dvId);
+        leaves = devices.filter((item) => ids.includes(item.dvId));
+    }
 
     const isBound = !!device.imei;
     const canDelete = !leaves.length;
@@ -71,6 +83,8 @@ const DeviceSmallCard: React.FC<DeviceSmallCardProp> = (props) => {
         e.stopPropagation();
         const payload: DeviceVM = {
             ...device,
+            project: project,
+            space: space,
             parent: parent,
             leaves: leaves,
         };
@@ -213,6 +227,7 @@ const DeviceSmallCard: React.FC<DeviceSmallCardProp> = (props) => {
 };
 
 interface DeviceCardProp {
+    project: ProjectVM;
     device: DeviceVM;
     spaces: SpaceVM[];
     devices: DeviceVM[];
@@ -225,11 +240,23 @@ const DeviceCard: React.FC<DeviceCardProp> = (props) => {
         return <React.Fragment />;
     }
 
+    const project = props.project;
+    const spaces = !props.spaces ? [] : props.spaces;
     const devices = !props.devices ? [] : props.devices;
 
     const device = props.device;
+    const space = spaces.find((space) => space.id == device.spaceId);
     const parent = devices.find((item) => item.id == device.parentId);
-    const leaves = devices.filter((item) => item.parentId == device.id);
+    let leaves = devices.filter((leaf) => leaf.parentId == device.id);
+
+    if (device.type.categoryId == DeviceTypeCategories.SwitchPanel) {
+        const ids = !device.switchPanelControlInfo
+            ? []
+            : device.switchPanelControlInfo
+                  .filter((info) => !!info?.connectionInfo[0]?.dvId)
+                  .map((info) => info.connectionInfo[0].dvId);
+        leaves = devices.filter((item) => ids.includes(item.dvId));
+    }
 
     let canDelete = !leaves.length;
 
@@ -240,6 +267,7 @@ const DeviceCard: React.FC<DeviceCardProp> = (props) => {
             return (
                 <DeviceSmallCard
                     key={leaf.id}
+                    project={project}
                     device={leaf}
                     spaces={props.spaces}
                     devices={props.devices}
@@ -346,9 +374,12 @@ const DeviceCard: React.FC<DeviceCardProp> = (props) => {
         e.stopPropagation();
         const payload: DeviceVM = {
             ...device,
+            project: project,
+            space: space,
             parent: parent,
             leaves: leaves,
         };
+
         dispatch(DeviceSlice.editDeviceSetting(payload));
     };
 

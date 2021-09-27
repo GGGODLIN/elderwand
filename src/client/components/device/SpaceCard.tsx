@@ -10,17 +10,20 @@ import DeviceHelper from 'src/client/domain/device/DeviceHelper';
 import DeviceMaintainCardTypes, {
     DeviceMaintainCardType,
     DeviceMaintainCardTypeHelper,
+    DeviceTypeCategories,
 } from 'src/client/domain/device/DeviceMaintainItemTypes';
 import DeviceVM, {
     DeviceTemplateVM,
+    ProjectVM,
     SpaceVM,
 } from 'src/client/domain/device/DeviceVMs';
 import AssetsHelper from 'src/client/helper/AssetsHelper';
 import DeviceSlice from 'src/client/slices/DeviceSlice';
 
 interface DeviceSmallCardProp {
-    device: DeviceVM;
+    project: ProjectVM;
     spaces: SpaceVM[];
+    device: DeviceVM;
     devices: DeviceVM[];
 }
 
@@ -31,13 +34,23 @@ const DeviceSmallCard: React.FC<DeviceSmallCardProp> = (props) => {
         return <React.Fragment />;
     }
 
+    const project = props.project;
     // const spaces = !props.spaces ? [] : props.spaces;
     const devices = !props.devices ? [] : props.devices;
     const device = props.device;
 
     const space = props.spaces.find((space) => space.id == device.spaceId);
     const parent = props.devices.find((item) => item.id == device.parentId);
-    const leaves = devices.filter((item) => item.parentId == device.id);
+    let leaves = devices.filter((item) => item.parentId == device.id);
+
+    if (device.type.categoryId == DeviceTypeCategories.SwitchPanel) {
+        const ids = !device.switchPanelControlInfo
+            ? []
+            : device.switchPanelControlInfo
+                  .filter((info) => !!info?.connectionInfo[0]?.dvId)
+                  .map((info) => info.connectionInfo[0].dvId);
+        leaves = devices.filter((item) => ids.includes(item.dvId));
+    }
 
     const isBound = !!device.imei;
     let canDelete = !leaves.length;
@@ -70,6 +83,8 @@ const DeviceSmallCard: React.FC<DeviceSmallCardProp> = (props) => {
         e.stopPropagation();
         const payload: DeviceVM = {
             ...device,
+            project: project,
+            space: space,
             parent: parent,
             leaves: leaves,
         };
@@ -212,6 +227,7 @@ const DeviceSmallCard: React.FC<DeviceSmallCardProp> = (props) => {
 };
 
 interface SpaceCardProps {
+    project: ProjectVM;
     space: SpaceVM;
     spaces: SpaceVM[];
     devices: DeviceVM[];
@@ -224,6 +240,7 @@ const SpaceCard: React.FC<SpaceCardProps> = (props) => {
         return <React.Fragment />;
     }
 
+    const project = props.project;
     const spaces = !props.spaces ? [] : props.spaces;
     const space: SpaceVM = props.space;
     // const parent = spaces.find((item) => item.id == space.parentId);
@@ -242,8 +259,9 @@ const SpaceCard: React.FC<SpaceCardProps> = (props) => {
             return (
                 <DeviceSmallCard
                     key={leaf.id}
-                    device={leaf}
+                    project={project}
                     spaces={props.spaces}
+                    device={leaf}
                     devices={props.devices}
                 />
             );
@@ -387,7 +405,7 @@ const SpaceCard: React.FC<SpaceCardProps> = (props) => {
             : space.photos[0];
     const path = AssetsHelper.generatePhotoPath(icon.path);
 
-    const footer_header = `Space Count: ${leaves.length}`;
+    const footer_header = `Space Count: ${leaves.length},\tDevice Count: ${devices.length}`;
 
     return (
         <React.Fragment>

@@ -6,7 +6,6 @@ Authorization: Bearer {{AUTH_TOKEN}}
 
 ###
 
-
 # list spaces  by project
 GET {{HOST}}/api/spaces?projectId={{TARGET_PROJECT_CODE}}
 Accept: application/json
@@ -23,7 +22,6 @@ Authorization: Bearer {{AUTH_TOKEN}}
 
 ###
 
-
 # list device templates
 GET {{HOST}}/api/device/templates
 Accept: application/json
@@ -31,7 +29,6 @@ Content-Type: application/json
 Authorization: Bearer {{AUTH_TOKEN}}
 
 ###
-
 
 # Place device to space
 POST {{HOST}}/api/devices?projectId={{TARGET_PROJECT_CODE}}
@@ -54,3 +51,10 @@ Authorization: Bearer {{AUTH_TOKEN}}
 
 ###
 
+# Edit Device Info
+PUT {{HOST}}/api/devices/{{TARGET_DEVICE_ID}}?projectId={{TARGET_PROJECT_CODE}}
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{AUTH_TOKEN}}
+
+###
