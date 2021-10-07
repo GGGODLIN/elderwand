@@ -1,14 +1,16 @@
 import clsx from 'clsx';
-import React, { useEffect } from 'react';
+import React, { useEffect, Dispatch } from 'react';
 import UserSlice from 'src/client/slices/UserSlice';
 import { AddUserFAB } from 'src/client/components/user/AddUserFAB';
 import { AxiosError, AxiosInstance } from 'axios';
 import { AxiosUtil, PaginationParams } from 'src/client/utils/AxiosUtil';
-import { Dispatch } from 'redux';
+//import { Dispatch } from 'redux';
 import { RootState } from 'src/client/reducer';
 import { useDispatch, useSelector } from 'react-redux';
 import { UserCardList } from 'src/client/components/user/UserCardList';
 import { UserVM } from 'src/client/domain/user/UserVM';
+import AxiosFactory from 'src/client/helper/AxiosFactory';
+import FetchSlice from 'src/client/slices/FetchSlice';
 
 let PreviousParams: {
     limit: number;
@@ -16,6 +18,29 @@ let PreviousParams: {
 } = { limit: -1, offset: -1 };
 
 const PageSize = 48;
+
+const fetchUsers = (dispatch: Dispatch<any>) => {
+    const url = `/api/users`;
+    const params = {};
+
+    new AxiosFactory()
+        .useBearerToken()
+        .useBefore(() => {
+            dispatch(FetchSlice.start());
+        })
+        .getInstance()
+        .get<any>(url, { params: params })
+        .then((res) => {
+            console.log('fetchUsers', res)
+            dispatch(UserSlice.fetch(res.data));
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+        .finally(() => {
+            dispatch(FetchSlice.end());
+        });
+};
 
 const fetchUser = (
     client: AxiosInstance,
@@ -35,7 +60,7 @@ const fetchUser = (
         })
         .catch((err: AxiosError) => {
             console.log(err.message);
-            AxiosUtil.redirectUnAuthorization(err);
+            //AxiosUtil.redirectUnAuthorization(err);
         });
 };
 
@@ -74,7 +99,7 @@ const fetchUserOnScroll = (
         }
 
         if (isLoading) {
-            main.onscroll = () => {};
+            main.onscroll = () => { };
             return;
         }
 
@@ -105,7 +130,7 @@ const fetchUserOnScroll = (
 
             PreviousParams = params;
 
-            main.onscroll = () => {};
+            main.onscroll = () => { };
 
             fetchUser(client, params, (payload: any) => {
                 dispatch(UserSlice.push(payload));
@@ -123,8 +148,8 @@ export const UserMaintainPage: React.FC<UserMaintainPageProps> = () => {
     const classname = `${name} page`;
     const dispatch = useDispatch();
 
-    const origin = AxiosUtil.getOriginWithPort();
-    const client = AxiosUtil.makeAxiosInstance(dispatch, origin);
+    // const origin = AxiosUtil.getOriginWithPort();
+    // const client = AxiosUtil.makeAxiosInstance(dispatch, origin);
 
     const { isLoading } = useSelector((state: RootState) => state.fetch);
     const { users, limit, offset, total } = useSelector((state: RootState) => {
@@ -143,11 +168,16 @@ export const UserMaintainPage: React.FC<UserMaintainPageProps> = () => {
 
     const { goto_top } = useSelector((state: RootState) => state.layout);
 
-    fetchUserOnScroll(isLoading, offset, total, limit, client, dispatch);
+    //fetchUserOnScroll(isLoading, offset, total, limit, client, dispatch);
 
-    fetchUserOnInitial(client, dispatch, refresh);
+    //fetchUserOnInitial(client, dispatch, refresh);
 
     const actions = clsx(['fab-actions', goto_top.show ? 'with-goto-top' : '']);
+
+    useEffect(() => {
+        fetchUsers(dispatch);
+        return () => { };
+    }, []);
 
     return (
         <React.Fragment>

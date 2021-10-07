@@ -31,25 +31,25 @@ export const UserIndex: NextPage<UserIndexProps> = (props) => {
         dispatch(LayoutSlice.initial(layout));
     }, []);
 
-    useEffect(() => {
-        const origin = AxiosUtil.getOriginWithPort();
+    // useEffect(() => {
+    //     const origin = AxiosUtil.getOriginWithPort();
 
-        const client = AxiosUtil.makeAxiosInstance(dispatch, origin);
+    //     const client = AxiosUtil.makeAxiosInstance(dispatch, origin);
 
-        client
-            .get('/api/user/me')
-            .then((res) => {
-                if (res.status == 200) {
-                    dispatch(UserSlice.initial(res.data));
-                    return;
-                }
-            })
-            .catch((err: AxiosError) => {
-                console.log(err.response.status);
-                console.log(err.message);
-                document.location.replace('/logout');
-            });
-    }, []);
+    //     client
+    //         .get('/api/user/me')
+    //         .then((res) => {
+    //             if (res.status == 200) {
+    //                 dispatch(UserSlice.initial(res.data));
+    //                 return;
+    //             }
+    //         })
+    //         .catch((err: AxiosError) => {
+    //             console.log(err.response.status);
+    //             console.log(err.message);
+    //             document.location.replace('/logout');
+    //         });
+    // }, []);
 
     return (
         <React.Fragment>
