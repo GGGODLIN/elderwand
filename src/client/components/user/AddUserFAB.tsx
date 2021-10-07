@@ -25,7 +25,8 @@ import { UserRoleEnum } from 'src/client/configs/Enum';
 import kws from 'src/client/configs/Keywords';
 import { RootState } from 'src/client/reducer';
 import UserSlice from 'src/client/slices/UserSlice';
-// import AxiosUtil from 'src/client/utils/AxiosUtil';
+import AxiosFactory from 'src/client/helper/AxiosFactory';
+import FetchSlice from 'src/client/slices/FetchSlice';
 
 export const AddUserFAB: React.FC<any> = () => {
     const dispatch = useDispatch();
@@ -86,18 +87,28 @@ export const InviteUserDialog: React.FC<{}> = () => {
             ...form,
             role_id: parseInt(form.role_id),
         };
-        //
-        // client
-        //     .post<{ user: UserVM; token: string }>('/api/invite/user', body)
-        //     .then((res: AxiosResponse<any>) => {
-        //         dispatch(UserSlice.setInvitingUserInfo(res.data));
-        //     })
-        //     .catch((err: AxiosError<any>) => {
-        //         AxiosUtil.redirectUnAuthorization(err);
-        //     })
-        //     .finally(() => {
-        //         dispatch(FetchSlice.end());
-        //     });
+        console.log('onSubmit', body)
+
+        const url = `/api/users`;
+        const params = {};
+
+        new AxiosFactory()
+            .useBearerToken()
+            .useBefore(() => {
+                dispatch(FetchSlice.start());
+            })
+            .getInstance()
+            .post<any>(url, body, { params: params })
+            .then((res) => {
+                console.log('CreateUserForm', res)
+                //dispatch(UserSlice.fetch(res.data));
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+            .finally(() => {
+                dispatch(FetchSlice.end());
+            });
     };
 
     const handleErrorMessage = (error: any) => {
@@ -123,7 +134,7 @@ export const InviteUserDialog: React.FC<{}> = () => {
         document.execCommand('copy');
     };
 
-    const handleInviteUser = () => {};
+    const handleInviteUser = () => { };
 
     const handleClearDialog = () => {
         dispatch(UserSlice.clearInviteUserForm());
@@ -143,11 +154,11 @@ export const InviteUserDialog: React.FC<{}> = () => {
         display?: boolean;
         disabled?: boolean;
     }[] = [
-        { name: 'Select...', value: '', display: false },
-        { name: 'Project Engineer', value: UserRoleEnum.ProjectEngineer },
-        { name: 'Filed Engineer', value: UserRoleEnum.FieldEngineer },
-        { name: 'Viewer', value: UserRoleEnum.Viewer },
-    ];
+            { name: 'Select...', value: '', display: false },
+            { name: 'Project Engineer', value: UserRoleEnum.ProjectEngineer },
+            { name: 'Filed Engineer', value: UserRoleEnum.FieldEngineer },
+            { name: 'Viewer', value: UserRoleEnum.Viewer },
+        ];
 
     const items = options.map((item, idx) => {
         return (
@@ -268,7 +279,7 @@ export const InviteUserDialog: React.FC<{}> = () => {
                                         )}`,
                                     },
                                 })}
-                                // TODO value
+                            // TODO value
                             />
                         </Grid>
 

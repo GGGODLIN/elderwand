@@ -109,7 +109,32 @@ export default class UserMaintainController {
     };
 
     static createUser = async (ctx) => {
-        // TODO
+        const repository = new UserRepository({
+            host: ServerEnvVar.SkymapApiHost,
+            platformId: Platform.ElderWand,
+        });
+        console.log('createUser!!!', ctx, 'END!')
+        // await new UserMaintainUCO(repository)
+        //     .createUser()
+        //     .then((res: PaginationDTO<UserDTO>) => {
+        //         const vm = {
+        //             ...res,
+        //             results: convertToUserVMs(res.results),
+        //         } as PaginationVM<UserVM>;
+
+        //         ctx.status = 200;
+        //         ctx.body = vm;
+
+        //         return;
+        //     })
+        //     .catch((err) => {
+        //         if (err.isAxiosError) {
+        //             ctx.status = err.response.status;
+        //             ctx.body = err.response.data;
+        //             return;
+        //         }
+        //         throw err;
+        //     });
     };
 }
 

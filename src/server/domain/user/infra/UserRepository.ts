@@ -3,6 +3,9 @@ import AxiosFactory from '../../../helpers/AxiosFactory';
 import ErrorInfoDTO from '../../shared/models/ErrorInfoDTO';
 import PaginationDTO from '../../shared/models/PaginationDTO';
 import UserDTO from '../models/UserDTO';
+import {
+    CreateUserOptions
+} from '../models/UserVOs';
 
 export interface UserRepositoryCtor {
     host: string;
@@ -54,12 +57,34 @@ export default class UserRepository {
     async getUser(id: string): Promise<UserDTO> {
         const baseURL = this.origin;
         const pathname = `/api/users/${id}`;
-        const params = { pid: this.platformId };
+        const params = { platformId: this.platformId };
 
         const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
 
         return await axios
             .get<UserDTO>(pathname, { params: params })
+            .then((res) => {
+                const dto: UserDTO = res.data;
+
+                return dto;
+            })
+            .catch((err: AxiosError<ErrorInfoDTO>) => {
+                if (err.isAxiosError) {
+                    // console.log('isAxiosError from repository');
+                }
+                throw err;
+            });
+    }
+
+    async createUser(options: CreateUserOptions): Promise<UserDTO> {
+        const baseURL = this.origin;
+        const pathname = `/api/users`;
+        const params = { platformId: this.platformId };
+
+        const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
+
+        return await axios
+            .post<UserDTO>(pathname, { params: params })
             .then((res) => {
                 const dto: UserDTO = res.data;
 
