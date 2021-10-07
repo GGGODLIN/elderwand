@@ -57,7 +57,7 @@ export default class UserRepository {
     async getUser(id: string): Promise<UserDTO> {
         const baseURL = this.origin;
         const pathname = `/api/users/${id}`;
-        const params = { platformId: this.platformId };
+        const params = { pid: this.platformId };
 
         const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
 
