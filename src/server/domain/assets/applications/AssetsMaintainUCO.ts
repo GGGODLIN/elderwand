@@ -1,6 +1,6 @@
-import PaginationVM from '../../../../client/models/PaginationVM';
+import PaginationDTO from '../../../models/PaginationDTO';
 import AssetsRepository from '../infra/AssetsRepository';
-import { IconDTO } from '../models/AssetsDTOs';
+import { IconDTO } from '../models/AssetDTO';
 
 export default class AssetsMaintainUCO {
     private repository: AssetsRepository;
@@ -11,7 +11,7 @@ export default class AssetsMaintainUCO {
 
     /**
      */
-    listIcons(): Promise<PaginationVM<IconDTO>> {
+    listIcons(): Promise<PaginationDTO<IconDTO>> {
         return this.repository.listIcons();
     }
 }

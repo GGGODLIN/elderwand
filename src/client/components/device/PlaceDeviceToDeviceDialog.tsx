@@ -11,7 +11,7 @@ import DeviceMaintainAPIs, {
 import DeviceVM, {
     DeviceTemplateVM,
     ProjectVM,
-} from 'src/client/domain/device/DeviceVMs';
+} from 'src/client/domain/device/DeviceVM';
 import DeviceSlice from 'src/client/slices/DeviceSlice';
 
 interface PlaceDeviceToDeviceDialogProps {

@@ -1,6 +1,5 @@
 import path from 'path';
 import FileUtil from '../FileUtil';
-import knxDataFormat, { DptDescriptionMap } from '../fixture/KNXDataFormat';
 import MigrationUtil from '../MigrationUtil';
 
 describe('Migration Util Test', () => {
@@ -88,69 +87,30 @@ describe('Migration Util Test', () => {
         expect(actual).toBeTruthy();
     });
 
-    test('get KNX function list', async () => {
-        const functions = knxDataFormat.fun2dps.map((func) => {
-            return {
-                funId: func.funId,
-                dpts: func.dpts,
-                unit: func.valueStyle.unit,
-            } as {
-                funId: string;
-                dpts: string[];
-                unit?: string;
-            };
-        });
+    test('get KNX Data Point types', async () => {
+        const text = MigrationUtil.getDataPointTypeMapToTypescript();
 
-        console.log(functions);
-    });
-
-    test('get KNX DPT list', async () => {
-        const map = DptDescriptionMap;
-
-        const dpts = knxDataFormat.dptInfo.map((dpt) => {
-            type ValueKey = 'value';
-            type ValueType = 'boolean';
-
-            return {
-                dpt: dpt.dpt,
-                name: dpt.name,
-                createdRT: dpt.createdRT || [],
-                rt: dpt.rt,
-                valueKey: dpt.valueKey,
-                valueType: dpt.valueType,
-                desc: DptDescriptionMap[dpt.desc_zh_CN]?.en || '',
-            } as {
-                dpt: string;
-                name: string;
-                createdRT?: string;
-                rt?: string[];
-                valueKey?: ValueKey;
-                valueType?: ValueType;
-                // desc_zh_CN: string;
-                desc: string;
-            };
-        });
-
-        console.log(dpts);
-
-        // const descs = dpts.filter((dpt) => !!dpt.desc).map((dpt) => dpt.desc);
-        // console.log(descs.join('\r\n'));
-    });
-
-    test('get KNX FlagRule Map to ts file', async () => {
-        const text = MigrationUtil.getKNXFlagMapToJson();
-
-        const full = path.join(file_path, 'KNX_flag_rules.json');
+        const full = path.join(file_path, 'DataPointTypes.ts');
 
         const actual = await FileUtil.createFile(full, text);
 
         expect(actual).toBeTruthy();
     });
 
-    test('get KNX FlagRule Map to ts file', async () => {
-        const text = MigrationUtil.getKNXFlagMapToTypeScript();
+    test('get KNX Function Point types', async () => {
+        const text = MigrationUtil.getFunctionPointTypeMapToTypescript();
 
-        const full = path.join(file_path, 'KNXFlagRules.ts');
+        const full = path.join(file_path, 'FunctionPointTypes.ts');
+
+        const actual = await FileUtil.createFile(full, text);
+
+        expect(actual).toBeTruthy();
+    });
+
+    test('get KNX DataPoint Type Suffixes', async () => {
+        const text = MigrationUtil.getSuffixesMapToTypescript();
+
+        const full = path.join(file_path, 'DataPointTypeSuffixes.ts');
 
         const actual = await FileUtil.createFile(full, text);
 

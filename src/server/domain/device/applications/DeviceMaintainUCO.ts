@@ -1,13 +1,14 @@
-import PaginationVM from '../../../../client/models/PaginationVM';
 import DeviceRepository from '../../device/infra/DeviceRepository';
 import DeviceTemplateDTO from '../../migration/models/DeviceTemplateDTO';
+import PaginationDTO from '../../shared/models/PaginationDTO';
 import SpaceDTO from '../../space/models/SpaceDTO';
 import DeviceDTO from '../models/DeviceDTO';
 import {
-    EditDeviceOptions,
+    EditDeviceProfileOptions,
     EditDeviceProtocolsOptions,
     PlaceDeviceOptions,
 } from '../models/DeviceVOs';
+import FunctionPointTypeDTO from '../models/FunctionPointTypeDTO';
 
 export default class DeviceMaintainUCO {
     private repository: DeviceRepository;
@@ -19,7 +20,7 @@ export default class DeviceMaintainUCO {
     /**
      * @param pid Project ID or Code
      */
-    listDevices(pid: string): Promise<PaginationVM<DeviceDTO>> {
+    listDevices(pid: string): Promise<PaginationDTO<DeviceDTO>> {
         return this.repository.listDevices(pid);
     }
 
@@ -36,12 +37,12 @@ export default class DeviceMaintainUCO {
      * @param pid ProjectID
      * @param options Edit Device Options
      */
-    editDevice(
+    editDeviceProfile(
         id: string,
         pid: string,
-        options: EditDeviceOptions
+        options: EditDeviceProfileOptions
     ): Promise<DeviceDTO> {
-        return this.repository.editDevice(id, pid, options);
+        return this.repository.editDeviceProfile(id, pid, options);
     }
 
     /**
@@ -81,8 +82,8 @@ export default class DeviceMaintainUCO {
         id: string,
         pid: string
     ): Promise<{
-        spaces: PaginationVM<SpaceDTO>;
-        devices: PaginationVM<DeviceDTO>;
+        spaces: PaginationDTO<SpaceDTO>;
+        devices: PaginationDTO<DeviceDTO>;
     }> {
         return Promise.all([
             this.repository.listSpaces(pid),
@@ -136,7 +137,16 @@ export default class DeviceMaintainUCO {
     /**
      *
      */
-    listDeviceTemplates(): Promise<PaginationVM<DeviceTemplateDTO>> {
+    listDeviceTemplates(): Promise<PaginationDTO<DeviceTemplateDTO>> {
         return this.repository.listDeviceTemplates();
+    }
+
+    /**
+     *
+     */
+    listDeviceFunctionPointsTopology(): Promise<
+        PaginationDTO<FunctionPointTypeDTO>
+    > {
+        return this.repository.listDeviceFunctionPointTopology();
     }
 }

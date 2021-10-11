@@ -1,5 +1,5 @@
 import { Context } from 'koa';
-import PaginationVM from '../../client/models/PaginationVM';
+
 import ServerEnvVar from '../config/ServerEnvVar';
 import GatewayConnectionMaintainUCO from '../domain/gateway/applications/GatewayConnectionMaintainUCO';
 import GatewayConnectionRepository from '../domain/gateway/infra/GatewayConnectionRepository';
@@ -7,6 +7,7 @@ import GatewayConnectionDTO from '../domain/gateway/models/GatewayConnectionDTO'
 import { Platform } from '../domain/shared/enums/Enums';
 import PaginationDTO from '../domain/shared/models/PaginationDTO';
 import GatewayConnectionVM from '../models/gateway/GatewayConnectionVM';
+import PaginationVM from '../models/PaginationVM';
 
 export default class GatewayMaintainController {
     static listGatewayConnections = async (ctx: Context) => {

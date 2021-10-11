@@ -4,7 +4,7 @@ import React, { CSSProperties } from 'react';
 import { useDrag } from 'react-dnd';
 import { useDispatch } from 'react-redux';
 import DeviceMaintainCardTypes from 'src/client/domain/device/DeviceMaintainItemTypes';
-import { SpaceTemplateVM } from 'src/client/domain/device/DeviceVMs';
+import { SpaceTemplateVM } from 'src/client/domain/device/DeviceVM';
 import AssetsHelper from 'src/client/helper/AssetsHelper';
 import DeviceSlice from 'src/client/slices/DeviceSlice';
 

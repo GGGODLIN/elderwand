@@ -6,7 +6,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import DeviceMaintainAPIs from 'src/client/domain/device/DeviceMaintainAPIs';
-import { ProjectVM, SpaceVM } from 'src/client/domain/device/DeviceVMs';
+import { ProjectVM, SpaceVM } from 'src/client/domain/device/DeviceVM';
 import DeviceSlice from 'src/client/slices/DeviceSlice';
 
 interface RemoveSpaceDialogProps {

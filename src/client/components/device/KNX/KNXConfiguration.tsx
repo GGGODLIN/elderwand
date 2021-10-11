@@ -1,14 +1,25 @@
-import { IconButton, TextField } from '@material-ui/core';
+import {
+    Checkbox,
+    FormControl,
+    FormControlLabel,
+    IconButton,
+    MenuItem,
+    Select,
+    TextField,
+} from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
+import KeyboardReturnIcon from '@material-ui/icons/KeyboardReturn';
 import { Pagination } from '@material-ui/lab';
 import clsx from 'clsx';
+import i18n from 'i18next';
 import { produce } from 'immer';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
-import DeviceHelper from 'src/client/domain/device/DeviceHelper';
+import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
+import DeviceHelper, { FlagRule } from 'src/client/domain/device/DeviceHelper';
 import DeviceMaintainAPIs from 'src/client/domain/device/DeviceMaintainAPIs';
 import DeviceVM, {
     CommObject,
@@ -16,7 +27,11 @@ import DeviceVM, {
     Protocol,
     SpaceVM,
     SwitchPanelControlInfo,
-} from 'src/client/domain/device/DeviceVMs';
+} from 'src/client/domain/device/DeviceVM';
+import FunctionPointTypeVM, {
+    DataPointType,
+    Suffix,
+} from 'src/client/domain/device/FunctionPointTypeVM';
 import {
     ButtonAttr,
     ChannelAttr,
@@ -26,13 +41,31 @@ import {
     GeneralDeviceAttr,
     SensorAttr,
 } from 'src/client/domain/device/KnxDataTypes';
+import { RootState } from 'src/client/reducer';
 import DeviceSlice from 'src/client/slices/DeviceSlice';
 import { groupBy } from 'src/client/utils/FunctionUtil';
 import StringUtil from 'src/client/utils/StringUtil';
+import kws from 'src/client/configs/Keywords';
+
+interface KNXChannel {
+    ch: number;
+    info: ChannelInfo;
+    obj: CommObject;
+    attr: ChannelAttr;
+    attrs: ChannelAttr[];
+}
+
+interface KNXExtraAttr {
+    obj: CommObject;
+    attr: ExtraAttr;
+    // attrs: ChannelAttr[];
+}
 
 interface KNXSettingForm {
     address: string;
     filters: Filter[];
+    channels: KNXChannel[];
+    extras: KNXExtraAttr[];
 }
 
 export interface KNXConfigurationProp {
@@ -47,10 +80,23 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
     }
 
     const dispatch = useDispatch();
+    const { t } = useTranslation();
+
+    const status_suffix = t(kws.DeviceMaintainPage.Status);
 
     const project = props.project;
     const space = props.space;
     const device = props.device;
+
+    const { leaves, functions } = useSelector((state: RootState) => {
+        const leaves = state.device.devices.filter(
+            (item) => item.parentId == device.id
+        );
+        return {
+            leaves: leaves,
+            functions: state.device.function_point_types,
+        };
+    });
 
     const helper = new DeviceHelper({ device });
     const { isKNX, protocol } = helper.isKNX();
@@ -102,19 +148,17 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
     // Actuator Channel Setting
     const { isActuator } = helper.isActuator();
 
-    let channels = [];
+    let channels = [] as KNXChannel[];
 
     if (isActuator) {
-        channels = objects
-            .filter((obj) => !!obj.ch)
-            .map((obj) => {
-                const attr = device.attrs.find(
-                    (attr: ChannelAttr) => attr.objId == obj.objId
+        channels = device.attrs
+            .filter((attr: ChannelAttr) => !!attr.chId)
+            .map((attr: ChannelAttr) => {
+                const attrs = device.attrs.filter(
+                    (item: ChannelAttr) => item.chId == attr.chId
                 );
 
-                const attrs = device.attrs.filter(
-                    (attr: ChannelAttr) => attr.chId == obj.ch
-                );
+                const obj = objects.find((obj) => obj.objId == attr.objId);
 
                 const info = !device.channelInfo
                     ? null
@@ -123,18 +167,12 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                       );
 
                 return {
-                    ch: obj.ch,
-                    info: info,
-                    obj: obj,
+                    ch: attr.chId,
                     attr: attr,
                     attrs: attrs,
-                } as {
-                    ch: number;
-                    info: ChannelInfo;
-                    obj: CommObject;
-                    attr: ChannelAttr;
-                    attrs: ChannelAttr[];
-                };
+                    obj: obj,
+                    info: info,
+                } as KNXChannel;
             });
     }
 
@@ -206,9 +244,12 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                   .filter((attr) => !!attr.page)
                   .map((attr) => attr.objId);
 
-        extras = extraAttrs.filter((extra) =>
-            objIds.includes(extra.attr.objId)
-        );
+        extras = extraAttrs.filter((extra) => {
+            if (!objIds.includes(extra.attr.objId)) {
+                return;
+            }
+            return { attr: extra.attr, obj: extra.obj };
+        });
     }
 
     // Sensor
@@ -269,25 +310,52 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
             });
     }
 
+    const defaultValues = {
+        address: pAddr,
+        filters: filters,
+        channels: channels,
+        extras: extras,
+    };
+
     const {
         register,
         control,
         setValue,
         handleSubmit,
         clearErrors,
+        setError,
         formState: { errors },
     } = useForm<KNXSettingForm>({
         mode: 'onChange',
         reValidateMode: 'onChange',
+        defaultValues: defaultValues,
     });
 
     const [stateOfSetting, setSetting] = useState({
         setting: {
-            address: pAddr,
-            filters: filters,
+            ...defaultValues,
         } as KNXSettingForm,
         changed: false,
     });
+
+    const getCanBeUsedObjectID = (): number => {
+        let max = 0;
+
+        for (const origin of stateOfSetting.setting.channels) {
+            if (origin.attr.objId > max) {
+                max = origin.attr.objId;
+            }
+        }
+        for (const origin of stateOfSetting.setting.extras) {
+            if (origin.attr.objId > max) {
+                max = origin.attr.objId;
+            }
+        }
+
+        const objId = max + 1;
+
+        return objId;
+    };
 
     const handleChangeSetting = (e) => {
         const name = e.target.name;
@@ -320,11 +388,720 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
         setSetting(nextState);
     };
 
+    const handleEditChannel = (e) => {
+        const name = e.target.name;
+        const value = e.target.value;
+
+        if (!name) {
+            return;
+        }
+
+        const values = name.split('.');
+        const type = values[0];
+
+        if (type != 'channels') {
+            return;
+        }
+
+        const ch = values[1];
+        const obj = values[2];
+        const field = values[3];
+
+        let nextState;
+
+        switch (field) {
+            case 'dvId':
+                nextState = produce(stateOfSetting, (draft) => {
+                    for (
+                        let i = 0;
+                        i < stateOfSetting.setting.channels.length;
+                        i++
+                    ) {
+                        if (stateOfSetting.setting.channels[i].ch == ch) {
+                            draft.setting.channels[i].info.dvId = value;
+                        }
+                    }
+                    draft.changed = true;
+                });
+                setSetting(nextState);
+                break;
+            case 'funId':
+                nextState = produce(stateOfSetting, (draft) => {
+                    draft.changed = true;
+
+                    for (
+                        let i = 0;
+                        i < stateOfSetting.setting.channels.length;
+                        i++
+                    ) {
+                        const channel = stateOfSetting.setting.channels[i];
+
+                        if (
+                            channel.attr.chId == ch &&
+                            channel.attr.objId == obj
+                        ) {
+                            draft.setting.channels[i].attr.funId = value;
+                        }
+                    }
+                });
+                setSetting(nextState);
+                break;
+            case 'dpt':
+                nextState = produce(stateOfSetting, (draft) => {
+                    draft.changed = true;
+
+                    for (
+                        let i = 0;
+                        i < stateOfSetting.setting.channels.length;
+                        i++
+                    ) {
+                        const channel = stateOfSetting.setting.channels[i];
+
+                        if (
+                            channel.attr.chId == ch &&
+                            channel.attr.objId == obj
+                        ) {
+                            const func = functions.find(
+                                (func) => func.value == channel.attr.funId
+                            );
+
+                            if (!func) {
+                                return;
+                            }
+
+                            const dpt = func.dpts.find(
+                                (dpt) => dpt.dpt == value
+                            );
+
+                            if (!dpt) {
+                                return;
+                            }
+
+                            draft.setting.channels[i].attr.dpt = dpt.dpt;
+                            draft.setting.channels[i].attr.createdRT =
+                                dpt.createdRT;
+                            draft.setting.channels[i].attr.valueKey =
+                                dpt.valueKey;
+                            draft.setting.channels[i].attr.valueType =
+                                dpt.valueType;
+                        }
+                    }
+                });
+                setSetting(nextState);
+                break;
+            case 'suffix':
+                nextState = produce(stateOfSetting, (draft) => {
+                    draft.changed = true;
+                    for (
+                        let i = 0;
+                        i < stateOfSetting.setting.channels.length;
+                        i++
+                    ) {
+                        const channel = stateOfSetting.setting.channels[i];
+                        if (
+                            channel.attr.chId == ch &&
+                            channel.attr.objId == obj
+                        ) {
+                            draft.setting.channels[i].attr.suffix = value;
+                        }
+                    }
+                });
+                setSetting(nextState);
+                break;
+            case 'gAddrs':
+                nextState = produce(stateOfSetting, (draft) => {
+                    draft.changed = true;
+                    for (
+                        let i = 0;
+                        i < stateOfSetting.setting.channels.length;
+                        i++
+                    ) {
+                        const channel = stateOfSetting.setting.channels[i];
+                        if (
+                            channel.attr.chId == ch &&
+                            channel.attr.objId == obj
+                        ) {
+                            const addrs = value.split(',');
+                            draft.setting.channels[i].obj.gAddrs = addrs;
+                        }
+                    }
+                });
+                setSetting(nextState);
+                break;
+            case 'name':
+                nextState = produce(stateOfSetting, (draft) => {
+                    draft.changed = true;
+                    for (
+                        let i = 0;
+                        i < stateOfSetting.setting.channels.length;
+                        i++
+                    ) {
+                        const channel = stateOfSetting.setting.channels[i];
+                        if (
+                            channel.attr.chId == ch &&
+                            channel.attr.objId == obj
+                        ) {
+                            draft.setting.channels[i].attr.name = value;
+                        }
+                    }
+                });
+                setSetting(nextState);
+                break;
+        }
+    };
+
+    const handleEditChannelFlag = (e) => {
+        const name = e.target.name;
+        const checked = e.target.checked;
+
+        if (!name) {
+            return;
+        }
+
+        const values = name.split('.');
+        const ch = values[1];
+        const obj = values[2];
+        const field = values[3];
+
+        const nextState = produce(stateOfSetting, (draft) => {
+            draft.changed = true;
+
+            for (let i = 0; i < draft.setting.channels.length; i++) {
+                const channel = draft.setting.channels[i];
+                if (channel.attr.chId == ch && channel.attr.objId == obj) {
+                    const origin = draft.setting.channels[i].attr.flags;
+
+                    const flags = DeviceHelper.changeFlagRule(
+                        origin,
+                        field,
+                        checked ? 1 : 0
+                    );
+
+                    draft.setting.channels[i].attr.flags = flags;
+                }
+            }
+        });
+
+        setSetting(nextState);
+    };
+
+    const handleEditChannelAck4Obj = (e) => {
+        const name = e.target.name;
+        const checked = e.target.checked;
+
+        if (!name) {
+            return;
+        }
+
+        const values = name.split('.');
+        const cid = parseInt(values[1], 10); // channel ID
+        const oid = parseInt(values[2], 10); // obj ID
+
+        const nextState = produce(stateOfSetting, (draft) => {
+            let temp;
+
+            for (const origin of stateOfSetting.setting.channels) {
+                if (origin.attr.chId == cid && origin.attr.objId == oid) {
+                    temp = origin;
+                }
+            }
+
+            const objId = getCanBeUsedObjectID();
+            const flags = DeviceHelper.changeFlagRules(temp.attr.flags, [
+                { name: 'read', value: 1 },
+                { name: 'write', value: 0 },
+                { name: 'transmit', value: 1 },
+            ]);
+
+            const obj: CommObject = { ch: cid, objId: objId, gAddrs: [] };
+            const attr: ChannelAttr = {
+                ...temp.attr,
+                objId: objId,
+                flags: flags,
+                ack4Obj: temp.attr.objId,
+                ackSet: true,
+                name: !temp.attr.name
+                    ? ''
+                    : `${temp.attr.name} ${status_suffix}`,
+            };
+
+            let attrs = [];
+
+            for (const origin of temp.attrs) {
+                attrs.push(origin);
+
+                if (origin.objId == oid) {
+                    attrs.push(attr);
+                }
+            }
+
+            const channel: KNXChannel = {
+                ch: temp.ch,
+                info: temp.info,
+                obj: obj,
+                attr: attr,
+                attrs: attrs,
+            };
+
+            let channels = [];
+
+            for (const origin of stateOfSetting.setting.channels) {
+                if (origin.attr.chId != cid) {
+                    channels.push(origin);
+                    continue;
+                }
+
+                const latest = { ...origin, attrs: attrs };
+
+                channels.push(latest);
+
+                if (origin.attr.chId == cid && origin.obj.objId == oid) {
+                    channels.push(channel);
+                }
+            }
+
+            draft.setting.channels = channels;
+            draft.changed = true;
+        });
+
+        setSetting(nextState);
+    };
+
+    const handleAddChannel = (e, value: string) => {
+        const name = value;
+
+        if (!name) {
+            return;
+        }
+
+        const values = name.split('.');
+        const cid = parseInt(values[1], 10); // channel ID
+        // const oid = values[2]; // obj ID
+
+        const default_flag: FlagRule = {
+            priority: 1,
+            communication: 1,
+            read: 0,
+            write: 0,
+            read_init: 1,
+            transmit: 0,
+            update: 1,
+        };
+
+        const nextState = produce(stateOfSetting, (draft) => {
+            let max = 0;
+
+            for (const origin of stateOfSetting.setting.channels) {
+                if (origin.attr.objId > max) {
+                    max = origin.attr.objId;
+                }
+            }
+
+            const objId = max + 1;
+            const flags = DeviceHelper.toFlagNumber(default_flag);
+
+            const obj: CommObject = { ch: cid, objId: objId, gAddrs: [] };
+            const attr: ChannelAttr = {
+                chId: cid,
+                name: '',
+                objId: objId,
+
+                funId: '',
+                dpt: '',
+                flags: flags,
+                suffix: null,
+
+                rt: ['bh.r.attr.actuator'],
+                createdRT: '',
+                valueKey: '',
+                valueType: '',
+            };
+            const info: ChannelInfo =
+                stateOfSetting.setting.channels.find(
+                    (channel) => channel.info.channelNo == cid
+                )?.info ||
+                ({
+                    channelNo: cid,
+                    dvId: '',
+                } as ChannelInfo);
+
+            let attrs = stateOfSetting.setting.channels
+                .filter((channel) => channel.attr.chId == cid)
+                .map((channel) => channel.attr);
+
+            attrs.push(attr);
+
+            const channel: KNXChannel = {
+                ch: cid,
+                info: info,
+                obj: obj,
+                attr: attr,
+                attrs: attrs,
+            };
+
+            const channels = [];
+
+            let idx = stateOfSetting.setting.channels.filter(
+                (channel) => channel.attr.chId == cid
+            ).length;
+
+            for (const origin of stateOfSetting.setting.channels) {
+                if (origin.attr.chId != cid) {
+                    channels.push(origin);
+                    continue;
+                }
+
+                const updated = { ...origin, attrs: attrs };
+
+                channels.push(updated);
+
+                // latest
+                idx = idx - 1;
+                if (idx == 0) {
+                    channels.push(channel);
+                }
+            }
+
+            draft.setting.channels = channels;
+            draft.changed = true;
+        });
+
+        setSetting(nextState);
+    };
+
+    const handleDeleteChannel = (e, value) => {
+        const values = value.split('.');
+        const cid = parseInt(values[1], 10); // channel ID
+        const oid = parseInt(values[2], 10); // obj ID
+        const type = values[3];
+
+        const nextState = produce(stateOfSetting, (draft) => {
+            let filtered = stateOfSetting.setting.channels.filter(
+                (channel) => channel.attr.chId == cid
+            );
+
+            switch (type) {
+                case 'response':
+                    filtered = filtered.filter(
+                        (channel) =>
+                            channel.attr.objId != oid &&
+                            channel.attr.ack4Obj != oid
+                    );
+                    break;
+
+                case 'request':
+                    filtered = filtered.filter(
+                        (channel) => channel.attr.objId != oid
+                    );
+                    break;
+            }
+
+            const attrs = filtered.map((channel) => channel.attr);
+
+            const include = filtered.map((channel) => channel.attr.objId);
+
+            const channels = [];
+
+            for (const origin of stateOfSetting.setting.channels) {
+                if (origin.attr.chId != cid) {
+                    channels.push(origin);
+                    continue;
+                }
+
+                if (!include.includes(origin.attr.objId)) {
+                    continue;
+                }
+
+                const dest = {
+                    ...origin,
+                    attrs: attrs,
+                };
+
+                channels.push(dest);
+            }
+
+            draft.changed = true;
+            draft.setting.channels = channels;
+        });
+
+        setSetting(nextState);
+    };
+
+    const handleEditExtraAttr = (e) => {
+        const name = e.target.name; // `extras.${page}.${oid}.${field}`
+        const value = e.target.value;
+        // console.log({ name, value });
+
+        if (!name) {
+            return;
+        }
+
+        const values = name.split('.');
+        const type = values[0];
+
+        if (type != 'extras') {
+            return;
+        }
+
+        const page = values[1];
+        const obj = values[2];
+        const field = values[3];
+
+        let nextState;
+
+        switch (field) {
+            case 'funId':
+                nextState = produce(stateOfSetting, (draft) => {
+                    draft.changed = true;
+                    for (
+                        let i = 0;
+                        i < stateOfSetting.setting.extras.length;
+                        i++
+                    ) {
+                        const extras = stateOfSetting.setting.extras[i];
+
+                        if (extras.attr.objId == obj) {
+                            draft.setting.extras[i].attr.funId = value;
+                        }
+                    }
+                });
+                setSetting(nextState);
+                break;
+            case 'dpt':
+                nextState = produce(stateOfSetting, (draft) => {
+                    draft.changed = true;
+
+                    for (
+                        let i = 0;
+                        i < stateOfSetting.setting.extras.length;
+                        i++
+                    ) {
+                        const extras = stateOfSetting.setting.extras[i];
+
+                        if (extras.attr.objId == obj) {
+                            const func = functions.find(
+                                (func) => func.value == extras.attr.funId
+                            );
+
+                            if (!func) {
+                                return;
+                            }
+
+                            const dpt = func.dpts.find(
+                                (dpt) => dpt.dpt == value
+                            );
+
+                            if (!dpt) {
+                                return;
+                            }
+
+                            draft.setting.extras[i].attr.dpt = dpt.dpt;
+                            draft.setting.extras[i].attr.createdRT =
+                                dpt.createdRT;
+                            draft.setting.extras[i].attr.valueKey =
+                                dpt.valueKey;
+                            draft.setting.extras[i].attr.valueType =
+                                dpt.valueType;
+                        }
+                    }
+                });
+                setSetting(nextState);
+                break;
+            case 'suffix':
+                nextState = produce(stateOfSetting, (draft) => {
+                    draft.changed = true;
+                    for (
+                        let i = 0;
+                        i < stateOfSetting.setting.extras.length;
+                        i++
+                    ) {
+                        const extras = stateOfSetting.setting.extras[i];
+                        if (extras.attr.objId == obj) {
+                            draft.setting.extras[i].attr.suffix = value;
+                        }
+                    }
+                });
+                setSetting(nextState);
+                break;
+            case 'gAddrs':
+                nextState = produce(stateOfSetting, (draft) => {
+                    draft.changed = true;
+
+                    let addrs = [];
+
+                    for (
+                        let i = 0;
+                        i < stateOfSetting.setting.extras.length;
+                        i++
+                    ) {
+                        const extras = stateOfSetting.setting.extras[i];
+                        if (extras.attr.objId == obj) {
+                            addrs = value.split(',');
+                            draft.setting.extras[i].obj.gAddrs = addrs;
+                        }
+                    }
+                });
+                setSetting(nextState);
+
+                break;
+            case 'name':
+                nextState = produce(stateOfSetting, (draft) => {
+                    draft.changed = true;
+                    for (
+                        let i = 0;
+                        i < stateOfSetting.setting.extras.length;
+                        i++
+                    ) {
+                        const extras = stateOfSetting.setting.extras[i];
+                        if (extras.attr.objId == obj) {
+                            draft.setting.extras[i].attr.name = value;
+                        }
+                    }
+                });
+                setSetting(nextState);
+                break;
+        }
+    };
+
+    const handleEditExtraAttrFlag = (e) => {
+        const name = e.target.name;
+        const checked = e.target.checked;
+
+        if (!name) {
+            return;
+        }
+
+        const values = name.split('.');
+        const page = values[1];
+        const obj = values[2];
+        const field = values[3];
+
+        // console.log({ page, obj, field });
+
+        const nextState = produce(stateOfSetting, (draft) => {
+            draft.changed = true;
+
+            for (let i = 0; i < stateOfSetting.setting.extras.length; i++) {
+                const extra = stateOfSetting.setting.extras[i];
+
+                if (extra.attr.objId == obj) {
+                    const origin = draft.setting.extras[i].attr.flags;
+
+                    const flags = DeviceHelper.changeFlagRule(
+                        origin,
+                        field,
+                        checked ? 1 : 0
+                    );
+
+                    draft.setting.extras[i].attr.flags = flags;
+                }
+            }
+        });
+
+        setSetting(nextState);
+    };
+
+    const handleAddExtraAttr = (e, value: string) => {
+        const values = value.split('.');
+        const type = values[0];
+
+        if (type != 'extras') {
+            return;
+        }
+
+        const page = parseInt(values[1], 10);
+
+        const default_flag: FlagRule = {
+            priority: 1,
+            communication: 1,
+            read: 0,
+            write: 0,
+            read_init: 1,
+            transmit: 0,
+            update: 1,
+        };
+
+        const nextState = produce(stateOfSetting, (draft) => {
+            const objId = getCanBeUsedObjectID();
+            const flags = DeviceHelper.toFlagNumber(default_flag);
+
+            const obj: CommObject = { objId: objId, gAddrs: [] };
+            let attr: ExtraAttr = {
+                // chId: cid,
+                name: '',
+                objId: objId,
+
+                funId: '',
+                dpt: '',
+                flags: flags,
+                suffix: null,
+
+                rt: ['bh.r.attr.actuator'],
+                createdRT: '',
+                valueKey: '',
+                valueType: '',
+            };
+
+            if (!!page) {
+                attr.page = page;
+            }
+
+            const extra: KNXExtraAttr = {
+                obj: obj,
+                attr: attr,
+            };
+
+            const extras = [];
+
+            for (const origin of stateOfSetting.setting.extras) {
+                extras.push({ ...origin });
+            }
+
+            extras.push(extra);
+
+            draft.setting.extras = extras;
+            draft.changed = true;
+        });
+
+        setSetting(nextState);
+    };
+
+    /**
+     * @param {value} value is extras.{page}.${oid}.
+     */
+    const handleDeleteExtraAttr = (e, value: string) => {
+        const values = value.split('.');
+        const type = values[0];
+
+        if (type != 'extras') {
+            return;
+        }
+
+        const page = parseInt(values[1], 10);
+        const obj = parseInt(values[2], 10);
+
+        const nextState = produce(stateOfSetting, (draft) => {
+            let extras = [];
+
+            for (const extra of stateOfSetting.setting.extras) {
+                if (extra.attr.objId == obj) {
+                    continue;
+                }
+
+                extras.push(extra);
+            }
+
+            draft.changed = true;
+            draft.setting.extras = extras;
+        });
+
+        setSetting(nextState);
+    };
+
     const handleResetSetting = (e) => {
         setSetting({
             setting: {
-                address: pAddr,
-                filters: filters,
+                ...defaultValues,
             },
             changed: false,
         });
@@ -332,33 +1109,99 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
     };
 
     const handleSubmitSetting = (e) => {
-        let vo = JSON.parse(JSON.stringify(protocol)) as Protocol;
+        let new_protocol = JSON.parse(JSON.stringify(protocol)) as Protocol;
 
-        vo.commInfo.filters = stateOfSetting.setting.filters;
-        vo.commInfo.pAddr = stateOfSetting.setting.address;
+        new_protocol.commInfo.filters = stateOfSetting.setting.filters;
+        new_protocol.commInfo.pAddr = stateOfSetting.setting.address;
 
-        let protocols = device.protocols.filter(
+        const objs = [];
+
+        objs.push(
+            ...stateOfSetting.setting.channels.map((channel) => channel.obj)
+        );
+        objs.push(...stateOfSetting.setting.extras.map((extra) => extra.obj));
+
+        new_protocol.commInfo.objs = objs;
+
+        const protocols = device.protocols.filter(
             (protocol) => protocol.typeId != 'KNX'
         );
 
-        protocols.push(vo);
+        protocols.push(new_protocol);
 
-        const device_vo = {
+        const groups = groupBy('channelNo')(
+            stateOfSetting.setting.channels.map((channel) => channel.info)
+        );
+
+        const infos = [];
+
+        for (const key of Object.keys(groups)) {
+            infos.push(groups[key][0]);
+        }
+
+        // attrs
+        const attrs = [];
+        attrs.push(
+            ...stateOfSetting.setting.channels.map((channel) => channel.attr)
+        );
+        attrs.push(...stateOfSetting.setting.extras.map((extra) => extra.attr));
+
+        // sendTelRules
+        const sendTelRules = [];
+        sendTelRules.push(
+            ...stateOfSetting.setting.channels
+                .filter((channel) => {
+                    const flags = DeviceHelper.parseFlagRule(
+                        channel.attr.flags
+                    );
+
+                    if (flags.transmit == 1) {
+                        return channel;
+                    }
+
+                    return;
+                })
+                .map((channel) => channel.attr.objId)
+        );
+        sendTelRules.push(
+            ...stateOfSetting.setting.extras
+                .filter((extra) => {
+                    const flags = DeviceHelper.parseFlagRule(extra.attr.flags);
+
+                    if (flags.transmit == 1) {
+                        return extra;
+                    }
+
+                    return;
+                })
+                .map((extra) => extra.attr.objId)
+        );
+
+        const new_device = {
             ...device,
             protocols: protocols,
-        };
+            channelInfo: infos,
+            attrs: attrs,
+            sendTelRules: sendTelRules,
+        } as DeviceVM;
 
         DeviceMaintainAPIs.editDeviceProtocols(
             dispatch,
             project,
-            device_vo,
+            new_device,
             (data) => {
-                dispatch(
-                    DeviceSlice.editDeviceSetting({ ...data, project, space })
-                );
                 DeviceMaintainAPIs.fetchDeviceTopologyResources(
                     dispatch,
-                    project
+                    project,
+                    () => {
+                        dispatch(
+                            DeviceSlice.editDeviceSetting({
+                                ...data,
+                                project,
+                                space,
+                            })
+                        );
+                    }
                 );
             }
         );
@@ -367,8 +1210,7 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
     useEffect(() => {
         setSetting({
             setting: {
-                address: pAddr,
-                filters: filters,
+                ...defaultValues,
             },
             changed: false,
         });
@@ -376,6 +1218,10 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
             // effect;
         };
     }, [device]);
+
+    let previous = 0;
+    let channel_start = false;
+    let isEven = false;
 
     return (
         <div className="KNX-group">
@@ -414,11 +1260,11 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                                             },
                                             pattern: {
                                                 value: new RegExp(
-                                                    /^\d\.\d\.\d$/,
+                                                    /^\d+\.\d+\.\d+$/,
                                                     'gm'
                                                 ),
                                                 message:
-                                                    'pattern rule is \\d.\\d.\\d',
+                                                    'pattern rule is \\d+.\\d+.\\d+',
                                             },
                                         }),
                                     }}
@@ -453,6 +1299,23 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                                                     onChange={
                                                         handleChangeFilter
                                                     }
+                                                    disabled={false}
+                                                    inputProps={{
+                                                        ...register(
+                                                            // @ts-ignore
+                                                            `filters.${idx}.in`,
+                                                            {
+                                                                pattern: {
+                                                                    value: new RegExp(
+                                                                        /^\d+$/,
+                                                                        'gm'
+                                                                    ),
+                                                                    message:
+                                                                        'pattern rule is \\d+',
+                                                                },
+                                                            }
+                                                        ),
+                                                    }}
                                                     error={
                                                         !!errors.filters &&
                                                         !!errors.filters[idx]
@@ -466,23 +1329,6 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                                                     //               idx
                                                     //           ].in.message
                                                     // }
-                                                    disabled={false}
-                                                    inputProps={{
-                                                        ...register(
-                                                            // @ts-ignore
-                                                            `filters.${idx}.in`,
-                                                            {
-                                                                pattern: {
-                                                                    value: new RegExp(
-                                                                        /^\d+$/,
-                                                                        'gm'
-                                                                    ),
-                                                                    message:
-                                                                        'pattern rule is \\d',
-                                                                },
-                                                            }
-                                                        ),
-                                                    }}
                                                 />
                                                 <TextField
                                                     variant="outlined"
@@ -500,20 +1346,6 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                                                     onChange={
                                                         handleChangeFilter
                                                     }
-                                                    error={
-                                                        !!errors.filters &&
-                                                        !!errors.filters[idx]
-                                                            ?.out
-                                                    }
-                                                    // helperText={
-                                                    //     !!errors.filters &&
-                                                    //     !errors.filters[idx]
-                                                    //         ?.out
-                                                    //         ? ' '
-                                                    //         : errors.filters[
-                                                    //               idx
-                                                    //           ].out.message
-                                                    // }
                                                     disabled={false}
                                                     inputProps={{
                                                         ...register(
@@ -526,11 +1358,28 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                                                                         'gm'
                                                                     ),
                                                                     message:
-                                                                        'pattern rule is \\d',
+                                                                        'pattern rule is \\d+',
                                                                 },
                                                             }
                                                         ),
                                                     }}
+                                                    // TODO Fix
+                                                    // error={
+                                                    //     !!errors?.filters
+                                                    //         ?.length &&
+                                                    //     !!errors.filters[idx]
+                                                    //         ?.out
+                                                    // }
+                                                    // helperText={
+                                                    //     !!errors?.filters
+                                                    //         ?.length &&
+                                                    //     !!errors.filters[idx]
+                                                    //         ?.out
+                                                    //         ? ' '
+                                                    //         : errors.filters[
+                                                    //               idx
+                                                    //           ].out.message
+                                                    // }
                                                 />
                                             </div>
                                         </div>
@@ -539,27 +1388,6 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                             )}
                         </div>
                     </div>
-                )}
-            </div>
-            {/* operation */}
-            <div className={'actions'}>
-                {stateOfSetting.changed && (
-                    <React.Fragment>
-                        <Button
-                            className={'save'}
-                            type={'button'}
-                            onClick={handleSubmitSetting}
-                        >
-                            {'SAVE'}
-                        </Button>
-                        <Button
-                            className={'reset'}
-                            type={'reset'}
-                            onClick={handleResetSetting}
-                        >
-                            {'RESET'}
-                        </Button>
-                    </React.Fragment>
                 )}
             </div>
             {/* KNX Channels */}
@@ -580,84 +1408,502 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                             </tr>
                         </thead>
                         <tbody>
-                            {channels.map((channel, idx) => {
-                                const row_span = channel.attrs.length;
+                            {stateOfSetting.setting.channels.map(
+                                (channel, idx) => {
+                                    channel_start = false;
 
-                                const rule = DeviceHelper.parseFlagRule(
-                                    channel.attr.flags
-                                );
+                                    if (previous != channel.attr.chId) {
+                                        channel_start = true;
+                                        previous = channel.attr.chId;
+                                        isEven = !isEven;
+                                    }
 
-                                const isEven = channel.ch % 2 == 0;
-                                const classname = clsx([
-                                    isEven ? 'even' : 'odd',
-                                ]);
+                                    const row_span = channel.attrs.length;
 
-                                const bound = device.leaves.find(
-                                    (leaf) => leaf.dvId == channel.info.dvId
-                                );
+                                    const classname = clsx([
+                                        isEven ? 'even' : 'odd',
+                                    ]);
 
-                                return (
-                                    <tr key={idx} className={classname}>
-                                        {idx % row_span == 0 && (
-                                            <td
-                                                className={'center'}
-                                                rowSpan={row_span}
-                                            >
-                                                {channel.ch}
+                                    const rule = DeviceHelper.parseFlagRule(
+                                        channel.attr.flags
+                                    );
+
+                                    const bound = leaves.find(
+                                        (leaf) => leaf.dvId == channel.info.dvId
+                                    );
+
+                                    const fpts: FunctionPointTypeVM[] =
+                                        functions;
+
+                                    const fpt = functions.find(
+                                        (fpt) => fpt.value == channel.attr.funId
+                                    );
+
+                                    const dpts: DataPointType[] = !fpt
+                                        ? []
+                                        : fpt.dpts;
+
+                                    const dpt = dpts.find(
+                                        (dpt) => dpt.dpt == channel.attr.dpt
+                                    );
+
+                                    const suffixes: Suffix[] = !dpt
+                                        ? []
+                                        : dpt.suffixes;
+
+                                    const cid = channel.ch;
+                                    const oid = channel.obj.objId;
+                                    const key = `channels.${cid}.${oid}`;
+
+                                    const ack4Objs = channel.attrs.filter(
+                                        (attr) =>
+                                            attr.ack4Obj == channel.attr.objId
+                                    );
+
+                                    const id = `channels.${cid}.${oid}.${channel.attrs.length}`;
+
+                                    return (
+                                        <tr
+                                            key={key}
+                                            id={id}
+                                            className={classname}
+                                        >
+                                            {channel_start && (
+                                                <td
+                                                    className={'center'}
+                                                    rowSpan={row_span}
+                                                >
+                                                    {`${channel.attr.chId}`}
+                                                </td>
+                                            )}
+
+                                            {channel_start && (
+                                                <td
+                                                    className={'center'}
+                                                    rowSpan={row_span}
+                                                >
+                                                    {/*{bound && bound.name}*/}
+                                                    <FormControl
+                                                        variant={'outlined'}
+                                                        size={'small'}
+                                                        fullWidth={true}
+                                                    >
+                                                        <Select
+                                                            className={
+                                                                'device-selector'
+                                                            }
+                                                            value={
+                                                                !bound
+                                                                    ? ' '
+                                                                    : bound.dvId
+                                                            }
+                                                            name={`${key}.dvId`}
+                                                            onChange={
+                                                                handleEditChannel
+                                                            }
+                                                        >
+                                                            <MenuItem
+                                                                value={' '}
+                                                            >
+                                                                <div>
+                                                                    <span>
+                                                                        {
+                                                                            'Select...'
+                                                                        }
+                                                                    </span>
+                                                                </div>
+                                                            </MenuItem>
+                                                            {leaves.map(
+                                                                (leaf) => {
+                                                                    return (
+                                                                        <MenuItem
+                                                                            key={
+                                                                                leaf.dvId
+                                                                            }
+                                                                            value={
+                                                                                leaf.dvId
+                                                                            }
+                                                                        >
+                                                                            <div>
+                                                                                <span>
+                                                                                    {
+                                                                                        leaf.name
+                                                                                    }
+                                                                                </span>
+                                                                            </div>
+                                                                        </MenuItem>
+                                                                    );
+                                                                }
+                                                            )}
+                                                        </Select>
+                                                        {/*<FormHelperText>{` `}</FormHelperText>*/}
+                                                    </FormControl>
+                                                </td>
+                                            )}
+
+                                            <td className={'center'}>
+                                                {/*{channel.attr.funId}*/}
+                                                <FormControl
+                                                    variant={'outlined'}
+                                                    size={'small'}
+                                                    fullWidth={true}
+                                                >
+                                                    <Select
+                                                        className={
+                                                            'fpt-selector'
+                                                        }
+                                                        value={
+                                                            channel.attr
+                                                                .funId || ' '
+                                                        }
+                                                        name={`${key}.funId`}
+                                                        onChange={
+                                                            handleEditChannel
+                                                        }
+                                                    >
+                                                        <MenuItem value={' '}>
+                                                            <div>
+                                                                <span>
+                                                                    {
+                                                                        'Select...'
+                                                                    }
+                                                                </span>
+                                                            </div>
+                                                        </MenuItem>
+                                                        {fpts.map((fpt) => {
+                                                            return (
+                                                                <MenuItem
+                                                                    key={
+                                                                        fpt.value
+                                                                    }
+                                                                    value={
+                                                                        fpt.value
+                                                                    }
+                                                                >
+                                                                    <div>
+                                                                        <span>
+                                                                            {
+                                                                                fpt.name
+                                                                            }
+                                                                        </span>
+                                                                    </div>
+                                                                </MenuItem>
+                                                            );
+                                                        })}
+                                                    </Select>
+                                                </FormControl>
                                             </td>
-                                        )}
-                                        <td className={'center'}>
-                                            {/*{channel.info && channel.info.dvId}*/}
-                                            {/*{channel.info.dvId}*/}
-                                            {bound && bound.name}
-                                        </td>
-                                        <td className={'center'}>
-                                            {channel.attr.funId}
-                                        </td>
-                                        <td className={'center'}>
-                                            {channel.attr.dpt}
-                                        </td>
-                                        <td className={'center'}>
-                                            {channel.attr.suffixes || 'None'}
-                                        </td>
-                                        <td className={'center'}>
-                                            {channel.obj &&
-                                                channel.obj.gAddrs[0]}
-                                        </td>
-                                        <td className={'center'}>
-                                            {rule.read}
-                                        </td>
-                                        <td className={'center'}>
-                                            {rule.update}
-                                        </td>
-                                        <td className={'center'}>
-                                            {rule.transmit}
-                                        </td>
-                                        <td className={'center'}>
-                                            {channel.attr.name}
-                                        </td>
-                                        <td className={'center'}>
-                                            {`${channel.attr.ack4Obj} / ${channel.attr.ackSet}`}
-                                        </td>
-                                        {/*operations*/}
-                                        <td style={{ textAlign: 'center' }}>
-                                            <IconButton>
-                                                <DeleteIcon />
-                                            </IconButton>
-                                        </td>
-                                        {idx % row_span == 0 && (
-                                            <td
-                                                className={'center'}
-                                                rowSpan={row_span}
-                                            >
-                                                <IconButton>
-                                                    <AddIcon />
+                                            <td className={'center'}>
+                                                {/*{channel.attr.dpt}*/}
+                                                <FormControl
+                                                    variant={'outlined'}
+                                                    size={'small'}
+                                                    fullWidth={true}
+                                                >
+                                                    <Select
+                                                        className={
+                                                            'dpt-selector'
+                                                        }
+                                                        value={
+                                                            channel.attr.dpt ||
+                                                            ' '
+                                                        }
+                                                        name={`${key}.dpt`}
+                                                        onChange={
+                                                            handleEditChannel
+                                                        }
+                                                    >
+                                                        <MenuItem value={' '}>
+                                                            <div>
+                                                                <span>
+                                                                    {
+                                                                        'Select...'
+                                                                    }
+                                                                </span>
+                                                            </div>
+                                                        </MenuItem>
+                                                        {dpts.map((dpt) => {
+                                                            return (
+                                                                <MenuItem
+                                                                    key={
+                                                                        dpt.dpt
+                                                                    }
+                                                                    value={
+                                                                        dpt.dpt
+                                                                    }
+                                                                >
+                                                                    <div>
+                                                                        <span>
+                                                                            {`${dpt.dpt} ${dpt.name}`}
+                                                                        </span>
+                                                                    </div>
+                                                                </MenuItem>
+                                                            );
+                                                        })}
+                                                    </Select>
+                                                </FormControl>
+                                            </td>
+                                            <td className={'center'}>
+                                                {/*{channel.attr.suffix || 'None'}*/}
+                                                <FormControl
+                                                    variant={'outlined'}
+                                                    size={'small'}
+                                                    fullWidth={true}
+                                                >
+                                                    <Select
+                                                        className={
+                                                            'suffix-selector'
+                                                        }
+                                                        value={
+                                                            channel.attr
+                                                                .suffix || ' '
+                                                        }
+                                                        name={`${key}.suffix`}
+                                                        onChange={
+                                                            handleEditChannel
+                                                        }
+                                                    >
+                                                        <MenuItem value={' '}>
+                                                            <div>
+                                                                <span>
+                                                                    {'None'}
+                                                                </span>
+                                                            </div>
+                                                        </MenuItem>
+                                                        {suffixes.map(
+                                                            (suffix) => {
+                                                                return (
+                                                                    <MenuItem
+                                                                        key={
+                                                                            suffix.value
+                                                                        }
+                                                                        value={
+                                                                            suffix.value
+                                                                        }
+                                                                    >
+                                                                        <div>
+                                                                            <span>
+                                                                                {`${suffix.name}`}
+                                                                            </span>
+                                                                        </div>
+                                                                    </MenuItem>
+                                                                );
+                                                            }
+                                                        )}
+                                                    </Select>
+                                                </FormControl>
+                                            </td>
+                                            <td className={'center'}>
+                                                {/*{channel.obj &&*/}
+                                                {/*    channel.obj.gAddrs[0]}*/}
+                                                <div className={'address'}>
+                                                    <TextField
+                                                        // label="Address"
+                                                        variant="outlined"
+                                                        size={'small'}
+                                                        InputLabelProps={{
+                                                            shrink: true,
+                                                        }}
+                                                        value={channel.obj.gAddrs.join(
+                                                            ','
+                                                        )}
+                                                        onChange={
+                                                            handleEditChannel
+                                                        }
+                                                        required={false}
+                                                        disabled={false}
+                                                        // name={`channels.${cid}.${oid}.gAddrs`}
+                                                        inputProps={{
+                                                            ...register(
+                                                                // @ts-ignore
+                                                                `channels.${cid}.${oid}.gAddrs`,
+                                                                {}
+                                                            ),
+                                                        }}
+                                                        error={
+                                                            errors?.channels
+                                                                ?.length &&
+                                                            !!errors?.channels[
+                                                                cid
+                                                            ] &&
+                                                            !!errors?.channels[
+                                                                cid
+                                                            ][oid] &&
+                                                            !!errors?.channels[
+                                                                cid
+                                                            ][oid].gAddrs
+                                                        }
+                                                        helperText={
+                                                            errors?.channels
+                                                                ?.length &&
+                                                            errors?.channels[
+                                                                cid
+                                                            ] &&
+                                                            errors?.channels[
+                                                                cid
+                                                            ][oid] &&
+                                                            errors?.channels[
+                                                                cid
+                                                            ][oid].gAddrs
+                                                                .message
+                                                        }
+                                                    />
+                                                </div>
+                                            </td>
+                                            <td className={'center'}>
+                                                {/*{rule.read}*/}
+                                                <FormControlLabel
+                                                    className={'read'}
+                                                    label=""
+                                                    control={
+                                                        <Checkbox
+                                                            checked={
+                                                                !!rule.read
+                                                            }
+                                                            name={`${key}.read`}
+                                                            disabled={false}
+                                                        />
+                                                    }
+                                                    onChange={
+                                                        handleEditChannelFlag
+                                                    }
+                                                />
+                                            </td>
+                                            <td className={'center'}>
+                                                {/*{rule.write}*/}
+                                                <FormControlLabel
+                                                    className={'write'}
+                                                    label=""
+                                                    control={
+                                                        <Checkbox
+                                                            checked={
+                                                                !!rule.write
+                                                            }
+                                                            name={`${key}.write`}
+                                                            disabled={false}
+                                                        />
+                                                    }
+                                                    onChange={
+                                                        handleEditChannelFlag
+                                                    }
+                                                />
+                                            </td>
+                                            <td className={'center'}>
+                                                {/*{rule.transmit}*/}
+                                                <FormControlLabel
+                                                    className={'transmit'}
+                                                    label=""
+                                                    control={
+                                                        <Checkbox
+                                                            checked={
+                                                                !!rule.transmit
+                                                            }
+                                                            name={`${key}.transmit`}
+                                                            disabled={false}
+                                                        />
+                                                    }
+                                                    onChange={
+                                                        handleEditChannelFlag
+                                                    }
+                                                />
+                                            </td>
+                                            <td className={'center'}>
+                                                {/*{channel.attr.name}*/}
+                                                <TextField
+                                                    variant="outlined"
+                                                    size={'small'}
+                                                    InputLabelProps={{
+                                                        shrink: true,
+                                                    }}
+                                                    value={channel.attr.name}
+                                                    onChange={handleEditChannel}
+                                                    disabled={false}
+                                                    inputProps={{
+                                                        ...register(
+                                                            // @ts-ignore
+                                                            `channels.${cid}.${oid}.name`,
+                                                            {}
+                                                        ),
+                                                    }}
+                                                />
+                                            </td>
+                                            <td className={'center'}>
+                                                {/*{`${channel.attr.ack4Obj} / ${channel.attr.ackSet}`}*/}
+                                                {!channel.attr.ack4Obj ? (
+                                                    <div className={'response'}>
+                                                        <div className={'res'}>
+                                                            <KeyboardReturnIcon />
+                                                        </div>
+                                                        <div>
+                                                            <FormControlLabel
+                                                                label=""
+                                                                control={
+                                                                    <Checkbox
+                                                                        name={`${key}.ack4Obj`}
+                                                                        checked={
+                                                                            ack4Objs.length >=
+                                                                            1
+                                                                        }
+                                                                        disabled={
+                                                                            ack4Objs.length >=
+                                                                            1
+                                                                        }
+                                                                    />
+                                                                }
+                                                                onChange={
+                                                                    handleEditChannelAck4Obj
+                                                                }
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                ) : (
+                                                    <div className={'response'}>
+                                                        <div className={'req'}>
+                                                            <KeyboardReturnIcon />
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            </td>
+                                            {/*operations*/}
+                                            <td style={{ textAlign: 'center' }}>
+                                                <IconButton
+                                                    onClick={(e) => {
+                                                        const type = !channel
+                                                            .attr.ack4Obj
+                                                            ? 'response'
+                                                            : 'request';
+                                                        const value = `channels.${cid}.${oid}.${type}`;
+                                                        handleDeleteChannel(
+                                                            e,
+                                                            value
+                                                        );
+                                                    }}
+                                                >
+                                                    <DeleteIcon />
                                                 </IconButton>
                                             </td>
-                                        )}
-                                    </tr>
-                                );
-                            })}
+                                            {channel_start && (
+                                                <td
+                                                    className={'center'}
+                                                    rowSpan={row_span}
+                                                >
+                                                    <IconButton
+                                                        onClick={(e) => {
+                                                            const value = `channels.${cid}`;
+                                                            handleAddChannel(
+                                                                e,
+                                                                value
+                                                            );
+                                                        }}
+                                                    >
+                                                        <AddIcon />
+                                                    </IconButton>
+                                                </td>
+                                            )}
+                                        </tr>
+                                    );
+                                }
+                            )}
                         </tbody>
                         <tfoot>
                             <tr>
@@ -672,7 +1918,7 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                         </tfoot>
                     </table>
                 )}
-
+                {/* SwitchPanel Table */}
                 {isSwitchPanel && (
                     <React.Fragment>
                         {page_count > 1 && (
@@ -815,9 +2061,8 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                         </table>
                     </React.Fragment>
                 )}
-
                 {/* Extra Attrs Table */}
-                {hasExtraAttrs && (
+                {(hasExtraAttrs || true) && (
                     <React.Fragment>
                         <table>
                             <thead>
@@ -837,6 +2082,15 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                                             style={{
                                                 padding: '0',
                                             }}
+                                            onClick={(e) => {
+                                                const idx =
+                                                    stateOfSwitchPanel.page;
+                                                const page = isSwitchPanel
+                                                    ? idx
+                                                    : 0;
+                                                const value = `extras.${page}`;
+                                                handleAddExtraAttr(e, value);
+                                            }}
                                         >
                                             <AddIcon />
                                         </IconButton>
@@ -844,56 +2098,402 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {extras.map((extra, idx) => {
-                                    const rule = DeviceHelper.parseFlagRule(
-                                        extra.attr.flags
-                                    );
+                                {stateOfSetting.setting.extras.map(
+                                    (extra: KNXExtraAttr, idx) => {
+                                        const rule = DeviceHelper.parseFlagRule(
+                                            extra.attr.flags
+                                        );
 
-                                    const isEven = idx % 2 != 0;
+                                        const isEven = idx % 2 == 0;
 
-                                    const classname = clsx([
-                                        isEven ? 'even' : 'odd',
-                                    ]);
+                                        const classname = clsx([
+                                            isEven ? 'even' : 'odd',
+                                        ]);
 
-                                    return (
-                                        <React.Fragment key={idx}>
-                                            <tr className={classname}>
-                                                <td className={'center'}>
-                                                    {extra.attr.funId}
-                                                </td>
-                                                <td className={'center'}>
-                                                    {extra.attr.dpt}
-                                                </td>
-                                                <td className={'center'}>
-                                                    {extra.attr.suffix ||
-                                                        'None'}
-                                                </td>
-                                                <td className={'center'}>
-                                                    {extra.obj &&
-                                                        extra.obj.gAddrs[0]}
-                                                </td>
-                                                <td className={'center'}>
-                                                    {rule.read}
-                                                </td>
-                                                <td className={'center'}>
-                                                    {rule.write}
-                                                </td>
-                                                <td className={'center'}>
-                                                    {rule.transmit}
-                                                </td>
-                                                <td className={'center'}>
-                                                    {extra.attr.name}
-                                                </td>
-                                                {/*operations*/}
-                                                <td className={'center'}>
-                                                    <IconButton>
-                                                        <DeleteIcon />
-                                                    </IconButton>
-                                                </td>
-                                            </tr>
-                                        </React.Fragment>
-                                    );
-                                })}
+                                        const fpts: FunctionPointTypeVM[] =
+                                            functions;
+
+                                        const fpt = functions.find(
+                                            (fpt) =>
+                                                fpt.value == extra.attr.funId
+                                        );
+
+                                        const dpts: DataPointType[] = !fpt
+                                            ? []
+                                            : fpt.dpts;
+
+                                        const dpt = dpts.find(
+                                            (dpt) => dpt.dpt == extra.attr.dpt
+                                        );
+
+                                        const suffixes: Suffix[] = !dpt
+                                            ? []
+                                            : dpt.suffixes;
+
+                                        const page = extra.attr.page || 0;
+                                        const oid = extra.attr.objId;
+                                        const key = `extras.${page}.${oid}`;
+
+                                        return (
+                                            <React.Fragment key={key}>
+                                                <tr className={classname}>
+                                                    <td className={'center'}>
+                                                        {/*{extra.attr.funId}*/}
+                                                        <FormControl
+                                                            variant={'outlined'}
+                                                            size={'small'}
+                                                            fullWidth={true}
+                                                        >
+                                                            <Select
+                                                                className={
+                                                                    'fpt-selector'
+                                                                }
+                                                                value={
+                                                                    extra.attr
+                                                                        .funId ||
+                                                                    ' '
+                                                                }
+                                                                name={`${key}.funId`}
+                                                                onChange={
+                                                                    handleEditExtraAttr
+                                                                }
+                                                            >
+                                                                <MenuItem
+                                                                    value={' '}
+                                                                >
+                                                                    <div>
+                                                                        <span>
+                                                                            {
+                                                                                'Select...'
+                                                                            }
+                                                                        </span>
+                                                                    </div>
+                                                                </MenuItem>
+                                                                {fpts.map(
+                                                                    (fpt) => {
+                                                                        return (
+                                                                            <MenuItem
+                                                                                key={
+                                                                                    fpt.value
+                                                                                }
+                                                                                value={
+                                                                                    fpt.value
+                                                                                }
+                                                                            >
+                                                                                <div>
+                                                                                    <span>
+                                                                                        {
+                                                                                            fpt.name
+                                                                                        }
+                                                                                    </span>
+                                                                                </div>
+                                                                            </MenuItem>
+                                                                        );
+                                                                    }
+                                                                )}
+                                                            </Select>
+                                                        </FormControl>
+                                                    </td>
+                                                    <td className={'center'}>
+                                                        {/*{extra.attr.dpt}*/}
+                                                        <FormControl
+                                                            variant={'outlined'}
+                                                            size={'small'}
+                                                            fullWidth={true}
+                                                        >
+                                                            <Select
+                                                                className={
+                                                                    'dpt-selector'
+                                                                }
+                                                                value={
+                                                                    extra.attr
+                                                                        .dpt ||
+                                                                    ' '
+                                                                }
+                                                                name={`${key}.dpt`}
+                                                                onChange={
+                                                                    handleEditExtraAttr
+                                                                }
+                                                            >
+                                                                <MenuItem
+                                                                    value={' '}
+                                                                >
+                                                                    <div>
+                                                                        <span>
+                                                                            {
+                                                                                'Select...'
+                                                                            }
+                                                                        </span>
+                                                                    </div>
+                                                                </MenuItem>
+                                                                {dpts.map(
+                                                                    (dpt) => {
+                                                                        return (
+                                                                            <MenuItem
+                                                                                key={
+                                                                                    dpt.dpt
+                                                                                }
+                                                                                value={
+                                                                                    dpt.dpt
+                                                                                }
+                                                                            >
+                                                                                <div>
+                                                                                    <span>
+                                                                                        {`${dpt.dpt} ${dpt.name}`}
+                                                                                    </span>
+                                                                                </div>
+                                                                            </MenuItem>
+                                                                        );
+                                                                    }
+                                                                )}
+                                                            </Select>
+                                                        </FormControl>
+                                                    </td>
+                                                    <td className={'center'}>
+                                                        {/*{extra.attr.suffix || 'None'}*/}
+                                                        <FormControl
+                                                            variant={'outlined'}
+                                                            size={'small'}
+                                                            fullWidth={true}
+                                                        >
+                                                            <Select
+                                                                className={
+                                                                    'suffix-selector'
+                                                                }
+                                                                value={
+                                                                    extra.attr
+                                                                        .suffix ||
+                                                                    ' '
+                                                                }
+                                                                name={`${key}.suffix`}
+                                                                onChange={
+                                                                    handleEditExtraAttr
+                                                                }
+                                                            >
+                                                                <MenuItem
+                                                                    value={' '}
+                                                                >
+                                                                    <div>
+                                                                        <span>
+                                                                            {
+                                                                                'None'
+                                                                            }
+                                                                        </span>
+                                                                    </div>
+                                                                </MenuItem>
+                                                                {suffixes.map(
+                                                                    (
+                                                                        suffix
+                                                                    ) => {
+                                                                        return (
+                                                                            <MenuItem
+                                                                                key={
+                                                                                    suffix.value
+                                                                                }
+                                                                                value={
+                                                                                    suffix.value
+                                                                                }
+                                                                            >
+                                                                                <div>
+                                                                                    <span>
+                                                                                        {`${suffix.name}`}
+                                                                                    </span>
+                                                                                </div>
+                                                                            </MenuItem>
+                                                                        );
+                                                                    }
+                                                                )}
+                                                            </Select>
+                                                        </FormControl>
+                                                    </td>
+                                                    <td className={'center'}>
+                                                        {/*{extra.obj && extra.obj.gAddrs[0]}*/}
+                                                        <div
+                                                            className={
+                                                                'address'
+                                                            }
+                                                        >
+                                                            <TextField
+                                                                // label="Address"
+                                                                variant="outlined"
+                                                                size={'small'}
+                                                                InputLabelProps={{
+                                                                    shrink: true,
+                                                                }}
+                                                                value={extra.obj?.gAddrs.join(
+                                                                    ','
+                                                                )}
+                                                                onChange={
+                                                                    handleEditExtraAttr
+                                                                }
+                                                                required={false}
+                                                                disabled={false}
+                                                                // name={`extras.${page}.${oid}.gAddrs`}
+                                                                inputProps={{
+                                                                    ...register(
+                                                                        // @ts-ignore
+                                                                        `${key}.gAddrs`,
+                                                                        {
+                                                                            pattern:
+                                                                                {
+                                                                                    value: new RegExp(
+                                                                                        /(\d+\/\d+\/\d+,)|(\d+\/\d+\/\d+$)/,
+                                                                                        'gm'
+                                                                                    ),
+                                                                                    message:
+                                                                                        'rule is \\d+\\/\\d+\\/\\d+',
+                                                                                },
+                                                                        }
+                                                                    ),
+                                                                }}
+                                                                error={
+                                                                    !!errors
+                                                                        .extras
+                                                                        ?.length &&
+                                                                    !!errors
+                                                                        .extras[
+                                                                        page
+                                                                    ] &&
+                                                                    !!errors
+                                                                        .extras[
+                                                                        page
+                                                                    ][oid] &&
+                                                                    !!errors
+                                                                        .extras[
+                                                                        page
+                                                                    ][oid]
+                                                                        ?.gAddrs
+                                                                }
+                                                                helperText={
+                                                                    !!errors
+                                                                        .extras
+                                                                        ?.length &&
+                                                                    !!errors
+                                                                        .extras[
+                                                                        page
+                                                                    ] &&
+                                                                    !!errors
+                                                                        .extras[
+                                                                        page
+                                                                    ][oid] &&
+                                                                    errors
+                                                                        .extras[
+                                                                        page
+                                                                    ][oid]
+                                                                        ?.gAddrs
+                                                                        ?.message
+                                                                }
+                                                            />
+                                                        </div>
+                                                    </td>
+                                                    <td className={'center'}>
+                                                        {/*{rule.read}*/}
+                                                        <FormControlLabel
+                                                            className={'read'}
+                                                            label=""
+                                                            control={
+                                                                <Checkbox
+                                                                    checked={
+                                                                        !!rule.read
+                                                                    }
+                                                                    name={`${key}.read`}
+                                                                    disabled={
+                                                                        false
+                                                                    }
+                                                                />
+                                                            }
+                                                            onChange={
+                                                                handleEditExtraAttrFlag
+                                                            }
+                                                        />
+                                                    </td>
+                                                    <td className={'center'}>
+                                                        {/*{rule.write}*/}
+                                                        <FormControlLabel
+                                                            className={'write'}
+                                                            label=""
+                                                            control={
+                                                                <Checkbox
+                                                                    checked={
+                                                                        !!rule.write
+                                                                    }
+                                                                    name={`${key}.write`}
+                                                                    disabled={
+                                                                        false
+                                                                    }
+                                                                />
+                                                            }
+                                                            onChange={
+                                                                handleEditExtraAttrFlag
+                                                            }
+                                                        />
+                                                    </td>
+                                                    <td className={'center'}>
+                                                        {/*{rule.transmit}*/}
+                                                        <FormControlLabel
+                                                            className={
+                                                                'transmit'
+                                                            }
+                                                            label=""
+                                                            control={
+                                                                <Checkbox
+                                                                    checked={
+                                                                        !!rule.transmit
+                                                                    }
+                                                                    name={`${key}.transmit`}
+                                                                    disabled={
+                                                                        false
+                                                                    }
+                                                                />
+                                                            }
+                                                            onChange={
+                                                                handleEditExtraAttrFlag
+                                                            }
+                                                        />
+                                                    </td>
+                                                    <td className={'center'}>
+                                                        {/*{extra.attr.name}*/}
+                                                        <TextField
+                                                            variant="outlined"
+                                                            size={'small'}
+                                                            InputLabelProps={{
+                                                                shrink: true,
+                                                            }}
+                                                            value={
+                                                                extra.attr.name
+                                                            }
+                                                            onChange={
+                                                                handleEditExtraAttr
+                                                            }
+                                                            disabled={false}
+                                                            inputProps={{
+                                                                ...register(
+                                                                    // @ts-ignore
+                                                                    `${key}.name`,
+                                                                    {}
+                                                                ),
+                                                            }}
+                                                        />
+                                                    </td>
+                                                    {/*operations*/}
+                                                    <td className={'center'}>
+                                                        <IconButton
+                                                            onClick={(e) => {
+                                                                const value = `${key}`;
+                                                                handleDeleteExtraAttr(
+                                                                    e,
+                                                                    value
+                                                                );
+                                                            }}
+                                                        >
+                                                            <DeleteIcon />
+                                                        </IconButton>
+                                                    </td>
+                                                </tr>
+                                            </React.Fragment>
+                                        );
+                                    }
+                                )}
                             </tbody>
                             <tfoot>
                                 <tr>
@@ -1041,7 +2641,7 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                                         </td>
 
                                         <td className={'center'}>
-                                            {general.attr.suffixes || 'None'}
+                                            {general.attr.suffix || 'None'}
                                         </td>
 
                                         <td className={'center'}>
@@ -1121,7 +2721,7 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                                                 {extra.attr.dpt}
                                             </td>
                                             <td className={'center'}>
-                                                {extra.attr.suffixes || 'None'}
+                                                {extra.attr.suffix || 'None'}
                                             </td>
                                             <td className={'center'}>
                                                 {extra.obj &&
@@ -1158,6 +2758,27 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                             </tr>
                         </tfoot>
                     </table>
+                )}
+            </div>
+            {/* operation */}
+            <div className={'actions'}>
+                {stateOfSetting.changed && (
+                    <React.Fragment>
+                        <Button
+                            className={'save'}
+                            type={'button'}
+                            onClick={handleSubmitSetting}
+                        >
+                            {'SAVE'}
+                        </Button>
+                        <Button
+                            className={'reset'}
+                            type={'reset'}
+                            onClick={handleResetSetting}
+                        >
+                            {'RESET'}
+                        </Button>
+                    </React.Fragment>
                 )}
             </div>
         </div>

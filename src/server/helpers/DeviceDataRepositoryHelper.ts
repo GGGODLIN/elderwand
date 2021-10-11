@@ -1,4 +1,3 @@
-import PaginationVM from '../../client/models/PaginationVM';
 import DeviceMaintainUCO from '../domain/device/applications/DeviceMaintainUCO';
 import DeviceRepository from '../domain/device/infra/DeviceRepository';
 import DeviceDTO from '../domain/device/models/DeviceDTO';
@@ -9,6 +8,7 @@ import { Platform } from '../domain/shared/enums/Enums';
 import SpaceMaintainUCO from '../domain/space/applications/SpaceMaintainUCO';
 import SpaceRepository from '../domain/space/infra/SpaceRepository';
 import SpaceDTO from '../domain/space/models/SpaceDTO';
+import PaginationDTO from '../models/PaginationDTO';
 
 export interface ApiRepositoryCtor {
     host: string;
@@ -37,7 +37,7 @@ export default class DeviceDataRepositoryHelper {
     ): Promise<SpaceDTO[]> {
         return await new SpaceMaintainUCO(new SpaceRepository(ctor))
             .listSpaces(pid)
-            .then((res: PaginationVM<SpaceDTO>) => {
+            .then((res: PaginationDTO<SpaceDTO>) => {
                 let root = res.results.find((item) => {
                     if (item.id == sid) {
                         return item;
@@ -110,7 +110,7 @@ export default class DeviceDataRepositoryHelper {
     ): Promise<DeviceDTO[]> {
         return await new DeviceMaintainUCO(new DeviceRepository(ctor))
             .listDevices(pid)
-            .then((res: PaginationVM<DeviceDTO>) => {
+            .then((res: PaginationDTO<DeviceDTO>) => {
                 let origin: DeviceDTO[] = res.results;
                 let latest: DeviceDTO[] = [root];
 

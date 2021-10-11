@@ -1,10 +1,8 @@
 import { IRouterContext } from 'koa-router';
-import PaginationVM from '../../client/models/PaginationVM';
 import ServerEnvVar from '../config/ServerEnvVar';
 import DeviceMaintainUCO from '../domain/device/applications/DeviceMaintainUCO';
 import DeviceRepository from '../domain/device/infra/DeviceRepository';
 import DeviceDTO from '../domain/device/models/DeviceDTO';
-import { PlaceDeviceOptions } from '../domain/device/models/DeviceVOs';
 import { Platform } from '../domain/shared/enums/Enums';
 import PaginationDTO from '../domain/shared/models/PaginationDTO';
 import RequestBody from '../domain/shared/types/RequestBody';
@@ -15,6 +13,7 @@ import {
     AddSpaceOptions,
     EditSpaceOptions,
 } from '../domain/space/models/SpaceVOs';
+import PaginationVM from '../models/PaginationVM';
 import SpaceVM, { DeviceVM, SpaceTemplateVM } from '../models/space/SpaceVM';
 import { groupBy } from '../utils/FunctionUtil';
 

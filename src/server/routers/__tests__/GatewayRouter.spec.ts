@@ -1,8 +1,8 @@
 import supertest from 'supertest';
-import PaginationVM from '../../../client/models/PaginationVM';
 import TestEnvVar from '../../../test/config/TestEnvVar';
 import TestDataGenerator from '../../../test/utils/TestDataGenerator';
 import GatewayConnectionVM from '../../models/gateway/GatewayConnectionVM';
+import PaginationVM from '../../models/PaginationVM';
 import KoaServer from '../../server';
 import GatewayRouter, { GatewayRouterActions } from '../GatewayRouter';
 

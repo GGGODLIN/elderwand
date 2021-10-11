@@ -1,9 +1,4 @@
 {
-  "ErrorMessage": {
-    "IsRequired": "必要欄位",
-    "InvalidEmailAddress": "非電子郵件信箱"
-  },
-
   "Login": "登入",
   "Username": "使用者名稱",
   "Password": "密碼",
@@ -17,5 +12,13 @@
   "Address": "地址",
   "PhoneNumber": "電話",
   "AlreadyHaveAnAccount": "已經有帳號",
-  "Submit": "送出"
+  "Submit": "送出",
+
+  "ErrorMessage": {
+    "IsRequired": "必要欄位",
+    "InvalidEmailAddress": "非電子郵件信箱"
+  },
+  "DeviceMaintainPage": {
+    "Status": "状态"
+  }
 }

@@ -1,4 +1,4 @@
-import PaginationVM from '../../../../client/models/PaginationVM';
+import PaginationDTO from '../../../models/PaginationDTO';
 import ProjectRepository from '../infra/ProjectRepository';
 import ProjectDTO from '../models/ProjectDTO';
 
@@ -9,7 +9,7 @@ export class ProjectMaintainUCO {
 
     private readonly repository: ProjectRepository;
 
-    listProjects(): Promise<PaginationVM<ProjectDTO>> {
+    listProjects(): Promise<PaginationDTO<ProjectDTO>> {
         return this.repository.listProjects();
     }
 

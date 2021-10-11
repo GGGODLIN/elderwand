@@ -2,7 +2,7 @@ import { AxiosError } from 'axios';
 import AxiosFactory from '../../../helpers/AxiosFactory';
 import ErrorInfoDTO from '../../shared/models/ErrorInfoDTO';
 import PaginationDTO from '../../shared/models/PaginationDTO';
-import { IconDTO } from '../models/AssetsDTOs';
+import { IconDTO } from '../models/AssetDTO';
 
 export interface AssetsRepositoryCtor {
     host: string;

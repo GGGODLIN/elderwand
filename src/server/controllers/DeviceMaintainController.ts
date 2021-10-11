@@ -1,15 +1,14 @@
 import { IRouterContext } from 'koa-router';
-import { SpaceVM } from '../../client/domain/device/DeviceVMs';
-import PaginationVM from '../../client/models/PaginationVM';
 import ServerEnvVar from '../config/ServerEnvVar';
 import DeviceMaintainUCO from '../domain/device/applications/DeviceMaintainUCO';
 import DeviceRepository from '../domain/device/infra/DeviceRepository';
 import DeviceDTO from '../domain/device/models/DeviceDTO';
 import {
-    EditDeviceOptions,
+    EditDeviceProfileOptions,
     EditDeviceProtocolsOptions,
     PlaceDeviceOptions,
 } from '../domain/device/models/DeviceVOs';
+import FunctionPointTypeDTO from '../domain/device/models/FunctionPointTypeDTO';
 import DeviceTemplateDTO from '../domain/migration/models/DeviceTemplateDTO';
 import { Platform } from '../domain/shared/enums/Enums';
 import PaginationDTO from '../domain/shared/models/PaginationDTO';
@@ -20,7 +19,10 @@ import DeviceDataRepositoryHelper, {
     ApiRepositoryCtor,
 } from '../helpers/DeviceDataRepositoryHelper';
 import DeviceVM from '../models/device/DeviceVM';
+import FunctionPointTypeVM from '../models/device/FunctionPointTypeVM';
 import DeviceTemplateVM from '../models/migration/DeviceTemplateVM';
+import PaginationVM from '../models/PaginationVM';
+import SpaceVM from '../models/space/SpaceVM';
 
 export default class DeviceMaintainController {
     // /api/devices?projectId={projectId}
@@ -186,8 +188,8 @@ export default class DeviceMaintainController {
     };
 
     // /api/devices/:id?projectId={projectId}
-    static editDevice = async (
-        ctx: IRouterContext & RequestBody<EditDeviceOptions>
+    static editDeviceProfile = async (
+        ctx: IRouterContext & RequestBody<EditDeviceProfileOptions>
     ) => {
         const repository = new DeviceRepository({
             host: ServerEnvVar.SkymapApiHost,
@@ -204,12 +206,12 @@ export default class DeviceMaintainController {
             ...ctx.query,
         };
 
-        const body: EditDeviceOptions = {
+        const body: EditDeviceProfileOptions = {
             ...ctx.request.body,
         };
 
         await new DeviceMaintainUCO(repository)
-            .editDevice(params.id, query.projectId, body)
+            .editDeviceProfile(params.id, query.projectId, body)
             .then((res: DeviceDTO) => {
                 const vm = convertToDeviceVM(res);
 
@@ -531,6 +533,60 @@ export default class DeviceMaintainController {
                 throw err;
             });
     };
+
+    // /api/device/function-point/topology
+    static listDeviceFunctionPointTopology = async (ctx: IRouterContext) => {
+        const repository = new DeviceRepository({
+            host: ServerEnvVar.SkymapApiHost,
+            platformId: Platform.ElderWand,
+        });
+
+        const query = {
+            ...ctx.query,
+        };
+
+        await new DeviceMaintainUCO(repository)
+            .listDeviceFunctionPointsTopology()
+            .then((res: PaginationDTO<FunctionPointTypeDTO>) => {
+                const vm = {
+                    ...res,
+                    results: convertToFunctionPointTypeVMs(res.results),
+                } as PaginationVM<FunctionPointTypeVM>;
+
+                ctx.body = vm;
+                ctx.status = 200;
+
+                return;
+            })
+            .catch((err) => {
+                if (err.isAxiosError) {
+                    ctx.status = err.response.status;
+                    ctx.body = err.response.data;
+                    return;
+                }
+                throw err;
+            });
+    };
+}
+
+function convertToFunctionPointTypeVMs(
+    dtos: FunctionPointTypeDTO[]
+): FunctionPointTypeVM[] {
+    if (!dtos) {
+        return [];
+    }
+
+    return dtos.map((dto) => {
+        return convertToFunctionPointTypeVM(dto);
+    });
+}
+
+function convertToFunctionPointTypeVM(
+    dto: FunctionPointTypeDTO
+): FunctionPointTypeVM {
+    return {
+        ...dto,
+    } as FunctionPointTypeVM;
 }
 
 interface BindGatewayBody {
@@ -564,8 +620,27 @@ function convertToDeviceVMs(dtos: DeviceDTO[]): DeviceVM[] {
 }
 
 function convertToDeviceVM(dto: DeviceDTO): DeviceVM {
+    const attrs = [];
+
+    // for rewrite 2.0 older data
+    for (const item of dto.attrs) {
+        let attr = JSON.parse(JSON.stringify(item));
+
+        if (!item['suffix'] && !!item['suffixes']) {
+            attr.suffix = (item as any).suffixes;
+        }
+
+        delete attr.suffixes;
+        delete attr.susffixes_zh_CN;
+        delete attr.Name_zh_CN;
+        delete attr.appHidden;
+
+        attrs.push(attr);
+    }
+
     return {
         ...dto,
+        attrs: attrs,
     } as DeviceVM;
 }
 

@@ -1,4 +1,4 @@
-import PaginationVM from '../../../../client/models/PaginationVM';
+import PaginationVM from '../../../models/PaginationVM';
 import GatewayConnectionRepository from '../infra/GatewayConnectionRepository';
 import GatewayConnectionDTO from '../models/GatewayConnectionDTO';
 import GatewayConnectVO from '../models/GatewayConnectVO';

@@ -12,7 +12,7 @@ import DeviceVM, {
     DeviceTemplateVM,
     ProjectVM,
     SpaceVM,
-} from 'src/client/domain/device/DeviceVMs';
+} from 'src/client/domain/device/DeviceVM';
 import DeviceSlice from 'src/client/slices/DeviceSlice';
 import DeviceCard from './DeviceCard';
 import SpaceCard from './SpaceCard';

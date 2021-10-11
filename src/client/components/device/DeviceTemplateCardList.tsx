@@ -6,7 +6,7 @@ import {
     DeviceTypeCategories,
     DeviceTypeCategoryTags,
 } from 'src/client/domain/device/DeviceMaintainItemTypes';
-import { DeviceTemplateVM } from 'src/client/domain/device/DeviceVMs';
+import { DeviceTemplateVM } from 'src/client/domain/device/DeviceVM';
 import DeviceTemplateCard from './DeviceTemplateCard';
 
 interface DeviceTemplateCardListProps {

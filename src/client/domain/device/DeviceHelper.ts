@@ -3,18 +3,28 @@ import {
     DeviceProtocolTypes,
     DeviceTypeCategories,
 } from './DeviceMaintainItemTypes';
-import DeviceVM, { CommObject, Protocol } from './DeviceVMs';
+import DeviceVM, { CommObject, Protocol } from './DeviceVM';
 import { ChannelAttr, ExtraAttr } from './KnxDataTypes';
-
-interface DeviceHelperCtor {
-    device: DeviceVM;
-}
 
 interface Assets {
     id: string;
     name: string;
     path: string;
     tags: string[];
+}
+
+export interface FlagRule {
+    priority: number;
+    communication: number;
+    read: number;
+    write: number;
+    read_init: number;
+    transmit: number;
+    update: number;
+}
+
+interface DeviceHelperCtor {
+    device: DeviceVM;
 }
 
 class DeviceHelper {
@@ -157,15 +167,16 @@ class DeviceHelper {
     } {
         const device = this.device;
 
-        const objects = !protocol?.commInfo?.objs ? [] : protocol.commInfo.objs;
+        const objects = !protocol?.commInfo?.objs
+            ? []
+            : protocol.commInfo.objs.filter((obj) => !!obj?.objId);
 
-        let extras = objects
-            .filter((obj) => !!obj.attrObjId)
-            .map((obj) => {
-                const attr = device.attrs.find(
-                    (attr: ExtraAttr) => attr.objId == obj.attrObjId
-                );
-
+        let extras = device.attrs
+            .filter(
+                (attr: ExtraAttr) => !attr.chId && !attr.btn && !!attr.objId
+            )
+            .map((attr: ExtraAttr) => {
+                const obj = objects.find((obj) => obj.objId == attr.objId);
                 return {
                     attr: attr,
                     obj: obj,
@@ -219,6 +230,27 @@ class DeviceHelper {
         };
     }
 
+    static toFlagNumber = (flag: FlagRule): number => {
+        const f = flag;
+        const priority = f.priority.toString(2).padStart(2, '0');
+
+        //  xa = [ U,  T, RI,  W,  R,  C,  P,  P ];
+        const xa = [
+            f.update,
+            f.transmit,
+            f.read_init,
+            f.write,
+            f.read,
+            f.communication,
+            parseInt(priority[0], 2),
+            parseInt(priority[1], 2),
+        ];
+
+        const value = parseInt(xa.join('').padStart(8, '0'), 2);
+
+        return value;
+    };
+
     static parseFlagRule = (flags: number = 0): FlagRule => {
         // Bit index	KNX Description	Modbus
         // 0 -1	Priority calls for the object, the default is 0	Unused
@@ -243,16 +275,71 @@ class DeviceHelper {
 
         return rule;
     };
+
+    static changeFlagRule = (
+        flags: number = 0,
+        field: AttrFlag,
+        value: 0 | 1 | number = 0
+    ): number => {
+        const f = DeviceHelper.parseFlagRule(flags);
+
+        if (undefined == f[field]) {
+            return flags;
+        }
+
+        f[field] = value;
+
+        const priority = f.priority.toString(2).padStart(2, '0');
+
+        //  xa = [ U,  T, RI,  W,  R,  C,  P,  P ];
+        const xa = [
+            f.update,
+            f.transmit,
+            f.read_init,
+            f.write,
+            f.read,
+            f.communication,
+            parseInt(priority[0], 2),
+            parseInt(priority[1], 2),
+        ];
+
+        const result = parseInt(xa.join('').padStart(8, '0'), 2);
+
+        return result;
+    };
+
+    static changeFlagRules = (
+        flags: number = 0,
+        fields: { name: AttrFlag; value: 0 | 1 }[]
+    ): number => {
+        const f = DeviceHelper.parseFlagRule(flags);
+
+        for (const field of fields) {
+            if (undefined != f[field.name]) {
+                f[field.name] = field.value;
+            }
+        }
+
+        const priority = f.priority.toString(2).padStart(2, '0');
+
+        //  xa = [ U,  T, RI,  W,  R,  C,  P,  P ];
+        const xa = [
+            f.update,
+            f.transmit,
+            f.read_init,
+            f.write,
+            f.read,
+            f.communication,
+            parseInt(priority[0], 2),
+            parseInt(priority[1], 2),
+        ];
+
+        const result = parseInt(xa.join('').padStart(8, '0'), 2);
+
+        return result;
+    };
 }
 
-interface FlagRule {
-    priority: number;
-    communication: number;
-    read: number;
-    write: number;
-    read_init: number;
-    transmit: number;
-    update: number;
-}
+type AttrFlag = 'read' | 'write' | 'transmit';
 
 export default DeviceHelper;

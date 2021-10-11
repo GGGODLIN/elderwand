@@ -1,17 +1,14 @@
 import supertest from 'supertest';
-import PaginationVM from '../../../client/models/PaginationVM';
 import TestEnvVar from '../../../test/config/TestEnvVar';
-import ServerEnvVar from '../../config/ServerEnvVar';
-import AuthWhitelist from '../../config/Whitelist';
 import ErrorInfoDTO from '../../domain/shared/models/ErrorInfoDTO';
-import AuthorizeMiddleware from '../../middlewares/AuthMiddleware';
 import DeviceVM from '../../models/migration/DeviceVM';
 import {
     DeviceTemplatePreviewVM,
     ProjectPreviewVM,
-} from '../../models/migration/PreviewVMs';
+} from '../../models/migration/PreviewVM';
 import ProjectVM from '../../models/migration/ProjectVM';
 import SpaceVM from '../../models/migration/SpaceVM';
+import PaginationVM from '../../models/PaginationVM';
 import KoaServer from '../../server';
 import MigrationRouter, { MigrationRouterActions } from '../MigrationRouter';
 

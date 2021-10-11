@@ -121,6 +121,7 @@ export const DevicePage: React.FC<DevicePageProps> = () => {
         DeviceMaintainAPIs.fetchProjects(dispatch);
         DeviceMaintainAPIs.fetchSpaceTemplates(dispatch);
         DeviceMaintainAPIs.fetchDeviceTemplates(dispatch);
+        DeviceMaintainAPIs.fetchDeviceFunctionPointTopology(dispatch);
         DeviceMaintainAPIs.fetchIcons(dispatch);
         return () => {};
     }, []);

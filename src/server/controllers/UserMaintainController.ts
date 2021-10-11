@@ -1,11 +1,11 @@
 import { Context } from 'koa';
-import PaginationVM from '../../client/models/PaginationVM';
 import ServerEnvVar from '../config/ServerEnvVar';
-import UserMaintainUCO from '../domain/user/applications/UserMaintainUCO';
 import { Platform } from '../domain/shared/enums/Enums';
 import PaginationDTO from '../domain/shared/models/PaginationDTO';
+import UserMaintainUCO from '../domain/user/applications/UserMaintainUCO';
 import UserRepository from '../domain/user/infra/UserRepository';
 import UserDTO from '../domain/user/models/UserDTO';
+import PaginationVM from '../models/PaginationVM';
 import UserVM from '../models/user/UserVM';
 import AuthUtil from '../utils/AuthUtil';
 

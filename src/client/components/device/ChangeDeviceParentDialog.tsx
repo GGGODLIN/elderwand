@@ -6,7 +6,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import DeviceMaintainAPIs from 'src/client/domain/device/DeviceMaintainAPIs';
-import DeviceVM, { ProjectVM } from 'src/client/domain/device/DeviceVMs';
+import DeviceVM, { ProjectVM } from 'src/client/domain/device/DeviceVM';
 import DeviceSlice from 'src/client/slices/DeviceSlice';
 
 interface ChangeDeviceParentDialogProps {
@@ -37,7 +37,7 @@ const ChangeDeviceParentDialog: React.FC<ChangeDeviceParentDialogProps> = (
             parentId: !props.parent ? null : props.parent.id,
         };
 
-        DeviceMaintainAPIs.editDevice(dispatch, project, device, () => {
+        DeviceMaintainAPIs.editDeviceProfile(dispatch, project, device, () => {
             DeviceMaintainAPIs.fetchDeviceTopologyResources(
                 dispatch,
                 props.project,

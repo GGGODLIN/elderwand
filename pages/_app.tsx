@@ -1,17 +1,12 @@
+import { createTheme, NoSsr, ThemeProvider } from '@material-ui/core';
+import { AppProps } from 'next/app';
 import Head from 'next/head';
 import React from 'react';
-import RootStore from 'src/client/store';
-import { AppProps } from 'next/app';
-import { ClientEnvVar } from 'src/client/configs/ClientEnvVar';
 import { Provider } from 'react-redux';
-import 'src/client/utils/i18n';
+import { ClientEnvVar, DevEnvVar } from 'src/client/configs/ClientEnvVar';
+import RootStore from 'src/client/store';
 import 'src/client/style.scss';
-import {
-    createMuiTheme,
-    NoSsr,
-    ThemeProvider,
-    useMediaQuery,
-} from '@material-ui/core';
+import 'src/client/utils/i18n';
 
 function MyApp({ Component, pageProps }: AppProps) {
     // const prefersDarkMode = useMediaQuery("(prefers-color-scheme: light)");
@@ -20,7 +15,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     // https://material-ui.com/customization/default-theme/
     const theme = React.useMemo(
         () =>
-            createMuiTheme({
+            createTheme({
                 palette: {
                     type: prefersDarkMode ? 'dark' : 'light',
                     primary: {
@@ -36,6 +31,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
     if (ClientEnvVar.IsDev) {
         console.info({ client: ClientEnvVar });
+        console.info({ dev: DevEnvVar });
     }
     const store = RootStore;
     const title = pageProps.title || '';

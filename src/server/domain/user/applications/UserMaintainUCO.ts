@@ -1,4 +1,4 @@
-import PaginationVM from '../../../../client/models/PaginationVM';
+import PaginationDTO from '../../../models/PaginationDTO';
 import UserRepository from '../infra/UserRepository';
 import UserDTO from '../models/UserDTO';
 
@@ -9,7 +9,7 @@ export default class UserMaintainUCO {
         this.repository = repository;
     }
 
-    listUsers(): Promise<PaginationVM<UserDTO>> {
+    listUsers(): Promise<PaginationDTO<UserDTO>> {
         return this.repository.listUsers();
     }
 

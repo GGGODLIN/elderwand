@@ -1,6 +1,5 @@
-import { Button } from '@material-ui/core';
-import React, { useState } from 'react';
-import { SpaceTemplateVM } from 'src/client/domain/device/DeviceVMs';
+import React from 'react';
+import { SpaceTemplateVM } from 'src/client/domain/device/DeviceVM';
 import SpaceTemplateCard from './SpaceTemplateCard';
 
 interface SpaceTemplateCardListProps {

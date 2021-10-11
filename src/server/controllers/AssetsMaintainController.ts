@@ -1,13 +1,13 @@
 import { IRouterContext } from 'koa-router';
-import { Icon } from '../../client/domain/device/DeviceVMs';
-import PaginationVM from '../../client/models/PaginationVM';
 import ServerEnvVar from '../config/ServerEnvVar';
 import AssetsMaintainUCO from '../domain/assets/applications/AssetsMaintainUCO';
 import AssetsRepository from '../domain/assets/infra/AssetsRepository';
-import { IconDTO } from '../domain/assets/models/AssetsDTOs';
+import { IconDTO } from '../domain/assets/models/AssetDTO';
 import { Platform } from '../domain/shared/enums/Enums';
 import PaginationDTO from '../domain/shared/models/PaginationDTO';
 import RequestBody from '../domain/shared/types/RequestBody';
+import { IconVM } from '../models/assets/AssetVM';
+import PaginationVM from '../models/PaginationVM';
 
 export default class AssetsMaintainController {
     static listIcons = async (ctx: IRouterContext & RequestBody) => {
@@ -26,7 +26,7 @@ export default class AssetsMaintainController {
                 const vm = {
                     ...res,
                     results: convertToIconVMs(res.results),
-                } as PaginationVM<IconDTO>;
+                } as PaginationVM<IconVM>;
 
                 ctx.status = 200;
                 ctx.body = vm;
@@ -44,7 +44,7 @@ export default class AssetsMaintainController {
     };
 }
 
-function convertToIconVMs(dtos: IconDTO[]): Icon[] {
+function convertToIconVMs(dtos: IconDTO[]): IconVM[] {
     if (!dtos) {
         return [];
     }
@@ -54,7 +54,7 @@ function convertToIconVMs(dtos: IconDTO[]): Icon[] {
     });
 }
 
-function convertToIconVM(dto: IconDTO): Icon {
+function convertToIconVM(dto: IconDTO): IconVM {
     return {
         ...dto,
     };

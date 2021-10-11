@@ -1,0 +1,15 @@
+# get current user
+GET {{HOST}}/api/user/me
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{AUTH_TOKEN}}
+
+###
+
+# list users
+GET {{HOST}}/api/users
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{AUTH_TOKEN}}
+
+###

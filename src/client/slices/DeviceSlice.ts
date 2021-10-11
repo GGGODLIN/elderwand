@@ -14,8 +14,9 @@ import DeviceVM, {
     ProjectVM,
     SpaceTemplateVM,
     SpaceVM,
-} from 'src/client/domain/device/DeviceVMs';
+} from 'src/client/domain/device/DeviceVM';
 import PaginationVM from 'src/client/models/PaginationVM';
+import FunctionPointTypeVM from '../domain/device/FunctionPointTypeVM';
 
 export interface DeviceMaintainState {
     icons: Icon[];
@@ -29,6 +30,7 @@ export interface DeviceMaintainState {
     space_template_selected?: SpaceTemplateVM;
     device_templates: DeviceTemplateVM[];
     device_templates_selected?: DeviceTemplateVM;
+    function_point_types: FunctionPointTypeVM[];
     place_device_to_space_dialog: {
         open: boolean;
         project?: ProjectVM;
@@ -106,6 +108,7 @@ const getInitialState = (): DeviceMaintainState => {
         device_selected: null,
         device_templates: [],
         device_templates_selected: null,
+        function_point_types: [],
         place_device_to_space_dialog: {
             open: false,
             project: null,
@@ -253,6 +256,14 @@ const DeviceSlice = createSlice<
         ) => {
             return produce(state, (draft) => {
                 draft.device_templates = action.payload.results;
+            });
+        },
+        fetchDeviceFunctionPointTypes: (
+            state,
+            action: PayloadAction<PaginationVM<FunctionPointTypeVM>>
+        ) => {
+            return produce(state, (draft) => {
+                draft.function_point_types = action.payload.results;
             });
         },
         selectProject: (state, action: PayloadAction<ProjectVM>) => {
@@ -536,6 +547,11 @@ const fetchDeviceTemplates = DeviceSlice.actions
     PaginationVM<DeviceTemplateVM>
 >;
 
+const fetchDeviceFunctionPointTypes = DeviceSlice.actions
+    .fetchDeviceFunctionPointTypes as ActionCreatorWithPayload<
+    PaginationVM<FunctionPointTypeVM>
+>;
+
 const selectProject = DeviceSlice.actions
     .selectProject as ActionCreatorWithPayload<ProjectVM>;
 
@@ -626,6 +642,7 @@ export default {
     clearDeviceTopologyResources,
     fetchSpaceTemplates,
     fetchDeviceTemplates,
+    fetchDeviceFunctionPointTypes,
     selectProject,
     selectSpace,
     selectDevice,

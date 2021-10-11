@@ -2,7 +2,7 @@ import DeviceVM, {
     DeviceTemplateVM,
     SpaceTemplateVM,
     SpaceVM,
-} from './DeviceVMs';
+} from './DeviceVM';
 
 const DeviceMaintainCardTypes: {
     // [key: string]: DeviceMaintainCardType;

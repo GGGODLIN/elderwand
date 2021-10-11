@@ -28,7 +28,7 @@ import DeviceVM, {
     ProjectVM,
     SoftwareInfo,
     SpaceVM,
-} from 'src/client/domain/device/DeviceVMs';
+} from 'src/client/domain/device/DeviceVM';
 import AssetsHelper from 'src/client/helper/AssetsHelper';
 import { RootState } from 'src/client/reducer';
 import DeviceSlice from 'src/client/slices/DeviceSlice';
@@ -366,6 +366,8 @@ const Specification: React.FC<SpecificationProps> = (props): JSX.Element => {
 interface DeviceEditForm {
     name: string;
     iconId: string;
+    heartbeat?: number;
+    period?: number;
 }
 
 interface DeviceProfileProps {
@@ -404,6 +406,13 @@ const DeviceProfile: React.FC<DeviceProfileProps> = (props) => {
         };
     });
 
+    const defaultValues = {
+        name: device.name,
+        iconId: device.iconId,
+        heartbeat: device.heartbeat,
+        period: device.period,
+    };
+
     const {
         register,
         control,
@@ -414,20 +423,17 @@ const DeviceProfile: React.FC<DeviceProfileProps> = (props) => {
     } = useForm<DeviceEditForm>({
         mode: 'onChange',
         reValidateMode: 'onChange',
-        defaultValues: {
-            name: device.name,
-        },
+        defaultValues: defaultValues,
     });
 
     const [stateOfDeviceProfile, setDeviceProfile] = useState({
         profile: {
-            name: device.name,
-            iconId: device.iconId,
-        },
+            ...defaultValues,
+        } as DeviceEditForm,
         changed: false,
     });
 
-    const handleEditDeviceProfile = (e) => {
+    const handleEditProfile = (e) => {
         const name = e.target.name;
         const value = e.target.value;
 
@@ -439,11 +445,10 @@ const DeviceProfile: React.FC<DeviceProfileProps> = (props) => {
         setDeviceProfile(nextState);
     };
 
-    const handleResetDeviceProfile = (e) => {
+    const handleResetProfile = (e) => {
         setDeviceProfile({
             profile: {
-                name: device.name,
-                iconId: device.iconId,
+                ...defaultValues,
             },
             changed: false,
         });
@@ -451,26 +456,38 @@ const DeviceProfile: React.FC<DeviceProfileProps> = (props) => {
         clearErrors();
     };
 
-    const handleSubmitDeviceProfile = (e) => {
+    const handleSubmitProfile = (e) => {
         const device_vo = {
             ...device,
-            name: stateOfDeviceProfile.profile.name,
-            iconId: stateOfDeviceProfile.profile.iconId,
+            ...stateOfDeviceProfile.profile,
         };
 
-        DeviceMaintainAPIs.editDevice(dispatch, project, device_vo, (data) => {
-            dispatch(
-                DeviceSlice.editDeviceSetting({ ...data, project, space })
-            );
-            DeviceMaintainAPIs.fetchDeviceTopologyResources(dispatch, project);
-        });
+        DeviceMaintainAPIs.editDeviceProfile(
+            dispatch,
+            project,
+            device_vo,
+            (data) => {
+                DeviceMaintainAPIs.fetchDeviceTopologyResources(
+                    dispatch,
+                    project,
+                    () => {
+                        dispatch(
+                            DeviceSlice.editDeviceSetting({
+                                ...data,
+                                project,
+                                space,
+                            })
+                        );
+                    }
+                );
+            }
+        );
     };
 
     useEffect(() => {
         setDeviceProfile({
             profile: {
-                name: device.name,
-                iconId: device.iconId,
+                ...defaultValues,
             },
             changed: false,
         });
@@ -493,7 +510,7 @@ const DeviceProfile: React.FC<DeviceProfileProps> = (props) => {
                             }}
                             label="Name"
                             value={stateOfDeviceProfile.profile.name}
-                            onChange={handleEditDeviceProfile}
+                            onChange={handleEditProfile}
                             error={!!errors.name}
                             helperText={
                                 !errors.name ? ' ' : errors.name.message
@@ -545,7 +562,7 @@ const DeviceProfile: React.FC<DeviceProfileProps> = (props) => {
                                 value={stateOfDeviceProfile.profile.iconId}
                                 label="Icon"
                                 name={'iconId'}
-                                onChange={handleEditDeviceProfile}
+                                onChange={handleEditProfile}
                             >
                                 {icons.map((icon) => {
                                     return (
@@ -662,11 +679,33 @@ const DeviceProfile: React.FC<DeviceProfileProps> = (props) => {
                                     }}
                                     label="Heartbeat"
                                     value={
-                                        !device.heartbeat ? 0 : device.heartbeat
+                                        !stateOfDeviceProfile.profile.heartbeat
+                                            ? 0
+                                            : stateOfDeviceProfile.profile
+                                                  .heartbeat
                                     }
-                                    helperText={`( 0~65535 )`}
+                                    type={'number'}
                                     disabled={!device.heartbeat}
                                     style={{ width: '160px' }}
+                                    onChange={handleEditProfile}
+                                    inputProps={{
+                                        ...register('heartbeat', {
+                                            min: {
+                                                value: 0,
+                                                message: 'min value is 0',
+                                            },
+                                            max: {
+                                                value: 65535,
+                                                message: 'max value is 65535',
+                                            },
+                                        }),
+                                    }}
+                                    error={!!errors.heartbeat}
+                                    helperText={
+                                        !errors.heartbeat
+                                            ? '( 0~65535 )'
+                                            : errors.heartbeat.message
+                                    }
                                 />
                             )}
                             {(routine || device.period) && (
@@ -677,12 +716,36 @@ const DeviceProfile: React.FC<DeviceProfileProps> = (props) => {
                                         shrink: true,
                                     }}
                                     label="Period"
-                                    value={!device.period ? 0 : device.period}
-                                    helperText={`( 0~65535 )`}
+                                    value={
+                                        !stateOfDeviceProfile.profile.period
+                                            ? 0
+                                            : stateOfDeviceProfile.profile
+                                                  .period
+                                    }
+                                    type={'number'}
                                     disabled={!device.period}
                                     style={{
                                         width: '160px',
                                     }}
+                                    onChange={handleEditProfile}
+                                    inputProps={{
+                                        ...register('period', {
+                                            min: {
+                                                value: 0,
+                                                message: 'min value is 0',
+                                            },
+                                            max: {
+                                                value: 65535,
+                                                message: 'max value is 65535',
+                                            },
+                                        }),
+                                    }}
+                                    error={!!errors.period}
+                                    helperText={
+                                        !errors.period
+                                            ? '( 0~65535 )'
+                                            : errors.period.message
+                                    }
                                 />
                             )}
                         </React.Fragment>
@@ -723,14 +786,14 @@ const DeviceProfile: React.FC<DeviceProfileProps> = (props) => {
                                     <Button
                                         className={'save'}
                                         type={'button'}
-                                        onClick={handleSubmitDeviceProfile}
+                                        onClick={handleSubmitProfile}
                                     >
                                         {'SAVE'}
                                     </Button>
                                     <Button
                                         className={'reset'}
                                         type={'reset'}
-                                        onClick={handleResetDeviceProfile}
+                                        onClick={handleResetProfile}
                                     >
                                         {'RESET'}
                                     </Button>
@@ -834,7 +897,6 @@ const EditDeviceSettingDialog: React.FC<EditDeviceDialogProps> = (props) => {
     const helper = new DeviceHelper({ device: device });
 
     const { isGateway } = helper.isGateway();
-    // const { isKNX } = helper.isKNX();
 
     const profile = true;
     const info = true;

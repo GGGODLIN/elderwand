@@ -1,8 +1,9 @@
 import supertest from 'supertest';
-import PaginationVM from '../../../client/models/PaginationVM';
 import TestEnvVar from '../../../test/config/TestEnvVar';
 import DeviceVM from '../../models/device/DeviceVM';
+import FunctionPointTypeVM from '../../models/device/FunctionPointTypeVM';
 import DeviceTemplateVM from '../../models/migration/DeviceTemplateVM';
+import PaginationVM from '../../models/PaginationVM';
 import KoaServer from '../../server';
 import DeviceRouter, {
     DeviceRouterActions,
@@ -43,12 +44,13 @@ describe('Device Router', function () {
 
             const actual = response.body as PaginationVM<DeviceVM>;
 
-            console.log(actual);
+            console.log(JSON.stringify(actual, null, 2));
         });
     });
 
     describe('get the device', function () {
-        it('should be 200', async function () {
+        it.skip('should be 200', async function () {
+            // TODO variable
             const id = 'REXX-d81fQON92xiu';
 
             const pathname = DeviceRouterActions.getDevice(id);
@@ -71,9 +73,9 @@ describe('Device Router', function () {
     });
 
     describe('bind the gateway connection to the device', function () {
-        it('should be 200', async function () {
+        it.skip('should be 200', async function () {
             // TODO variable
-            const id = 'REXX-d81fQON92xiu';
+            const id = TestEnvVar.TargetDeviceDvID;
 
             const pathname = DeviceRouterActions.bindGatewayConnection(id);
 
@@ -100,7 +102,7 @@ describe('Device Router', function () {
     });
 
     describe('unbind the gateway connection to the device', function () {
-        it('should be 200', async function () {
+        it.skip('should be 200', async function () {
             // TODO variable
             const id = 'REXX-d81fQON92xiu';
 
@@ -124,7 +126,7 @@ describe('Device Router', function () {
     });
 
     describe('get the device data repository', function () {
-        it('should be 200', async function () {
+        it.skip('should be 200', async function () {
             // TODO variable
             const id = 'REXX-d81fQON92xiu';
 
@@ -148,7 +150,7 @@ describe('Device Router', function () {
     });
 
     describe('get the version 2 device data repository', function () {
-        it('should be 200', async function () {
+        it.skip('should be 200', async function () {
             // TODO variable
             const id = 'REXX-r39wgkzaCtcP';
 
@@ -204,6 +206,26 @@ describe('Device Router', function () {
                 .expect(200);
 
             const actual = response.body as PaginationVM<DeviceTemplateVM>;
+
+            console.log(actual);
+        });
+    });
+
+    describe('list device function point topology', function () {
+        it('should be 200', async function () {
+            const pathname =
+                DeviceRouterActions.listDeviceFunctionPointTopology();
+
+            const query = {};
+
+            const response = await server
+                .get(pathname)
+                .set('Accept', 'application/json')
+                // .set(AuthUtil.AuthHeader, AuthUtil.newBearer(token))
+                .query(query)
+                .expect(200);
+
+            const actual = response.body as PaginationVM<FunctionPointTypeVM>;
 
             console.log(actual);
         });

@@ -37,33 +37,33 @@ interface DeviceTemplateSpec {
     EnOcean?: EnOcean;
 }
 
-export interface KNX {
+interface KNX {
     // chCnt?: number;
     // maxCh?: number;
     isIPR?: boolean;
 }
 
-export interface RS485 {
+interface RS485 {
     chCnt?: number;
     maxCh?: number;
     mdbConf: MdbConf;
     phyConf: PhyConf;
 }
 
-export interface MdbConf {
+interface MdbConf {
     RTU: boolean;
     master: boolean;
     std: boolean;
 }
 
-export interface PhyConf {
+interface PhyConf {
     bRate: number;
     dBit: number;
     ptyBit: number;
     sBit: number;
 }
 
-export interface EnOcean {
+interface EnOcean {
     EEPCode: string;
 }
 

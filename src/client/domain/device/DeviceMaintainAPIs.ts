@@ -5,11 +5,12 @@ import DeviceVM, {
     ProjectVM,
     SpaceTemplateVM,
     SpaceVM,
-} from 'src/client/domain/device/DeviceVMs';
+} from 'src/client/domain/device/DeviceVM';
 import AxiosFactory from 'src/client/helper/AxiosFactory';
 import PaginationVM from 'src/client/models/PaginationVM';
 import DeviceSlice from 'src/client/slices/DeviceSlice';
 import FetchSlice from 'src/client/slices/FetchSlice';
+import FunctionPointTypeVM from './FunctionPointTypeVM';
 
 export interface PlaceDeviceToSpaceOptions {
     templateId?: string;
@@ -27,6 +28,15 @@ export interface PlaceDeviceToDeviceOptions {
 export interface AddSpaceOptions {
     templateId?: string;
     parentId?: string;
+}
+
+interface EditDeviceProfileOptions {
+    name?: string;
+    spaceId?: string;
+    parentId?: string;
+    iconId?: string;
+    heartbeat?: number;
+    period?: number;
 }
 
 class DeviceMaintainAPIs {
@@ -209,6 +219,28 @@ class DeviceMaintainAPIs {
             });
     };
 
+    static fetchDeviceFunctionPointTopology = (dispatch: Dispatch<any>) => {
+        const url = `/api/device/function-point/topology`;
+        const params = {};
+
+        new AxiosFactory()
+            .useBearerToken()
+            .useBefore(() => {
+                dispatch(FetchSlice.start());
+            })
+            .getInstance()
+            .get<PaginationVM<FunctionPointTypeVM>>(url, { params: params })
+            .then((res) => {
+                dispatch(DeviceSlice.fetchDeviceFunctionPointTypes(res.data));
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+            .finally(() => {
+                dispatch(FetchSlice.end());
+            });
+    };
+
     static placeDeviceToSpace = (
         dispatch: Dispatch<any>,
         project: ProjectVM,
@@ -279,7 +311,7 @@ class DeviceMaintainAPIs {
             });
     };
 
-    static editDevice = (
+    static editDeviceProfile = (
         dispatch: Dispatch<any>,
         project: ProjectVM,
         device: DeviceVM,
@@ -294,7 +326,9 @@ class DeviceMaintainAPIs {
             iconId: device.iconId,
             spaceId: device.spaceId,
             parentId: device.parentId,
-        };
+            heartbeat: device.heartbeat,
+            period: device.period,
+        } as EditDeviceProfileOptions;
 
         new AxiosFactory()
             .useBearerToken()
@@ -329,6 +363,9 @@ class DeviceMaintainAPIs {
         };
         const data = {
             protocols: device.protocols,
+            channelInfo: device.channelInfo,
+            attrs: device.attrs,
+            sendRules: device.sendTelRules,
         };
 
         new AxiosFactory()

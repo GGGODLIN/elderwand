@@ -13,7 +13,7 @@ import {
     DeviceTemplatePreviewDTO,
     ProjectPreviewDTO,
     SpacePreviewDTO,
-} from '../domain/migration/models/MigrationPreviewDTOs';
+} from '../domain/migration/models/MigrationPreviewDTO';
 import {
     GetSourceProjectVO,
     ImportDevicesVO,
@@ -39,10 +39,9 @@ import {
     DeviceTemplatePreviewVM,
     ProjectPreviewVM,
     SpacePreviewVM,
-} from '../models/migration/PreviewVMs';
+} from '../models/migration/PreviewVM';
 import ProjectVM from '../models/migration/ProjectVM';
 import SpaceVM from '../models/migration/SpaceVM';
-
 import PaginationVM from '../models/PaginationVM';
 import { SpaceTemplateVM } from '../models/space/SpaceVM';
 

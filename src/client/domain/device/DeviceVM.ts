@@ -166,9 +166,10 @@ export interface CommObject {
     ch?: number;
     btn?: number;
     objId: number;
-    attrObjId?: number;
     gAddrs: string[];
-    ebtn?: boolean;
+
+    attrObjId?: number;
+    // ebtn?: boolean;
 }
 
 export interface ProtocolType {

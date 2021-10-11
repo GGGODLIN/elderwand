@@ -1,6 +1,6 @@
 import supertest from 'supertest';
-import PaginationVM from '../../../client/models/PaginationVM';
 import TestEnvVar from '../../../test/config/TestEnvVar';
+import PaginationVM from '../../models/PaginationVM';
 import ProjectVM from '../../models/project/ProjectVM';
 import KoaServer from '../../server';
 import ProjectRouter, { ProjectRouterActions } from '../ProjectRouter';

@@ -68,6 +68,16 @@ describe('Device Repository', function () {
 
         console.log(actual);
     });
+
+    it('list device function types should be successful', async function () {
+        const repository = new DeviceRepository(ctor);
+
+        const actual = await repository.listDeviceFunctionPointTopology();
+
+        expect(actual).not.toBeNull();
+
+        console.log(JSON.stringify(actual, null, 2));
+    });
 });
 
 export {};

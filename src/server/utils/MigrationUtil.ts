@@ -1,12 +1,12 @@
-import knxDataFormat from './fixture/KNXDataFormat';
-import SpaceTemplates, { SpaceTemplate } from './fixture/SpaceTemplates';
-import StringUtil from './StringUtil';
 import { Brand, Brands } from './fixture/Brand';
-import { Device, ThingsSchema } from './fixture/ThingsSchema';
 import { DeviceCategories, DeviceCategory } from './fixture/DeviceCategory';
 import { DeviceType, DeviceTypes } from './fixture/DeviceType';
 import { getIconTypeName, Icons } from './fixture/Icons';
 import { Images } from './fixture/Images';
+import knxDataFormat from './fixture/KNXDataFormat';
+import SpaceTemplates, { SpaceTemplate } from './fixture/SpaceTemplates';
+import { Device, ThingsSchema } from './fixture/ThingsSchema';
+import StringUtil from './StringUtil';
 
 export default class MigrationUtil {
     static getIconFiles(): string[] {
@@ -206,91 +206,138 @@ var SpaceTemplateMap = map[string]SpaceTemplate{${text}\n}`;
         return content;
     }
 
-    static getKNXFlagMapToJson(): string {
-        const items = knxDataFormat.flagRules
-            .sort((left, right) => {
-                const a = left.fValue;
-                const b = right.fValue;
-
-                if (!a || a > b) {
-                    return 1;
-                }
-
-                if (!b || a < b) {
-                    return -1;
-                }
-
-                return 0;
+    static getFunctionPointTypeMapToTypescript(): string {
+        const items = knxDataFormat.fun2dps
+            .map((item) => {
+                const data = {
+                    name: item.funId,
+                    value: item.funId,
+                    dpts: item.dpts,
+                    unit: item.valueStyle.unit || null,
+                };
+                return data;
             })
-            .map((rule) => {
-                let text = `\t"${rule.fValue}": ${JSON.stringify(
-                    rule,
-                    null,
-                    2
-                )}`;
-
-                text = text
-                    .replace('commumication', 'communication')
-                    .replace('trasmit', 'transmit');
-
-                return text;
+            .map((item) => {
+                return `
+    ${item.value}: {
+        name: '${item.name}',
+        value: '${item.value}',
+        dpts: ${!item.dpts?.length ? `[]` : `['${item.dpts.join("', '")}']`},
+        unit: ${!item.unit ? null : `'${item.unit}'`},
+    }`;
             })
-            .join(',\r\n');
+            .join(',');
 
-        const content = `{\r\n${items}\r\n}`;
+        const struct = `export interface FunctionPointType {
+    name: string;
+    value: string;
+    dpts: string[];
+    unit: string | null;
+}\n`;
+
+        const content =
+            struct +
+            `export const FunctionPointTypeMap: {
+    [key: string]: FunctionPointType;
+} = {${items},\r\n};`;
 
         return content;
-
-        // to typescript
-        //         const content = `export const KNXFlagRuleMap: {
-        //     [key: string]: KNXFlagRule;
-        //     // '4': KNXFlagRule;
-        //     // '148': KNXFlagRule;
-        //     // '196': KNXFlagRule;
-        //     // '212': KNXFlagRule;
-        // } = {\r\n${items},\r\n};`;
-        //
-        //         return content;
     }
 
-    static getKNXFlagMapToTypeScript(): string {
-        const items = knxDataFormat.flagRules
-            .sort((left, right) => {
-                const a = left.fValue;
-                const b = right.fValue;
-
-                if (!a || a > b) {
-                    return 1;
-                }
-
-                if (!b || a < b) {
-                    return -1;
-                }
-
-                return 0;
+    static getDataPointTypeMapToTypescript(): string {
+        const items = knxDataFormat.dptInfo
+            .map((item) => {
+                const data = {
+                    dpt: item.dpt,
+                    name: item.name,
+                    createdRT: item.createdRT,
+                    rt: item.rt,
+                    valueType: item.valueType,
+                    valueKey: item.valueKey,
+                };
+                return data;
             })
-            .map((rule) => {
-                let text = `\t"${rule.fValue}": ${JSON.stringify(
-                    rule,
-                    null,
-                    4
-                )}`;
-
-                text = text
-                    .replace('commumication', 'communication')
-                    .replace('trasmit', 'transmit');
-
-                return text;
+            .map((item) => {
+                return `
+    '${item.dpt}': {
+        dpt: '${item.dpt}',
+        name: '${item.name}',
+        createdRT: '${item.createdRT}',
+        rt: ${!item.rt?.length ? `[]` : `['${item.rt.join('", "')}']`},
+        valueType: '${item.valueType}',
+        valueKey: '${item.valueKey}',
+    }`;
             })
-            .join(',\r\n');
+            .join(',');
 
-        const content = `export const KNXFlagRuleMap: {
-            [key: string]: KNXFlagRule;
-            // '4': KNXFlagRule;
-            // '148': KNXFlagRule;
-            // '196': KNXFlagRule;
-            // '212': KNXFlagRule;
-        } = {\r\n${items},\r\n};`;
+        const struct = `export interface DataPointType {
+    dpt: string;
+    name: string;
+    createdRT: string;
+    rt: string[];
+    valueType: string;
+    valueKey: string;
+}\n`;
+
+        const content =
+            struct +
+            `export const DataPointTypeMap: {
+    [key: string]: DataPointType;
+} = {${items},\r\n};`;
+
+        return content;
+    }
+
+    static getSuffixesMapToTypescript(): string {
+        let items = [];
+        for (const rtCodeDef of knxDataFormat.rtCodeDefs) {
+            const data = {
+                createdRT: rtCodeDef.createdRT,
+                suffixes: Array.isArray(rtCodeDef.suffixes)
+                    ? rtCodeDef.suffixes
+                    : rtCodeDef.suffixes || [],
+            };
+            items.push(data);
+        }
+
+        const fields = items
+            .map((item) => {
+                const suffixes = !item.suffixes?.length
+                    ? '[]'
+                    : `[${item.suffixes
+                          .map((suffix) => {
+                              return `
+            {
+                name: '${suffix}',
+                value: '${suffix}',
+            }`;
+                          })
+                          .join(',\r\n')}\r\n        ]`;
+
+                return `
+    '${item.createdRT}': {
+        createdRT: '${item.createdRT}',
+        suffixes: ${suffixes},
+    }`;
+            })
+            .join(',');
+
+        const struct = `export interface DatePointTypeSuffix {
+    createdRT: string;
+    suffixes: Suffix[]
+}\r\n`;
+
+        const struct_suffix = `export interface Suffix {
+    name: string;
+    value: string;
+}\r\n`;
+
+        const content =
+            struct +
+            struct_suffix +
+            `export const DataPointTypeSuffixMap: {
+    [key: string]: DatePointTypeSuffix;
+} = {${fields},\r\n};`;
 
         return content;
     }

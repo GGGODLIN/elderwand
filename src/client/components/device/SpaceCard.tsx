@@ -16,7 +16,7 @@ import DeviceVM, {
     DeviceTemplateVM,
     ProjectVM,
     SpaceVM,
-} from 'src/client/domain/device/DeviceVMs';
+} from 'src/client/domain/device/DeviceVM';
 import AssetsHelper from 'src/client/helper/AssetsHelper';
 import DeviceSlice from 'src/client/slices/DeviceSlice';
 

@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 import DeviceVM, {
     ProjectVM,
     SpaceVM,
-} from 'src/client/domain/device/DeviceVMs';
+} from 'src/client/domain/device/DeviceVM';
 import DeviceSlice from 'src/client/slices/DeviceSlice';
 
 interface GatewayTreeViewProp {
@@ -27,7 +27,7 @@ const GatewayTreeView: React.FC<GatewayTreeViewProp> = (props) => {
         );
     }
 
-    let elements = [];
+    // let elements = [];
 
     let groups_by_space_map: { [key: string]: DeviceVM[] } = {};
 
@@ -60,7 +60,7 @@ const GatewayTreeView: React.FC<GatewayTreeViewProp> = (props) => {
         space_map[space.id] = space;
     }
 
-    elements = Object.keys(groups_by_space_map).map((space_id) => {
+    const elements = Object.keys(groups_by_space_map).map((space_id) => {
         const space = space_map[space_id];
 
         const gws = groups_by_space_map[space_id]

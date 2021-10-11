@@ -1,15 +1,19 @@
 import { AxiosError } from 'axios';
 import AxiosFactory from '../../../helpers/AxiosFactory';
+import { DataPointTypeMap } from '../../../utils/fixture/DataPointTypes';
+import { DataPointTypeSuffixMap } from '../../../utils/fixture/DataPointTypeSuffixes';
+import { FunctionPointTypeMap } from '../../../utils/fixture/FunctionPointTypes';
 import DeviceTemplateDTO from '../../migration/models/DeviceTemplateDTO';
 import ErrorInfoDTO from '../../shared/models/ErrorInfoDTO';
 import PaginationDTO from '../../shared/models/PaginationDTO';
-import DeviceDTO from '../../device/models/DeviceDTO';
 import SpaceDTO from '../../space/models/SpaceDTO';
+import DeviceDTO from '../models/DeviceDTO';
 import {
-    EditDeviceOptions,
+    EditDeviceProfileOptions,
     EditDeviceProtocolsOptions,
     PlaceDeviceOptions,
 } from '../models/DeviceVOs';
+import FunctionPointTypeDTO from '../models/FunctionPointTypeDTO';
 
 export interface DeviceRepositoryCtor {
     host: string;
@@ -173,10 +177,10 @@ export default class DeviceRepository {
      * @param pid project ID
      * @param options Edit Device Options
      */
-    async editDevice(
+    async editDeviceProfile(
         id: string,
         pid: string,
-        options: EditDeviceOptions
+        options: EditDeviceProfileOptions
     ): Promise<DeviceDTO> {
         const baseURL = this.origin;
         const pathname = `/api/devices/${id}`;
@@ -373,7 +377,7 @@ export default class DeviceRepository {
         return await axios
             .get<DeviceTemplateDTO[]>(pathname, { params: params })
             .then((res) => {
-                const result: PaginationDTO<DeviceTemplateDTO> = {
+                let result: PaginationDTO<DeviceTemplateDTO> = {
                     offset: 0,
                     limit: 0,
                     total: 0,
@@ -393,5 +397,62 @@ export default class DeviceRepository {
                 }
                 throw err;
             });
+    }
+
+    /**
+     *
+     */
+    async listDeviceFunctionPointTopology(): Promise<
+        PaginationDTO<FunctionPointTypeDTO>
+    > {
+        const dtos = [];
+
+        for (const key of Object.keys(FunctionPointTypeMap)) {
+            const fpt = FunctionPointTypeMap[key];
+
+            const dto = {
+                name: fpt.name,
+                value: fpt.value,
+                unit: fpt.unit,
+                dpts: [],
+            } as FunctionPointTypeDTO;
+
+            for (const key of fpt.dpts) {
+                const value = DataPointTypeMap[key];
+
+                if (value) {
+                    const dptSuffix = DataPointTypeSuffixMap[value.createdRT];
+
+                    const ses = {
+                        dpt: value.dpt,
+                        name: value.name,
+                        createdRT: value.createdRT,
+                        rt: value.rt,
+                        valueType: value.valueType,
+                        valueKey: value.valueKey,
+                        suffixes: !dptSuffix ? [] : dptSuffix.suffixes,
+                    };
+
+                    dto.dpts.push(ses);
+                }
+            }
+
+            dtos.push(dto);
+        }
+
+        const result: PaginationDTO<FunctionPointTypeDTO> = {
+            offset: 0,
+            limit: 0,
+            total: dtos.length,
+            results: dtos,
+        };
+
+        return new Promise((resolve, reject) => {
+            try {
+                resolve(result);
+            } catch (e) {
+                reject(e);
+            }
+        });
     }
 }

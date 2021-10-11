@@ -8,29 +8,6 @@ interface DptInfo {
     valueType?: string;
 }
 
-type ValueKey = 'value';
-type ValueType = 'boolean';
-
-interface FlagRule {
-    fValue: number;
-    type: string;
-    readInit: number;
-    read: number;
-    write: number;
-    update: number;
-    trasmit: number;
-    commumication: number;
-    priority: number;
-}
-
-interface Fun2Dpts {
-    funId: string;
-    valueStyle: {
-        style: string;
-        unit?: string;
-    };
-}
-
 // data from elder-wand 2.0, things schema, docTag: knxDataFormat;
 const knxDataFormat = {
     dptInfo: [
@@ -538,52 +515,6 @@ const knxDataFormat = {
             desc_zh_CN: '',
             createdRT: 'bh.r.color.rgb',
             rt: [],
-        },
-    ],
-    flagRules: [
-        {
-            write: 0,
-            readInit: 0,
-            fValue: 196,
-            commumication: 1,
-            read: 0,
-            trasmit: 1,
-            update: 1,
-            type: 'bh.r.attr.sensor',
-            priority: 0,
-        },
-        {
-            fValue: 212,
-            type: 'bh.r.attr.button',
-            write: 1,
-            read: 0,
-            readInit: 0,
-            trasmit: 1,
-            update: 1,
-            priority: 0,
-            commumication: 1,
-        },
-        {
-            type: 'bh.r.attr.actuator',
-            write: 1,
-            readInit: 0,
-            update: 1,
-            fValue: 148,
-            priority: 0,
-            commumication: 1,
-            read: 0,
-            trasmit: 0,
-        },
-        {
-            priority: 0,
-            read: 0,
-            write: 0,
-            readInit: 0,
-            type: 'default',
-            commumication: 1,
-            trasmit: 0,
-            update: 0,
-            fValue: 4,
         },
     ],
     fun2dps: [

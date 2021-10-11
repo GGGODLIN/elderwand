@@ -2,7 +2,7 @@ import { Dispatch } from 'react';
 import AxiosFactory from 'src/client/helper/AxiosFactory';
 import FetchSlice from 'src/client/slices/FetchSlice';
 
-import { SpaceTemplateVM } from './DataMigrationVMs';
+import { SpaceTemplateVM } from './DataMigrationVM';
 
 interface ImportSpaceTemplateOptions {}
 

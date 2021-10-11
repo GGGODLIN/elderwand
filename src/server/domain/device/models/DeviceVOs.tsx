@@ -4,10 +4,13 @@ export interface PlaceDeviceOptions {
     dvId?: string;
 }
 
-export interface EditDeviceOptions {
+export interface EditDeviceProfileOptions {
+    name?: string;
     spaceId?: string;
     parentId?: string;
-    // TODO
+    iconId?: string;
+    heartbeat?: number;
+    period?: number;
 }
 
 export interface EditDeviceProtocolsOptions {

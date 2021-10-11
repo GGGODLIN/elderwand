@@ -22,7 +22,7 @@ export default class UserRepository {
     async listUsers(): Promise<PaginationDTO<UserDTO>> {
         const baseURL = this.origin;
         const pathname = '/api/users';
-        const params = { pid: this.platformId };
+        const params = { platformId: this.platformId };
 
         const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
 

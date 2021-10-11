@@ -1,9 +1,4 @@
 const Keywords = {
-    ErrorMessage: {
-        IsRequired: 'ErrorMessage.IsRequired',
-        InvalidEmailAddress: 'ErrorMessage.InvalidEmailAddress',
-        MaxLength: 'ErrorMessage.MaxLength',
-    },
     LoginPage: {
         Login: 'Login',
         Username: 'Username',
@@ -27,6 +22,14 @@ const Keywords = {
         ForgotPassword: 'ForgotPassword',
         AlreadyHaveAnAccount: 'AlreadyHaveAnAccount',
         Submit: 'Submit',
+    },
+    ErrorMessage: {
+        IsRequired: 'ErrorMessage.IsRequired',
+        InvalidEmailAddress: 'ErrorMessage.InvalidEmailAddress',
+        MaxLength: 'ErrorMessage.MaxLength',
+    },
+    DeviceMaintainPage: {
+        Status: 'DeviceMaintainPage.Status',
     },
 };
 

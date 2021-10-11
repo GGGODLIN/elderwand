@@ -11,6 +11,9 @@ export interface TestEnvironmentVariables {
 
     NewTargetProjectCode: string;
 
+    TargetDeviceID: string;
+    TargetDeviceDvID: string;
+
     GatewayClientIP: string;
     GatewayConnectionID: string;
 
@@ -30,6 +33,8 @@ const TestEnvVar: TestEnvironmentVariables = {
     MigrationTargetProjectCode: process.env['MIGRATION_TARGET_PROJECT_CODE'],
 
     NewTargetProjectCode: process.env['NEW_TARGET_PROJECT_CODE'],
+    TargetDeviceID: process.env['TARGET_DEVICE_ID'],
+    TargetDeviceDvID: process.env['TARGET_DEVICE_DVID'],
 
     GatewayClientIP: process.env['GATEWAY_CLIENT_IP'],
     GatewayConnectionID: process.env['GATEWAY_CONNECTION_ID'],

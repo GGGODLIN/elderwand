@@ -1,4 +1,4 @@
-export default interface PaginationVM<T> {
+export default interface PaginationDTO<T> {
     offset: number;
     limit: number;
     total: number;

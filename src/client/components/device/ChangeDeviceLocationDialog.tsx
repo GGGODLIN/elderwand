@@ -9,7 +9,7 @@ import DeviceMaintainAPIs from 'src/client/domain/device/DeviceMaintainAPIs';
 import DeviceVM, {
     ProjectVM,
     SpaceVM,
-} from 'src/client/domain/device/DeviceVMs';
+} from 'src/client/domain/device/DeviceVM';
 import DeviceSlice from 'src/client/slices/DeviceSlice';
 
 interface ChangeDeviceLocationDialogProps {
@@ -37,7 +37,7 @@ const ChangeDeviceLocationDialog: React.FC<ChangeDeviceLocationDialogProps> = (
     const handleChange = () => {
         const device = { ...props.device, spaceId: props.space.id };
 
-        DeviceMaintainAPIs.editDevice(dispatch, project, device, () => {
+        DeviceMaintainAPIs.editDeviceProfile(dispatch, project, device, () => {
             DeviceMaintainAPIs.fetchDeviceTopologyResources(
                 dispatch,
                 props.project,

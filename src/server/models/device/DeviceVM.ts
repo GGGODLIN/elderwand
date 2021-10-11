@@ -13,7 +13,7 @@ export default interface DeviceVM {
     parent?: DeviceVM;
 
     iconId: string;
-    icon: Icon;
+    icon: IconVM;
     images?: Image[];
 
     protocols: Protocol[];
@@ -41,58 +41,58 @@ export default interface DeviceVM {
     deletedAt?: number;
 }
 
-export interface DeviceType {
+interface DeviceType {
     id: number;
     name: string;
     categoryId: string;
     category: Category;
 }
 
-export interface Category {
+interface Category {
     id: string;
     name: string;
 }
 
-export interface DeviceModel {
+interface DeviceModel {
     id: string;
     name: string;
     brandId: string;
     brand: Brand;
 }
 
-export interface Brand {
+interface Brand {
     id: string;
     code: string;
     name: string;
 }
 
-export interface Icon {
+interface IconVM {
     id: string;
     name: string;
     path: string;
     tags: string[];
 }
 
-export interface Image {
+interface Image {
     id: string;
     name: string;
     path: string;
     tags: string[];
 }
 
-export interface Protocol {
+interface Protocol {
     id: string;
     typeId: string;
     type: ProtocolType;
     commInfo: any;
 }
 
-export interface ProtocolType {
+interface ProtocolType {
     id: string;
     name: string;
 }
 
-export interface DeviceSpec {
+interface DeviceSpec {
     id: string;
     comPortCount?: number;
     networkCardCount?: number;
@@ -104,37 +104,37 @@ export interface DeviceSpec {
     EnOcean?: EnOcean;
 }
 
-export interface KNX {
+interface KNX {
     // chCnt?: number;
     // maxCh?: number;
     isIPR?: boolean;
 }
 
-export interface RS485 {
+interface RS485 {
     chCnt?: number;
     maxCh?: number;
     mdbConf: MdbConf;
     phyConf: PhyConf;
 }
 
-export interface MdbConf {
+interface MdbConf {
     RTU: boolean;
     master: boolean;
     std: boolean;
 }
 
-export interface PhyConf {
+interface PhyConf {
     bRate: number;
     dBit: number;
     ptyBit: number;
     sBit: number;
 }
 
-export interface EnOcean {
+interface EnOcean {
     EEPCode: string;
 }
 
-export interface SwitchPanel {
+interface SwitchPanel {
     pageCount: number;
     btnCount: number;
     hasLPress?: boolean;
@@ -142,28 +142,28 @@ export interface SwitchPanel {
     modifyStyle: boolean;
 }
 
-export interface ChannelInfo {
+interface ChannelInfo {
     channelNo: number;
     dvId: string;
 }
 
-export interface SwitchPanelControlInfo {
+interface SwitchPanelControlInfo {
     button: number;
     connectionInfo: ConnectionInfo[];
     lPress?: boolean;
 }
 
-export interface ConnectionInfo {
+interface ConnectionInfo {
     objectId: number;
     dvId: string;
 }
 
-export interface SoftwareInfo {
+interface SoftwareInfo {
     name: string;
     version?: string;
 }
 
-export interface NetworkCard {
+interface NetworkCard {
     id: string;
     name: string;
     ip: string;

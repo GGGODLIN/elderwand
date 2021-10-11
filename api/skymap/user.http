@@ -1,11 +1,11 @@
 # get user
-GET {{HOST}}/api/user/me?pid=3
+GET {{HOST}}/api/user/me?platformId=3
 accept: application/json
 
 ###
 
 # list users by platform
-GET {{HOST}}/api/users?pid=3
+GET {{HOST}}/api/users?platformId=3
 accept: application/json
 
 ###

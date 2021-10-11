@@ -12,6 +12,8 @@ export const DeviceRouterActions = {
     unbindGatewayConnection: (id: string) => `/api/devices/${id}/gateway`,
     getRepository: (id: string) => `/api/devices/${id}/repository`,
     listDeviceTemplates: () => `/api/device/templates`,
+    listDeviceFunctionPointTopology: () =>
+        `/api/device/function-point/topology`,
 };
 
 export const DeviceVersion2RouterActions = {
@@ -45,11 +47,11 @@ export default class DeviceRouter {
                 method: 'POST',
                 controller: DeviceMaintainController.placeDevice,
             },
-            editDevice: {
+            editDeviceProfile: {
                 name: 'edit-device',
                 action: '/devices/:id',
                 method: 'PUT',
-                controller: DeviceMaintainController.editDevice,
+                controller: DeviceMaintainController.editDeviceProfile,
             },
             editDeviceProtocols: {
                 name: 'edit-device',
@@ -92,6 +94,13 @@ export default class DeviceRouter {
                 action: '/device/templates',
                 method: 'GET',
                 controller: DeviceMaintainController.listDeviceTemplates,
+            },
+            listDeviceFunctionPointTopology: {
+                name: 'list-device-function-point-topology',
+                action: '/device/function-point/topology',
+                method: 'GET',
+                controller:
+                    DeviceMaintainController.listDeviceFunctionPointTopology,
             },
         };
 

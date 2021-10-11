@@ -6,7 +6,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import DeviceMaintainAPIs from 'src/client/domain/device/DeviceMaintainAPIs';
-import DeviceVM, { ProjectVM } from 'src/client/domain/device/DeviceVMs';
+import DeviceVM, { ProjectVM } from 'src/client/domain/device/DeviceVM';
 import DeviceSlice from 'src/client/slices/DeviceSlice';
 
 interface RemoveDeviceDialogProps {

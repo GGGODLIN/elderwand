@@ -476,8 +476,8 @@
 
 .edit-device-setting-dialog {
   .MuiPaper-root {
-    width: 80%;
-    max-width: 80%;
+    width: 90%;
+    max-width: 90%;
     height: 90%;
   }
 
@@ -811,6 +811,7 @@
         padding: 8px 0;
         text-align: center;
         vertical-align: center;
+        white-space: nowrap;
 
         border-right: $bg-green-primary solid 1px;
         &:last-child {
@@ -831,7 +832,7 @@
           border-bottom: none;
         }
 
-        &.even {
+        &.odd {
           background-color: $bg-green-light;
         }
       }
@@ -848,6 +849,51 @@
         &.center {
           text-align: center;
           vertical-align: middle;
+        }
+      }
+    }
+
+    .MuiOutlinedInput-inputMarginDense {
+      padding-top: 4px;
+      padding-bottom: 4px;
+    }
+
+    .MuiOutlinedInput-root {
+      margin: 0 4px;
+    }
+
+    .MuiFormControlLabel-root {
+      margin: 0;
+    }
+
+    .Mui-checked {
+      color: $bg-green-dark;
+    }
+
+    .Mui-disabled {
+      color: $bg-grey-primary;
+    }
+
+    .response {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+
+      .res {
+        padding: 0 0 0 8px;
+
+        svg {
+          color: $bg-red-primary;
+          transform: rotate(180deg);
+        }
+      }
+
+      .req {
+        padding: 0 0 0 8px;
+
+        svg {
+          color: $bg-red-primary;
         }
       }
     }

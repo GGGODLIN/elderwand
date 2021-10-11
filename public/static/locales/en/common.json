@@ -1,8 +1,4 @@
 {
-  "ErrorMessage": {
-    "IsRequired": "is require",
-    "InvalidEmailAddress": "invalid email address"
-  },
   "Login": "Sign In",
   "Username": "Username",
   "Password": "Password",
@@ -16,5 +12,13 @@
   "Address": "Address",
   "PhoneNumber": "Phone number",
   "AlreadyHaveAnAccount": "Already have an account",
-  "Submit": "Submit"
+  "Submit": "Submit",
+
+  "ErrorMessage": {
+    "IsRequired": "is require",
+    "InvalidEmailAddress": "invalid email address"
+  },
+  "DeviceMaintainPage": {
+    "Status": "Status"
+  }
 }

@@ -9,7 +9,7 @@ import {
     DeviceTemplatePreviewDTO,
     ProjectPreviewDTO,
     SpacePreviewDTO,
-} from '../models/MigrationPreviewDTOs';
+} from '../models/MigrationPreviewDTO';
 import ProjectDTO from '../models/ProjectDTO';
 import SpaceDTO from '../models/SpaceDTO';
 import SpaceTemplateDTO from '../models/SpaceTemplateDTO';

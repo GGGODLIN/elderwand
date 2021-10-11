@@ -1,9 +1,9 @@
 import DeviceHelper from '../DeviceHelper';
-import DeviceVM from '../DeviceVMs';
+import DeviceVM from '../DeviceVM';
 
 describe('Parse Flags', () => {
     test('should be successful', async () => {
-        const helper = new DeviceHelper({ device: actuator });
+        const helper = new DeviceHelper({ device: actuator as DeviceVM });
 
         const { isActuator } = helper.isActuator();
 
@@ -20,7 +20,7 @@ describe('Parse Flags', () => {
     });
 });
 
-const actuator: DeviceVM = {
+const actuator = {
     id: '4faa9f45-9cfa-4ddf-8c1a-2ef0015a1af0',
     name: '继电器4路10A',
     dvId: 'GOLD-MQx0pTghhaSX',
