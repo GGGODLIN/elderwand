@@ -13,7 +13,7 @@ Content-Type: application/json
       "ip": "192.168.0.100",
       "name": "eth0",
       "network": "internet",
-      "mac": "22:00:21:33:33:88"
+      "mac": "22:00:21:33:33:11"
     },
     {
       "enable": true,

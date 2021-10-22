@@ -36,9 +36,9 @@ export interface ButtonAttr {
     objId: number;
 
     dpt: string;
-    flags: number;
     funId: string;
     suffix: string;
+    flags: number;
 
     page: number;
     bIdx?: number;

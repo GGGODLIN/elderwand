@@ -790,7 +790,7 @@
     }
   }
 
-  .channels-setting {
+  .KNX-setting {
     //border: $bg-green-primary solid 1px;
     //border-radius: 8px;
     //margin: 12px 0;
@@ -801,6 +801,12 @@
       width: 100%;
       min-height: 80px;
       margin-top: 24px;
+    }
+
+    thead {
+      .title {
+        border-bottom: $bg-green-light solid 1px;
+      }
     }
 
     thead,

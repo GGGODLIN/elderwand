@@ -5,6 +5,7 @@ import {
     IconButton,
     MenuItem,
     Select,
+    Switch,
     TextField,
 } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
@@ -55,17 +56,25 @@ interface KNXChannel {
     attrs: ChannelAttr[];
 }
 
-interface KNXExtraAttr {
+interface KNXExtra {
     obj: CommObject;
     attr: ExtraAttr;
     // attrs: ChannelAttr[];
+}
+
+interface KNXButton {
+    obj: CommObject;
+    attr: ButtonAttr;
+    attrs: ButtonAttr[];
+    info: SwitchPanelControlInfo;
 }
 
 interface KNXSettingForm {
     address: string;
     filters: Filter[];
     channels: KNXChannel[];
-    extras: KNXExtraAttr[];
+    extras: KNXExtra[];
+    buttons: KNXButton[];
 }
 
 export interface KNXConfigurationProp {
@@ -193,43 +202,47 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
     let buttons = [];
 
     if (isSwitchPanel) {
-        const btns = !attrs_page_group[stateOfSwitchPanel.page]
-            ? device.attrs.map((attr: ButtonAttr) => attr.btn)
-            : (attrs_page_group[stateOfSwitchPanel.page] as ButtonAttr[])
-                  .filter((attr) => !!attr.btn)
-                  .map((attr) => attr.btn);
-        buttons = objects
-            .filter((obj: CommObject) => !!btns.includes(obj.btn))
-            .filter((obj: CommObject) => !!obj.btn)
-            .map((obj) => {
-                const attr = device.attrs.find(
-                    (attr: ButtonAttr) => attr.objId == obj.objId
-                );
+        const attrs = attrs_page_group[stateOfSwitchPanel.page].filter(
+            (attr: ButtonAttr) => !!attr.btn
+        );
 
-                const attrs = device.attrs.filter(
-                    (attr: ButtonAttr) => attr.btn == obj.btn
-                );
+        buttons = attrs.map((attr: ButtonAttr) => {
+            // const page = stateOfSwitchPanel.page;
+            let obj = objects.find(
+                (obj: CommObject) => obj.objId == attr.objId
+            );
 
-                const info = !device.switchPanelControlInfo
-                    ? null
-                    : device.switchPanelControlInfo.find(
-                          (info) => info.button == obj.btn
-                      );
+            if (!obj) {
+                obj = {
+                    btn: attr.btn,
+                    objId: attr.objId,
+                    gAddrs: [],
+                } as CommObject;
+            }
 
-                return {
-                    btn: obj.btn,
-                    info: info,
-                    obj: obj,
-                    attr: attr,
-                    attrs: attrs,
-                } as {
-                    btn: number;
-                    info: SwitchPanelControlInfo;
-                    obj: CommObject;
-                    attr: ButtonAttr;
-                    attrs: ButtonAttr[];
-                };
-            });
+            const attrs = attrs_page_group[stateOfSwitchPanel.page].filter(
+                (item) => item.btn == attr.btn
+            );
+
+            let info = device.switchPanelControlInfo?.find(
+                (info) => info.button == attr.btn
+            );
+
+            if (!info) {
+                info = {
+                    button: attr.btn,
+                    lPress: attr.lpress,
+                    connectionInfo: [],
+                } as SwitchPanelControlInfo;
+            }
+
+            return {
+                attr: attr,
+                attrs: attrs,
+                obj: obj,
+                info: info,
+            } as KNXButton;
+        });
     }
 
     // Extra Attrs
@@ -237,19 +250,8 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
 
     let extras = [];
 
-    if (hasExtraAttrs) {
-        const objIds = !attrs_page_group[stateOfSwitchPanel.page]
-            ? device.attrs.map((attr: ExtraAttr) => attr.objId)
-            : (attrs_page_group[stateOfSwitchPanel.page] as ExtraAttr[])
-                  .filter((attr) => !!attr.page)
-                  .map((attr) => attr.objId);
-
-        extras = extraAttrs.filter((extra) => {
-            if (!objIds.includes(extra.attr.objId)) {
-                return;
-            }
-            return { attr: extra.attr, obj: extra.obj };
-        });
+    if (hasExtraAttrs || isSwitchPanel) {
+        extras = extraAttrs;
     }
 
     // Sensor
@@ -315,6 +317,7 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
         filters: filters,
         channels: channels,
         extras: extras,
+        buttons: buttons,
     };
 
     const {
@@ -347,6 +350,11 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
             }
         }
         for (const origin of stateOfSetting.setting.extras) {
+            if (origin.attr.objId > max) {
+                max = origin.attr.objId;
+            }
+        }
+        for (const origin of stateOfSetting.setting.buttons) {
             if (origin.attr.objId > max) {
                 max = origin.attr.objId;
             }
@@ -830,7 +838,6 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
     const handleEditExtraAttr = (e) => {
         const name = e.target.name; // `extras.${page}.${oid}.${field}`
         const value = e.target.value;
-        // console.log({ name, value });
 
         if (!name) {
             return;
@@ -976,8 +983,6 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
         const obj = values[2];
         const field = values[3];
 
-        // console.log({ page, obj, field });
-
         const nextState = produce(stateOfSetting, (draft) => {
             draft.changed = true;
 
@@ -1046,7 +1051,7 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                 attr.page = page;
             }
 
-            const extra: KNXExtraAttr = {
+            const extra: KNXExtra = {
                 obj: obj,
                 attr: attr,
             };
@@ -1098,6 +1103,226 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
         setSetting(nextState);
     };
 
+    const handleEditButton = (e) => {
+        const name = e.target.name; // `buttons.${page}.${oid}.${field}`
+        const value = e.target.value;
+
+        if (!name) {
+            return;
+        }
+
+        const values = name.split('.');
+        const type = values[0];
+
+        if (type != 'buttons') {
+            return;
+        }
+
+        const page = values[1];
+        const obj = values[2];
+        const field = values[3];
+
+        let nextState;
+
+        switch (field) {
+            case 'style':
+                nextState = produce(stateOfSetting, (draft) => {
+                    draft.changed = true;
+                    for (
+                        let i = 0;
+                        i < stateOfSetting.setting.buttons.length;
+                        i++
+                    ) {
+                        const button = stateOfSetting.setting.buttons[i];
+
+                        if (button.attr.objId == obj) {
+                            draft.setting.buttons[i].attr.style = value;
+                        }
+                    }
+                });
+                setSetting(nextState);
+                break;
+            case 'funId':
+                nextState = produce(stateOfSetting, (draft) => {
+                    draft.changed = true;
+                    for (
+                        let i = 0;
+                        i < stateOfSetting.setting.buttons.length;
+                        i++
+                    ) {
+                        const button = stateOfSetting.setting.buttons[i];
+
+                        if (button.attr.objId == obj) {
+                            draft.setting.extras[i].attr.funId = value;
+                        }
+                    }
+                });
+                setSetting(nextState);
+                break;
+            case 'dpt':
+                nextState = produce(stateOfSetting, (draft) => {
+                    draft.changed = true;
+
+                    for (
+                        let i = 0;
+                        i < stateOfSetting.setting.buttons.length;
+                        i++
+                    ) {
+                        const button = stateOfSetting.setting.buttons[i];
+
+                        if (button.attr.objId == obj) {
+                            const func = functions.find(
+                                (func) => func.value == button.attr.funId
+                            );
+
+                            if (!func) {
+                                return;
+                            }
+
+                            const dpt = func.dpts.find(
+                                (dpt) => dpt.dpt == value
+                            );
+
+                            if (!dpt) {
+                                return;
+                            }
+
+                            draft.setting.buttons[i].attr.dpt = dpt.dpt;
+                            draft.setting.buttons[i].attr.createdRT =
+                                dpt.createdRT;
+                            draft.setting.buttons[i].attr.valueKey =
+                                dpt.valueKey;
+                            draft.setting.buttons[i].attr.valueType =
+                                dpt.valueType;
+                        }
+                    }
+                });
+                setSetting(nextState);
+                break;
+            case 'suffix':
+                nextState = produce(stateOfSetting, (draft) => {
+                    draft.changed = true;
+                    for (
+                        let i = 0;
+                        i < stateOfSetting.setting.buttons.length;
+                        i++
+                    ) {
+                        const button = stateOfSetting.setting.buttons[i];
+                        if (button.attr.objId == obj) {
+                            draft.setting.buttons[i].attr.suffix = value;
+                        }
+                    }
+                });
+                setSetting(nextState);
+                break;
+            case 'gAddrs':
+                nextState = produce(stateOfSetting, (draft) => {
+                    draft.changed = true;
+
+                    let addrs = [];
+
+                    for (
+                        let i = 0;
+                        i < stateOfSetting.setting.buttons.length;
+                        i++
+                    ) {
+                        const button = stateOfSetting.setting.buttons[i];
+                        if (button.attr.objId == obj) {
+                            addrs = value.split(',');
+                            draft.setting.buttons[i].obj.gAddrs = addrs;
+                        }
+                    }
+                });
+                setSetting(nextState);
+
+                break;
+            case 'name':
+                nextState = produce(stateOfSetting, (draft) => {
+                    draft.changed = true;
+                    for (
+                        let i = 0;
+                        i < stateOfSetting.setting.buttons.length;
+                        i++
+                    ) {
+                        const button = stateOfSetting.setting.buttons[i];
+                        if (button.attr.objId == obj) {
+                            draft.setting.buttons[i].attr.name = value;
+                        }
+                    }
+                });
+                setSetting(nextState);
+                break;
+        }
+    };
+
+    const handleChangeButtonPressModel = (e) => {
+        const name = e.target.name;
+        const checked = e.target.checked;
+
+        if (!name) {
+            return;
+        }
+
+        const values = name.split('.');
+        const page = values[1];
+        const obj = values[2];
+        const field = values[3];
+
+        if (field != 'lpress') {
+            return;
+        }
+
+        const nextState = produce(stateOfSetting, (draft) => {
+            draft.changed = true;
+
+            for (let i = 0; i < stateOfSetting.setting.buttons.length; i++) {
+                const button = stateOfSetting.setting.buttons[i];
+
+                if (button.attr.objId == obj) {
+                    draft.setting.buttons[i].attr.lpress = checked;
+                }
+            }
+        });
+
+        setSetting(nextState);
+    };
+
+    const handleEditButtonAttrFlag = (e) => {
+        const name = e.target.name;
+        const checked = e.target.checked;
+
+        if (!name) {
+            return;
+        }
+
+        const values = name.split('.');
+        const page = values[1];
+        const obj = values[2];
+        const field = values[3];
+
+        const nextState = produce(stateOfSetting, (draft) => {
+            draft.changed = true;
+
+            for (let i = 0; i < stateOfSetting.setting.buttons.length; i++) {
+                const button = stateOfSetting.setting.buttons[i];
+
+                if (button.attr.objId == obj) {
+                    const origin = draft.setting.buttons[i].attr.flags;
+
+                    const flags = DeviceHelper.changeFlagRule(
+                        origin,
+                        field,
+                        checked ? 1 : 0
+                    );
+
+                    draft.setting.buttons[i].attr.flags = flags;
+                }
+            }
+        });
+
+        setSetting(nextState);
+    };
+
     const handleResetSetting = (e) => {
         setSetting({
             setting: {
@@ -1121,6 +1346,10 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
         );
         objs.push(...stateOfSetting.setting.extras.map((extra) => extra.obj));
 
+        objs.push(
+            ...stateOfSetting.setting.buttons.map((button) => button.obj)
+        );
+
         new_protocol.commInfo.objs = objs;
 
         const protocols = device.protocols.filter(
@@ -1129,20 +1358,31 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
 
         protocols.push(new_protocol);
 
+        // channels
         const groups = groupBy('channelNo')(
             stateOfSetting.setting.channels.map((channel) => channel.info)
         );
 
-        const infos = [];
+        const channelInfo = [];
 
         for (const key of Object.keys(groups)) {
-            infos.push(groups[key][0]);
+            channelInfo.push(groups[key][0]);
         }
+
+        // switch panel
+        const switchPanelControlInfo = [];
+
+        switchPanelControlInfo.push(
+            ...stateOfSetting.setting.buttons.map((button) => button.info)
+        );
 
         // attrs
         const attrs = [];
         attrs.push(
             ...stateOfSetting.setting.channels.map((channel) => channel.attr)
+        );
+        attrs.push(
+            ...stateOfSetting.setting.buttons.map((buttons) => buttons.attr)
         );
         attrs.push(...stateOfSetting.setting.extras.map((extra) => extra.attr));
 
@@ -1164,6 +1404,19 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                 .map((channel) => channel.attr.objId)
         );
         sendTelRules.push(
+            ...stateOfSetting.setting.buttons
+                .filter((button) => {
+                    const flags = DeviceHelper.parseFlagRule(button.attr.flags);
+
+                    if (flags.transmit == 1) {
+                        return button;
+                    }
+
+                    return;
+                })
+                .map((button) => button.attr.objId)
+        );
+        sendTelRules.push(
             ...stateOfSetting.setting.extras
                 .filter((extra) => {
                     const flags = DeviceHelper.parseFlagRule(extra.attr.flags);
@@ -1180,7 +1433,8 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
         const new_device = {
             ...device,
             protocols: protocols,
-            channelInfo: infos,
+            channelInfo: channelInfo,
+            switchPanelControlInfo: switchPanelControlInfo,
             attrs: attrs,
             sendTelRules: sendTelRules,
         } as DeviceVM;
@@ -1391,7 +1645,7 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                 )}
             </div>
             {/* KNX Channels */}
-            <div className="channels-setting">
+            <div className="KNX-setting">
                 {/* Channel Table */}
                 {isActuator && (
                     <table>
@@ -1921,22 +2175,18 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                 {/* SwitchPanel Table */}
                 {isSwitchPanel && (
                     <React.Fragment>
-                        {page_count > 1 && (
-                            <div className={'pagination'}>
-                                <Pagination
-                                    count={page_count}
-                                    page={stateOfSwitchPanel.page}
-                                    onChange={handleChangePage}
-                                    variant="outlined"
-                                    color="primary"
-                                    showFirstButton={true}
-                                    showLastButton={true}
-                                />
-                            </div>
-                        )}
-
                         <table>
                             <thead>
+                                <tr>
+                                    <th
+                                        colSpan={
+                                            SwitchPanelSettingTitleList.length
+                                        }
+                                        className={'title'}
+                                    >
+                                        {'Button Attributes'}
+                                    </th>
+                                </tr>
                                 <tr>
                                     {SwitchPanelSettingTitleList.map(
                                         (title, idx) => {
@@ -1950,100 +2200,478 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {buttons.map((button, idx) => {
-                                    const row_span = button?.attrs?.length || 0;
+                                {stateOfSetting.setting.buttons.map(
+                                    (button, idx) => {
+                                        const row_span =
+                                            button?.attrs?.length || 0;
 
-                                    const rule = DeviceHelper.parseFlagRule(
-                                        button.attr.flags
-                                    );
+                                        const rule = DeviceHelper.parseFlagRule(
+                                            button.attr.flags
+                                        );
 
-                                    let isEven = button.btn % 2 == 0;
+                                        let isEven = button.attr.btn % 2 == 0;
 
-                                    const classname = clsx([
-                                        isEven ? 'even' : 'odd',
-                                    ]);
+                                        const classname = clsx([
+                                            isEven ? 'even' : 'odd',
+                                        ]);
 
-                                    const controlled = device.leaves.find(
-                                        (leaf) =>
-                                            leaf.dvId ==
-                                            button.info.connectionInfo[0].dvId
-                                    );
+                                        // TODO multi selector
+                                        const controlled = device.leaves?.find(
+                                            (leaf) =>
+                                                leaf.dvId ==
+                                                button.info?.connectionInfo[0]
+                                                    .dvId
+                                        );
 
-                                    return (
-                                        <tr key={idx} className={classname}>
-                                            {idx % row_span == 0 && (
-                                                <td
-                                                    className={'center'}
-                                                    rowSpan={row_span}
-                                                >
-                                                    {button.attr.bIdx ||
-                                                        button.attr.btn}
+                                        const fpts: FunctionPointTypeVM[] =
+                                            functions;
+
+                                        const fpt = functions.find(
+                                            (fpt) =>
+                                                fpt.value == button.attr.funId
+                                        );
+
+                                        const dpts: DataPointType[] = !fpt
+                                            ? []
+                                            : fpt.dpts;
+
+                                        const dpt = dpts.find(
+                                            (dpt) => dpt.dpt == button.attr.dpt
+                                        );
+
+                                        const suffixes: Suffix[] = !dpt
+                                            ? []
+                                            : dpt.suffixes;
+
+                                        const page = button.attr.page || 0;
+                                        const oid = button.attr.objId;
+                                        const key = `buttons.${page}.${oid}`;
+
+                                        return (
+                                            <tr key={idx} className={classname}>
+                                                {idx % row_span == 0 && (
+                                                    <td
+                                                        className={'center'}
+                                                        rowSpan={row_span}
+                                                    >
+                                                        {button.attr.bIdx ||
+                                                            button.attr.btn}
+                                                    </td>
+                                                )}
+
+                                                <td className={'center'}>
+                                                    {/*toggle (單鍵), Rocker(雙鍵), toggle simulator(類單鍵)*/}
+                                                    <FormControl
+                                                        variant={'outlined'}
+                                                        size={'small'}
+                                                        fullWidth={true}
+                                                    >
+                                                        <Select
+                                                            className={
+                                                                'btn-type-selector'
+                                                            }
+                                                            value={
+                                                                button.attr
+                                                                    .style
+                                                            }
+                                                            name={`${key}.style`}
+                                                            onChange={
+                                                                handleEditButton
+                                                            }
+                                                        >
+                                                            <MenuItem
+                                                                value={' '}
+                                                            >
+                                                                <div>
+                                                                    <span>
+                                                                        {
+                                                                            'Select...'
+                                                                        }
+                                                                    </span>
+                                                                </div>
+                                                            </MenuItem>
+                                                            {ButtonTypes.map(
+                                                                (item) => {
+                                                                    return (
+                                                                        <MenuItem
+                                                                            key={
+                                                                                item.value
+                                                                            }
+                                                                            value={
+                                                                                item.value
+                                                                            }
+                                                                        >
+                                                                            <div>
+                                                                                <span>
+                                                                                    {
+                                                                                        item.name
+                                                                                    }
+                                                                                </span>
+                                                                            </div>
+                                                                        </MenuItem>
+                                                                    );
+                                                                }
+                                                            )}
+                                                        </Select>
+                                                    </FormControl>
                                                 </td>
-                                            )}
 
-                                            <td className={'center'}>
-                                                {/*toggle (單鍵), Rocker(雙鍵), toggle simulator(類單鍵)*/}
-                                                {button.attr.style
-                                                    ? 'Toggle'
-                                                    : 'Rocker'}
-                                            </td>
-
-                                            <td>
-                                                <div>{'Short'}</div>
-                                                <div>
-                                                    {`Long ${
-                                                        button.attr.lpress
-                                                            ? 'true'
-                                                            : 'false'
-                                                    }`}
-                                                </div>
-                                            </td>
-
-                                            {idx % row_span == 0 && (
-                                                <td
-                                                    className={'center'}
-                                                    rowSpan={row_span}
-                                                >
-                                                    {controlled &&
-                                                        controlled.name}
+                                                <td>
+                                                    <div>{'Short'}</div>
+                                                    <div>
+                                                        {'Long'}
+                                                        <Switch
+                                                            checked={
+                                                                button.attr
+                                                                    .lpress
+                                                            }
+                                                            onChange={
+                                                                handleChangeButtonPressModel
+                                                            }
+                                                            color="primary"
+                                                            name={`${key}.lpress`}
+                                                            inputProps={{}}
+                                                        />
+                                                    </div>
                                                 </td>
-                                            )}
 
-                                            <td className={'center'}>
-                                                {button.attr.funId}
-                                            </td>
+                                                {idx % row_span == 0 && (
+                                                    <td
+                                                        className={'center'}
+                                                        rowSpan={row_span}
+                                                    >
+                                                        {controlled && (
+                                                            <div
+                                                                data-dvId={
+                                                                    controlled.dvId
+                                                                }
+                                                            >
+                                                                {
+                                                                    controlled.name
+                                                                }
+                                                            </div>
+                                                        )}
+                                                    </td>
+                                                )}
 
-                                            <td className={'center'}>
-                                                {button.attr.dpt}
-                                            </td>
+                                                <td className={'center'}>
+                                                    <FormControl
+                                                        variant={'outlined'}
+                                                        size={'small'}
+                                                        fullWidth={true}
+                                                    >
+                                                        <Select
+                                                            className={
+                                                                'fpt-selector'
+                                                            }
+                                                            value={
+                                                                button.attr
+                                                                    .funId ||
+                                                                ' '
+                                                            }
+                                                            name={`${key}.funId`}
+                                                            onChange={
+                                                                handleEditExtraAttr
+                                                            }
+                                                        >
+                                                            <MenuItem
+                                                                value={' '}
+                                                            >
+                                                                <div>
+                                                                    <span>
+                                                                        {
+                                                                            'Select...'
+                                                                        }
+                                                                    </span>
+                                                                </div>
+                                                            </MenuItem>
+                                                            {fpts.map((fpt) => {
+                                                                return (
+                                                                    <MenuItem
+                                                                        key={
+                                                                            fpt.value
+                                                                        }
+                                                                        value={
+                                                                            fpt.value
+                                                                        }
+                                                                    >
+                                                                        <div>
+                                                                            <span>
+                                                                                {
+                                                                                    fpt.name
+                                                                                }
+                                                                            </span>
+                                                                        </div>
+                                                                    </MenuItem>
+                                                                );
+                                                            })}
+                                                        </Select>
+                                                    </FormControl>
+                                                </td>
 
-                                            <td className={'center'}>
-                                                {button.attr.suffix || 'None'}
-                                            </td>
+                                                <td className={'center'}>
+                                                    {/*{extra.attr.dpt}*/}
+                                                    <FormControl
+                                                        variant={'outlined'}
+                                                        size={'small'}
+                                                        fullWidth={true}
+                                                    >
+                                                        <Select
+                                                            className={
+                                                                'dpt-selector'
+                                                            }
+                                                            value={
+                                                                button.attr
+                                                                    .dpt || ' '
+                                                            }
+                                                            name={`${key}.dpt`}
+                                                            onChange={
+                                                                handleEditButton
+                                                            }
+                                                        >
+                                                            <MenuItem
+                                                                value={' '}
+                                                            >
+                                                                <div>
+                                                                    <span>
+                                                                        {
+                                                                            'Select...'
+                                                                        }
+                                                                    </span>
+                                                                </div>
+                                                            </MenuItem>
+                                                            {dpts.map((dpt) => {
+                                                                return (
+                                                                    <MenuItem
+                                                                        key={
+                                                                            dpt.dpt
+                                                                        }
+                                                                        value={
+                                                                            dpt.dpt
+                                                                        }
+                                                                    >
+                                                                        <div>
+                                                                            <span>
+                                                                                {`${dpt.dpt} ${dpt.name}`}
+                                                                            </span>
+                                                                        </div>
+                                                                    </MenuItem>
+                                                                );
+                                                            })}
+                                                        </Select>
+                                                    </FormControl>
+                                                </td>
 
-                                            <td className={'center'}>
-                                                {button.obj?.gAddrs &&
-                                                    button.obj.gAddrs[0]}
-                                            </td>
+                                                <td className={'center'}>
+                                                    <FormControl
+                                                        variant={'outlined'}
+                                                        size={'small'}
+                                                        fullWidth={true}
+                                                    >
+                                                        <Select
+                                                            className={
+                                                                'suffix-selector'
+                                                            }
+                                                            value={
+                                                                button.attr
+                                                                    .suffix ||
+                                                                ' '
+                                                            }
+                                                            name={`${key}.suffix`}
+                                                            onChange={
+                                                                handleEditButton
+                                                            }
+                                                        >
+                                                            <MenuItem
+                                                                value={' '}
+                                                            >
+                                                                <div>
+                                                                    <span>
+                                                                        {'None'}
+                                                                    </span>
+                                                                </div>
+                                                            </MenuItem>
+                                                            {suffixes.map(
+                                                                (suffix) => {
+                                                                    return (
+                                                                        <MenuItem
+                                                                            key={
+                                                                                suffix.value
+                                                                            }
+                                                                            value={
+                                                                                suffix.value
+                                                                            }
+                                                                        >
+                                                                            <div>
+                                                                                <span>
+                                                                                    {`${suffix.name}`}
+                                                                                </span>
+                                                                            </div>
+                                                                        </MenuItem>
+                                                                    );
+                                                                }
+                                                            )}
+                                                        </Select>
+                                                    </FormControl>
+                                                </td>
 
-                                            <td className={'center'}>
-                                                {rule.read}
-                                            </td>
+                                                <td className={'center'}>
+                                                    <div className={'address'}>
+                                                        <TextField
+                                                            // label="Address"
+                                                            variant="outlined"
+                                                            size={'small'}
+                                                            InputLabelProps={{
+                                                                shrink: true,
+                                                            }}
+                                                            value={button.obj?.gAddrs.join(
+                                                                ','
+                                                            )}
+                                                            onChange={
+                                                                handleEditButton
+                                                            }
+                                                            required={false}
+                                                            disabled={false}
+                                                            // name={`extras.${page}.${oid}.gAddrs`}
+                                                            inputProps={{
+                                                                ...register(
+                                                                    // @ts-ignore
+                                                                    `${key}.gAddrs`,
+                                                                    {
+                                                                        pattern:
+                                                                            {
+                                                                                value: new RegExp(
+                                                                                    /(\d+\/\d+\/\d+,)|(\d+\/\d+\/\d+$)/,
+                                                                                    'gm'
+                                                                                ),
+                                                                                message:
+                                                                                    'rule is \\d+\\/\\d+\\/\\d+',
+                                                                            },
+                                                                    }
+                                                                ),
+                                                            }}
+                                                            error={
+                                                                !!errors.buttons
+                                                                    ?.length &&
+                                                                !!errors
+                                                                    .buttons[
+                                                                    page
+                                                                ] &&
+                                                                !!errors
+                                                                    .buttons[
+                                                                    page
+                                                                ][oid] &&
+                                                                !!errors
+                                                                    .buttons[
+                                                                    page
+                                                                ][oid]?.gAddrs
+                                                            }
+                                                            helperText={
+                                                                !!errors.buttons
+                                                                    ?.length &&
+                                                                !!errors
+                                                                    .buttons[
+                                                                    page
+                                                                ] &&
+                                                                !!errors
+                                                                    .buttons[
+                                                                    page
+                                                                ][oid] &&
+                                                                errors.buttons[
+                                                                    page
+                                                                ][oid]?.gAddrs
+                                                                    ?.message
+                                                            }
+                                                        />
+                                                    </div>
+                                                </td>
 
-                                            <td className={'center'}>
-                                                {rule.update}
-                                            </td>
+                                                <td className={'center'}>
+                                                    {/*{rule.read}*/}
+                                                    <FormControlLabel
+                                                        className={'read'}
+                                                        label=""
+                                                        control={
+                                                            <Checkbox
+                                                                checked={
+                                                                    !!rule.read
+                                                                }
+                                                                name={`${key}.read`}
+                                                                disabled={false}
+                                                            />
+                                                        }
+                                                        onChange={
+                                                            handleEditButtonAttrFlag
+                                                        }
+                                                    />
+                                                </td>
 
-                                            <td className={'center'}>
-                                                {rule.transmit}
-                                            </td>
+                                                <td className={'center'}>
+                                                    {/*{rule.write}*/}
+                                                    <FormControlLabel
+                                                        className={'write'}
+                                                        label=""
+                                                        control={
+                                                            <Checkbox
+                                                                checked={
+                                                                    !!rule.write
+                                                                }
+                                                                name={`${key}.write`}
+                                                                disabled={false}
+                                                            />
+                                                        }
+                                                        onChange={
+                                                            handleEditButtonAttrFlag
+                                                        }
+                                                    />
+                                                </td>
 
-                                            <td className={'center'}>
-                                                {button.attr.name}
-                                            </td>
-                                        </tr>
-                                    );
-                                })}
+                                                <td className={'center'}>
+                                                    {/*{rule.transmit}*/}
+                                                    <FormControlLabel
+                                                        className={'transmit'}
+                                                        label=""
+                                                        control={
+                                                            <Checkbox
+                                                                checked={
+                                                                    !!rule.transmit
+                                                                }
+                                                                name={`${key}.transmit`}
+                                                                disabled={false}
+                                                            />
+                                                        }
+                                                        onChange={
+                                                            handleEditButtonAttrFlag
+                                                        }
+                                                    />
+                                                </td>
+
+                                                <td className={'center'}>
+                                                    {/*{button.attr.name}*/}
+                                                    <TextField
+                                                        variant="outlined"
+                                                        size={'small'}
+                                                        InputLabelProps={{
+                                                            shrink: true,
+                                                        }}
+                                                        value={button.attr.name}
+                                                        onChange={
+                                                            handleEditButton
+                                                        }
+                                                        disabled={false}
+                                                        inputProps={{
+                                                            ...register(
+                                                                // @ts-ignore
+                                                                `${key}.name`,
+                                                                {}
+                                                            ),
+                                                        }}
+                                                    />
+                                                </td>
+                                            </tr>
+                                        );
+                                    }
+                                )}
                             </tbody>
                             <tfoot>
                                 <tr>
@@ -2059,13 +2687,32 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                                 </tr>
                             </tfoot>
                         </table>
+
+                        {page_count > 1 && (
+                            <div className={'pagination'}>
+                                <Pagination
+                                    count={page_count}
+                                    page={stateOfSwitchPanel.page}
+                                    onChange={handleChangePage}
+                                    variant="outlined"
+                                    color="primary"
+                                    showFirstButton={true}
+                                    showLastButton={true}
+                                />
+                            </div>
+                        )}
                     </React.Fragment>
                 )}
                 {/* Extra Attrs Table */}
-                {(hasExtraAttrs || true) && (
+                {(hasExtraAttrs || isSwitchPanel) && (
                     <React.Fragment>
                         <table>
                             <thead>
+                                <tr>
+                                    <th colSpan={9} className={'title'}>
+                                        {'Extra Attributes'}
+                                    </th>
+                                </tr>
                                 <tr>
                                     {ExtractAttrTitleList.map((title, idx) => {
                                         return (
@@ -2098,8 +2745,13 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {stateOfSetting.setting.extras.map(
-                                    (extra: KNXExtraAttr, idx) => {
+                                {stateOfSetting.setting.extras
+                                    .filter(
+                                        (extra) =>
+                                            extra.attr.page ==
+                                            stateOfSwitchPanel.page
+                                    )
+                                    .map((extra: KNXExtra, idx) => {
                                         const rule = DeviceHelper.parseFlagRule(
                                             extra.attr.flags
                                         );
@@ -2492,8 +3144,7 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                                                 </tr>
                                             </React.Fragment>
                                         );
-                                    }
-                                )}
+                                    })}
                             </tbody>
                             <tfoot>
                                 <tr>
@@ -2688,6 +3339,11 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                     <table>
                         <thead>
                             <tr>
+                                <th colSpan={8} className={'title'}>
+                                    {'Parent Device Extra Attributes'}
+                                </th>
+                            </tr>
+                            <tr>
                                 {ParentExtractAttrTitleList.map(
                                     (title, idx) => {
                                         return (
@@ -2791,6 +3447,7 @@ type SettingTitle =
     | 'Button Type'
     | 'Press Mode'
     | 'Controlled Device'
+    | 'Controlled'
     | 'Channel ID'
     | 'Device ID'
     | 'Device Name'
@@ -2826,7 +3483,7 @@ const SwitchPanelSettingTitleList: SettingTitle[] = [
     'Button ID',
     'Button Type',
     'Press Mode',
-    'Controlled Device',
+    'Controlled',
     'Function',
     'Data Type',
     'Sub Attribute',
@@ -2883,6 +3540,21 @@ const GeneralDeviceAttrTitleList: SettingTitle[] = [
     'W',
     'T',
     'Object Name',
+];
+
+const ButtonTypes: { value: number; name: string }[] = [
+    {
+        value: 0,
+        name: 'Toggle',
+    },
+    {
+        value: 1,
+        name: 'Rocker',
+    },
+    {
+        value: 2,
+        name: 'Toggle Simulator',
+    },
 ];
 
 export default KNXConfiguration;

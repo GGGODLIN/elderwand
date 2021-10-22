@@ -168,7 +168,7 @@ export interface CommObject {
     objId: number;
     gAddrs: string[];
 
-    attrObjId?: number;
+    // attrObjId?: number;
     // ebtn?: boolean;
 }
 

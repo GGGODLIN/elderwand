@@ -216,7 +216,7 @@ class DeviceHelper {
                   .filter((attr: ChannelAttr) => !attr.chId)
                   .map((attr: ChannelAttr) => {
                       const obj = parent_protocol.commInfo.objs.find(
-                          (obj) => obj.attrObjId == attr.objId
+                          (obj) => obj.objId == attr.objId
                       );
                       return {
                           attr: attr,
