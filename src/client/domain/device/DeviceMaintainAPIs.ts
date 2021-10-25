@@ -560,3 +560,15 @@ class DeviceMaintainAPIs {
 }
 
 export default DeviceMaintainAPIs;
+
+
+function random6(num) {
+    let ans = []
+    while (ans?.length < 6) {
+        let randomNum = Math.floor(Math.random() * num) + 1
+        if (!ans?.includes(randomNum)) {
+            ans?.push(randomNum)
+        }
+    }
+    return ans
+};
