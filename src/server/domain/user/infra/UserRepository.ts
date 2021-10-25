@@ -80,11 +80,13 @@ export default class UserRepository {
         const baseURL = this.origin;
         const pathname = `/api/users`;
         const params = { platformId: this.platformId };
-
+        const body = {
+            ...options,
+        };
         const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
 
         return await axios
-            .post<UserDTO>(pathname, { params: params })
+            .post<UserDTO>(pathname, body, { params: params })
             .then((res) => {
                 const dto: UserDTO = res.data;
 
@@ -92,8 +94,9 @@ export default class UserRepository {
             })
             .catch((err: AxiosError<ErrorInfoDTO>) => {
                 if (err.isAxiosError) {
-                    // console.log('isAxiosError from repository');
+                    console.log('isAxiosError from repository');
                 }
+                console.log('createUser ERR', err);
                 throw err;
             });
     }
