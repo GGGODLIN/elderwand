@@ -22,7 +22,7 @@ dist/
 *-log.http
 
 # env
-.env*
+.env.*.local
 !.env.sample
 yarn.lock
 
