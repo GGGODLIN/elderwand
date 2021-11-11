@@ -1,4 +1,6 @@
 # G13.ElderWand.Web
+## Abstract
+* Using Next.js framework for React.js
 
 ## develop tool
 
@@ -62,3 +64,51 @@ yarn web:dev
 10. RUN make dev-build
 11. RUN make dev-up
  -->
+
+#Troubleshoot
+
+* Can't run yarn web:install and web:dev for developing process, if you get following error messages
+
+  ```ErrorInfo
+  $ yarn web:install
+
+  yarn run v1.22.5
+  $ yarn install && sh scripts/handel-shared.sh
+  info No lockfile found.
+  [1/5] Validating package.json...
+  [2/5] Resolving packages...
+  info There appears to be trouble with your network connection. Retrying...
+  info There appears to be trouble with your network connection. Retrying...
+  info There appears to be trouble with your network connection. Retrying...
+  info There appears to be trouble with your network connection. Retrying...
+  error An unexpected error occurred: "https://registry.yarnpkg.com/@koa%2fcors: tunneling socket could not be established, cause=getaddrinfo ENOTFOUND npm-proxy-cache".
+  info If you think this is a bug, please open a bug report with the information provided in "/mnt/d/AD/Workspace/ElderWand/code/g13.elderwand.web/yarn-error.log".
+  info Visit https://yarnpkg.com/en/docs/cli/install for documentation about this command.
+  error Command failed with exit code 1.
+  info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+  allen@AllenLaptop:/mnt/d/AD/Workspace/ElderWand/code/g13.elderwand.web$ yarn web:dev
+  yarn run v1.22.5
+  $ export NODE_ENV=development && nodemon --config nodemon.json
+  /bin/sh: 1: nodemon: not found
+  error Command failed with exit code 127.
+  info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+  ```
+
+  ```ErrorInfo
+  $ yarn web:dev 
+
+  yarn run v1.22.5
+  $ export NODE_ENV=development && nodemon --config nodemon.json
+  /bin/sh: 1: nodemon: not found
+  error Command failed with exit code 127.
+  info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+  allen@AllenLaptop:/mnt/d/AD/Workspace/ElderWand/code/g13.elderwand.web$ code .
+  allen@AllenLaptop:/mnt/d/AD/Workspace/ElderWand/code/g13.elderwand.web$ rm -f yarn.lock yarn-error.log
+  allen@AllenLaptop:/mnt/d/AD/Workspace/ElderWand/code/g13.elderwand.web$ yarn global add typescript
+  ```
+
+  Resolve: 
+  ```cmd
+  $ make remove-proxy
+  ```
+  rerun the develop commands
