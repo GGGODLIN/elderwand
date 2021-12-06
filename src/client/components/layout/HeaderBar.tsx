@@ -67,11 +67,11 @@ export const HeaderBar: React.FC<{}> = () => {
                             <a href="/admin">{'Admin'}</a>
                         </li>
                         <li>
-                            <a href="/">{'About'}</a>
+                            <a href="/">{'Profile'}</a>
                         </li>
-                        <li>
-                            <a href="/">{'Contact'}</a>
-                        </li>
+                        {/* <li>
+                            <a href="/admin">{'Contact'}</a>
+                        </li> */}
                     </ul>
                 </nav>
 

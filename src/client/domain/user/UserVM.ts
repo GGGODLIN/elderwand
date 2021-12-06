@@ -1,4 +1,6 @@
 export default interface UserVM {
+    displayName: any;
+    account: any;
     id: string;
     display_name: string;
     address: string;

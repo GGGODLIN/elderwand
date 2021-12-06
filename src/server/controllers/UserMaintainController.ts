@@ -109,7 +109,98 @@ export default class UserMaintainController {
     };
 
     static createUser = async (ctx) => {
-        // TODO
+        const repository = new UserRepository({
+            host: ServerEnvVar.SkymapApiHost,
+            platformId: Platform.ElderWand,
+        });
+        const body = {
+            ...ctx.request.body,
+        };
+        await new UserMaintainUCO(repository)
+            .createUser(body)
+            .then((res: UserDTO) => {
+                const vm = convertToUserVM(res);
+
+                ctx.status = 200;
+                ctx.body = vm;
+
+                return;
+            })
+            .catch((err) => {
+                if (err.isAxiosError) {
+                    ctx.status = err.response.status;
+                    ctx.body = err.response.data;
+                    return;
+                }
+                throw err;
+            });
+    };
+
+    static editUser = async (ctx) => {
+        const repository = new UserRepository({
+            host: ServerEnvVar.SkymapApiHost,
+            platformId: Platform.ElderWand,
+        });
+
+        const params: {
+            uid: string;
+        } = {
+            uid: '',
+            ...ctx.params,
+        };
+
+        const body = {
+            ...ctx.request.body,
+        };
+
+        await new UserMaintainUCO(repository)
+            .editUser(params.uid, body)
+            .then((res: UserDTO) => {
+                const vm = convertToUserVM(res);
+
+                ctx.status = 200;
+                ctx.body = vm;
+
+                return;
+            })
+            .catch((err) => {
+                if (err.isAxiosError) {
+                    ctx.status = err.response.status;
+                    ctx.body = err.response.data;
+                    return;
+                }
+                throw err;
+            });
+    };
+
+    static editUserPwd = async (ctx) => {
+        const repository = new UserRepository({
+            host: ServerEnvVar.SkymapApiHost,
+            platformId: Platform.ElderWand,
+        });
+
+        const body = {
+            ...ctx.request.body,
+        };
+
+        await new UserMaintainUCO(repository)
+            .editUserPwd(body)
+            .then((res: UserDTO) => {
+                const vm = convertToUserVM(res);
+
+                ctx.status = 200;
+                ctx.body = vm;
+
+                return;
+            })
+            .catch((err) => {
+                if (err.isAxiosError) {
+                    ctx.status = err.response.status;
+                    ctx.body = err.response.data;
+                    return;
+                }
+                throw err;
+            });
     };
 }
 

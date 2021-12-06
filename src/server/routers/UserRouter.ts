@@ -7,6 +7,7 @@ export const UserRouterActions = {
     listUsers: () => `/api/users`,
     getUser: (uid: string) => `/api/users/${uid}`,
     me: () => `/api/user/me`,
+    editUser: (uid: string) => `/api/users/${uid}`,
 };
 
 export default class UserRouter {
@@ -36,6 +37,18 @@ export default class UserRouter {
                 method: 'POST',
                 controller: UserMaintainController.createUser,
             },
+            editUser: {
+                name: 'edit-user',
+                action: '/users/:uid',
+                method: 'PUT',
+                controller: UserMaintainController.editUser,
+            },
+            editUserPwd: {
+                name: 'edit-user-password',
+                action: '/password',
+                method: 'PUT',
+                controller: UserMaintainController.editUserPwd,
+            }
         };
 
         return KoaRouterFactory.create('/api', options);
