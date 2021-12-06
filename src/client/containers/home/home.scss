@@ -1,11 +1,50 @@
 @import 'src/client/styles/variable';
 
-.home.page {
+.register.page,
+.login.page {
   align-items: center;
   display: flex;
   justify-content: center;
+}
 
-  .name {
-    font-size: 64px;
+.register-form-card,
+.login-form-card {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  margin-top: 10%;
+  margin-bottom: 10%;
+
+  .MuiCardContent-root {
+    padding: 24px;
+  }
+
+  .avatar {
+    background-color: $red;
+    color: $white;
+    margin: 8px auto;
+  }
+
+  .title {
+    text-align: center;
+  }
+
+  form {
+    margin: 24px 0 0 0;
+    width: 100%;
+
+    [type='submit'] {
+      margin: 16px 0;
+    }
+
+    a {
+      color: $white;
+    }
+  }
+  .other-action {
+    a {
+      color: $black;
+      text-decoration: underline;
+    }
   }
 }

@@ -47,6 +47,7 @@ export default class UserRepository {
                 return result;
             })
             .catch((err: AxiosError<ErrorInfoDTO>) => {
+                console.log('Error', err)
                 if (err.isAxiosError) {
                     // console.log('isAxiosError from repository');
                 }
@@ -57,7 +58,7 @@ export default class UserRepository {
     async getUser(id: string): Promise<UserDTO> {
         const baseURL = this.origin;
         const pathname = `/api/users/${id}`;
-        const params = { pid: this.platformId };
+        const params = { platformId: this.platformId };
 
         const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
 
@@ -97,6 +98,56 @@ export default class UserRepository {
                     console.log('isAxiosError from repository');
                 }
                 console.log('createUser ERR', err);
+                throw err;
+            });
+    }
+
+    async editUser(id: string, options): Promise<UserDTO> {
+        const baseURL = this.origin;
+        const pathname = `/api/users/${id}`;
+        const params = { platformId: this.platformId };
+        const body = {
+            ...options,
+        };
+
+        const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
+
+        return await axios
+            .patch<UserDTO>(pathname, body)
+            .then((res) => {
+                const dto: UserDTO = res.data;
+                return dto;
+            })
+            .catch((err: AxiosError<ErrorInfoDTO>) => {
+                console.log('editUserErr', err)
+                if (err.isAxiosError) {
+                    // console.log('isAxiosError from repository');
+                }
+                throw err;
+            });
+    }
+
+    async editUserPwd(options): Promise<UserDTO> {
+        const baseURL = this.origin;
+        const pathname = `/api/password`;
+        const body = {
+            ...options,
+            platformId: this.platformId
+        };
+
+        const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
+
+        return await axios
+            .patch<UserDTO>(pathname, body)
+            .then((res) => {
+                const dto: UserDTO = res.data;
+                return dto;
+            })
+            .catch((err: AxiosError<ErrorInfoDTO>) => {
+                console.log('editUserPwdErr', err)
+                if (err.isAxiosError) {
+                    // console.log('isAxiosError from repository');
+                }
                 throw err;
             });
     }

@@ -31,6 +31,18 @@ const Keywords = {
     DeviceMaintainPage: {
         Status: 'DeviceMaintainPage.Status',
     },
+    UserProfile: {
+        Account: 'Account',
+        FullName: 'Full Name',
+        Email: 'E-Mail',
+        Password: 'Password',
+        ConfirmPassword: 'ConfirmPassword',
+        Phone: 'Phone',
+        Address: 'Address',
+        Company: 'Company',
+        EditPassword: 'EditPassword',
+        Submit: 'Submit'
+    },
 };
 
 export default Keywords;

@@ -23,4 +23,12 @@ export default class UserMaintainUCO {
     createUser(options: CreateUserOptions): Promise<UserDTO> {
         return this.repository.createUser(options);
     }
+
+    editUser(id: string, options): Promise<UserDTO> {
+        return this.repository.editUser(id, options);
+    }
+
+    editUserPwd(options): Promise<UserDTO> {
+        return this.repository.editUserPwd(options);
+    }
 }
