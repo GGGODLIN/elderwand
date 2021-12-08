@@ -66,21 +66,21 @@ export const AuthSlice = createSlice<
                 // draft.register.form.username = user.username;
                 // draft.register.form.display_name = user.display_name;
 
-                if (ClientEnvVar.IsDev) {
-                    const name = isUUID(user.username)
-                        ? `test_${Date.now()}`
-                        : user.username;
-                    const password = 'password';
+                // if (ClientEnvVar.IsDev) {
+                //     const name = isUUID(user.username)
+                //         ? `test_${Date.now()}`
+                //         : user.username;
+                //     const password = 'password';
 
-                    draft.register.form.username = name;
-                    draft.register.form.display_name =
-                        user.display_name || name;
-                    draft.register.form.password = password;
-                    draft.register.form.password2 = password;
-                    draft.register.form.email = `${name}@mail.com`;
-                    draft.register.form.address = 'example address string';
-                    draft.register.form.tel = `${Date.now()}`;
-                }
+                //     draft.register.form.username = name;
+                //     draft.register.form.display_name =
+                //         user.display_name || name;
+                //     draft.register.form.password = password;
+                //     draft.register.form.password2 = password;
+                //     draft.register.form.email = `${name}@mail.com`;
+                //     draft.register.form.address = 'example address string';
+                //     draft.register.form.tel = `${Date.now()}`;
+                // }
             });
         },
         changeRegisterUserForm: (
@@ -103,8 +103,8 @@ const setInvitingUser = AuthSlice.actions
 
 const changeRegisterUserForm = AuthSlice.actions
     .changeRegisterUserForm as ActionCreatorWithPayload<{
-    name: string;
-    value: any;
-}>;
+        name: string;
+        value: any;
+    }>;
 
 export default { reducer, setInvitingUser, changeRegisterUserForm };

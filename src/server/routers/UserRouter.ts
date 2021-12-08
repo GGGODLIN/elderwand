@@ -48,6 +48,24 @@ export default class UserRouter {
                 action: '/password',
                 method: 'PUT',
                 controller: UserMaintainController.editUserPwd,
+            },
+            inviteUser: {
+                name: 'invite-user',
+                action: '/invitation/user',
+                method: 'POST',
+                controller: UserMaintainController.inviteUser,
+            },
+            verifyInvitationToken: {
+                name: 'verifyInvitationToken',
+                action: '/invitation/user/:token',
+                method: 'GET',
+                controller: UserMaintainController.verifyInvitationToken,
+            },
+            registerUser: {
+                name: 'registerUser',
+                action: '/register',
+                method: 'POST',
+                controller: UserMaintainController.registerUser,
             }
         };
 

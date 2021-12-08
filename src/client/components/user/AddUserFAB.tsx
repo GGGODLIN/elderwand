@@ -67,6 +67,7 @@ export const InviteUserDialog: React.FC<{}> = () => {
     const { show, inviting_user, inviting_token } = useSelector(
         (state: RootState) => state.user.invite_dialog
     );
+    const { user } = useSelector((state: RootState) => state.user);
 
     const classname = clsx(['fab', name, show ? '' : 'open']);
 
@@ -84,13 +85,12 @@ export const InviteUserDialog: React.FC<{}> = () => {
 
     const onSubmit = (form: CreateUserForm) => {
         const body = {
-            ...form,
-            role_id: parseInt(form.role_id),
+            email: form?.email,
+            roleID: parseInt(form.role_id),
+            parentID: user?.id
         };
-        console.log('onSubmit', body)
 
-        const url = `/api/users`;
-        const params = {};
+        const url = `/api/invitation/user`;
 
         new AxiosFactory()
             .useBearerToken()
@@ -98,10 +98,9 @@ export const InviteUserDialog: React.FC<{}> = () => {
                 dispatch(FetchSlice.start());
             })
             .getInstance()
-            .post<any>(url, body, { params: params })
+            .post<any>(url, body)
             .then((res) => {
-                console.log('CreateUserForm', res)
-                //dispatch(UserSlice.fetch(res.data));
+                dispatch(UserSlice.setInvitingUserInfo(res.data));
             })
             .catch((err) => {
                 console.log(err);

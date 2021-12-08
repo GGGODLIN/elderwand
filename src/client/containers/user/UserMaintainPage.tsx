@@ -42,102 +42,125 @@ const fetchUsers = (dispatch: Dispatch<any>) => {
         });
 };
 
-const fetchUser = (
-    client: AxiosInstance,
-    params: PaginationParams,
-    callback: Function
-) => {
-    client
-        .get<any>('/api/users', { params: params })
+const getUser = (dispatch: Dispatch<any>) => {
+    new AxiosFactory()
+        .useBearerToken()
+        .useBefore(() => {
+            dispatch(FetchSlice.start());
+        })
+        .getInstance()
+        .get('/api/user/me')
         .then((res) => {
-            if (res.data.offset === 0) {
-                setTimeout(() => {
-                    const main = document.querySelector('main');
-                    main.scroll({ top: 0, behavior: 'smooth' });
-                }, 100);
+            if (res.status == 200) {
+                dispatch(UserSlice.initial(res.data));
+                return;
             }
-            callback(res.data);
         })
         .catch((err: AxiosError) => {
+            console.log(err.response.status);
             console.log(err.message);
-            //AxiosUtil.redirectUnAuthorization(err);
+        })
+        .finally(() => {
+            dispatch(FetchSlice.end());
         });
-};
+}
 
-const fetchUserOnInitial = (
-    client: AxiosInstance,
-    dispatch: Dispatch<any>,
-    refresh: boolean
-) => {
-    useEffect(() => {
-        const params = {
-            limit: PageSize,
-            offset: 0,
-        };
+// const fetchUser = (
+//     client: AxiosInstance,
+//     params: PaginationParams,
+//     callback: Function
+// ) => {
+//     client
+//         .get<any>('/api/users', { params: params })
+//         .then((res) => {
+//             if (res.data.offset === 0) {
+//                 setTimeout(() => {
+//                     const main = document.querySelector('main');
+//                     main.scroll({ top: 0, behavior: 'smooth' });
+//                 }, 100);
+//             }
+//             callback(res.data);
+//         })
+//         .catch((err: AxiosError) => {
+//             console.log(err.message);
+//             //AxiosUtil.redirectUnAuthorization(err);
+//         });
+// };
 
-        if (refresh) {
-            fetchUser(client, params, (payload: any) => {
-                dispatch(UserSlice.fetch(payload));
-            });
-        }
-    }, [refresh]);
-};
+// const fetchUserOnInitial = (
+//     client: AxiosInstance,
+//     dispatch: Dispatch<any>,
+//     refresh: boolean
+// ) => {
+//     useEffect(() => {
+//         const params = {
+//             limit: PageSize,
+//             offset: 0,
+//         };
 
-const fetchUserOnScroll = (
-    isLoading: boolean,
-    offset: number,
-    total: number,
-    limit: number,
-    client: AxiosInstance,
-    dispatch: Dispatch<any>
-) => {
-    useEffect(() => {
-        const main = document.querySelector('main');
+//         if (refresh) {
+//             fetchUser(client, params, (payload: any) => {
+//                 dispatch(UserSlice.fetch(payload));
+//             });
+//         }
+//     }, [refresh]);
+// };
 
-        if (!main) {
-            return;
-        }
+// const fetchUserOnScroll = (
+//     isLoading: boolean,
+//     offset: number,
+//     total: number,
+//     limit: number,
+//     client: AxiosInstance,
+//     dispatch: Dispatch<any>
+// ) => {
+//     useEffect(() => {
+//         const main = document.querySelector('main');
 
-        if (isLoading) {
-            main.onscroll = () => { };
-            return;
-        }
+//         if (!main) {
+//             return;
+//         }
 
-        main.onscroll = (e) => {
-            const position = main.scrollHeight - main.scrollTop;
-            const height = main.clientHeight;
+//         if (isLoading) {
+//             main.onscroll = () => { };
+//             return;
+//         }
 
-            if (position - height > 300) {
-                return;
-            }
+//         main.onscroll = (e) => {
+//             const position = main.scrollHeight - main.scrollTop;
+//             const height = main.clientHeight;
 
-            if (isLoading) {
-                return;
-            }
+//             if (position - height > 300) {
+//                 return;
+//             }
 
-            if (offset >= total) {
-                return;
-            }
+//             if (isLoading) {
+//                 return;
+//             }
 
-            const params = {
-                limit: limit,
-                offset: offset,
-            };
+//             if (offset >= total) {
+//                 return;
+//             }
 
-            if (offset == PreviousParams.offset) {
-                return;
-            }
+//             const params = {
+//                 limit: limit,
+//                 offset: offset,
+//             };
 
-            PreviousParams = params;
+//             if (offset == PreviousParams.offset) {
+//                 return;
+//             }
 
-            main.onscroll = () => { };
+//             PreviousParams = params;
 
-            fetchUser(client, params, (payload: any) => {
-                dispatch(UserSlice.push(payload));
-            });
-        };
-    }, [isLoading, limit, offset, total]);
-};
+//             main.onscroll = () => { };
+
+//             fetchUser(client, params, (payload: any) => {
+//                 dispatch(UserSlice.push(payload));
+//             });
+//         };
+//     }, [isLoading, limit, offset, total]);
+// };
 
 export interface UserMaintainPageProps {
     title: string;
@@ -176,6 +199,7 @@ export const UserMaintainPage: React.FC<UserMaintainPageProps> = () => {
 
     useEffect(() => {
         fetchUsers(dispatch);
+        getUser(dispatch)
         return () => { };
     }, []);
 

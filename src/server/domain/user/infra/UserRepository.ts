@@ -151,4 +151,76 @@ export default class UserRepository {
                 throw err;
             });
     }
+
+    async inviteUser(options): Promise<UserDTO> {
+        const baseURL = this.origin;
+        const pathname = `/api/invitation/user`;
+        const body = {
+            ...options,
+            platformId: this.platformId
+        };
+
+        const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
+
+        return await axios
+            .post(pathname, body)
+            .then((res) => {
+                const dto = res.data;
+                return dto;
+            })
+            .catch((err: AxiosError<ErrorInfoDTO>) => {
+                console.log('inviteUserErr', err)
+                if (err.isAxiosError) {
+                    // console.log('isAxiosError from repository');
+                }
+                throw err;
+            });
+    }
+
+    async verifyInvitationToken(options): Promise<UserDTO> {
+        const baseURL = this.origin;
+        const pathname = `/api/invitation/user?token=${options}`;
+
+
+        const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
+
+        return await axios
+            .get(pathname)
+            .then((res) => {
+                const dto = res.data;
+                return dto;
+            })
+            .catch((err: AxiosError<ErrorInfoDTO>) => {
+                console.log('verifyInvitationTokenErr', err)
+                if (err.isAxiosError) {
+                    // console.log('isAxiosError from repository');
+                }
+                throw err;
+            });
+    }
+
+    async registerUser(options): Promise<UserDTO> {
+        const baseURL = this.origin;
+        const pathname = `/api/register`;
+        const body = {
+            ...options,
+            platformId: this.platformId
+        };
+
+        const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
+
+        return await axios
+            .post(pathname, body)
+            .then((res) => {
+                const dto = res.data;
+                return dto;
+            })
+            .catch((err: AxiosError<ErrorInfoDTO>) => {
+                console.log('registerUserErr', err)
+                if (err.isAxiosError) {
+                    // console.log('isAxiosError from repository');
+                }
+                throw err;
+            });
+    }
 }

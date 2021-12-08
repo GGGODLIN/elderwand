@@ -31,4 +31,16 @@ export default class UserMaintainUCO {
     editUserPwd(options): Promise<UserDTO> {
         return this.repository.editUserPwd(options);
     }
+
+    inviteUser(options): Promise<UserDTO> {
+        return this.repository.inviteUser(options);
+    }
+
+    verifyInvitationToken(options): Promise<UserDTO> {
+        return this.repository.verifyInvitationToken(options);
+    }
+
+    registerUser(options): Promise<UserDTO> {
+        return this.repository.registerUser(options);
+    }
 }

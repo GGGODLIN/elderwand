@@ -20,6 +20,7 @@ import {
     Link,
     TextField,
 } from '@material-ui/core';
+import AxiosFactory from 'src/client/helper/AxiosFactory';
 
 interface RegisterForm {
     id: string;
@@ -67,8 +68,8 @@ export const RegisterPage: React.FC<RegisterPageProps> = (props) => {
 
     const { token } = props.query;
 
-    const origin = AxiosUtil.getOriginWithPort();
-    const client = AxiosUtil.makeAxiosInstance(dispatch, origin);
+    //const origin = AxiosUtil.getOriginWithPort();
+    //const client = AxiosUtil.makeAxiosInstance(dispatch, origin);
 
     const handleInputChange = (
         e: ChangeEvent<{ name: string; value: string }>
@@ -81,45 +82,87 @@ export const RegisterPage: React.FC<RegisterPageProps> = (props) => {
     };
 
     const onSubmit = async (form: RegisterForm) => {
-        client
+        new AxiosFactory()
+            .useBearerToken()
+            .useBefore(() => {
+                dispatch(FetchSlice.start());
+            })
+            .getInstance()
             .post('/api/register', form)
             .then((res: AxiosResponse<any>) => {
                 if (200 <= res.status && res.status < 300) {
                     window.location.replace('/admin');
                     return;
                 }
-                console.log(res.data);
             })
             .catch((err: AxiosError<any>) => {
                 console.error(err.message);
                 dispatch(FetchSlice.end());
+            })
+            .finally(() => {
+                dispatch(FetchSlice.end());
             });
+        // client
+        //     .post('/api/register', form)
+        //     .then((res: AxiosResponse<any>) => {
+        //         if (200 <= res.status && res.status < 300) {
+        //             window.location.replace('/admin');
+        //             return;
+        //         }
+        //         console.log(res.data);
+        //     })
+        //     .catch((err: AxiosError<any>) => {
+        //         console.error(err.message);
+        //         dispatch(FetchSlice.end());
+        //     });
     };
 
     const { form } = useSelector((state: RootState) => state.auth.register);
+    const { isLoading } = useSelector((state: RootState) => state.fetch);
+    console.log('form', form)
 
     useEffect(() => {
         if (!token) {
             return;
         }
 
-        const params = { token: token };
+        const url = `/api/invitation/user/${token}`;
 
-        client
-            .get('/api/invite/user', { params: params })
+
+        new AxiosFactory()
+            .useBearerToken()
+            .useBefore(() => {
+                dispatch(FetchSlice.start());
+            })
+            .getInstance()
+            .get<any>(url)
             .then((res: AxiosResponse<UserVM>) => {
-                console.log(res.data);
+                console.log('invitation', res.data);
 
-                // dispatch(AuthSlice.setInvitingUser({ user: res.data }));
+                dispatch(AuthSlice.setInvitingUser({ user: res.data }));
             })
             .catch((err: AxiosError<any>) => {
                 console.log(err.message);
+            })
+            .finally(() => {
+                dispatch(FetchSlice.end());
             });
+
+        // client
+        //     .get('/api/invite/user', { params: params })
+        //     .then((res: AxiosResponse<UserVM>) => {
+        //         console.log(res.data);
+
+        //         // dispatch(AuthSlice.setInvitingUser({ user: res.data }));
+        //     })
+        //     .catch((err: AxiosError<any>) => {
+        //         console.log(err.message);
+        //     });
     }, [token]);
 
     return (
         <React.Fragment>
-            <div className={classname}>
+            {isLoading || <div className={classname}>
                 <Container
                     className={'register-form-container'}
                     maxWidth={'xs'}
@@ -168,8 +211,8 @@ export const RegisterPage: React.FC<RegisterPageProps> = (props) => {
                                     autoFocus
                                     autoComplete="username"
                                     size="small"
-                                    // onChange={handleInputChange}
-                                    value={form.username}
+                                    onChange={handleInputChange}
+                                    //value={form.username}
                                     {...register('username', {
                                         required: `${t(
                                             kws.ErrorMessage.IsRequired
@@ -202,7 +245,7 @@ export const RegisterPage: React.FC<RegisterPageProps> = (props) => {
                                             kws.ErrorMessage.IsRequired
                                         )}`,
                                     })}
-                                    // onChange={handleInputChange}
+                                    onChange={handleInputChange}
                                     error={!!errors.display_name}
                                     helperText={handleErrorMessage(
                                         errors.display_name
@@ -269,7 +312,7 @@ export const RegisterPage: React.FC<RegisterPageProps> = (props) => {
                                     label={t(kws.LoginPage.EmailAddress)}
                                     variant="outlined"
                                     margin="normal"
-                                    required
+                                    //required
                                     fullWidth
                                     size="small"
                                     autoComplete="email"
@@ -280,7 +323,7 @@ export const RegisterPage: React.FC<RegisterPageProps> = (props) => {
                                     //     message: `${t(kws.ErrorMessage.InvalidEmailAddress)}`,
                                     //   },
                                     // })}
-                                    value={form.email}
+                                    defaultValue={form.email}
                                     {...register('email', {
                                         required: `${t(
                                             kws.ErrorMessage.IsRequired
@@ -322,7 +365,7 @@ export const RegisterPage: React.FC<RegisterPageProps> = (props) => {
                                             kws.ErrorMessage.IsRequired
                                         )}`,
                                     })}
-                                    // onChange={handleInputChange}
+                                    onChange={handleInputChange}
                                     error={!!errors.display_name}
                                     helperText={handleErrorMessage(
                                         errors.address
@@ -348,7 +391,7 @@ export const RegisterPage: React.FC<RegisterPageProps> = (props) => {
                                             kws.ErrorMessage.IsRequired
                                         )}`,
                                     })}
-                                    // onChange={handleInputChange}
+                                    onChange={handleInputChange}
                                     error={!!errors.tel}
                                     helperText={handleErrorMessage(errors.tel)}
                                 />
@@ -387,7 +430,7 @@ export const RegisterPage: React.FC<RegisterPageProps> = (props) => {
                         </CardContent>
                     </Card>
                 </Container>
-            </div>
+            </div>}
         </React.Fragment>
     );
 };

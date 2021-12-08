@@ -58,6 +58,7 @@ export const HomePage: React.FC<LoginPageProps> = (props) => {
     const dispatch = useDispatch();
     const { t } = useTranslation();
     const { user } = useSelector((state: RootState) => state.user);
+    console.log('user', user)
     const { isLoading } = useSelector((state: RootState) => state.fetch);
 
     const [isEditPwd, setIsEditPwd] = useState(false);
