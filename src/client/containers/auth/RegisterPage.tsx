@@ -76,19 +76,30 @@ export const RegisterPage: React.FC<RegisterPageProps> = (props) => {
     ) => {
         const name = e.target.name;
         const value = e.target.value;
-        console.log({ name, value });
 
         dispatch(AuthSlice.changeRegisterUserForm({ name, value }));
+        setValue(e.target.name, e.target.value);
     };
 
-    const onSubmit = async (form: RegisterForm) => {
+    const onSubmit = async (formValue: RegisterForm) => {
+        const formFormat = {
+            "accountID": form.account_id,
+            "address": formValue?.address,
+            "displayName": formValue?.display_name,
+            "email": formValue?.email ?? form?.email,
+            "id": form.id,
+            "password": formValue?.password,
+            "tel": formValue?.tel,
+            "username": formValue?.username
+        }
+
         new AxiosFactory()
             .useBearerToken()
             .useBefore(() => {
                 dispatch(FetchSlice.start());
             })
             .getInstance()
-            .post('/api/register', form)
+            .post('/api/register', { ...formFormat })
             .then((res: AxiosResponse<any>) => {
                 if (200 <= res.status && res.status < 300) {
                     window.location.replace('/admin');
@@ -119,7 +130,6 @@ export const RegisterPage: React.FC<RegisterPageProps> = (props) => {
 
     const { form } = useSelector((state: RootState) => state.auth.register);
     const { isLoading } = useSelector((state: RootState) => state.fetch);
-    console.log('form', form)
 
     useEffect(() => {
         if (!token) {
@@ -137,8 +147,6 @@ export const RegisterPage: React.FC<RegisterPageProps> = (props) => {
             .getInstance()
             .get<any>(url)
             .then((res: AxiosResponse<UserVM>) => {
-                console.log('invitation', res.data);
-
                 dispatch(AuthSlice.setInvitingUser({ user: res.data }));
             })
             .catch((err: AxiosError<any>) => {
@@ -180,11 +188,7 @@ export const RegisterPage: React.FC<RegisterPageProps> = (props) => {
                                     value={form.id}
                                     hidden
                                     readOnly
-                                    {...register('id', {
-                                        required: `${t(
-                                            kws.ErrorMessage.IsRequired
-                                        )}`,
-                                    })}
+                                    {...register('id')}
                                 />
                                 <input
                                     type="text"
@@ -192,11 +196,7 @@ export const RegisterPage: React.FC<RegisterPageProps> = (props) => {
                                     value={form.account_id}
                                     hidden
                                     readOnly
-                                    {...register('account_id', {
-                                        required: `${t(
-                                            kws.ErrorMessage.IsRequired
-                                        )}`,
-                                    })}
+                                    {...register('account_id')}
                                 />
 
                                 <TextField
@@ -208,11 +208,12 @@ export const RegisterPage: React.FC<RegisterPageProps> = (props) => {
                                     margin="normal"
                                     required
                                     fullWidth
-                                    autoFocus
+                                    //autoFocus
                                     autoComplete="username"
                                     size="small"
                                     onChange={handleInputChange}
                                     //value={form.username}
+                                    defaultValue={form.username}
                                     {...register('username', {
                                         required: `${t(
                                             kws.ErrorMessage.IsRequired
@@ -312,7 +313,7 @@ export const RegisterPage: React.FC<RegisterPageProps> = (props) => {
                                     label={t(kws.LoginPage.EmailAddress)}
                                     variant="outlined"
                                     margin="normal"
-                                    //required
+                                    required
                                     fullWidth
                                     size="small"
                                     autoComplete="email"
@@ -325,9 +326,7 @@ export const RegisterPage: React.FC<RegisterPageProps> = (props) => {
                                     // })}
                                     defaultValue={form.email}
                                     {...register('email', {
-                                        required: `${t(
-                                            kws.ErrorMessage.IsRequired
-                                        )}`,
+
                                         pattern: {
                                             value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
                                             message: `${t(
@@ -359,7 +358,7 @@ export const RegisterPage: React.FC<RegisterPageProps> = (props) => {
                                     // inputRef={register({
                                     //   required: `${t(kws.ErrorMessage.IsRequired)}`,
                                     // })}
-                                    value={form.address}
+                                    //value={form.address}
                                     {...register('address', {
                                         required: `${t(
                                             kws.ErrorMessage.IsRequired
@@ -385,7 +384,7 @@ export const RegisterPage: React.FC<RegisterPageProps> = (props) => {
                                     // inputRef={register({
                                     //   required: `${t(kws.ErrorMessage.IsRequired)}`,
                                     // })}
-                                    value={form.tel}
+                                    //value={form.tel}
                                     {...register('tel', {
                                         required: `${t(
                                             kws.ErrorMessage.IsRequired
@@ -401,7 +400,7 @@ export const RegisterPage: React.FC<RegisterPageProps> = (props) => {
                                     variant="contained"
                                     color="primary"
                                     fullWidth
-                                    disabled={handleSubmitLock(errors)}
+                                //disabled={handleSubmitLock(errors)}
                                 >
                                     {t(kws.RegisterPage.Register)}
                                 </Button>

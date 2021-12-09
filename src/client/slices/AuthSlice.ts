@@ -60,7 +60,7 @@ export const AuthSlice = createSlice<
             return produce(state, (draft) => {
                 const user = action.payload.user;
                 draft.register.form.id = user.id;
-                draft.register.form.account_id = user.account_id;
+                draft.register.form.account_id = user.accountId;
                 draft.register.form.email = user.email;
                 // IF already have an account
                 // draft.register.form.username = user.username;

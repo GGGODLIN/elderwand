@@ -8,7 +8,7 @@ const AuthWhitelist: RegExp[] = [
     /^\/register/,
     /^\/api\/login/,
     /^\/api\/logout/,
-    /^\/api\/invite\/user/,
+    /^\/api\/invitation\/user/,
     /^\/api\/register/,
 
     // hardware
