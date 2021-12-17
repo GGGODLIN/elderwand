@@ -70,6 +70,73 @@ export default class ProjectMaintainController {
                 throw err;
             });
     };
+
+    static createProject = async (ctx) => {
+        const repository = new ProjectRepository({
+            host: ServerEnvVar.SkymapApiHost,
+            platformId: Platform.ElderWand,
+        });
+
+        const body = {
+            ...ctx.request.body,
+        };
+
+        await new ProjectMaintainUCO(repository)
+            .createProject(body)
+            .then((res: ProjectDTO) => {
+                const vm = convertToProjectVM(res);
+
+                ctx.status = 200;
+                ctx.body = vm;
+
+                return;
+            })
+            .catch((err) => {
+                if (err.isAxiosError) {
+                    ctx.status = err.response.status;
+                    ctx.body = err.response.data;
+                    return;
+                }
+                throw err;
+            });
+    };
+
+    static updateProject = async (ctx) => {
+        const repository = new ProjectRepository({
+            host: ServerEnvVar.SkymapApiHost,
+            platformId: Platform.ElderWand,
+        });
+
+        const params: {
+            pid: string;
+        } = {
+            pid: '',
+            ...ctx.params,
+        };
+
+        const body = {
+            ...ctx.request.body,
+        };
+
+        await new ProjectMaintainUCO(repository)
+            .updateProject(params.pid, body)
+            .then((res: ProjectDTO) => {
+                const vm = convertToProjectVM(res);
+
+                ctx.status = 200;
+                ctx.body = vm;
+
+                return;
+            })
+            .catch((err) => {
+                if (err.isAxiosError) {
+                    ctx.status = err.response.status;
+                    ctx.body = err.response.data;
+                    return;
+                }
+                throw err;
+            });
+    };
 }
 
 function convertToProjectVMs(dtos: ProjectDTO[]): ProjectVM[] {

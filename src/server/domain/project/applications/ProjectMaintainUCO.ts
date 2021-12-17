@@ -16,4 +16,12 @@ export class ProjectMaintainUCO {
     getProject(id: string): Promise<ProjectDTO> {
         return this.repository.getProject(id);
     }
+
+    createProject(options): Promise<ProjectDTO> {
+        return this.repository.createProject(options);
+    }
+
+    updateProject(id, options): Promise<ProjectDTO> {
+        return this.repository.updateProject(id, options);
+    }
 }

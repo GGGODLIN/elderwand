@@ -23,12 +23,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ClientEnvVar } from 'src/client/configs/ClientEnvVar';
 import { CloudCodeEnum } from 'src/client/configs/Enum';
 import kws from 'src/client/configs/Keywords';
-import { UserVM } from 'src/client/domain/user/UserVM';
 import { RootState } from 'src/client/reducer';
 import FetchSlice from 'src/client/slices/FetchSlice';
 import ProjectSlice from 'src/client/slices/ProjectSlice';
-import { AxiosUtil } from 'src/client/utils/AxiosUtil';
 import TimeUtil from 'src/client/utils/TimeUtil';
+import AxiosFactory from 'src/client/helper/AxiosFactory';
 
 export const CreateProjectFAB: React.FC<any> = () => {
     const dispatch = useDispatch();
@@ -110,40 +109,71 @@ export const CreateProjectDialog: React.FC<{}> = () => {
         (state: RootState) => state.project.create_dialog
     );
 
+    const { user } = useSelector((state: RootState) => state.user);
+
     const classname = clsx([name]);
 
     const onSubmit = (form: CreateProjectForm) => {
-        const origin = AxiosUtil.getOriginWithPort();
-        const client = AxiosUtil.makeAxiosInstance(dispatch, origin);
+
 
         const body = {
             name: form.name,
-            cloud_code_id: parseInt(form.cloud_code_id),
-            expire_date: TimeUtil.parse(form.expire_date, TimeFormat).valueOf(),
+            cloudCodeId: parseInt(form.cloud_code_id),
+            expireDate: new Date(form.expire_date).toISOString().slice(0, new Date(form.expire_date).toISOString().length - 1),
+            owerId: user?.id
         };
+        console.log('CreateProjectForm', form, body)
 
-        // console.log(body);
+        const url = `/api/projects`;
 
-        client
-            .post<{ user: UserVM; token: string }>('/api/projects', body)
-            .then((res: AxiosResponse<any>) => {
+        new AxiosFactory()
+            .useBearerToken()
+            .useBefore(() => {
+                dispatch(FetchSlice.start());
+            })
+            .getInstance()
+            .post<any>(url, body)
+            .then((res) => {
                 dispatch(ProjectSlice.showCreateDialog(false));
                 dispatch(ProjectSlice.refresh());
             })
-            .catch((err: AxiosError<any>) => {
-                console.log(err.message);
-                if (err.isAxiosError) {
-                    console.log(err.response.data);
-                }
-                AxiosUtil.redirectUnAuthorization(err);
-                dispatch(FetchSlice.fail({ error: err.message }));
+            .catch((err) => {
+                console.log(err);
             })
             .finally(() => {
                 dispatch(FetchSlice.end());
             });
+        // const origin = AxiosUtil.getOriginWithPort();
+        // const client = AxiosUtil.makeAxiosInstance(dispatch, origin);
+
+        // const body = {
+        //     name: form.name,
+        //     cloud_code_id: parseInt(form.cloud_code_id),
+        //     expire_date: TimeUtil.parse(form.expire_date, TimeFormat).valueOf(),
+        // };
+
+        // // console.log(body);
+
+        // client
+        //     .post<{ user: UserVM; token: string }>('/api/projects', body)
+        //     .then((res: AxiosResponse<any>) => {
+        //         dispatch(ProjectSlice.showCreateDialog(false));
+        //         dispatch(ProjectSlice.refresh());
+        //     })
+        //     .catch((err: AxiosError<any>) => {
+        //         console.log(err.message);
+        //         if (err.isAxiosError) {
+        //             console.log(err.response.data);
+        //         }
+        //         AxiosUtil.redirectUnAuthorization(err);
+        //         dispatch(FetchSlice.fail({ error: err.message }));
+        //     })
+        //     .finally(() => {
+        //         dispatch(FetchSlice.end());
+        //     });
     };
 
-    const { register, handleSubmit, errors } = useForm<CreateProjectForm>({
+    const { register, handleSubmit, formState: { errors }, } = useForm<CreateProjectForm>({
         mode: 'onChange',
     });
 
@@ -196,7 +226,7 @@ export const CreateProjectDialog: React.FC<{}> = () => {
                                 size="medium"
                                 defaultValue={default_name}
                                 autoFocus={true}
-                                inputRef={register({
+                                {...register('name', {
                                     required: `${t(
                                         kws.ErrorMessage.IsRequired
                                     )}`,
@@ -221,7 +251,7 @@ export const CreateProjectDialog: React.FC<{}> = () => {
                                     defaultValue={''}
                                     onChange={handleChangeCloudCodeSelect}
                                     required
-                                    inputRef={register({
+                                    {...register('cloud_code_id', {
                                         required: `${t(
                                             kws.ErrorMessage.IsRequired
                                         )}`,
@@ -247,7 +277,7 @@ export const CreateProjectDialog: React.FC<{}> = () => {
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
-                                inputRef={register({
+                                {...register('expire_date', {
                                     required: `${t(
                                         kws.ErrorMessage.IsRequired
                                     )}`,

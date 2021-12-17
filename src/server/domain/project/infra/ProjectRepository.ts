@@ -72,4 +72,54 @@ export default class ProjectRepository {
                 throw err;
             });
     }
+
+    async createProject(options) {
+        const baseURL = this.origin;
+        const pathname = `/api/projects`;
+        const body = {
+            ...options,
+            platformId: this.platformId
+        };
+
+        const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
+
+        return await axios
+            .post<ProjectDTO>(pathname, body)
+            .then((res) => {
+                const dto: ProjectDTO = res.data;
+
+                return dto;
+            })
+            .catch((err: AxiosError<ErrorInfoDTO>) => {
+                if (err.isAxiosError) {
+                    // console.log('isAxiosError from repository');
+                }
+                throw err;
+            });
+    }
+
+    async updateProject(id, options) {
+        const baseURL = this.origin;
+        const pathname = `/api/projects/${id}`;
+        const body = {
+            ...options,
+        };
+
+        const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
+
+        return await axios
+            .patch<ProjectDTO>(pathname, body)
+            .then((res) => {
+                const dto: ProjectDTO = res.data;
+
+                return dto;
+            })
+            .catch((err: AxiosError<ErrorInfoDTO>) => {
+                if (err.isAxiosError) {
+                    // console.log('isAxiosError from repository');
+                }
+                console.log('updateProjectErr', err)
+                throw err;
+            });
+    }
 }

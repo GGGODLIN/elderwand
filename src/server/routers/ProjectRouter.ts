@@ -23,6 +23,18 @@ export default class ProjectRouter {
                 method: 'GET',
                 controller: ProjectMaintainController.getProject,
             },
+            createProject: {
+                name: 'create-project',
+                action: '/projects',
+                method: 'POST',
+                controller: ProjectMaintainController.createProject,
+            },
+            updateProject: {
+                name: 'update-project',
+                action: '/projects/:pid',
+                method: 'PUT',
+                controller: ProjectMaintainController.updateProject,
+            },
         };
 
         return KoaRouterFactory.create('/api', options);

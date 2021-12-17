@@ -18,7 +18,7 @@ interface CreateProjectFrom {
     // code?: string;
 }
 
-interface AssignUserFrom {}
+interface AssignUserFrom { }
 
 export interface ProjectState {
     page_result?: PaginationVM<ProjectVM>;
@@ -26,6 +26,11 @@ export interface ProjectState {
     create_dialog: {
         show: boolean;
         form: CreateProjectFrom;
+    };
+    edit_dialog: {
+        show: boolean;
+        form: CreateProjectFrom;
+        project: any;
     };
     assign_user_dialog: {
         show: boolean;
@@ -48,6 +53,11 @@ const getInitialState = (): ProjectState => {
         create_dialog: {
             show: false,
             form: {},
+        },
+        edit_dialog: {
+            show: false,
+            form: {},
+            project: {}
         },
         assign_user_dialog: {
             show: false,
@@ -89,6 +99,19 @@ const ProjectSlice = createSlice<
         showCreateDialog: (state, action: PayloadAction<boolean>) => {
             return produce(state, (draft) => {
                 draft.create_dialog.show = action.payload;
+            });
+        },
+        showEditDialog: (state, action: PayloadAction<boolean>) => {
+            return produce(state, (draft) => {
+                draft.edit_dialog.show = action.payload;
+            });
+        },
+        assignEditProject: (
+            state,
+            action
+        ) => {
+            return produce(state, (draft) => {
+                draft.edit_dialog.project = action.payload;
             });
         },
         changeCreateProjectForm: (
@@ -187,19 +210,25 @@ const deselectAllRows = ProjectSlice.actions
 
 const setRangeStart = ProjectSlice.actions
     .setRangeStart as ActionCreatorWithPayload<
-    { key: key; checked: boolean },
-    string
->;
+        { key: key; checked: boolean },
+        string
+    >;
 const setRangeSelect = ProjectSlice.actions
     .setRangeSelect as ActionCreatorWithPayload<key, string>;
 
 const showCreateDialog = ProjectSlice.actions
     .showCreateDialog as ActionCreatorWithPayload<boolean>;
+const showEditDialog = ProjectSlice.actions
+    .showEditDialog as ActionCreatorWithPayload<boolean>;
+const assignEditProject = ProjectSlice.actions
+    .assignEditProject as ActionCreatorWithPayload<{
+        project: any;
+    }>;
 const changeCreateProjectForm = ProjectSlice.actions
     .changeCreateProjectForm as ActionCreatorWithPayload<{
-    name: string;
-    value: any;
-}>;
+        name: string;
+        value: any;
+    }>;
 
 const showAssignUserDialog = ProjectSlice.actions
     .showAssignUserDialog as ActionCreatorWithPayload<boolean>;
@@ -215,6 +244,8 @@ export default {
     setRangeStart,
     setRangeSelect,
     showCreateDialog,
+    showEditDialog,
+    assignEditProject,
     changeCreateProjectForm,
     showAssignUserDialog,
 };

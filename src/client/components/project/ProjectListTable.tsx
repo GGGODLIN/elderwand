@@ -4,7 +4,7 @@ import BuildIcon from '@material-ui/icons/Build';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import ProjectSlice from 'src/client/slices/ProjectSlice';
 import PublishIcon from '@material-ui/icons/Publish';
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import SettingsIcon from '@material-ui/icons/Settings';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import { DataType, EditingMode, SortingMode } from 'ka-table/enums';
@@ -20,6 +20,7 @@ import {
     Grid,
     IconButton,
 } from '@material-ui/core';
+import { ConfirmDialog } from 'src/client/components/ConfirmDialog';
 
 const SelectionHeader: React.FC<IHeadCellProps> = (props) => {
     const dispatch = props.dispatch;
@@ -79,6 +80,15 @@ const ExpireDateCell: React.FC<ICellTextProps> = (props) => {
 };
 
 const ActionCell: React.FC<{}> = (props) => {
+    const [openDeleteProjectDialog, setOpenDeleteProjectDialog] = useState(
+        false
+    );
+
+    const dispatch = useDispatch();
+    const handleOpenEditProjectDialog = () => {
+        dispatch(ProjectSlice.assignEditProject(props?.rowData));
+        dispatch(ProjectSlice.showEditDialog(true));
+    };
     return (
         <Grid className={'row-actions'} container justify="flex-end">
             <Grid item>
@@ -124,7 +134,7 @@ const ActionCell: React.FC<{}> = (props) => {
             <Grid item>
                 <IconButton
                     onClick={() => {
-                        console.log('click');
+                        handleOpenEditProjectDialog();
                     }}
                 >
                     <SettingsIcon />
@@ -134,10 +144,14 @@ const ActionCell: React.FC<{}> = (props) => {
             <Grid item>
                 <IconButton
                     onClick={() => {
-                        console.log('click');
+                        setOpenDeleteProjectDialog(true)
                     }}
                 >
                     <DeleteForeverIcon />
+                    <ConfirmDialog open={openDeleteProjectDialog} title={'Delete Project'} content={'Delete Project?'} cancelText={'Cancel2'} confirmText={'cofirm2'} handleCancel={() => { setOpenDeleteProjectDialog(false) }} handleConfirm={() => {
+                        console.log('handleConfirm')
+                        setOpenDeleteProjectDialog(false)
+                    }} />
                 </IconButton>
             </Grid>
 
@@ -156,12 +170,11 @@ const ActionCell: React.FC<{}> = (props) => {
 
 const GroupCountCell: React.FC<ICellTextProps> = (props) => {
     const data: ProjectVM = props.rowData;
-    return <div>{data.groups.length}</div>;
+    return <div>{data.groups?.length}</div>;
 };
 
 const UserCountCell: React.FC<ICellTextProps> = (props) => {
     const data: ProjectVM = props.rowData;
-
     const count = data.groups
         .map((group) => {
             return group.users.length;
@@ -185,13 +198,13 @@ export const ProjectListTable: React.FC<ProjectListTableProps> = (props) => {
             { key: 'name', title: 'Name', dataType: DataType.String },
             { key: 'code', title: 'Project Code', dataType: DataType.String },
             {
-                key: 'cloud_code_name',
+                key: 'cloudCode.name',
                 title: 'Cloud Code',
                 dataType: DataType.String,
             },
-            { key: 'group_count', title: 'Group' },
-            { key: 'user_count', title: 'User' },
-            { key: 'status_code', title: 'Status', dataType: DataType.String },
+            // { key: 'group_count', title: 'Group' },
+            // { key: 'user_count', title: 'User' },
+            { key: 'status.name', title: 'Status', dataType: DataType.String },
             { key: 'updated_at', title: 'Time' },
             { key: 'expire_date', title: 'Expire' },
             { key: 'action-cell' },
@@ -227,13 +240,13 @@ export const ProjectListTable: React.FC<ProjectListTableProps> = (props) => {
                                         return <ActionCell {...props} />;
                                     }
 
-                                    if (props.column.key === 'group_count') {
-                                        return <GroupCountCell {...props} />;
-                                    }
+                                    // if (props.column.key === 'group_count') {
+                                    //     return <GroupCountCell {...props} />;
+                                    // }
 
-                                    if (props.column.key === 'user_count') {
-                                        return <UserCountCell {...props} />;
-                                    }
+                                    // if (props.column.key === 'user_count') {
+                                    //     return <UserCountCell {...props} />;
+                                    // }
 
                                     if (props.column.key === 'updated_at') {
                                         return <UpdatedTimeCell {...props} />;

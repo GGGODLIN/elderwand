@@ -3,13 +3,18 @@ import AppsIcon from '@material-ui/icons/Apps';
 import ListAltIcon from '@material-ui/icons/ListAlt';
 import { AxiosInstance } from 'axios';
 import clsx from 'clsx';
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState, Dispatch } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AssignUserToProjectGroupFAB } from 'src/client/components/project/AssignUserToProjectGroupFAB';
 import { CreateProjectFAB } from 'src/client/components/project/CreateProjectFAB';
+import { EditProjectDialog } from 'src/client/components/project/EditProjectDialog';
 import { ProjectCardGrid } from 'src/client/components/project/ProjectCardGrid';
 import { ProjectListTable } from 'src/client/components/project/ProjectListTable';
 import { RootState } from 'src/client/reducer';
+import AxiosFactory from 'src/client/helper/AxiosFactory';
+import FetchSlice from 'src/client/slices/FetchSlice';
+import ProjectSlice from 'src/client/slices/ProjectSlice';
+import UserSlice from '../../slices/UserSlice';
 
 export interface ProjectMaintainPageProps {
     title: string;
@@ -110,6 +115,58 @@ export const ProjectMaintainPage: React.FC<ProjectMaintainPageProps> = () => {
     // const client = AxiosUtil.makeAxiosInstance(dispatch, origin);
     // fetchProjectOnInitial(client, refresh);
 
+    const fetchProjects = (dispatch: Dispatch<any>) => {
+        const url = `/api/projects`;
+        const params = {};
+
+        new AxiosFactory()
+            .useBearerToken()
+            .useBefore(() => {
+                dispatch(FetchSlice.start());
+            })
+            .getInstance()
+            .get<any>(url, { params: params })
+            .then((res) => {
+                console.log('fetchProjects', res)
+                dispatch(ProjectSlice.fetch(res.data));
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+            .finally(() => {
+                dispatch(FetchSlice.end());
+            });
+    };
+
+    useEffect(() => {
+        if (refresh) {
+            fetchProjects(dispatch);
+        }
+
+        return () => { };
+    }, [refresh]);
+    useEffect(() => {
+        new AxiosFactory()
+            .useBearerToken()
+            .useBefore(() => {
+                dispatch(FetchSlice.start());
+            })
+            .getInstance()
+            .get('/api/user/me')
+            .then((res) => {
+                if (res.status == 200) {
+                    dispatch(UserSlice.initial(res.data));
+                    return;
+                }
+            })
+            .catch((err: AxiosError) => {
+                console.log(err.response.status);
+                console.log(err.message);
+            })
+            .finally(() => {
+                dispatch(FetchSlice.end());
+            });
+    }, []);
     return (
         <React.Fragment>
             <div className={classname}>
@@ -129,6 +186,7 @@ export const ProjectMaintainPage: React.FC<ProjectMaintainPageProps> = () => {
                 </TabPanel>
                 <div className={actions}>
                     <CreateProjectFAB />
+                    <EditProjectDialog />
                     {/* TODO Enable with selected not 0 */}
                     <AssignUserToProjectGroupFAB
                         disable={selected.length <= 0}
