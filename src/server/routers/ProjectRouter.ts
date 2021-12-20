@@ -35,6 +35,12 @@ export default class ProjectRouter {
                 method: 'PUT',
                 controller: ProjectMaintainController.updateProject,
             },
+            removeProject: {
+                name: 'remove-project',
+                action: '/projects/:pid',
+                method: 'DELETE',
+                controller: ProjectMaintainController.removeProject,
+            },
         };
 
         return KoaRouterFactory.create('/api', options);

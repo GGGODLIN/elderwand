@@ -167,6 +167,8 @@ export const ProjectMaintainPage: React.FC<ProjectMaintainPageProps> = () => {
                 dispatch(FetchSlice.end());
             });
     }, []);
+
+    let projectsWithoutRemoved = projects?.filter?.((project) => { return project?.status?.id != 5 })
     return (
         <React.Fragment>
             <div className={classname}>
@@ -179,10 +181,10 @@ export const ProjectMaintainPage: React.FC<ProjectMaintainPageProps> = () => {
                     <Tab icon={<ListAltIcon />} aria-label="table" />
                 </Tabs>
                 <TabPanel value={tab_index} index={0}>
-                    <ProjectCardGrid projects={projects} />
+                    <ProjectCardGrid projects={projectsWithoutRemoved} />
                 </TabPanel>
                 <TabPanel value={tab_index} index={1}>
-                    <ProjectListTable projects={projects} selected={selected} />
+                    <ProjectListTable projects={projectsWithoutRemoved} selected={selected} />
                 </TabPanel>
                 <div className={actions}>
                     <CreateProjectFAB />

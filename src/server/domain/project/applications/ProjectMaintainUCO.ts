@@ -24,4 +24,8 @@ export class ProjectMaintainUCO {
     updateProject(id, options): Promise<ProjectDTO> {
         return this.repository.updateProject(id, options);
     }
+
+    removeProject(id: string): Promise<ProjectDTO> {
+        return this.repository.removeProject(id);
+    }
 }

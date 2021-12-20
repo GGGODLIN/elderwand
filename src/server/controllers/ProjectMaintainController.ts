@@ -137,6 +137,39 @@ export default class ProjectMaintainController {
                 throw err;
             });
     };
+
+    static removeProject = async (ctx) => {
+        const repository = new ProjectRepository({
+            host: ServerEnvVar.SkymapApiHost,
+            platformId: Platform.ElderWand,
+        });
+
+        const params: {
+            pid: string;
+        } = {
+            pid: '',
+            ...ctx.params,
+        };
+
+        await new ProjectMaintainUCO(repository)
+            .removeProject(params.pid)
+            .then((res: ProjectDTO) => {
+                const vm = convertToProjectVM(res);
+
+                ctx.status = 200;
+                ctx.body = vm;
+
+                return;
+            })
+            .catch((err) => {
+                if (err.isAxiosError) {
+                    ctx.status = err.response.status;
+                    ctx.body = err.response.data;
+                    return;
+                }
+                throw err;
+            });
+    };
 }
 
 function convertToProjectVMs(dtos: ProjectDTO[]): ProjectVM[] {

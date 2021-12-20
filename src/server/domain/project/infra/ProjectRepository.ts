@@ -122,4 +122,26 @@ export default class ProjectRepository {
                 throw err;
             });
     }
+
+    async removeProject(code: string) {
+        const baseURL = this.origin;
+        const pathname = `/api/projects/${code}`;
+        const params = { pid: this.platformId };
+
+        const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
+
+        return await axios
+            .delete<ProjectDTO>(pathname)
+            .then((res) => {
+                const dto: ProjectDTO = res.data;
+
+                return dto;
+            })
+            .catch((err: AxiosError<ErrorInfoDTO>) => {
+                if (err.isAxiosError) {
+                    // console.log('isAxiosError from repository');
+                }
+                throw err;
+            });
+    }
 }

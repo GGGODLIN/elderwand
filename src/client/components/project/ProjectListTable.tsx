@@ -21,6 +21,8 @@ import {
     IconButton,
 } from '@material-ui/core';
 import { ConfirmDialog } from 'src/client/components/ConfirmDialog';
+import AxiosFactory from 'src/client/helper/AxiosFactory';
+import FetchSlice from 'src/client/slices/FetchSlice';
 
 const SelectionHeader: React.FC<IHeadCellProps> = (props) => {
     const dispatch = props.dispatch;
@@ -89,6 +91,27 @@ const ActionCell: React.FC<{}> = (props) => {
         dispatch(ProjectSlice.assignEditProject(props?.rowData));
         dispatch(ProjectSlice.showEditDialog(true));
     };
+
+    const handleDeleteProject = () => {
+        const url = `/api/projects/${props?.rowData?.id}`;
+
+        new AxiosFactory()
+            .useBearerToken()
+            .useBefore(() => {
+                dispatch(FetchSlice.start());
+            })
+            .getInstance()
+            .delete<any>(url)
+            .then((res) => {
+                dispatch(ProjectSlice.refresh());
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+            .finally(() => {
+                dispatch(FetchSlice.end());
+            });
+    }
     return (
         <Grid className={'row-actions'} container justify="flex-end">
             <Grid item>
@@ -144,12 +167,12 @@ const ActionCell: React.FC<{}> = (props) => {
             <Grid item>
                 <IconButton
                     onClick={() => {
-                        setOpenDeleteProjectDialog(true)
+                        setOpenDeleteProjectDialog(!openDeleteProjectDialog)
                     }}
                 >
                     <DeleteForeverIcon />
-                    <ConfirmDialog open={openDeleteProjectDialog} title={'Delete Project'} content={'Delete Project?'} cancelText={'Cancel2'} confirmText={'cofirm2'} handleCancel={() => { setOpenDeleteProjectDialog(false) }} handleConfirm={() => {
-                        console.log('handleConfirm')
+                    <ConfirmDialog open={openDeleteProjectDialog} title={'Delete Project'} content={`Delete Project ${props?.rowData?.name} ?`} cancelText={'Cancel'} confirmText={'Confirm'} handleCancel={() => { setOpenDeleteProjectDialog(false) }} handleConfirm={() => {
+                        handleDeleteProject()
                         setOpenDeleteProjectDialog(false)
                     }} />
                 </IconButton>

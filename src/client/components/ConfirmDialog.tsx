@@ -11,9 +11,9 @@ import DeviceSlice from 'src/client/slices/DeviceSlice';
 
 export const ConfirmDialog = (props) => {
 
-    if (!props.open) {
-        return null;
-    }
+    // if (!props.open) {
+    //     return null;
+    // }
 
 
 
