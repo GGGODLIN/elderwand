@@ -16,7 +16,7 @@ import {
 import AddIcon from '@material-ui/icons/Add';
 import { AxiosError, AxiosResponse } from 'axios';
 import clsx from 'clsx';
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -28,6 +28,7 @@ import FetchSlice from 'src/client/slices/FetchSlice';
 import ProjectSlice from 'src/client/slices/ProjectSlice';
 import TimeUtil from 'src/client/utils/TimeUtil';
 import AxiosFactory from 'src/client/helper/AxiosFactory';
+import { AssetsContext } from 'src/client/context/AssetsContext';
 
 export const CreateProjectFAB: React.FC<any> = () => {
     const dispatch = useDispatch();
@@ -66,18 +67,18 @@ interface SelectOption {
     disabled?: boolean;
 }
 
-const options: SelectOption[] = [
-    { name: 'Select...', value: '', display: false },
-    { name: 'Black Hole', value: CloudCodeEnum.BlackHole },
-    { name: 'AliLiving', value: CloudCodeEnum.AliLiving },
-    { name: 'Tencent', value: CloudCodeEnum.Tencent },
-    { name: 'Huawai', value: CloudCodeEnum.Huawai },
-    { name: 'AWS', value: CloudCodeEnum.AWS },
-    { name: 'Azure', value: CloudCodeEnum.Azure },
-    { name: 'GoogleCloud', value: CloudCodeEnum.GoogleCloud },
-    { name: 'Jinmao', value: CloudCodeEnum.Jinmao },
-    // TODO from server
-];
+// const options: SelectOption[] = [
+//     { name: 'Select...', value: '', display: false },
+//     { name: 'Black Hole', value: CloudCodeEnum.BlackHole },
+//     { name: 'AliLiving', value: CloudCodeEnum.AliLiving },
+//     { name: 'Tencent', value: CloudCodeEnum.Tencent },
+//     { name: 'Huawai', value: CloudCodeEnum.Huawai },
+//     { name: 'AWS', value: CloudCodeEnum.AWS },
+//     { name: 'Azure', value: CloudCodeEnum.Azure },
+//     { name: 'GoogleCloud', value: CloudCodeEnum.GoogleCloud },
+//     { name: 'Jinmao', value: CloudCodeEnum.Jinmao },
+//     // TODO from server
+// ];
 
 const SelectOptions: React.FC<{ options: SelectOption[] }> = (props) => {
     const items = props.options.map((item, idx) => {
@@ -112,6 +113,13 @@ export const CreateProjectDialog: React.FC<{}> = () => {
     const { user } = useSelector((state: RootState) => state.user);
 
     const classname = clsx([name]);
+
+    const {
+        cloudCodes
+    } = useContext(AssetsContext)
+
+
+    const options: SelectOption[] = cloudCodes?.map?.((item) => { return { name: item?.name, value: item?.id } });
 
     const onSubmit = (form: CreateProjectForm) => {
 

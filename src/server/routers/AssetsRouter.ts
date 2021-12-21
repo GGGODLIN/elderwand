@@ -8,11 +8,17 @@ export default class AssetsRouter {
         const options: KoaRouterFactoryOptions = {
             listIcons: {
                 name: 'list-icons',
-                action: '/icons',
+                action: '/assets/icons',
                 method: 'GET',
                 controller: AssetsMaintainController.listIcons,
             },
+            getCloudCodes: {
+                name: 'get-cloud-codes',
+                action: '/clouds',
+                method: 'GET',
+                controller: AssetsMaintainController.getCloudCodes,
+            },
         };
-        return KoaRouterFactory.create('/api/assets', options);
+        return KoaRouterFactory.create('/api', options);
     }
 }

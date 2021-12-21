@@ -5,6 +5,7 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { ClientEnvVar, DevEnvVar } from 'src/client/configs/ClientEnvVar';
 import RootStore from 'src/client/store';
+import { AssetsProvider } from 'src/client/context/AssetsContext';
 import 'src/client/style.scss';
 import 'src/client/utils/i18n';
 
@@ -39,23 +40,25 @@ function MyApp({ Component, pageProps }: AppProps) {
     return (
         <Provider store={store}>
             <ThemeProvider theme={theme}>
-                <Head>
-                    <title>{title}</title>
-                    <meta charSet="UTF-8" />
-                    <meta name="keywords" content="NextJS, KoaJS" />
-                    <meta name="author" content="Rex" />
-                    <meta
-                        name="viewport"
-                        content="minimum-scale=1, initial-scale=1, width=device-width"
-                    />
-                    <link
-                        rel="stylesheet"
-                        href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
-                    />
-                </Head>
-                <NoSsr>
-                    <Component {...pageProps} />
-                </NoSsr>
+                <AssetsProvider >
+                    <Head>
+                        <title>{title}</title>
+                        <meta charSet="UTF-8" />
+                        <meta name="keywords" content="NextJS, KoaJS" />
+                        <meta name="author" content="Rex" />
+                        <meta
+                            name="viewport"
+                            content="minimum-scale=1, initial-scale=1, width=device-width"
+                        />
+                        <link
+                            rel="stylesheet"
+                            href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+                        />
+                    </Head>
+                    <NoSsr>
+                        <Component {...pageProps} />
+                    </NoSsr>
+                </AssetsProvider>
             </ThemeProvider>
         </Provider>
     );

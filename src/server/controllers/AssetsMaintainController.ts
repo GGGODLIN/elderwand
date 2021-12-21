@@ -42,6 +42,31 @@ export default class AssetsMaintainController {
                 throw err;
             });
     };
+
+    static getCloudCodes = async (ctx: IRouterContext & RequestBody) => {
+        const repository = new AssetsRepository({
+            host: ServerEnvVar.SkymapApiHost,
+            platformId: Platform.ElderWand,
+        });
+
+        await new AssetsMaintainUCO(repository)
+            .getCloudCodes()
+            .then((res) => {
+
+                ctx.status = 200;
+                ctx.body = { ...res };
+
+                return;
+            })
+            .catch((err) => {
+                if (err.isAxiosError) {
+                    ctx.status = err.response.status;
+                    ctx.body = err.response.data;
+                    return;
+                }
+                throw err;
+            });
+    };
 }
 
 function convertToIconVMs(dtos: IconDTO[]): IconVM[] {

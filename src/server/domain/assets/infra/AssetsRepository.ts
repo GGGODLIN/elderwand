@@ -54,4 +54,35 @@ export default class AssetsRepository {
                 throw err;
             });
     }
+
+    async getCloudCodes() {
+        const baseURL = this.origin;
+        const pathname = '/api/clouds';
+
+        const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
+
+        return await axios
+            .get(pathname)
+            .then((res) => {
+                let result = {
+                    offset: 0,
+                    limit: 0,
+                    total: 0,
+                    results: [],
+                };
+
+                if (res.data) {
+                    result.total = res.data.length;
+                    result.results = res.data;
+                }
+
+                return result;
+            })
+            .catch((err: AxiosError<ErrorInfoDTO>) => {
+                if (err.isAxiosError) {
+                    // console.log('isAxiosError from repository');
+                }
+                throw err;
+            });
+    }
 }

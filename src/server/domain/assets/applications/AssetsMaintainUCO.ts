@@ -14,4 +14,8 @@ export default class AssetsMaintainUCO {
     listIcons(): Promise<PaginationDTO<IconDTO>> {
         return this.repository.listIcons();
     }
+
+    getCloudCodes() {
+        return this.repository.getCloudCodes();
+    }
 }
