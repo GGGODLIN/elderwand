@@ -7,12 +7,15 @@ import ProjectDTO from '../domain/project/models/ProjectDTO';
 import { Platform } from '../domain/shared/enums/Enums';
 import PaginationDTO from '../domain/shared/models/PaginationDTO';
 import ProjectVM from '../models/project/ProjectVM';
+import AuthUtil from '../utils/AuthUtil';
 
 export default class ProjectMaintainController {
-    static listProjects = async (ctx: Context) => {
+    static listProjects = async (ctx) => {
+        const token = AuthUtil.getToken(ctx);
         const repository = new ProjectRepository({
             host: ServerEnvVar.SkymapApiHost,
             platformId: Platform.ElderWand,
+            token: token
         });
 
         await new ProjectMaintainUCO(repository)
@@ -39,9 +42,11 @@ export default class ProjectMaintainController {
     };
 
     static getProject = async (ctx) => {
+        const token = AuthUtil.getToken(ctx);
         const repository = new ProjectRepository({
             host: ServerEnvVar.SkymapApiHost,
             platformId: Platform.ElderWand,
+            token: token
         });
 
         const params: {
@@ -72,9 +77,11 @@ export default class ProjectMaintainController {
     };
 
     static createProject = async (ctx) => {
+        const token = AuthUtil.getToken(ctx);
         const repository = new ProjectRepository({
             host: ServerEnvVar.SkymapApiHost,
             platformId: Platform.ElderWand,
+            token: token
         });
 
         const body = {
@@ -102,9 +109,11 @@ export default class ProjectMaintainController {
     };
 
     static updateProject = async (ctx) => {
+        const token = AuthUtil.getToken(ctx);
         const repository = new ProjectRepository({
             host: ServerEnvVar.SkymapApiHost,
             platformId: Platform.ElderWand,
+            token: token
         });
 
         const params: {
@@ -139,9 +148,11 @@ export default class ProjectMaintainController {
     };
 
     static removeProject = async (ctx) => {
+        const token = AuthUtil.getToken(ctx);
         const repository = new ProjectRepository({
             host: ServerEnvVar.SkymapApiHost,
             platformId: Platform.ElderWand,
+            token: token
         });
 
         const params: {

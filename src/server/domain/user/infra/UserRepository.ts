@@ -11,16 +11,19 @@ export interface UserRepositoryCtor {
     host: string;
     platformId: number;
     version?: number;
+    token?: string;
 }
 
 export default class UserRepository {
     constructor(ctor: UserRepositoryCtor) {
         this.origin = ctor.host;
         this.platformId = ctor.platformId;
+        this.token = ctor.token;
     }
 
     private readonly origin: string;
     private readonly platformId: number;
+    private readonly token: string;
 
     async listUsers(): Promise<PaginationDTO<UserDTO>> {
         const baseURL = this.origin;
@@ -30,7 +33,7 @@ export default class UserRepository {
         const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
 
         return await axios
-            .get<UserDTO[]>(pathname, { params: params })
+            .get<UserDTO[]>(pathname, { params: params, headers: { Authorization: `Bearer ${this.token}` } })
             .then((res) => {
                 const result: PaginationDTO<UserDTO> = {
                     offset: 0,
@@ -63,7 +66,7 @@ export default class UserRepository {
         const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
 
         return await axios
-            .get<UserDTO>(pathname, { params: params })
+            .get<UserDTO>(pathname, { params: params, headers: { Authorization: `Bearer ${this.token}` } })
             .then((res) => {
                 const dto: UserDTO = res.data;
 
@@ -87,7 +90,7 @@ export default class UserRepository {
         const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
 
         return await axios
-            .post<UserDTO>(pathname, body, { params: params })
+            .post<UserDTO>(pathname, body, { params: params, headers: { Authorization: `Bearer ${this.token}` } })
             .then((res) => {
                 const dto: UserDTO = res.data;
 
@@ -113,7 +116,7 @@ export default class UserRepository {
         const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
 
         return await axios
-            .patch<UserDTO>(pathname, body)
+            .patch<UserDTO>(pathname, body, { headers: { Authorization: `Bearer ${this.token}` } })
             .then((res) => {
                 const dto: UserDTO = res.data;
                 return dto;
@@ -138,7 +141,7 @@ export default class UserRepository {
         const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
 
         return await axios
-            .patch<UserDTO>(pathname, body)
+            .patch<UserDTO>(pathname, body, { headers: { Authorization: `Bearer ${this.token}` } })
             .then((res) => {
                 const dto: UserDTO = res.data;
                 return dto;
@@ -163,7 +166,7 @@ export default class UserRepository {
         const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
 
         return await axios
-            .post(pathname, body)
+            .post(pathname, body, { headers: { Authorization: `Bearer ${this.token}` } })
             .then((res) => {
                 const dto = res.data;
                 return dto;
@@ -183,15 +186,43 @@ export default class UserRepository {
 
 
         const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
+        const loginData = await this.login('elderwand_admin', 'password')
 
         return await axios
-            .get(pathname)
+            .get(pathname, { headers: { Authorization: `Bearer ${loginData?.token}` } })
             .then((res) => {
                 const dto = res.data;
                 return dto;
             })
             .catch((err: AxiosError<ErrorInfoDTO>) => {
                 console.log('verifyInvitationTokenErr', err)
+                if (err.isAxiosError) {
+                    // console.log('isAxiosError from repository');
+                }
+                throw err;
+            });
+    }
+
+    async login(username: string, password: string): Promise<UserDTO> {
+        const baseURL = this.origin;
+        const pathname = `/api/login`;
+        const params = { pid: this.platformId };
+
+        const body = {
+            username: username,
+            password: password,
+            platformId: this.platformId,
+        };
+
+        const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
+
+        return await axios
+            .post<UserDTO>(pathname, body, { params: params })
+            .then((res) => {
+                const dto: UserDTO = res.data;
+                return dto;
+            })
+            .catch((err: AxiosError<ErrorInfoDTO>) => {
                 if (err.isAxiosError) {
                     // console.log('isAxiosError from repository');
                 }

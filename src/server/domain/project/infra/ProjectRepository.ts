@@ -8,16 +8,19 @@ export interface ProjectRepositoryCtor {
     host: string;
     platformId: number;
     version?: number;
+    token?: string;
 }
 
 export default class ProjectRepository {
     constructor(ctor: ProjectRepositoryCtor) {
         this.origin = ctor.host;
         this.platformId = ctor.platformId;
+        this.token = ctor.token;
     }
 
     private readonly origin: string;
     private readonly platformId: number;
+    private readonly token: string;
 
     async listProjects(): Promise<PaginationDTO<ProjectDTO>> {
         const baseURL = this.origin;
@@ -27,7 +30,7 @@ export default class ProjectRepository {
         const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
 
         return await axios
-            .get<ProjectDTO[]>(pathname, { params: params })
+            .get<ProjectDTO[]>(pathname, { params: params, headers: { Authorization: `Bearer ${this.token}` } })
             .then((res) => {
                 const result: PaginationDTO<ProjectDTO> = {
                     offset: 0,
@@ -59,7 +62,7 @@ export default class ProjectRepository {
         const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
 
         return await axios
-            .get<ProjectDTO>(pathname, { params: params })
+            .get<ProjectDTO>(pathname, { params: params, headers: { Authorization: `Bearer ${this.token}` } })
             .then((res) => {
                 const dto: ProjectDTO = res.data;
 
@@ -84,7 +87,7 @@ export default class ProjectRepository {
         const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
 
         return await axios
-            .post<ProjectDTO>(pathname, body)
+            .post<ProjectDTO>(pathname, body, { headers: { Authorization: `Bearer ${this.token}` } })
             .then((res) => {
                 const dto: ProjectDTO = res.data;
 
@@ -108,7 +111,7 @@ export default class ProjectRepository {
         const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
 
         return await axios
-            .patch<ProjectDTO>(pathname, body)
+            .patch<ProjectDTO>(pathname, body, { headers: { Authorization: `Bearer ${this.token}` } })
             .then((res) => {
                 const dto: ProjectDTO = res.data;
 
@@ -131,7 +134,7 @@ export default class ProjectRepository {
         const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
 
         return await axios
-            .delete<ProjectDTO>(pathname)
+            .delete<ProjectDTO>(pathname, { headers: { Authorization: `Bearer ${this.token}` } })
             .then((res) => {
                 const dto: ProjectDTO = res.data;
 

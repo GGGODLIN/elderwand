@@ -10,10 +10,12 @@ import UserVM from '../models/user/UserVM';
 import AuthUtil from '../utils/AuthUtil';
 
 export default class UserMaintainController {
-    static listUsers = async (ctx: Context) => {
+    static listUsers = async (ctx) => {
+        const token = AuthUtil.getToken(ctx);
         const repository = new UserRepository({
             host: ServerEnvVar.SkymapApiHost,
             platformId: Platform.ElderWand,
+            token: token
         });
 
         await new UserMaintainUCO(repository)
@@ -40,9 +42,11 @@ export default class UserMaintainController {
     };
 
     static getUser = async (ctx) => {
+        const token = AuthUtil.getToken(ctx);
         const repository = new UserRepository({
             host: ServerEnvVar.SkymapApiHost,
             platformId: Platform.ElderWand,
+            token: token
         });
 
         const params: {
@@ -73,19 +77,21 @@ export default class UserMaintainController {
     };
 
     static getUserWithToken = async (ctx) => {
-        const token = AuthUtil.getToken(ctx);
 
-        const jwt = AuthUtil.decode(token, ServerEnvVar.JwtSecret);
+        const token = AuthUtil.getToken(ctx);
+        //const jwt = AuthUtil.decode(token, ServerEnvVar.JwtSecret);
 
         const repository = new UserRepository({
             host: ServerEnvVar.SkymapApiHost,
             platformId: Platform.ElderWand,
+            token: token
         });
 
         const params: {
             uid: string;
         } = {
-            uid: jwt.data.id,
+            //uid: jwt.data.id,
+            uid: 'b7a820fb-7e08-4929-bc05-082ec9d79115'
         };
 
         await new UserMaintainUCO(repository)
@@ -99,19 +105,23 @@ export default class UserMaintainController {
                 return;
             })
             .catch((err) => {
+                console.log('getUserWithTokenErr', err)
                 if (err.isAxiosError) {
                     ctx.status = err.response.status;
                     ctx.body = err.response.data;
                     return;
                 }
+
                 throw err;
             });
     };
 
     static createUser = async (ctx) => {
+        const token = AuthUtil.getToken(ctx);
         const repository = new UserRepository({
             host: ServerEnvVar.SkymapApiHost,
             platformId: Platform.ElderWand,
+            token: token
         });
         const body = {
             ...ctx.request.body,
@@ -137,9 +147,11 @@ export default class UserMaintainController {
     };
 
     static editUser = async (ctx) => {
+        const token = AuthUtil.getToken(ctx);
         const repository = new UserRepository({
             host: ServerEnvVar.SkymapApiHost,
             platformId: Platform.ElderWand,
+            token: token
         });
 
         const params: {
@@ -174,9 +186,11 @@ export default class UserMaintainController {
     };
 
     static editUserPwd = async (ctx) => {
+        const token = AuthUtil.getToken(ctx);
         const repository = new UserRepository({
             host: ServerEnvVar.SkymapApiHost,
             platformId: Platform.ElderWand,
+            token: token
         });
 
         const body = {
@@ -204,9 +218,11 @@ export default class UserMaintainController {
     };
 
     static inviteUser = async (ctx) => {
+        const token = AuthUtil.getToken(ctx);
         const repository = new UserRepository({
             host: ServerEnvVar.SkymapApiHost,
             platformId: Platform.ElderWand,
+            token: token
         });
 
         const body = {
@@ -234,10 +250,13 @@ export default class UserMaintainController {
     };
 
     static verifyInvitationToken = async (ctx) => {
+        const token = AuthUtil.getToken(ctx);
         const repository = new UserRepository({
             host: ServerEnvVar.SkymapApiHost,
             platformId: Platform.ElderWand,
+            token: token
         });
+        console.log('verifyInvitationToken', token)
 
         const params: {
             token: string;

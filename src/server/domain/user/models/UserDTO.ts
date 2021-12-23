@@ -17,6 +17,7 @@ export default interface UserDTO {
     updatedBy: string;
     createdAt: number;
     UpdatedAt: number;
+    token: string;
 }
 
 interface Account {

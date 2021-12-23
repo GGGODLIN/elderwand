@@ -8,12 +8,15 @@ import PaginationDTO from '../domain/shared/models/PaginationDTO';
 import RequestBody from '../domain/shared/types/RequestBody';
 import { IconVM } from '../models/assets/AssetVM';
 import PaginationVM from '../models/PaginationVM';
+import AuthUtil from '../utils/AuthUtil';
 
 export default class AssetsMaintainController {
-    static listIcons = async (ctx: IRouterContext & RequestBody) => {
+    static listIcons = async (ctx) => {
+        const token = AuthUtil.getToken(ctx);
         const repository = new AssetsRepository({
             host: ServerEnvVar.SkymapApiHost,
             platformId: Platform.ElderWand,
+            token: token
         });
 
         const query = {
@@ -43,10 +46,12 @@ export default class AssetsMaintainController {
             });
     };
 
-    static getCloudCodes = async (ctx: IRouterContext & RequestBody) => {
+    static getCloudCodes = async (ctx) => {
+        const token = AuthUtil.getToken(ctx);
         const repository = new AssetsRepository({
             host: ServerEnvVar.SkymapApiHost,
             platformId: Platform.ElderWand,
+            token: token
         });
 
         await new AssetsMaintainUCO(repository)

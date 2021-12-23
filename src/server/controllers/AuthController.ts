@@ -36,11 +36,13 @@ export default class AuthController {
                     username: user.account.username,
                 };
 
-                const token = AuthUtil.sign(
-                    data,
-                    ServerEnvVar.JwtSecret,
-                    ServerEnvVar.AuthTokenTTL
-                );
+                // const token = AuthUtil.sign(
+                //     data,
+                //     ServerEnvVar.JwtSecret,
+                //     ServerEnvVar.AuthTokenTTL
+                // );
+
+                const token = user?.token
 
                 ctx.response.set(
                     AuthUtil.AuthHeader,

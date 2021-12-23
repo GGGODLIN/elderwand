@@ -8,16 +8,19 @@ export interface AssetsRepositoryCtor {
     host: string;
     platformId: number;
     version?: number;
+    token?: string;
 }
 
 export default class AssetsRepository {
     constructor(ctor: AssetsRepositoryCtor) {
         this.origin = ctor.host;
         this.platformId = ctor.platformId;
+        this.token = ctor.token;
     }
 
     private readonly origin: string;
     private readonly platformId: number;
+    private readonly token: string;
 
     /**
      */
@@ -31,7 +34,7 @@ export default class AssetsRepository {
         const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
 
         return await axios
-            .get<IconDTO[]>(pathname, { params: params })
+            .get<IconDTO[]>(pathname, { params: params, headers: { Authorization: `Bearer ${this.token}` } })
             .then((res) => {
                 let result: PaginationDTO<IconDTO> = {
                     offset: 0,
@@ -62,7 +65,7 @@ export default class AssetsRepository {
         const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
 
         return await axios
-            .get(pathname)
+            .get(pathname, { headers: { Authorization: `Bearer ${this.token}` } })
             .then((res) => {
                 let result = {
                     offset: 0,
