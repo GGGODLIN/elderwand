@@ -58,15 +58,14 @@ export default class UserRepository {
             });
     }
 
-    async getUser(id: string): Promise<UserDTO> {
+    async getUser(): Promise<UserDTO> {
         const baseURL = this.origin;
-        const pathname = `/api/users/${id}`;
-        const params = { platformId: this.platformId };
+        const pathname = `/api/me`;
 
         const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
 
         return await axios
-            .get<UserDTO>(pathname, { params: params, headers: { Authorization: `Bearer ${this.token}` } })
+            .get<UserDTO>(pathname, { headers: { Authorization: `Bearer ${this.token}` } })
             .then((res) => {
                 const dto: UserDTO = res.data;
 

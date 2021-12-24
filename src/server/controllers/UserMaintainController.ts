@@ -57,7 +57,7 @@ export default class UserMaintainController {
         };
 
         await new UserMaintainUCO(repository)
-            .getUser(params.uid)
+            .getUser()
             .then((res: UserDTO) => {
                 const vm = convertToUserVM(res);
 
@@ -87,15 +87,10 @@ export default class UserMaintainController {
             token: token
         });
 
-        const params: {
-            uid: string;
-        } = {
-            //uid: jwt.data.id,
-            uid: 'b7a820fb-7e08-4929-bc05-082ec9d79115'
-        };
+
 
         await new UserMaintainUCO(repository)
-            .getUser(params.uid)
+            .getUser()
             .then((res: UserDTO) => {
                 const vm = convertToUserVM(res);
 

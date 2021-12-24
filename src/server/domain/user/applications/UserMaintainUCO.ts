@@ -16,8 +16,8 @@ export default class UserMaintainUCO {
         return this.repository.listUsers();
     }
 
-    getUser(id: string): Promise<UserDTO> {
-        return this.repository.getUser(id);
+    getUser(): Promise<UserDTO> {
+        return this.repository.getUser();
     }
 
     createUser(options: CreateUserOptions): Promise<UserDTO> {
