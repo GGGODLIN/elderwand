@@ -23,13 +23,16 @@ import FunctionPointTypeVM from '../models/device/FunctionPointTypeVM';
 import DeviceTemplateVM from '../models/migration/DeviceTemplateVM';
 import PaginationVM from '../models/PaginationVM';
 import SpaceVM from '../models/space/SpaceVM';
+import AuthUtil from '../utils/AuthUtil';
 
 export default class DeviceMaintainController {
     // /api/devices?projectId={projectId}
-    static listDevices = async (ctx: IRouterContext) => {
+    static listDevices = async (ctx) => {
+        const token = AuthUtil.getToken(ctx);
         const repository = new DeviceRepository({
             host: ServerEnvVar.SkymapApiHost,
             platformId: Platform.ElderWand,
+            token: token
         });
 
         const query = {
@@ -61,10 +64,12 @@ export default class DeviceMaintainController {
     };
 
     // /api/devices/:id?projectId={projectId}
-    static getDevice = async (ctx: IRouterContext) => {
+    static getDevice = async (ctx) => {
+        const token = AuthUtil.getToken(ctx);
         const repository = new DeviceRepository({
             host: ServerEnvVar.SkymapApiHost,
             platformId: Platform.ElderWand,
+            token: token
         });
 
         const params = {
@@ -98,10 +103,12 @@ export default class DeviceMaintainController {
     };
 
     // /api/device/topology/resource?projectId={projectId}
-    static getDeviceTopologyResource = async (ctx: IRouterContext) => {
+    static getDeviceTopologyResource = async (ctx) => {
+        const token = AuthUtil.getToken(ctx);
         const repository = new DeviceRepository({
             host: ServerEnvVar.SkymapApiHost,
             platformId: Platform.ElderWand,
+            token: token
         });
 
         const params = {
@@ -146,11 +153,13 @@ export default class DeviceMaintainController {
 
     // /api/devices?projectId={projectId}
     static placeDevice = async (
-        ctx: IRouterContext & RequestBody<PlaceDeviceOptions>
+        ctx
     ) => {
+        const token = AuthUtil.getToken(ctx);
         const repository = new DeviceRepository({
             host: ServerEnvVar.SkymapApiHost,
             platformId: Platform.ElderWand,
+            token: token
         });
 
         const params = {
@@ -189,11 +198,13 @@ export default class DeviceMaintainController {
 
     // /api/devices/:id?projectId={projectId}
     static editDeviceProfile = async (
-        ctx: IRouterContext & RequestBody<EditDeviceProfileOptions>
+        ctx
     ) => {
+        const token = AuthUtil.getToken(ctx);
         const repository = new DeviceRepository({
             host: ServerEnvVar.SkymapApiHost,
             platformId: Platform.ElderWand,
+            token: token
         });
 
         const params = {
@@ -232,11 +243,13 @@ export default class DeviceMaintainController {
 
     // /api/devices/:id?projectId={projectId}
     static editDeviceProtocols = async (
-        ctx: IRouterContext & RequestBody<EditDeviceProtocolsOptions>
+        ctx
     ) => {
+        const token = AuthUtil.getToken(ctx);
         const repository = new DeviceRepository({
             host: ServerEnvVar.SkymapApiHost,
             platformId: Platform.ElderWand,
+            token: token
         });
 
         const params = {
@@ -274,10 +287,12 @@ export default class DeviceMaintainController {
     };
 
     // /api/devices/:id/parent?projectId={projectId}
-    static unlinkParentDevice = async (ctx: IRouterContext & RequestBody) => {
+    static unlinkParentDevice = async (ctx) => {
+        const token = AuthUtil.getToken(ctx);
         const repository = new DeviceRepository({
             host: ServerEnvVar.SkymapApiHost,
             platformId: Platform.ElderWand,
+            token: token
         });
 
         const params = {
@@ -315,10 +330,12 @@ export default class DeviceMaintainController {
     };
 
     // /api/devices/:id?projectId={projectId}
-    static removeDevice = async (ctx: IRouterContext & RequestBody) => {
+    static removeDevice = async (ctx) => {
+        const token = AuthUtil.getToken(ctx);
         const repository = new DeviceRepository({
             host: ServerEnvVar.SkymapApiHost,
             platformId: Platform.ElderWand,
+            token: token
         });
 
         const params = {
@@ -357,11 +374,13 @@ export default class DeviceMaintainController {
 
     // /api/devices/:id/gateway?projectId={projectId}
     static bindGateway = async (
-        ctx: IRouterContext & RequestBody<BindGatewayBody>
+        ctx
     ) => {
+        const token = AuthUtil.getToken(ctx);
         const repository = new DeviceRepository({
             host: ServerEnvVar.SkymapApiHost,
             platformId: Platform.ElderWand,
+            token: token
         });
 
         const params = {
@@ -401,11 +420,13 @@ export default class DeviceMaintainController {
 
     // /api/devices/:id/gateway?projectId={projectId}
     static unbindGateway = async (
-        ctx: IRouterContext & RequestBody<BindGatewayBody>
+        ctx
     ) => {
+        const token = AuthUtil.getToken(ctx);
         const repository = new DeviceRepository({
             host: ServerEnvVar.SkymapApiHost,
             platformId: Platform.ElderWand,
+            token: token
         });
 
         const params = {
@@ -439,10 +460,12 @@ export default class DeviceMaintainController {
     };
 
     // /api/devices/:id/repository?projectId={projectId}
-    static getRepository = async (ctx: IRouterContext) => {
+    static getRepository = async (ctx) => {
+        const token = AuthUtil.getToken(ctx);
         const ctor: ApiRepositoryCtor = {
             host: ServerEnvVar.SkymapApiHost,
             platformId: Platform.ElderWand,
+            token: token
         };
 
         const params = {
@@ -500,10 +523,12 @@ export default class DeviceMaintainController {
     };
 
     // /api/device/templates
-    static listDeviceTemplates = async (ctx: IRouterContext) => {
+    static listDeviceTemplates = async (ctx) => {
+        const token = AuthUtil.getToken(ctx);
         const repository = new DeviceRepository({
             host: ServerEnvVar.SkymapApiHost,
             platformId: Platform.ElderWand,
+            token: token
         });
 
         const query = {
@@ -535,10 +560,12 @@ export default class DeviceMaintainController {
     };
 
     // /api/device/function-point/topology
-    static listDeviceFunctionPointTopology = async (ctx: IRouterContext) => {
+    static listDeviceFunctionPointTopology = async (ctx) => {
+        const token = AuthUtil.getToken(ctx);
         const repository = new DeviceRepository({
             host: ServerEnvVar.SkymapApiHost,
             platformId: Platform.ElderWand,
+            token: token
         });
 
         const query = {

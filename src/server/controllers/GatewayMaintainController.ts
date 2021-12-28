@@ -8,12 +8,15 @@ import { Platform } from '../domain/shared/enums/Enums';
 import PaginationDTO from '../domain/shared/models/PaginationDTO';
 import GatewayConnectionVM from '../models/gateway/GatewayConnectionVM';
 import PaginationVM from '../models/PaginationVM';
+import AuthUtil from '../utils/AuthUtil';
 
 export default class GatewayMaintainController {
-    static listGatewayConnections = async (ctx: Context) => {
+    static listGatewayConnections = async (ctx) => {
+        const token = AuthUtil.getToken(ctx);
         const repository = new GatewayConnectionRepository({
             host: ServerEnvVar.SkymapApiHost,
             platformId: Platform.ElderWand,
+            token: token
         });
 
         const query = {
@@ -49,15 +52,13 @@ export default class GatewayMaintainController {
     };
 
     static connect = async (
-        ctx: Context & {
-            request: {
-                body: GatewayConnectJVO;
-            };
-        }
+        ctx
     ) => {
+        const token = AuthUtil.getToken(ctx);
         const repository = new GatewayConnectionRepository({
             host: ServerEnvVar.SkymapApiHost,
             platformId: Platform.ElderWand,
+            token: token
         });
 
         const vo = {
@@ -85,21 +86,21 @@ export default class GatewayMaintainController {
     };
 }
 
-interface GatewayConnectJVO {
-    id?: string;
-    publicIP: string;
-    traceIP: string;
-    networkCards: NetworkCard[];
-    swInfos: object;
-}
+// interface GatewayConnectJVO {
+//     id?: string;
+//     publicIP: string;
+//     traceIP: string;
+//     networkCards: NetworkCard[];
+//     swInfos: object;
+// }
 
-interface NetworkCard {
-    enable: boolean;
-    ip: string;
-    name: string;
-    network: string;
-    mac: string;
-}
+// interface NetworkCard {
+//     enable: boolean;
+//     ip: string;
+//     name: string;
+//     network: string;
+//     mac: string;
+// }
 
 function convertToGatewayConnectionVMs(
     dtos: Array<GatewayConnectionDTO>

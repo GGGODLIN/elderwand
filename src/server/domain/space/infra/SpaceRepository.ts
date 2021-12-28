@@ -11,16 +11,19 @@ export interface SpaceRepositoryCtor {
     host: string;
     platformId: number;
     version?: number;
+    token?: string;
 }
 
 export default class SpaceRepository {
     constructor(ctor: SpaceRepositoryCtor) {
         this.origin = ctor.host;
         this.platformId = ctor.platformId;
+        this.token = ctor.token;
     }
 
     private readonly origin: string;
     private readonly platformId: number;
+    private readonly token: string;
 
     /**
      * @param projectId Project ID
@@ -36,7 +39,7 @@ export default class SpaceRepository {
         const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
 
         return await axios
-            .get<SpaceDTO[]>(pathname, { params: params })
+            .get<SpaceDTO[]>(pathname, { params: params, headers: { Authorization: `Bearer ${this.token}` } })
             .then((res) => {
                 const result: PaginationDTO<SpaceDTO> = {
                     offset: 0,
@@ -78,7 +81,7 @@ export default class SpaceRepository {
         const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
 
         return await axios
-            .get<SpaceDTO>(pathname, { params: params })
+            .get<SpaceDTO>(pathname, { params: params, headers: { Authorization: `Bearer ${this.token}` } })
             .then((res) => {
                 const dto: SpaceDTO = res.data;
 
@@ -106,7 +109,7 @@ export default class SpaceRepository {
         const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
 
         return await axios
-            .get<SpaceTemplateDTO[]>(pathname, { params: params })
+            .get<SpaceTemplateDTO[]>(pathname, { params: params, headers: { Authorization: `Bearer ${this.token}` } })
             .then((res) => {
                 const result: PaginationDTO<SpaceTemplateDTO> = {
                     offset: 0,
@@ -149,7 +152,7 @@ export default class SpaceRepository {
         const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
 
         return await axios
-            .post<SpaceDTO>(pathname, body, { params: params })
+            .post<SpaceDTO>(pathname, body, { params: params, headers: { Authorization: `Bearer ${this.token}` } })
             .then((res) => {
                 const dto: SpaceDTO = res.data;
                 return dto;
@@ -182,7 +185,7 @@ export default class SpaceRepository {
         const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
 
         return await axios
-            .put<SpaceDTO>(pathname, body, { params: params })
+            .put<SpaceDTO>(pathname, body, { params: params, headers: { Authorization: `Bearer ${this.token}` } })
             .then((res) => {
                 const dto: SpaceDTO = res.data;
                 return dto;
@@ -210,7 +213,7 @@ export default class SpaceRepository {
         const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
 
         return await axios
-            .delete<SpaceDTO>(pathname, { params: params })
+            .delete<SpaceDTO>(pathname, { params: params, headers: { Authorization: `Bearer ${this.token}` } })
             .then((res) => {
                 const dto: SpaceDTO = res.data;
                 return dto;

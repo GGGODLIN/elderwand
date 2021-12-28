@@ -16,13 +16,16 @@ import {
 import PaginationVM from '../models/PaginationVM';
 import SpaceVM, { DeviceVM, SpaceTemplateVM } from '../models/space/SpaceVM';
 import { groupBy } from '../utils/FunctionUtil';
+import AuthUtil from '../utils/AuthUtil';
 
 export default class SpaceMaintainController {
     // /api/spaces?projectId={projectId}
-    static listSpaces = async (ctx: IRouterContext) => {
+    static listSpaces = async (ctx) => {
+        const token = AuthUtil.getToken(ctx);
         const repository = new SpaceRepository({
             host: ServerEnvVar.SkymapApiHost,
             platformId: Platform.ElderWand,
+            token: token
         });
 
         const query = {
@@ -53,10 +56,12 @@ export default class SpaceMaintainController {
             });
     };
 
-    static getSpace = async (ctx: IRouterContext) => {
+    static getSpace = async (ctx) => {
+        const token = AuthUtil.getToken(ctx);
         const repository = new SpaceRepository({
             host: ServerEnvVar.SkymapApiHost,
             platformId: Platform.ElderWand,
+            token: token
         });
 
         const params = {
@@ -90,11 +95,13 @@ export default class SpaceMaintainController {
     };
 
     static addSpace = async (
-        ctx: IRouterContext & RequestBody<AddSpaceOptions>
+        ctx
     ) => {
+        const token = AuthUtil.getToken(ctx);
         const repository = new SpaceRepository({
             host: ServerEnvVar.SkymapApiHost,
             platformId: Platform.ElderWand,
+            token: token
         });
 
         const params = {
@@ -135,11 +142,13 @@ export default class SpaceMaintainController {
     };
 
     static editSpace = async (
-        ctx: IRouterContext & RequestBody<EditSpaceOptions>
+        ctx
     ) => {
+        const token = AuthUtil.getToken(ctx);
         const repository = new SpaceRepository({
             host: ServerEnvVar.SkymapApiHost,
             platformId: Platform.ElderWand,
+            token: token
         });
 
         const params = {
@@ -179,10 +188,12 @@ export default class SpaceMaintainController {
             });
     };
 
-    static removeSpace = async (ctx: IRouterContext) => {
+    static removeSpace = async (ctx) => {
+        const token = AuthUtil.getToken(ctx);
         const repository = new SpaceRepository({
             host: ServerEnvVar.SkymapApiHost,
             platformId: Platform.ElderWand,
+            token: token
         });
 
         const params = {
@@ -214,10 +225,12 @@ export default class SpaceMaintainController {
             });
     };
 
-    static getSpaceTopology = async (ctx: IRouterContext) => {
+    static getSpaceTopology = async (ctx) => {
+        const token = AuthUtil.getToken(ctx);
         const ctor = {
             host: ServerEnvVar.SkymapApiHost,
             platformId: Platform.ElderWand,
+            token: token
         };
 
         const params = {
@@ -332,10 +345,12 @@ export default class SpaceMaintainController {
         ctx.body = topology;
     };
 
-    static listSpaceTemplates = async (ctx: IRouterContext) => {
+    static listSpaceTemplates = async (ctx) => {
+        const token = AuthUtil.getToken(ctx);
         const repository = new SpaceRepository({
             host: ServerEnvVar.SkymapApiHost,
             platformId: Platform.ElderWand,
+            token: token
         });
 
         const query = {

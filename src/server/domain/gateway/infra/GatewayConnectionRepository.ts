@@ -8,6 +8,7 @@ import GatewayConnectVO from '../models/GatewayConnectVO';
 export interface GatewayConnectionRepositoryCtor {
     host: string;
     platformId: number;
+    token?: string;
     version?: number;
 }
 
@@ -15,9 +16,11 @@ export default class GatewayConnectionRepository {
     constructor(ctor: GatewayConnectionRepositoryCtor) {
         this.origin = ctor.host;
         this.platformId = ctor.platformId;
+        this.token = ctor.token;
     }
     private readonly origin: string;
     private readonly platformId: number;
+    private readonly token: string;
 
     /**
      * @param ip clientIP
@@ -35,7 +38,7 @@ export default class GatewayConnectionRepository {
         const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
 
         return await axios
-            .get<GatewayConnectionDTO[]>(pathname, { params: params })
+            .get<GatewayConnectionDTO[]>(pathname, { params: params, headers: { Authorization: `Bearer ${this.token}` } })
             .then((res) => {
                 const result: PaginationDTO<GatewayConnectionDTO> = {
                     offset: 0,
@@ -74,7 +77,7 @@ export default class GatewayConnectionRepository {
         const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
 
         return await axios
-            .put<GatewayConnectionDTO>(pathname, body, { params: params })
+            .put<GatewayConnectionDTO>(pathname, body, { params: params, headers: { Authorization: `Bearer ${this.token}` } })
             .then((res) => {
                 const dto: GatewayConnectionDTO = res.data;
 

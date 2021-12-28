@@ -13,6 +13,7 @@ import PaginationDTO from '../models/PaginationDTO';
 export interface ApiRepositoryCtor {
     host: string;
     platformId: Platform.ElderWand;
+    token?: string;
 }
 
 export default class DeviceDataRepositoryHelper {

@@ -19,16 +19,19 @@ export interface DeviceRepositoryCtor {
     host: string;
     platformId: number;
     version?: number;
+    token?: string;
 }
 
 export default class DeviceRepository {
     constructor(ctor: DeviceRepositoryCtor) {
         this.origin = ctor.host;
         this.platformId = ctor.platformId;
+        this.token = ctor.token;
     }
 
     private readonly origin: string;
     private readonly platformId: number;
+    private readonly token: string;
 
     /**
      * @param projectId Project ID
@@ -44,7 +47,7 @@ export default class DeviceRepository {
         const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
 
         return await axios
-            .get<DeviceDTO[]>(pathname, { params: params })
+            .get<DeviceDTO[]>(pathname, { params: params, headers: { Authorization: `Bearer ${this.token}` } })
             .then((res) => {
                 const result: PaginationDTO<DeviceDTO> = {
                     offset: 0,
@@ -84,7 +87,7 @@ export default class DeviceRepository {
         const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
 
         return await axios
-            .get<SpaceDTO[]>(pathname, { params: params })
+            .get<SpaceDTO[]>(pathname, { params: params, headers: { Authorization: `Bearer ${this.token}` } })
             .then((res) => {
                 const result: PaginationDTO<SpaceDTO> = {
                     offset: 0,
@@ -123,7 +126,7 @@ export default class DeviceRepository {
         const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
 
         return await axios
-            .get<DeviceDTO>(pathname, { params: params })
+            .get<DeviceDTO>(pathname, { params: params, headers: { Authorization: `Bearer ${this.token}` } })
             .then((res) => {
                 const dto: DeviceDTO = res.data;
 
@@ -159,7 +162,7 @@ export default class DeviceRepository {
         const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
 
         return await axios
-            .post<DeviceDTO>(pathname, body, { params: params })
+            .post<DeviceDTO>(pathname, body, { params: params, headers: { Authorization: `Bearer ${this.token}` } })
             .then((res) => {
                 const dto: DeviceDTO = res.data;
                 return dto;
@@ -194,7 +197,7 @@ export default class DeviceRepository {
         const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
 
         return await axios
-            .put<DeviceDTO>(pathname, data, { params: params })
+            .put<DeviceDTO>(pathname, data, { params: params, headers: { Authorization: `Bearer ${this.token}` } })
             .then((res) => {
                 const dto: DeviceDTO = res.data;
                 return dto;
@@ -225,7 +228,7 @@ export default class DeviceRepository {
         const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
 
         return await axios
-            .put<DeviceDTO>(pathname, data, { params: params })
+            .put<DeviceDTO>(pathname, data, { params: params, headers: { Authorization: `Bearer ${this.token}` } })
             .then((res) => {
                 const dto: DeviceDTO = res.data;
                 return dto;
@@ -253,7 +256,7 @@ export default class DeviceRepository {
         const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
 
         return await axios
-            .delete<DeviceDTO>(pathname, { params: params })
+            .delete<DeviceDTO>(pathname, { params: params, headers: { Authorization: `Bearer ${this.token}` } })
             .then((res) => {
                 const dto: DeviceDTO = res.data;
 
@@ -282,7 +285,7 @@ export default class DeviceRepository {
         const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
 
         return await axios
-            .delete<DeviceDTO>(pathname, { params: params })
+            .delete<DeviceDTO>(pathname, { params: params, headers: { Authorization: `Bearer ${this.token}` } })
             .then((res) => {
                 const dto: DeviceDTO = res.data;
 
@@ -320,7 +323,7 @@ export default class DeviceRepository {
         const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
 
         return await axios
-            .put<DeviceDTO>(pathname, body, { params: params })
+            .put<DeviceDTO>(pathname, body, { params: params, headers: { Authorization: `Bearer ${this.token}` } })
             .then((res) => {
                 const dto: DeviceDTO = res.data;
 
@@ -349,7 +352,7 @@ export default class DeviceRepository {
         const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
 
         return await axios
-            .delete<DeviceDTO>(pathname, { params: params })
+            .delete<DeviceDTO>(pathname, { params: params, headers: { Authorization: `Bearer ${this.token}` } })
             .then((res) => {
                 const dto: DeviceDTO = res.data;
                 return dto;
@@ -375,7 +378,7 @@ export default class DeviceRepository {
         const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
 
         return await axios
-            .get<DeviceTemplateDTO[]>(pathname, { params: params })
+            .get<DeviceTemplateDTO[]>(pathname, { params: params, headers: { Authorization: `Bearer ${this.token}` } })
             .then((res) => {
                 let result: PaginationDTO<DeviceTemplateDTO> = {
                     offset: 0,
