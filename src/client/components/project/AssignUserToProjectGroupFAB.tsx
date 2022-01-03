@@ -12,7 +12,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import GroupAddTwoToneIcon from '@material-ui/icons/GroupAddTwoTone';
 import clsx from 'clsx';
-import React, { useEffect } from 'react';
+import React, { useEffect, Dispatch } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'src/client/reducer';
 import AllocateUserSlice from 'src/client/slices/AllocateUserSlice';
@@ -20,6 +20,8 @@ import AvailableUserSlice from 'src/client/slices/AvailableUserSlice';
 import ProjectSlice from 'src/client/slices/ProjectSlice';
 import { AllocateUserList } from './AllocateUserList';
 import { AvailableUserList } from './AvailableUserList';
+import AxiosFactory from 'src/client/helper/AxiosFactory';
+import FetchSlice from 'src/client/slices/FetchSlice';
 
 interface AssignUserToProjectGroupFABProp {
     disable: boolean;
@@ -127,12 +129,42 @@ export const AssignUserToProjectDialog: React.FC<{}> = () => {
     // const origin = AxiosUtil.getOriginWithPort();
     // const client = AxiosUtil.makeAxiosInstance(dispatch, origin);
 
-    const handleAssignUser = () => {
-        const url = '/api/project/group/user';
+    const handleAssignUser = async () => {
+        //const url = `/api/projects/${}/users`;
         const body = {
-            projects: projects,
             users: users,
         };
+        //console.log('handleAssignUser', body)
+        dispatch(FetchSlice.start());
+        const assignPromises = projects.map((pid) => {
+            const url = `/api/projects/${pid}/users`
+            return new AxiosFactory()
+                .useBearerToken()
+                .getInstance()
+                .put<any>(url, body)
+                .then((res) => {
+                    //console.log('fetchUsers', res)
+                    //dispatch(AvailableUserSlice.fetch(res.data));
+                    return res
+                })
+                .catch((err) => {
+                    console.log(err);
+                })
+                .finally(() => {
+                    dispatch(FetchSlice.end());
+                });
+        })
+
+        Promise.all(assignPromises).then(values => {
+            dispatch(ProjectSlice.showAssignUserDialog(false));
+            dispatch(ProjectSlice.refresh());
+            dispatch(AllocateUserSlice.clear());
+            dispatch(AvailableUserSlice.clear());
+        }).catch(reason => {
+            console.log(reason)
+        }).finally(() => {
+            dispatch(FetchSlice.end());
+        })
 
         // // TODO rewrite
         // client
@@ -157,23 +189,28 @@ export const AssignUserToProjectDialog: React.FC<{}> = () => {
             return;
         }
 
-        // TODO fetch with current user
-        const params = {
-            limit: 100,
-            offset: 0,
-        };
-        // TODO rewrite
-        // client
-        //     .get<PaginationVM<UserVM>>('/api/users', { params: params })
-        //     .then((res) => {
-        //         dispatch(AvailableUserSlice.fetch(res.data));
-        //     })
-        //     .catch((err: AxiosError) => {
-        //         AxiosUtil.redirectUnAuthorization(err);
-        //     })
-        //     .finally(() => {
-        //         dispatch(FetchSlice.end());
-        //     });
+        const url = `/api/users`;
+        const params = {};
+
+        new AxiosFactory()
+            .useBearerToken()
+            .useBefore(() => {
+                dispatch(FetchSlice.start());
+            })
+            .getInstance()
+            .get<any>(url, { params: params })
+            .then((res) => {
+                dispatch(AvailableUserSlice.fetch(res.data));
+                if (projects?.length === 1) {
+                    console.log('projects', projects)
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+            .finally(() => {
+                dispatch(FetchSlice.end());
+            });
     }, [show]);
 
     const { available_users, available_users_selected } = useSelector(
@@ -217,7 +254,7 @@ export const AssignUserToProjectDialog: React.FC<{}> = () => {
             </DialogContent>
             <DialogActions>
                 <Button className={'assign'} onClick={handleAssignUser}>
-                    {'Assign'}
+                    {'OK'}
                 </Button>
                 <Button className={'cancel'} onClick={handleCloseDialog}>
                     {'Close'}
@@ -226,3 +263,28 @@ export const AssignUserToProjectDialog: React.FC<{}> = () => {
         </Dialog>
     );
 };
+
+
+// const fetchUsers = (dispatch: Dispatch<any>) => {
+//     const url = `/api/users`;
+//     const params = {};
+
+//     new AxiosFactory()
+//         .useBearerToken()
+//         .useBefore(() => {
+//             dispatch(FetchSlice.start());
+//         })
+//         .getInstance()
+//         .get<any>(url, { params: params })
+//         .then((res) => {
+//             //console.log('fetchUsers', res)
+//             dispatch(AvailableUserSlice.fetch(res.data));
+//         })
+//         .catch((err) => {
+//             console.log(err);
+//         })
+//         .finally(() => {
+//             dispatch(FetchSlice.end());
+//         });
+// };
+

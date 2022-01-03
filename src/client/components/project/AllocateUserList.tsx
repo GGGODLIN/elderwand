@@ -65,7 +65,7 @@ export const AllocateUserList: React.FC<AllocateUserListProps> = (props) => {
     const tableProps: ITableProps = {
         columns: [
             { key: 'selection-cell' },
-            { key: 'username', title: 'Name', dataType: DataType.String },
+            { key: 'displayName', title: 'Name', dataType: DataType.String },
             //   { key: "display_name", title: "display_name", dataType: DataType.String },
         ],
         editingMode: EditingMode.None,

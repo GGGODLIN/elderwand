@@ -28,4 +28,8 @@ export class ProjectMaintainUCO {
     removeProject(id: string): Promise<ProjectDTO> {
         return this.repository.removeProject(id);
     }
+
+    assignUsersToProjects(id, options): Promise<ProjectDTO> {
+        return this.repository.assignUsersToProjects(id, options);
+    }
 }

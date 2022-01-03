@@ -41,6 +41,12 @@ export default class ProjectRouter {
                 method: 'DELETE',
                 controller: ProjectMaintainController.removeProject,
             },
+            assignUsersToProjects: {
+                name: 'assignUsersToProjects',
+                action: '/projects/:pid/users',
+                method: 'PUT',
+                controller: ProjectMaintainController.assignUsersToProjects,
+            }
         };
 
         return KoaRouterFactory.create('/api', options);

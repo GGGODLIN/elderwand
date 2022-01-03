@@ -181,6 +181,45 @@ export default class ProjectMaintainController {
                 throw err;
             });
     };
+
+    static assignUsersToProjects = async (ctx) => {
+        const token = AuthUtil.getToken(ctx);
+        const repository = new ProjectRepository({
+            host: ServerEnvVar.SkymapApiHost,
+            platformId: Platform.ElderWand,
+            token: token
+        });
+
+        const params: {
+            pid: string;
+        } = {
+            pid: '',
+            ...ctx.params,
+        };
+
+        const body = {
+            ...ctx.request.body,
+        };
+
+        await new ProjectMaintainUCO(repository)
+            .assignUsersToProjects(params.pid, body)
+            .then((res: ProjectDTO) => {
+                const vm = convertToProjectVM(res);
+
+                ctx.status = 200;
+                ctx.body = vm;
+
+                return;
+            })
+            .catch((err) => {
+                if (err.isAxiosError) {
+                    ctx.status = err.response.status;
+                    ctx.body = err.response.data;
+                    return;
+                }
+                throw err;
+            });
+    };
 }
 
 function convertToProjectVMs(dtos: ProjectDTO[]): ProjectVM[] {

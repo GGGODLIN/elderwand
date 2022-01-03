@@ -112,12 +112,19 @@ const ActionCell: React.FC<{}> = (props) => {
                 dispatch(FetchSlice.end());
             });
     }
+
+    const handleAssignIconClick = () => {
+        const value = props.rowKeyValue;
+        dispatch(ProjectSlice.deselectAllRows())
+        dispatch(ProjectSlice.selectRow(value))
+        dispatch(ProjectSlice.showAssignUserDialog(true));
+    };
     return (
         <Grid className={'row-actions'} container justify="flex-end">
             <Grid item>
                 <IconButton
                     onClick={() => {
-                        console.log('click');
+                        handleAssignIconClick();
                     }}
                 >
                     <AccountBoxIcon />

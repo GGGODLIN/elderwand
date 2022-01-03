@@ -68,6 +68,7 @@ export const InviteUserDialog: React.FC<{}> = () => {
         (state: RootState) => state.user.invite_dialog
     );
     const { user } = useSelector((state: RootState) => state.user);
+    console.log('user', user)
 
     const classname = clsx(['fab', name, show ? '' : 'open']);
 
@@ -154,12 +155,16 @@ export const InviteUserDialog: React.FC<{}> = () => {
         disabled?: boolean;
     }[] = [
             { name: 'Select...', value: '', display: false },
+            { name: 'Tenant', value: UserRoleEnum.Tenant },
             { name: 'Project Engineer', value: UserRoleEnum.ProjectEngineer },
             { name: 'Filed Engineer', value: UserRoleEnum.FieldEngineer },
             { name: 'Viewer', value: UserRoleEnum.Viewer },
         ];
 
     const items = options.map((item, idx) => {
+        if (!!item?.value && user?.roleId >= item?.value) {
+            return null
+        }
         return (
             <option
                 key={idx}

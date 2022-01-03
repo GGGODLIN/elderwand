@@ -140,7 +140,7 @@ export default class UserRepository {
         const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
 
         return await axios
-            .patch<UserDTO>(pathname, body, { headers: { Authorization: `Bearer ${this.token}` } })
+            .put<UserDTO>(pathname, body, { headers: { Authorization: `Bearer ${this.token}` } })
             .then((res) => {
                 const dto: UserDTO = res.data;
                 return dto;

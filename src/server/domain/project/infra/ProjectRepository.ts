@@ -50,6 +50,7 @@ export default class ProjectRepository {
                 if (err.isAxiosError) {
                     // console.log('isAxiosError from repository');
                 }
+                console.log('listProjectsErr', err)
                 throw err;
             });
     }
@@ -144,6 +145,31 @@ export default class ProjectRepository {
                 if (err.isAxiosError) {
                     // console.log('isAxiosError from repository');
                 }
+                throw err;
+            });
+    }
+
+    async assignUsersToProjects(id, options) {
+        const baseURL = this.origin;
+        const pathname = `/api/projects/${id}/users`;
+        const body = {
+            ...options,
+        };
+
+        const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
+
+        return await axios
+            .put<ProjectDTO>(pathname, body, { headers: { Authorization: `Bearer ${this.token}` } })
+            .then((res) => {
+                const dto: ProjectDTO = res.data;
+
+                return dto;
+            })
+            .catch((err: AxiosError<ErrorInfoDTO>) => {
+                if (err.isAxiosError) {
+                    // console.log('isAxiosError from repository');
+                }
+                console.log('updateProjectErr', err)
                 throw err;
             });
     }
