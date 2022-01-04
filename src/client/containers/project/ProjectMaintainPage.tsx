@@ -15,6 +15,8 @@ import AxiosFactory from 'src/client/helper/AxiosFactory';
 import FetchSlice from 'src/client/slices/FetchSlice';
 import ProjectSlice from 'src/client/slices/ProjectSlice';
 import UserSlice from '../../slices/UserSlice';
+import AllocateUserSlice from 'src/client/slices/AllocateUserSlice';
+import AvailableUserSlice from 'src/client/slices/AvailableUserSlice';
 
 export interface ProjectMaintainPageProps {
     title: string;
@@ -141,6 +143,8 @@ export const ProjectMaintainPage: React.FC<ProjectMaintainPageProps> = () => {
     useEffect(() => {
         if (refresh) {
             fetchProjects(dispatch);
+            dispatch(AllocateUserSlice.clear());
+            dispatch(AvailableUserSlice.clear());
         }
 
         return () => { };
@@ -192,6 +196,7 @@ export const ProjectMaintainPage: React.FC<ProjectMaintainPageProps> = () => {
                     {/* TODO Enable with selected not 0 */}
                     <AssignUserToProjectGroupFAB
                         disable={selected.length <= 0}
+                        display={tab_index === 1}
                     />
                 </div>
             </div>

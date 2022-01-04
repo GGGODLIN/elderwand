@@ -25,17 +25,19 @@ import FetchSlice from 'src/client/slices/FetchSlice';
 
 interface AssignUserToProjectGroupFABProp {
     disable: boolean;
+    display: boolean;
 }
 
 export const AssignUserToProjectGroupFAB: React.FC<AssignUserToProjectGroupFABProp> =
     (
         props = {
             disable: false,
+            display: true,
         }
     ) => {
         const dispatch = useDispatch();
 
-        const display = true;
+        const display = props?.display;
         const name = 'assign-user-btn';
         const classname = clsx(['fab', name, display ? '' : 'hidden']);
 
@@ -112,11 +114,12 @@ export const AssignUserToProjectDialog: React.FC<{}> = () => {
 
     const name = 'assign-user-to-project-dialog';
 
-    const { show, projects, users } = useSelector((state: RootState) => {
+    const { show, projects, users, selectedProjectData } = useSelector((state: RootState) => {
         return {
             show: state.project.assign_user_dialog.show,
             projects: state.project.selected,
             users: state.allocate_users.users.map((user) => user.id),
+            selectedProjectData: state.project.page_result.results.find((p) => state.project.selected?.[0] === p.id),
         };
     });
 
@@ -124,6 +127,8 @@ export const AssignUserToProjectDialog: React.FC<{}> = () => {
 
     const handleCloseDialog = () => {
         dispatch(ProjectSlice.showAssignUserDialog(false));
+        dispatch(AllocateUserSlice.clear());
+        dispatch(AvailableUserSlice.clear());
     };
 
     // const origin = AxiosUtil.getOriginWithPort();
@@ -202,7 +207,8 @@ export const AssignUserToProjectDialog: React.FC<{}> = () => {
             .then((res) => {
                 dispatch(AvailableUserSlice.fetch(res.data));
                 if (projects?.length === 1) {
-                    console.log('projects', projects)
+                    dispatch(AllocateUserSlice.push(selectedProjectData?.users));
+                    dispatch(AvailableUserSlice.remove(selectedProjectData?.users?.map?.((user) => user?.id)));
                 }
             })
             .catch((err) => {
