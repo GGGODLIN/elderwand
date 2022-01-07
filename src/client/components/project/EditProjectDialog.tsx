@@ -16,7 +16,7 @@ import {
 import AddIcon from '@material-ui/icons/Add';
 import { AxiosError, AxiosResponse } from 'axios';
 import clsx from 'clsx';
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -28,6 +28,7 @@ import FetchSlice from 'src/client/slices/FetchSlice';
 import ProjectSlice from 'src/client/slices/ProjectSlice';
 import TimeUtil from 'src/client/utils/TimeUtil';
 import AxiosFactory from 'src/client/helper/AxiosFactory';
+import { CropDinSharp } from '@material-ui/icons';
 
 export const EditProjectDialog: React.FC<{}> = () => {
     const dispatch = useDispatch();
@@ -40,12 +41,11 @@ export const EditProjectDialog: React.FC<{}> = () => {
     const { show, project } = useSelector(
         (state: RootState) => state.project.edit_dialog
     );
-
+    console.log('EditProjectDialog', project)
 
     const classname = clsx([name]);
 
     const onSubmit = (form) => {
-
 
         const body = {
             name: form.name,
@@ -75,8 +75,8 @@ export const EditProjectDialog: React.FC<{}> = () => {
 
     };
 
-    const { register, handleSubmit, formState: { errors }, } = useForm<CreateProjectForm>({
-        mode: 'onChange',
+    const { register, handleSubmit, formState: { errors }, unregister } = useForm<CreateProjectForm>({
+        mode: 'all',
     });
 
     const handleCreateProject = () => handleSubmit(onSubmit)();
@@ -102,6 +102,13 @@ export const EditProjectDialog: React.FC<{}> = () => {
 
     let default_name = project?.name ?? '';
     let default_expire = TimeUtil.new(project?.expireDate ?? new Date()).format('YYYY-MM-DD');
+
+    useEffect(() => {
+        if (!show) {
+            unregister('name')
+            unregister('expire_date')
+        }
+    }, [show]);
 
     return (
         <Dialog
@@ -142,6 +149,7 @@ export const EditProjectDialog: React.FC<{}> = () => {
                                 type="date"
                                 variant="outlined"
                                 defaultValue={default_expire}
+                                autoFocus={true}
                                 InputLabelProps={{
                                     shrink: true,
                                 }}

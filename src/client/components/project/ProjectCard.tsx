@@ -50,6 +50,11 @@ export const ProjectCard: React.FC<ProjectCardProps> = (props) => {
         dispatch(ProjectSlice.showAssignUserDialog(true));
     };
 
+    const handleOpenEditProjectDialog = () => {
+        dispatch(ProjectSlice.assignEditProject(project));
+        dispatch(ProjectSlice.showEditDialog(true));
+    };
+
     const handleDeleteProject = () => {
         const url = `/api/projects/${project?.id}`;
 
@@ -175,7 +180,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = (props) => {
                 <Grid item>
                     <IconButton
                         onClick={() => {
-                            console.log('click');
+                            handleOpenEditProjectDialog();
                         }}
                     >
                         <SettingsIcon />

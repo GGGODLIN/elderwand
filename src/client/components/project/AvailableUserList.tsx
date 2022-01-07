@@ -60,7 +60,6 @@ export interface AvailableUserListProps {
 }
 
 export const AvailableUserList: React.FC<AvailableUserListProps> = (props) => {
-    console.log('AvailableUserList', props)
     const dispatch = useDispatch();
     const tableProps: ITableProps = {
         columns: [
