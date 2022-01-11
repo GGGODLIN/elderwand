@@ -19,16 +19,24 @@ export default class AuthRepository {
     private readonly platformId: number;
 
     // login
-    async login(username: string, password: string): Promise<UserDTO> {
+    async login(options): Promise<UserDTO> {
         const baseURL = this.origin;
         const pathname = `/api/login`;
         const params = { pid: this.platformId };
 
-        const body = {
-            username: username,
-            password: password,
+        const body: {
+            username: string;
+            password: string;
+            platformId: number;
+            token?: string;
+        } = {
+            username: options?.username,
+            password: options?.password,
             platformId: this.platformId,
         };
+        if (!!options?.token) {
+            body.token = options?.token
+        }
 
         const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
 

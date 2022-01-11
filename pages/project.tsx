@@ -5,6 +5,7 @@ import React, { useEffect } from 'react';
 import { InitialPayload, InitSlice } from 'src/client/slices/InitSlice';
 import { NextPage, NextPageContext } from 'next';
 import { useDispatch } from 'react-redux';
+import PageInitialUtil from 'src/client/utils/PageInitialUtil';
 
 export interface ProjectIndexProps {
     title: string;
@@ -12,6 +13,9 @@ export interface ProjectIndexProps {
 
 export const ProjectIndex: NextPage<ProjectIndexProps> = (props) => {
     const dispatch = useDispatch();
+    PageInitialUtil.initPageInfo(dispatch);
+    PageInitialUtil.initPageLayoutWithUser(dispatch);
+    PageInitialUtil.initUserInfo(dispatch);
 
     useEffect(() => {
         const page: InitialPayload = {

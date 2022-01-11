@@ -43,6 +43,7 @@ const handleSubmitLock = (errors: any): boolean => {
 
 export interface LoginPageProps {
     title: string;
+    query: { token: string };
 }
 
 const LoginPage: React.FC<LoginPageProps> = (props) => {
@@ -51,6 +52,8 @@ const LoginPage: React.FC<LoginPageProps> = (props) => {
 
     const dispatch = useDispatch();
     const { t } = useTranslation();
+
+    const { token } = props.query;
 
     let defaultValues = {
         username: '',
@@ -73,15 +76,21 @@ const LoginPage: React.FC<LoginPageProps> = (props) => {
     });
 
     const onSubmit = async (form: LoginForm) => {
+        const body = {
+            ...form,
+        }
+        if (!!token) {
+            body.token = token
+        }
         new AxiosFactory()
             .useBearerToken()
             .useBefore(() => {
                 dispatch(FetchSlice.start());
             })
             .getInstance()
-            .post('/api/login', form)
+            .post('/api/login', body)
             .then((res: AxiosResponse<{ id: string; username: string }>) => {
-                console.log(res.data);
+                //console.log(res.data);
                 if (200 <= res.status && res.status < 300) {
                     window.location.replace('/admin');
                     return;

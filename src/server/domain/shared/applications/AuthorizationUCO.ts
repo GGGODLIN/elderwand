@@ -8,7 +8,7 @@ export default class AuthorizationUCO {
         this.repository = repository;
     }
 
-    login(username: string, password: string): Promise<UserDTO> {
-        return this.repository.login(username, password);
+    login(options): Promise<UserDTO> {
+        return this.repository.login(options);
     }
 }

@@ -67,7 +67,7 @@ export const HeaderBar: React.FC<{}> = () => {
                             <a href="/admin">{'Admin'}</a>
                         </li>
                         <li>
-                            <a href="/">{'Profile'}</a>
+                            <a href="/profile">{'Profile'}</a>
                         </li>
                         {/* <li>
                             <a href="/admin">{'Contact'}</a>

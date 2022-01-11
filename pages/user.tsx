@@ -8,6 +8,7 @@ import { AxiosUtil } from 'src/client/utils/AxiosUtil';
 import { InitialPayload, InitSlice } from 'src/client/slices/InitSlice';
 import { NextPage, NextPageContext } from 'next';
 import { useDispatch } from 'react-redux';
+import PageInitialUtil from 'src/client/utils/PageInitialUtil';
 
 export interface UserIndexProps {
     title: string;
@@ -15,6 +16,10 @@ export interface UserIndexProps {
 
 export const UserIndex: NextPage<UserIndexProps> = (props) => {
     const dispatch = useDispatch();
+
+    PageInitialUtil.initPageInfo(dispatch);
+    PageInitialUtil.initPageLayoutWithUser(dispatch);
+    PageInitialUtil.initUserInfo(dispatch);
 
     useEffect(() => {
         const page: InitialPayload = {

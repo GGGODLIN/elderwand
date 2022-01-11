@@ -172,8 +172,8 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                 const info = !device.channelInfo
                     ? null
                     : device.channelInfo.find(
-                          (info: ChannelInfo) => info.channelNo == obj.ch
-                      );
+                        (info: ChannelInfo) => info.channelNo == obj.ch
+                    );
 
                 return {
                     ch: attr.chId,
@@ -205,11 +205,10 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
         const attrs = attrs_page_group[stateOfSwitchPanel.page].filter(
             (attr: ButtonAttr) => !!attr.btn
         );
-
         buttons = attrs.map((attr: ButtonAttr) => {
             // const page = stateOfSwitchPanel.page;
             let obj = objects.find(
-                (obj: CommObject) => obj.objId == attr.objId
+                (obj: CommObject) => obj?.objId == attr?.objId
             );
 
             if (!obj) {
@@ -1335,7 +1334,9 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
 
     const handleSubmitSetting = (e) => {
         let new_protocol = JSON.parse(JSON.stringify(protocol)) as Protocol;
-
+        if (!new_protocol?.commInfo) {
+            new_protocol.commInfo = {}
+        }
         new_protocol.commInfo.filters = stateOfSetting.setting.filters;
         new_protocol.commInfo.pAddr = stateOfSetting.setting.address;
 
@@ -1575,14 +1576,14 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                                                         !!errors.filters[idx]
                                                             ?.in
                                                     }
-                                                    // helperText={
-                                                    //     !!errors.filters &&
-                                                    //     !errors.filters[idx]?.in
-                                                    //         ? ' '
-                                                    //         : errors.filters[
-                                                    //               idx
-                                                    //           ].in.message
-                                                    // }
+                                                // helperText={
+                                                //     !!errors.filters &&
+                                                //     !errors.filters[idx]?.in
+                                                //         ? ' '
+                                                //         : errors.filters[
+                                                //               idx
+                                                //           ].in.message
+                                                // }
                                                 />
                                                 <TextField
                                                     variant="outlined"
@@ -1617,23 +1618,23 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                                                             }
                                                         ),
                                                     }}
-                                                    // TODO Fix
-                                                    // error={
-                                                    //     !!errors?.filters
-                                                    //         ?.length &&
-                                                    //     !!errors.filters[idx]
-                                                    //         ?.out
-                                                    // }
-                                                    // helperText={
-                                                    //     !!errors?.filters
-                                                    //         ?.length &&
-                                                    //     !!errors.filters[idx]
-                                                    //         ?.out
-                                                    //         ? ' '
-                                                    //         : errors.filters[
-                                                    //               idx
-                                                    //           ].out.message
-                                                    // }
+                                                // TODO Fix
+                                                // error={
+                                                //     !!errors?.filters
+                                                //         ?.length &&
+                                                //     !!errors.filters[idx]
+                                                //         ?.out
+                                                // }
+                                                // helperText={
+                                                //     !!errors?.filters
+                                                //         ?.length &&
+                                                //     !!errors.filters[idx]
+                                                //         ?.out
+                                                //         ? ' '
+                                                //         : errors.filters[
+                                                //               idx
+                                                //           ].out.message
+                                                // }
                                                 />
                                             </div>
                                         </div>
@@ -1978,10 +1979,10 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                                                             errors?.channels
                                                                 ?.length &&
                                                             !!errors?.channels[
-                                                                cid
+                                                            cid
                                                             ] &&
                                                             !!errors?.channels[
-                                                                cid
+                                                            cid
                                                             ][oid] &&
                                                             !!errors?.channels[
                                                                 cid
@@ -1991,10 +1992,10 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                                                             errors?.channels
                                                                 ?.length &&
                                                             errors?.channels[
-                                                                cid
+                                                            cid
                                                             ] &&
                                                             errors?.channels[
-                                                                cid
+                                                            cid
                                                             ][oid] &&
                                                             errors?.channels[
                                                                 cid
@@ -2539,14 +2540,14 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                                                                     `${key}.gAddrs`,
                                                                     {
                                                                         pattern:
-                                                                            {
-                                                                                value: new RegExp(
-                                                                                    /(\d+\/\d+\/\d+,)|(\d+\/\d+\/\d+$)/,
-                                                                                    'gm'
-                                                                                ),
-                                                                                message:
-                                                                                    'rule is \\d+\\/\\d+\\/\\d+',
-                                                                            },
+                                                                        {
+                                                                            value: new RegExp(
+                                                                                /(\d+\/\d+\/\d+,)|(\d+\/\d+\/\d+$)/,
+                                                                                'gm'
+                                                                            ),
+                                                                            message:
+                                                                                'rule is \\d+\\/\\d+\\/\\d+',
+                                                                        },
                                                                     }
                                                                 ),
                                                             }}
@@ -2555,11 +2556,11 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                                                                     ?.length &&
                                                                 !!errors
                                                                     .buttons[
-                                                                    page
+                                                                page
                                                                 ] &&
                                                                 !!errors
                                                                     .buttons[
-                                                                    page
+                                                                page
                                                                 ][oid] &&
                                                                 !!errors
                                                                     .buttons[
@@ -2571,11 +2572,11 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                                                                     ?.length &&
                                                                 !!errors
                                                                     .buttons[
-                                                                    page
+                                                                page
                                                                 ] &&
                                                                 !!errors
                                                                     .buttons[
-                                                                    page
+                                                                page
                                                                 ][oid] &&
                                                                 errors.buttons[
                                                                     page
@@ -2987,14 +2988,14 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                                                                         `${key}.gAddrs`,
                                                                         {
                                                                             pattern:
-                                                                                {
-                                                                                    value: new RegExp(
-                                                                                        /(\d+\/\d+\/\d+,)|(\d+\/\d+\/\d+$)/,
-                                                                                        'gm'
-                                                                                    ),
-                                                                                    message:
-                                                                                        'rule is \\d+\\/\\d+\\/\\d+',
-                                                                                },
+                                                                            {
+                                                                                value: new RegExp(
+                                                                                    /(\d+\/\d+\/\d+,)|(\d+\/\d+\/\d+$)/,
+                                                                                    'gm'
+                                                                                ),
+                                                                                message:
+                                                                                    'rule is \\d+\\/\\d+\\/\\d+',
+                                                                            },
                                                                         }
                                                                     ),
                                                                 }}
@@ -3004,11 +3005,11 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                                                                         ?.length &&
                                                                     !!errors
                                                                         .extras[
-                                                                        page
+                                                                    page
                                                                     ] &&
                                                                     !!errors
                                                                         .extras[
-                                                                        page
+                                                                    page
                                                                     ][oid] &&
                                                                     !!errors
                                                                         .extras[
@@ -3022,11 +3023,11 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                                                                         ?.length &&
                                                                     !!errors
                                                                         .extras[
-                                                                        page
+                                                                    page
                                                                     ] &&
                                                                     !!errors
                                                                         .extras[
-                                                                        page
+                                                                    page
                                                                     ][oid] &&
                                                                     errors
                                                                         .extras[

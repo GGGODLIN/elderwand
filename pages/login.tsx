@@ -36,8 +36,10 @@ export const LoginIndex: NextPage<LoginIndexProps> = (props) => {
 };
 
 LoginIndex.getInitialProps = async (ctx: NextPageContext) => {
+    const { query } = ctx;
     return {
         title: 'Login',
+        query: query,
     };
 };
 

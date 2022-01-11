@@ -14,20 +14,12 @@ export default class AuthController {
             platformId: Platform.ElderWand,
         });
 
-        const {
-            username,
-            password,
-        }: {
-            username: string;
-            password: string;
-        } = {
-            username: '',
-            password: '',
+        const body = {
             ...ctx.request.body,
         };
 
         await new AuthorizationUCO(repository)
-            .login(username, password)
+            .login(body)
             .then((res: UserDTO) => {
                 const user = res;
 

@@ -407,14 +407,14 @@ export const RegisterPage: React.FC<RegisterPageProps> = (props) => {
 
                                 <Grid container className={'other-action'}>
                                     <Grid item xs>
-                                        <Link href="/login" variant="body2">
+                                        <Link href={`/login?token=${token}`} variant="body2">
                                             {t(
                                                 kws.RegisterPage
                                                     .AlreadyHaveAnAccount
                                             )}
                                         </Link>
                                     </Grid>
-                                    <Grid item>
+                                    {/* <Grid item>
                                         <Link
                                             href="/password/reset"
                                             variant="body2"
@@ -423,7 +423,7 @@ export const RegisterPage: React.FC<RegisterPageProps> = (props) => {
                                                 kws.RegisterPage.ForgotPassword
                                             ) + ' ?'}
                                         </Link>
-                                    </Grid>
+                                    </Grid> */}
                                 </Grid>
                             </form>
                         </CardContent>
