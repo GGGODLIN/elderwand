@@ -68,7 +68,6 @@ export const InviteUserDialog: React.FC<{}> = () => {
         (state: RootState) => state.user.invite_dialog
     );
     const { user } = useSelector((state: RootState) => state.user);
-    console.log('user', user)
 
     const classname = clsx(['fab', name, show ? '' : 'open']);
 
@@ -148,23 +147,30 @@ export const InviteUserDialog: React.FC<{}> = () => {
         }
     };
 
+    // const options: {
+    //     name: string;
+    //     value: any;
+    //     display?: boolean;
+    //     disabled?: boolean;
+    // }[] = [
+    //         { name: 'Select...', value: '', display: false },
+    //         { name: 'Tenant', value: UserRoleEnum.Tenant },
+    //         { name: 'Project Engineer', value: UserRoleEnum.ProjectEngineer },
+    //         { name: 'Filed Engineer', value: UserRoleEnum.FieldEngineer },
+    //         { name: 'Viewer', value: UserRoleEnum.Viewer },
+    //     ];
+
     const options: {
         name: string;
         value: any;
         display?: boolean;
         disabled?: boolean;
-    }[] = [
-            { name: 'Select...', value: '', display: false },
-            { name: 'Tenant', value: UserRoleEnum.Tenant },
-            { name: 'Project Engineer', value: UserRoleEnum.ProjectEngineer },
-            { name: 'Filed Engineer', value: UserRoleEnum.FieldEngineer },
-            { name: 'Viewer', value: UserRoleEnum.Viewer },
-        ];
+    }[] = userInvitationPolicy(user?.roleId);
 
     const items = options.map((item, idx) => {
-        if (!!item?.value && user?.roleId >= item?.value) {
-            return null
-        }
+        // if (!!item?.value && user?.roleId >= item?.value) {
+        //     return null
+        // }
         return (
             <option
                 key={idx}
@@ -378,3 +384,29 @@ export const InviteUserDialog: React.FC<{}> = () => {
         </Dialog>
     );
 };
+
+const userInvitationPolicy = (userRoleId) => {
+
+    if (userRoleId === 2) {
+        return [
+            { name: 'Select...', value: '', display: false },
+            { name: 'Tenant', value: UserRoleEnum.Tenant },
+        ]
+    } else if (userRoleId === 5) {
+        return [
+            { name: 'Select...', value: '', display: false },
+            { name: 'Project Engineer', value: UserRoleEnum.ProjectEngineer },
+            { name: 'Filed Engineer', value: UserRoleEnum.FieldEngineer },
+            { name: 'Viewer', value: UserRoleEnum.Viewer },
+        ]
+    } else if (userRoleId === 6) {
+        return [
+            { name: 'Select...', value: '', display: false },
+            { name: 'Filed Engineer', value: UserRoleEnum.FieldEngineer },
+        ]
+    } else {
+        return [
+            { name: 'Select...', value: '', display: false },
+        ]
+    }
+}

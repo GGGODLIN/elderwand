@@ -185,6 +185,9 @@ export const UserMaintainPage: React.FC<UserMaintainPageProps> = () => {
         };
     });
 
+    const { user } = useSelector((state: RootState) => state.user);
+    const showAddUserFAB = user?.roleId === 2 || user?.roleId === 5 || user?.roleId === 6
+
     const { refresh } = useSelector((state: RootState) => {
         return { refresh: state.user.fetch_user_refresh };
     });
@@ -209,9 +212,9 @@ export const UserMaintainPage: React.FC<UserMaintainPageProps> = () => {
                 <div className="user-card-grid">
                     <UserCardList users={users} />
                 </div>
-                <div className={actions}>
+                {showAddUserFAB && <div className={actions}>
                     <AddUserFAB />
-                </div>
+                </div>}
             </div>
         </React.Fragment>
     );
