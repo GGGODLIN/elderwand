@@ -35,8 +35,10 @@ export const HomeIndex: NextPage<HomeIndexProps> = (props) => {
 };
 
 HomeIndex.getInitialProps = async (ctx: NextPageContext) => {
+    const { query } = ctx;
     return {
         title: 'Home',
+        query: query,
     };
 };
 
