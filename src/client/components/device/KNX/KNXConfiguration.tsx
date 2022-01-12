@@ -183,6 +183,7 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                     info: info,
                 } as KNXChannel;
             });
+        channels.sort((a, b) => a.ch - b.ch)
     }
 
     // SwitchPanel
@@ -1477,7 +1478,6 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
     let previous = 0;
     let channel_start = false;
     let isEven = false;
-
     return (
         <div className="KNX-group">
             <div className="KNX-info">
@@ -1667,6 +1667,7 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                                 (channel, idx) => {
                                     channel_start = false;
 
+
                                     if (previous != channel.attr.chId) {
                                         channel_start = true;
                                         previous = channel.attr.chId;
@@ -1707,7 +1708,7 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                                         : dpt.suffixes;
 
                                     const cid = channel.ch;
-                                    const oid = channel.obj.objId;
+                                    const oid = channel?.obj?.objId ?? channel?.attr?.objId;
                                     const key = `channels.${cid}.${oid}`;
 
                                     const ack4Objs = channel.attrs.filter(
@@ -1959,7 +1960,7 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                                                         InputLabelProps={{
                                                             shrink: true,
                                                         }}
-                                                        value={channel.obj.gAddrs.join(
+                                                        value={channel?.obj?.gAddrs?.join?.(
                                                             ','
                                                         )}
                                                         onChange={
