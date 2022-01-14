@@ -59,6 +59,7 @@ export default class DeviceRepository {
                 if (res.data) {
                     result.total = res.data.length;
                     result.results = res.data;
+                    console.log('listDevices', JSON.stringify(res.data))
                 }
 
                 return result;

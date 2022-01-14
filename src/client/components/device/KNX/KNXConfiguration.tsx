@@ -160,30 +160,38 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
     let channels = [] as KNXChannel[];
 
     if (isActuator) {
+        console.log('isActuator device', device)
         channels = device.attrs
             .filter((attr: ChannelAttr) => !!attr.chId)
-            .map((attr: ChannelAttr) => {
+            .map((attr: ChannelAttr, index) => {
                 const attrs = device.attrs.filter(
                     (item: ChannelAttr) => item.chId == attr.chId
                 );
 
-                const obj = objects.find((obj) => obj.objId == attr.objId);
+                let obj = objects.find((obj) => obj?.objId == attr?.objId);
+                if (!obj) {
+                    obj = { ch: attr.chId, gAddrs: null, objId: index }
+                }
 
                 const info = !device.channelInfo
-                    ? null
+                    ? ({
+                        channelNo: attr?.chId,
+                        dvId: '',
+                    })
                     : device.channelInfo.find(
-                        (info: ChannelInfo) => info.channelNo == obj.ch
+                        (info: ChannelInfo) => !!info?.channelNo && info?.channelNo === obj?.ch
                     );
-
+                console.log('info', info, device.channelInfo)
                 return {
                     ch: attr.chId,
                     attr: attr,
                     attrs: attrs,
                     obj: obj,
-                    info: info,
+                    info: { ...info },
                 } as KNXChannel;
             });
         channels.sort((a, b) => a.ch - b.ch)
+        console.log('isActuator', channels)
     }
 
     // SwitchPanel
@@ -397,6 +405,7 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
     };
 
     const handleEditChannel = (e) => {
+        console.log('handleEditChannel', e)
         const name = e.target.name;
         const value = e.target.value;
 
@@ -426,11 +435,19 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                         i++
                     ) {
                         if (stateOfSetting.setting.channels[i].ch == ch) {
+                            if (!draft.setting.channels[i].info) {
+                                draft.setting.channels[i].info = {
+                                    channelNo: ch,
+                                    dvId: '',
+                                }
+                            }
+                            draft.setting.channels[i].info.channelNo = parseInt(ch, 10)
                             draft.setting.channels[i].info.dvId = value;
                         }
                     }
                     draft.changed = true;
                 });
+                console.log('handleEditChannel switch dvId nextState', nextState)
                 setSetting(nextState);
                 break;
             case 'funId':
@@ -663,7 +680,7 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
 
                 channels.push(latest);
 
-                if (origin.attr.chId == cid && origin.obj.objId == oid) {
+                if (origin?.attr?.chId == cid && origin?.obj?.objId == oid) {
                     channels.push(channel);
                 }
             }
@@ -726,12 +743,13 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
             };
             const info: ChannelInfo =
                 stateOfSetting.setting.channels.find(
-                    (channel) => channel.info.channelNo == cid
+                    (channel) => channel?.info?.channelNo == cid
                 )?.info ||
                 ({
                     channelNo: cid,
                     dvId: '',
                 } as ChannelInfo);
+            console.log('handleAddChannel info', info)
 
             let attrs = stateOfSetting.setting.channels
                 .filter((channel) => channel.attr.chId == cid)
@@ -1370,6 +1388,7 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
         for (const key of Object.keys(groups)) {
             channelInfo.push(groups[key][0]);
         }
+        console.log('channelInfo', groups, channelInfo)
 
         // switch panel
         const switchPanelControlInfo = [];
@@ -1478,6 +1497,7 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
     let previous = 0;
     let channel_start = false;
     let isEven = false;
+    console.log('stateOfSetting', stateOfSetting)
     return (
         <div className="KNX-group">
             <div className="KNX-info">
@@ -1685,7 +1705,7 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                                     );
 
                                     const bound = leaves.find(
-                                        (leaf) => leaf.dvId == channel.info.dvId
+                                        (leaf) => leaf.dvId == channel?.info?.dvId
                                     );
 
                                     const fpts: FunctionPointTypeVM[] =
