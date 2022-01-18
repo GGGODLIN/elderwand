@@ -176,7 +176,10 @@ class DeviceHelper {
                 (attr: ExtraAttr) => !attr.chId && !attr.btn && !!attr.objId
             )
             .map((attr: ExtraAttr) => {
-                const obj = objects.find((obj) => obj.objId == attr.objId);
+                let obj = objects.find((obj) => obj.objId == attr.objId);
+                if (!obj) {
+                    obj = { ch: attr.chId, gAddrs: null, objId: attr?.objId }
+                }
                 return {
                     attr: attr,
                     obj: obj,
@@ -213,16 +216,17 @@ class DeviceHelper {
         const attrs = !this.device.parent.attrs
             ? []
             : this.device.parent?.attrs
-                  .filter((attr: ChannelAttr) => !attr.chId)
-                  .map((attr: ChannelAttr) => {
-                      const obj = parent_protocol.commInfo.objs.find(
-                          (obj) => obj.objId == attr.objId
-                      );
-                      return {
-                          attr: attr,
-                          obj: obj,
-                      };
-                  });
+                .filter((attr: ChannelAttr) => !attr.chId)
+                .map((attr: ChannelAttr) => {
+                    console.log('parent_protocol.commInfo.objs', parent_protocol.commInfo.objs)
+                    const obj = parent_protocol.commInfo.objs.find(
+                        (obj) => obj.objId == attr.objId
+                    );
+                    return {
+                        attr: attr,
+                        obj: obj,
+                    };
+                });
 
         return {
             hasParentExtraAttrs: !!attrs && !!attrs.length,

@@ -161,16 +161,19 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
 
     if (isActuator) {
         console.log('isActuator device', device)
-        channels = device.attrs
-            .filter((attr: ChannelAttr) => !!attr.chId)
-            .map((attr: ChannelAttr, index) => {
+        let deviceAttrs = [...device.attrs]
+        let filteredDeviceAttrs = deviceAttrs.filter((attr: ChannelAttr) => !!attr.chId)
+        //filteredDeviceAttrs.sort((a, b) => a.chId - b.chId)
+        //console.log('deviceAttrs', filteredDeviceAttrs)
+        channels = filteredDeviceAttrs
+            .map((attr: ChannelAttr) => {
                 const attrs = device.attrs.filter(
                     (item: ChannelAttr) => item.chId == attr.chId
                 );
 
                 let obj = objects.find((obj) => obj?.objId == attr?.objId);
                 if (!obj) {
-                    obj = { ch: attr.chId, gAddrs: null, objId: index }
+                    obj = { ch: attr.chId, gAddrs: null, objId: attr?.objId }
                 }
 
                 const info = !device.channelInfo
@@ -181,7 +184,7 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                     : device.channelInfo.find(
                         (info: ChannelInfo) => !!info?.channelNo && info?.channelNo === obj?.ch
                     );
-                console.log('info', info, device.channelInfo)
+
                 return {
                     ch: attr.chId,
                     attr: attr,
@@ -303,6 +306,7 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
     let generals = [];
 
     if (isGeneralDevice) {
+        console.log('isGeneralDevice device', device)
         generals = objects
             .filter((obj) => !obj.ch)
             .map((obj) => {
@@ -1025,6 +1029,7 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
     };
 
     const handleAddExtraAttr = (e, value: string) => {
+        console.log('handleAddExtraAttr', value)
         const values = value.split('.');
         const type = values[0];
 
@@ -1063,11 +1068,12 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                 createdRT: '',
                 valueKey: '',
                 valueType: '',
+                page: page
             };
 
-            if (!!page) {
-                attr.page = page;
-            }
+            // if (!!page) {
+            //     attr.page = page;
+            // }
 
             const extra: KNXExtra = {
                 obj: obj,
@@ -1079,7 +1085,7 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
             for (const origin of stateOfSetting.setting.extras) {
                 extras.push({ ...origin });
             }
-
+            console.log('extra', extra)
             extras.push(extra);
 
             draft.setting.extras = extras;
@@ -1360,10 +1366,14 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
         new_protocol.commInfo.pAddr = stateOfSetting.setting.address;
 
         const objs = [];
-
+        let channelsArr = [...stateOfSetting.setting.channels]
+        let newChannelsArr = channelsArr.map((channel) => channel.obj)
+        console.log('newChannelsArr', newChannelsArr, channelsArr)
+        newChannelsArr.sort((a, b) => a.ch - b.ch)
         objs.push(
-            ...stateOfSetting.setting.channels.map((channel) => channel.obj)
+            ...newChannelsArr
         );
+        console.log('objs', objs, newChannelsArr)
         objs.push(...stateOfSetting.setting.extras.map((extra) => extra.obj));
 
         objs.push(
@@ -1460,6 +1470,8 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
             sendTelRules: sendTelRules,
         } as DeviceVM;
 
+        //return console.log('new_device', new_device)
+
         DeviceMaintainAPIs.editDeviceProtocols(
             dispatch,
             project,
@@ -1497,7 +1509,7 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
     let previous = 0;
     let channel_start = false;
     let isEven = false;
-    console.log('stateOfSetting', stateOfSetting)
+    console.log('stateOfSetting', stateOfSetting, isActuator, isSwitchPanel, isGeneralDevice)
     return (
         <div className="KNX-group">
             <div className="KNX-info">
@@ -2769,9 +2781,9 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                             <tbody>
                                 {stateOfSetting.setting.extras
                                     .filter(
-                                        (extra) =>
-                                            extra.attr.page ==
-                                            stateOfSwitchPanel.page
+                                        (extra) => isSwitchPanel ?
+                                            (extra.attr.page ==
+                                                stateOfSwitchPanel.page) : true
                                     )
                                     .map((extra: KNXExtra, idx) => {
                                         const rule = DeviceHelper.parseFlagRule(
@@ -2994,7 +3006,7 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                                                                 InputLabelProps={{
                                                                     shrink: true,
                                                                 }}
-                                                                value={extra.obj?.gAddrs.join(
+                                                                value={extra.obj?.gAddrs?.join?.(
                                                                     ','
                                                                 )}
                                                                 onChange={
@@ -3403,7 +3415,7 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                                             </td>
                                             <td className={'center'}>
                                                 {extra.obj &&
-                                                    extra.obj.gAddrs[0]}
+                                                    extra.obj.gAddrs?.[0]}
                                             </td>
                                             <td className={'center'}>
                                                 {rule.read}
