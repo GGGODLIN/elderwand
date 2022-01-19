@@ -308,7 +308,7 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
     if (isGeneralDevice) {
         console.log('isGeneralDevice device', device)
         generals = objects
-            .filter((obj) => !obj.ch)
+            .filter((obj) => obj.ch)
             .map((obj) => {
                 const attr = device.attrs.find(
                     (attr: GeneralDeviceAttr) => attr.objId == obj.objId
@@ -323,6 +323,7 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                 };
             });
     }
+    console.log('generals', generals, objects)
 
     const defaultValues = {
         address: pAddr,
@@ -1470,8 +1471,64 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
             sendTelRules: sendTelRules,
         } as DeviceVM;
 
-        //return console.log('new_device', new_device)
 
+        //loop edit embedded device
+        channelInfo?.forEach((channel) => {
+            if (channel?.dvId && channel?.dvId !== ' ') {
+                let targetLeave = device?.leaves?.find((leave) => leave?.dvId === channel?.dvId)
+                if (!!targetLeave) {
+                    let newAttrs = attrs?.filter((attr) => attr?.chId === channel?.channelNo)
+
+                    const helper = new DeviceHelper({ device: targetLeave });
+                    const { protocol } = helper.isKNX();
+
+                    let new_protocol = JSON.parse(JSON.stringify(protocol)) as Protocol;
+                    if (!new_protocol?.commInfo) {
+                        new_protocol.commInfo = {}
+                    }
+                    // new_protocol.commInfo.filters = stateOfSetting.setting.filters;
+                    // new_protocol.commInfo.pAddr = stateOfSetting.setting.address;
+
+                    const objs = [];
+                    let channelsArr = [...stateOfSetting.setting.channels]
+                    let newChannelsArr = channelsArr.map((channel) => channel.obj).filter((obj) => obj?.ch === channel?.channelNo)
+                    //console.log('newChannelsArr', newChannelsArr, channelsArr)
+                    newChannelsArr.sort((a, b) => a.ch - b.ch)
+                    objs.push(
+                        ...newChannelsArr
+                    );
+                    //console.log('objs', objs, newChannelsArr)
+                    objs.push(...stateOfSetting.setting.extras.map((extra) => extra.obj));
+
+                    objs.push(
+                        ...stateOfSetting.setting.buttons.map((button) => button.obj)
+                    );
+
+                    new_protocol.commInfo.objs = objs;
+
+                    const protocols = targetLeave.protocols.filter(
+                        (protocol) => protocol.typeId != 'KNX'
+                    );
+
+                    protocols.push(new_protocol);
+                    const newEmbedDevice = {
+                        ...targetLeave,
+                        attrs: newAttrs,
+                        protocols: protocols,
+                    } as DeviceVM;
+                    DeviceMaintainAPIs.editDeviceProtocols(
+                        dispatch,
+                        project,
+                        newEmbedDevice,
+                        (data) => {
+
+                        }
+                    );
+                }
+            }
+
+        })
+        //return console.log('new_device', new_device)
         DeviceMaintainAPIs.editDeviceProtocols(
             dispatch,
             project,
