@@ -295,6 +295,7 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                 };
             });
     }
+    console.log('sensors', sensors, objects)
 
     // Parent ExtraAttrs
     const { hasParentExtraAttrs, parentExtraAttrs } =
@@ -721,9 +722,9 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
         const nextState = produce(stateOfSetting, (draft) => {
             let max = 0;
 
-            for (const origin of stateOfSetting.setting.channels) {
-                if (origin.attr.objId > max) {
-                    max = origin.attr.objId;
+            for (const origin of device?.attrs) {
+                if (origin?.objId > max) {
+                    max = origin?.objId;
                 }
             }
 
@@ -1566,7 +1567,7 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
     let previous = 0;
     let channel_start = false;
     let isEven = false;
-    console.log('stateOfSetting', stateOfSetting, isActuator, isSwitchPanel, isGeneralDevice)
+    console.log('stateOfSetting', stateOfSetting, isActuator, isSwitchPanel, isGeneralDevice, isSensor)
     return (
         <div className="KNX-group">
             <div className="KNX-info">
@@ -3307,15 +3308,30 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                                         </td>
 
                                         <td className={'center'}>
-                                            {rule.read}
+                                            {<Checkbox
+                                                checked={
+                                                    !!rule.read
+                                                }
+                                                disabled={true}
+                                            />}
                                         </td>
 
                                         <td className={'center'}>
-                                            {rule.update}
+                                            {<Checkbox
+                                                checked={
+                                                    !!rule.update
+                                                }
+                                                disabled={true}
+                                            />}
                                         </td>
 
                                         <td className={'center'}>
-                                            {rule.transmit}
+                                            {<Checkbox
+                                                checked={
+                                                    !!rule.transmit
+                                                }
+                                                disabled={true}
+                                            />}
                                         </td>
 
                                         <td className={'center'}>
@@ -3339,7 +3355,7 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                     </table>
                 )}
 
-                {isGeneralDevice && !!generals.length && (
+                {/* {isGeneralDevice && !!generals.length && (
                     <table>
                         <thead>
                             <tr>
@@ -3424,7 +3440,7 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                             </tr>
                         </tfoot>
                     </table>
-                )}
+                )} */}
 
                 {hasParentExtraAttrs && (
                     <table>
@@ -3475,13 +3491,28 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                                                     extra.obj.gAddrs?.[0]}
                                             </td>
                                             <td className={'center'}>
-                                                {rule.read}
+                                                {<Checkbox
+                                                    checked={
+                                                        !!rule.read
+                                                    }
+                                                    disabled={true}
+                                                />}
                                             </td>
                                             <td className={'center'}>
-                                                {rule.write}
+                                                {<Checkbox
+                                                    checked={
+                                                        !!rule.write
+                                                    }
+                                                    disabled={true}
+                                                />}
                                             </td>
                                             <td className={'center'}>
-                                                {rule.transmit}
+                                                {<Checkbox
+                                                    checked={
+                                                        !!rule.transmit
+                                                    }
+                                                    disabled={true}
+                                                />}
                                             </td>
                                             <td className={'center'}>
                                                 {extra.attr.name}

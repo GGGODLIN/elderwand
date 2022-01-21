@@ -218,10 +218,13 @@ class DeviceHelper {
             : this.device.parent?.attrs
                 .filter((attr: ChannelAttr) => !attr.chId)
                 .map((attr: ChannelAttr) => {
-                    console.log('parent_protocol.commInfo.objs', parent_protocol.commInfo.objs)
-                    const obj = parent_protocol.commInfo.objs.find(
+                    //console.log('parent_protocol.commInfo.objs', parent_protocol.commInfo.objs)
+                    let obj = parent_protocol?.commInfo?.objs?.find(
                         (obj) => obj.objId == attr.objId
                     );
+                    if (!obj) {
+                        obj = { ch: attr.chId, gAddrs: null, objId: attr?.objId }
+                    }
                     return {
                         attr: attr,
                         obj: obj,
