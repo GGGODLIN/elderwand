@@ -96,6 +96,7 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
     const project = props.project;
     const space = props.space;
     const device = props.device;
+    console.log('KNX device', device)
 
     const { leaves, functions } = useSelector((state: RootState) => {
         const leaves = state.device.devices.filter(
@@ -160,7 +161,7 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
     let channels = [] as KNXChannel[];
 
     if (isActuator) {
-        console.log('isActuator device', device)
+        //console.log('isActuator device', device)
         let deviceAttrs = [...device.attrs]
         let filteredDeviceAttrs = deviceAttrs.filter((attr: ChannelAttr) => !!attr.chId)
         //filteredDeviceAttrs.sort((a, b) => a.chId - b.chId)
@@ -194,7 +195,7 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                 } as KNXChannel;
             });
         channels.sort((a, b) => a.ch - b.ch)
-        console.log('isActuator', channels)
+        //console.log('isActuator', channels)
     }
 
     // SwitchPanel
@@ -214,11 +215,11 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
     let buttons = [];
 
     if (isSwitchPanel) {
-        const attrs = attrs_page_group[stateOfSwitchPanel.page].filter(
+        const attrs = device.attrs.filter(
             (attr: ButtonAttr) => !!attr.btn
         );
+        console.log('isSwitchPanel', attrs, attrs_page_group)
         buttons = attrs.map((attr: ButtonAttr) => {
-            // const page = stateOfSwitchPanel.page;
             let obj = objects.find(
                 (obj: CommObject) => obj?.objId == attr?.objId
             );
@@ -231,8 +232,8 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                 } as CommObject;
             }
 
-            const attrs = attrs_page_group[stateOfSwitchPanel.page].filter(
-                (item) => item.btn == attr.btn
+            const attrs = device.attrs.filter(
+                (item) => (item.btn == attr.btn && item.page == attr.page)
             );
 
             let info = device.switchPanelControlInfo?.find(
@@ -254,6 +255,47 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                 info: info,
             } as KNXButton;
         });
+        // const attrs = attrs_page_group[stateOfSwitchPanel.page].filter(
+        //     (attr: ButtonAttr) => !!attr.btn
+        // );
+        // console.log('isSwitchPanel', attrs)
+        // buttons = attrs.map((attr: ButtonAttr) => {
+        //     // const page = stateOfSwitchPanel.page;
+        //     let obj = objects.find(
+        //         (obj: CommObject) => obj?.objId == attr?.objId
+        //     );
+
+        //     if (!obj) {
+        //         obj = {
+        //             btn: attr.btn,
+        //             objId: attr.objId,
+        //             gAddrs: [],
+        //         } as CommObject;
+        //     }
+
+        //     const attrs = attrs_page_group[stateOfSwitchPanel.page].filter(
+        //         (item) => item.btn == attr.btn
+        //     );
+
+        //     let info = device.switchPanelControlInfo?.find(
+        //         (info) => info.button == attr.btn
+        //     );
+
+        //     if (!info) {
+        //         info = {
+        //             button: attr.btn,
+        //             lPress: attr.lpress,
+        //             connectionInfo: [],
+        //         } as SwitchPanelControlInfo;
+        //     }
+
+        //     return {
+        //         attr: attr,
+        //         attrs: attrs,
+        //         obj: obj,
+        //         info: info,
+        //     } as KNXButton;
+        // });
     }
 
     // Extra Attrs
@@ -295,7 +337,7 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                 };
             });
     }
-    console.log('sensors', sensors, objects)
+    //console.log('sensors', sensors, objects)
 
     // Parent ExtraAttrs
     const { hasParentExtraAttrs, parentExtraAttrs } =
@@ -307,7 +349,7 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
     let generals = [];
 
     if (isGeneralDevice) {
-        console.log('isGeneralDevice device', device)
+        //console.log('isGeneralDevice device', device)
         generals = objects
             .filter((obj) => obj.ch)
             .map((obj) => {
@@ -324,7 +366,7 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                 };
             });
     }
-    console.log('generals', generals, objects)
+    //console.log('generals', generals, objects)
 
     const defaultValues = {
         address: pAddr,
@@ -411,7 +453,7 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
     };
 
     const handleEditChannel = (e) => {
-        console.log('handleEditChannel', e)
+        //console.log('handleEditChannel', e)
         const name = e.target.name;
         const value = e.target.value;
 
@@ -453,7 +495,7 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                     }
                     draft.changed = true;
                 });
-                console.log('handleEditChannel switch dvId nextState', nextState)
+                //console.log('handleEditChannel switch dvId nextState', nextState)
                 setSetting(nextState);
                 break;
             case 'funId':
@@ -755,7 +797,7 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                     channelNo: cid,
                     dvId: '',
                 } as ChannelInfo);
-            console.log('handleAddChannel info', info)
+            //console.log('handleAddChannel info', info)
 
             let attrs = stateOfSetting.setting.channels
                 .filter((channel) => channel.attr.chId == cid)
@@ -1031,7 +1073,7 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
     };
 
     const handleAddExtraAttr = (e, value: string) => {
-        console.log('handleAddExtraAttr', value)
+        //console.log('handleAddExtraAttr', value)
         const values = value.split('.');
         const type = values[0];
 
@@ -1087,7 +1129,7 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
             for (const origin of stateOfSetting.setting.extras) {
                 extras.push({ ...origin });
             }
-            console.log('extra', extra)
+            //console.log('extra', extra)
             extras.push(extra);
 
             draft.setting.extras = extras;
@@ -1370,12 +1412,12 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
         const objs = [];
         let channelsArr = [...stateOfSetting.setting.channels]
         let newChannelsArr = channelsArr.map((channel) => channel.obj)
-        console.log('newChannelsArr', newChannelsArr, channelsArr)
+        //console.log('newChannelsArr', newChannelsArr, channelsArr)
         newChannelsArr.sort((a, b) => a.ch - b.ch)
         objs.push(
             ...newChannelsArr
         );
-        console.log('objs', objs, newChannelsArr)
+        //console.log('objs', objs, newChannelsArr)
         objs.push(...stateOfSetting.setting.extras.map((extra) => extra.obj));
 
         objs.push(
@@ -1400,7 +1442,7 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
         for (const key of Object.keys(groups)) {
             channelInfo.push(groups[key][0]);
         }
-        console.log('channelInfo', groups, channelInfo)
+        //console.log('channelInfo', groups, channelInfo)
 
         // switch panel
         const switchPanelControlInfo = [];
@@ -1567,7 +1609,7 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
     let previous = 0;
     let channel_start = false;
     let isEven = false;
-    console.log('stateOfSetting', stateOfSetting, isActuator, isSwitchPanel, isGeneralDevice, isSensor)
+    console.log('stateOfSetting', stateOfSetting, stateOfSetting.setting.buttons.filter((item) => item?.attr?.page === stateOfSwitchPanel.page))
     return (
         <div className="KNX-group">
             <div className="KNX-info">
@@ -2292,7 +2334,7 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {stateOfSetting.setting.buttons.map(
+                                {stateOfSetting.setting.buttons.filter((item) => item?.attr?.page === stateOfSwitchPanel.page).map(
                                     (button, idx) => {
                                         const row_span =
                                             button?.attrs?.length || 0;
@@ -2341,7 +2383,17 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
 
                                         return (
                                             <tr key={idx} className={classname}>
-                                                {idx % row_span == 0 && (
+                                                {/* {idx % row_span == 0 && (
+                                                    <td
+                                                        className={'center'}
+                                                        rowSpan={row_span}
+                                                    >
+                                                        {button.attr.bIdx ||
+                                                            button.attr.btn}
+                                                    </td>
+                                                )} */}
+
+                                                {(button?.attrs?.[0]?.objId === button?.attr?.objId) && (
                                                     <td
                                                         className={'center'}
                                                         rowSpan={row_span}
@@ -2427,7 +2479,7 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                                                     </div>
                                                 </td>
 
-                                                {idx % row_span == 0 && (
+                                                {(button?.attrs?.[0]?.objId === button?.attr?.objId) && (
                                                     <td
                                                         className={'center'}
                                                         rowSpan={row_span}
