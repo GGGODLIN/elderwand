@@ -365,17 +365,17 @@ export const InviteUserDialog: React.FC<{}> = () => {
                     </Button>
                 )}
 
-                {!!inviting_user && (
+                {/* {!!inviting_user && (
                     <Button className={'edit'} onClick={handleCreateUser}>
                         {'Save'}
                     </Button>
-                )}
+                )} */}
 
-                {!!inviting_user && !!inviting_user.email && (
+                {/* {!!inviting_user && !!inviting_user.email && (
                     <Button className={'invite'} onClick={handleInviteUser}>
                         {'Invite'}
                     </Button>
-                )}
+                )} */}
 
                 <Button className={'cancel'} onClick={handleCloseDialog}>
                     {'Close'}

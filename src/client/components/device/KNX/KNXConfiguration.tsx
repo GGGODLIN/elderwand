@@ -107,6 +107,10 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
             functions: state.device.function_point_types,
         };
     });
+    console.log('leaves', leaves)
+
+    const switchPanelLeaves = getSwitchPanelLeaves(device)
+    //console.log('switchPanelLeaves', switchPanelLeaves)
 
     const helper = new DeviceHelper({ device });
     const { isKNX, protocol } = helper.isKNX();
@@ -215,6 +219,7 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
     let buttons = [];
 
     if (isSwitchPanel) {
+        getSwitchPanelLeaves(device)
         const attrs = device.attrs.filter(
             (attr: ButtonAttr) => !!attr.btn
         );
@@ -1188,7 +1193,9 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
 
         const page = values[1];
         const obj = values[2];
-        const field = values[3];
+        const btn = values[3];
+        const field = values[4];
+        //console.log('handleEditButton value', JSON.parse(value))
 
         let nextState;
 
@@ -1210,8 +1217,29 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                 });
                 setSetting(nextState);
                 break;
+            case 'controlled':
+                nextState = produce(stateOfSetting, (draft) => {
+                    // let parsedValue = JSON.parse(value)
+                    console.log('parsedValue', value)
+                    draft.changed = true;
+                    for (
+                        let i = 0;
+                        i < stateOfSetting.setting.buttons.length;
+                        i++
+                    ) {
+                        const button = stateOfSetting.setting.buttons[i];
+
+                        if (button.attr.btn == btn && button.attr.page == page) {
+                            draft.setting.buttons[i].info.connectionInfo = [{ dvId: value?.split('.')?.[0], objectId: value?.split('.')?.[1] }];
+                        }
+                    }
+                });
+                console.log('nextState', nextState, btn)
+                setSetting(nextState);
+                break;
             case 'funId':
                 nextState = produce(stateOfSetting, (draft) => {
+                    console.log('funId')
                     draft.changed = true;
                     for (
                         let i = 0;
@@ -1221,7 +1249,7 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                         const button = stateOfSetting.setting.buttons[i];
 
                         if (button.attr.objId == obj) {
-                            draft.setting.extras[i].attr.funId = value;
+                            draft.setting.buttons[i].attr.funId = value;
                         }
                     }
                 });
@@ -1334,7 +1362,8 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
         const values = name.split('.');
         const page = values[1];
         const obj = values[2];
-        const field = values[3];
+        const btn = values[3];
+        const field = values[4];
 
         if (field != 'lpress') {
             return;
@@ -1450,6 +1479,7 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
         switchPanelControlInfo.push(
             ...stateOfSetting.setting.buttons.map((button) => button.info)
         );
+        console.log('switchPanelControlInfo', switchPanelControlInfo)
 
         // attrs
         const attrs = [];
@@ -2336,6 +2366,7 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                             <tbody>
                                 {stateOfSetting.setting.buttons.filter((item) => item?.attr?.page === stateOfSwitchPanel.page).map(
                                     (button, idx) => {
+                                        //console.log('button', button)
                                         const row_span =
                                             button?.attrs?.length || 0;
 
@@ -2350,12 +2381,8 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                                         ]);
 
                                         // TODO multi selector
-                                        const controlled = device.leaves?.find(
-                                            (leaf) =>
-                                                leaf.dvId ==
-                                                button.info?.connectionInfo[0]
-                                                    .dvId
-                                        );
+                                        const controlled = getControlledAttr(switchPanelLeaves, button.info?.connectionInfo?.[0])
+                                        console.log(`controlled-${button.attr.btn}`, controlled, button)
 
                                         const fpts: FunctionPointTypeVM[] =
                                             functions;
@@ -2379,7 +2406,8 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
 
                                         const page = button.attr.page || 0;
                                         const oid = button.attr.objId;
-                                        const key = `buttons.${page}.${oid}`;
+                                        const btn = button.attr.btn;
+                                        const key = `buttons.${page}.${oid}.${btn}`;
 
                                         return (
                                             <tr key={idx} className={classname}>
@@ -2484,17 +2512,66 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                                                         className={'center'}
                                                         rowSpan={row_span}
                                                     >
-                                                        {controlled && (
-                                                            <div
-                                                                data-dvId={
-                                                                    controlled.dvId
+                                                        {/* <div
+                                                            data-dvId={
+                                                                controlled.dvId
+                                                            }
+                                                        >
+                                                            {
+                                                                controlled.name
+                                                            }
+                                                        </div> */}
+                                                        <FormControl
+                                                            variant={'outlined'}
+                                                            size={'small'}
+                                                            fullWidth={true}
+                                                        >
+                                                            <Select
+                                                                className={
+                                                                    'fpt-selector'
+                                                                }
+                                                                value={
+                                                                    !!controlled ? `${controlled?.dvId}.${controlled?.objId}` : ' '
+                                                                }
+                                                                name={`${key}.controlled`}
+                                                                onChange={
+                                                                    handleEditButton
                                                                 }
                                                             >
-                                                                {
-                                                                    controlled.name
-                                                                }
-                                                            </div>
-                                                        )}
+                                                                <MenuItem
+                                                                    value={' '}
+                                                                >
+                                                                    <div>
+                                                                        <span>
+                                                                            {
+                                                                                'Select...'
+                                                                            }
+                                                                        </span>
+                                                                    </div>
+                                                                </MenuItem>
+                                                                {getControlledAttrs(switchPanelLeaves, button?.attr?.createdRT).map((leave) => {
+
+                                                                    return (
+                                                                        <MenuItem
+                                                                            key={
+                                                                                leave.dvId
+                                                                            }
+                                                                            value={
+                                                                                `${leave?.dvId}.${leave?.objId}`
+                                                                            }
+                                                                        >
+                                                                            <div>
+                                                                                <span>
+                                                                                    {
+                                                                                        leave?.pickerName
+                                                                                    }
+                                                                                </span>
+                                                                            </div>
+                                                                        </MenuItem>
+                                                                    );
+                                                                })}
+                                                            </Select>
+                                                        </FormControl>
                                                     </td>
                                                 )}
 
@@ -2515,7 +2592,7 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                                                             }
                                                             name={`${key}.funId`}
                                                             onChange={
-                                                                handleEditExtraAttr
+                                                                handleEditButton
                                                             }
                                                         >
                                                             <MenuItem
@@ -3732,3 +3809,77 @@ const ButtonTypes: { value: number; name: string }[] = [
 ];
 
 export default KNXConfiguration;
+
+const getSwitchPanelLeaves = (switchPanelData) => {
+    const { switchPanelLeaves } = useSelector((state: RootState) => {
+        const switchPanelLeaves = state.device.devices.filter(
+            (item) => {
+                return (!!switchPanelData?.parentId && item.parentId === switchPanelData?.parentId)
+            }
+        );
+        return {
+            switchPanelLeaves: switchPanelLeaves,
+        };
+    });
+    let deviceArr = []
+    for (let index = 0; index < switchPanelLeaves.length; index++) {
+        const leave = switchPanelLeaves[index];
+        if (leave?.type?.categoryId === 'A') {
+            console.log('deviceArr')
+            const { leaves } = useSelector((state: RootState) => {
+                const leaves = state.device.devices.filter(
+                    (item) => item.parentId == leave.id
+                );
+                return {
+                    leaves: leaves,
+                };
+            });
+            leaves?.forEach((item) => deviceArr.push(item))
+        }
+        else if (leave?.type?.categoryId === 'SD' || leave?.type?.categoryId === 'CPB') {
+            continue
+        }
+        else {
+            deviceArr.push(leave)
+        }
+    }
+    console.log('getSwitchPanelLeaves', deviceArr)
+    return deviceArr
+}
+
+const getControlledAttrs = (switchPanelLeaves, createdRT) => {
+    let controlledAttrs = []
+    for (let index = 0; index < switchPanelLeaves.length; index++) {
+        const leaveAttrs = switchPanelLeaves[index]?.attrs;
+        for (let j = 0; j < leaveAttrs.length; j++) {
+            const attr = leaveAttrs[j];
+            if (attr?.createdRT?.split?.(':')?.[0] === createdRT?.split?.(':')?.[0] && !attr?.rt?.[0]?.includes("bh.r.attr.button") && !attr?.ack4Obj) {
+                let newAttr = { ...attr, pickerName: `${switchPanelLeaves[index]?.name}-${attr?.name}`, dvId: switchPanelLeaves[index]?.dvId }
+                controlledAttrs.push(newAttr)
+            }
+
+        }
+    }
+    return controlledAttrs
+}
+
+const getControlledAttr = (switchPanelLeaves, info) => {
+    let controlledAttr = null
+    for (let index = 0; index < switchPanelLeaves.length; index++) {
+        const leaveAttrs = switchPanelLeaves[index]?.attrs;
+        for (let j = 0; j < leaveAttrs.length; j++) {
+            const attr = leaveAttrs[j];
+            if (attr?.objId == info?.objectId && switchPanelLeaves[index]?.dvId === info?.dvId && !attr?.ack4Obj) {
+                let newAttr = { ...attr, pickerName: `${switchPanelLeaves[index]?.name}-${attr?.name}`, dvId: switchPanelLeaves[index]?.dvId }
+                controlledAttr = { ...newAttr }
+                break
+            }
+
+        }
+        if (!!controlledAttr) {
+            break
+        }
+    }
+    console.log('controlledAttr', controlledAttr, switchPanelLeaves, info)
+    return controlledAttr
+}

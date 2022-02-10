@@ -366,6 +366,7 @@ class DeviceMaintainAPIs {
             channelInfo: device.channelInfo,
             attrs: device.attrs,
             sendRules: device.sendTelRules,
+            switchPanelControlInfo: device?.switchPanelControlInfo,
         };
 
         new AxiosFactory()

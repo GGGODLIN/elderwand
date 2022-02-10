@@ -59,7 +59,7 @@ export default class DeviceRepository {
                 if (res.data) {
                     result.total = res.data.length;
                     result.results = res.data;
-                    console.log('listDevices', JSON.stringify(res.data))
+                    //console.log('listDevices', JSON.stringify(res.data))
                 }
 
                 return result;
@@ -83,7 +83,7 @@ export default class DeviceRepository {
             projectId: projectId,
         };
 
-        console.log(params);
+        //console.log(params);
 
         const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
 
@@ -214,7 +214,7 @@ export default class DeviceRepository {
     async editDeviceProtocols(
         id: string,
         pid: string,
-        options: EditDeviceProtocolsOptions
+        options: any
     ): Promise<DeviceDTO> {
         const baseURL = this.origin;
         const pathname = `/api/devices/${id}/protocols`;
@@ -227,12 +227,12 @@ export default class DeviceRepository {
         };
 
         const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
-        console.log('editDeviceProtocols', JSON.stringify(data))
+        console.log('editDeviceProtocols', JSON.stringify(data?.switchPanelControlInfo))
         return await axios
             .put<DeviceDTO>(pathname, data, { params: params, headers: { Authorization: `Bearer ${this.token}` } })
             .then((res) => {
                 const dto: DeviceDTO = res.data;
-                console.log('editDeviceProtocols res', JSON.stringify(dto))
+                //console.log('editDeviceProtocols res', JSON.stringify(dto))
                 return dto;
             })
             .catch((err: AxiosError<ErrorInfoDTO>) => {
