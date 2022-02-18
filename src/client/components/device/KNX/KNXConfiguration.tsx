@@ -318,6 +318,7 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
     let sensors = [];
 
     if (isSensor) {
+        console.log('isSensor')
         sensors = objects
             .filter((obj) => !!obj.ch)
             .map((obj) => {
@@ -342,7 +343,7 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                 };
             });
     }
-    //console.log('sensors', sensors, objects)
+    console.log('sensors', sensors, objects)
 
     // Parent ExtraAttrs
     const { hasParentExtraAttrs, parentExtraAttrs } =
@@ -1230,7 +1231,7 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                         const button = stateOfSetting.setting.buttons[i];
 
                         if (button.attr.btn == btn && button.attr.page == page) {
-                            draft.setting.buttons[i].info.connectionInfo = [{ dvId: value?.split('.')?.[0], objectId: value?.split('.')?.[1] }];
+                            draft.setting.buttons[i].info.connectionInfo = [{ dvId: value?.split('.')?.[0], objectId: parseInt(value?.split('.')?.[1]) }];
                         }
                     }
                 });
@@ -1550,7 +1551,9 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
             if (channel?.dvId && channel?.dvId !== ' ') {
                 let targetLeave = device?.leaves?.find((leave) => leave?.dvId === channel?.dvId)
                 if (!!targetLeave) {
-                    let newAttrs = attrs?.filter((attr) => attr?.chId === channel?.channelNo)
+                    let tempNewAttrs = attrs?.filter((attr) => attr?.chId === channel?.channelNo)
+
+                    let [newAttrs, oldObjIdToNewObjIdTable] = assignNewObjId(tempNewAttrs)
 
                     const helper = new DeviceHelper({ device: targetLeave });
                     const { protocol } = helper.isKNX();
@@ -1567,6 +1570,7 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                     let newChannelsArr = channelsArr.map((channel) => channel.obj).filter((obj) => obj?.ch === channel?.channelNo)
                     //console.log('newChannelsArr', newChannelsArr, channelsArr)
                     newChannelsArr.sort((a, b) => a.ch - b.ch)
+                    newChannelsArr = newChannelsArr.map((item) => ({ ...item, objId: oldObjIdToNewObjIdTable.find((log) => log?.old === item?.objId)?.new }))
                     objs.push(
                         ...newChannelsArr
                     );
@@ -3882,4 +3886,36 @@ const getControlledAttr = (switchPanelLeaves, info) => {
     }
     console.log('controlledAttr', controlledAttr, switchPanelLeaves, info)
     return controlledAttr
+}
+const assignNewObjId = (attrs) => {
+    let objArr = []
+    let ack4ObjArr = []
+    for (let index = 0; index < attrs.length; index++) {
+        const element = attrs[index];
+        if (element?.ack4Obj) {
+            ack4ObjArr.push(element)
+        } else {
+            objArr.push(element)
+        }
+    }
+    let concatArr = objArr.concat(ack4ObjArr)
+    let assignNewObjIdArr = []
+    let oldObjIdToNewObjIdTable = []
+    for (let index = 0; index < concatArr.length; index++) {
+        const element = concatArr[index];
+        if (element?.ack4Obj) {
+            for (let j = 0; j < concatArr.length; j++) {
+                const elementJ = concatArr[j];
+                if (elementJ?.objId === element?.ack4Obj) {
+                    assignNewObjIdArr.push({ ...element, ack4Obj: j + 1, objId: index + 1 })
+                    oldObjIdToNewObjIdTable.push({ old: element?.objId, new: index + 1 })
+                    break
+                }
+            }
+        } else {
+            assignNewObjIdArr.push({ ...element, objId: index + 1 })
+            oldObjIdToNewObjIdTable.push({ old: element?.objId, new: index + 1 })
+        }
+    }
+    return [assignNewObjIdArr, oldObjIdToNewObjIdTable]
 }
