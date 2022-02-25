@@ -99,6 +99,7 @@ export class DeviceMaintainCardTypeHelper {
 
         const src = item.type.categoryId as DeviceTypeCategory;
         const dest = target.type.categoryId;
+        const isEmbeddedDevice = (item?.model?.brand?.code === "None" || item?.model?.brand?.code === "Non") && (item?.model?.name === "None" || item?.model?.name === "Non")
 
         if (dest == DeviceTypeCategories.Gateway) {
             return [
@@ -107,7 +108,7 @@ export class DeviceMaintainCardTypeHelper {
                 DeviceTypeCategories.Sensor,
                 DeviceTypeCategories.SpecialDevice,
                 DeviceTypeCategories.ContactBridge,
-            ].includes(src);
+            ].includes(src) && !isEmbeddedDevice;
         }
 
         if (dest == DeviceTypeCategories.Actuator) {
@@ -188,9 +189,9 @@ export class DeviceMaintainCardTypeHelper {
                 DeviceMaintainCardTypes.DeviceSmallCard,
             ].includes(target.type)
                 ? DeviceMaintainCardTypeHelper.isLinkableDevice(
-                      item.payload,
-                      target.payload as DeviceVM
-                  )
+                    item.payload,
+                    target.payload as DeviceVM
+                )
                 : false;
         }
 

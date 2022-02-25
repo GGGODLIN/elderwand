@@ -20,7 +20,7 @@ interface GatewayBindDialogProps {
     boundCallback?: Function;
 }
 
-const notifyGatewayIsBound = async (device: DeviceVM): Promise<void> => {
+const notifyGatewayIsBound = async (device: DeviceVM) => {
     // http://{{GATEWAY_IP}}:4232/driftice/v1/bindIotCloud/{{GATEWAY_DVID}}
     const token = 'icjUOsDkUO46k6b8vlypIjrMNENe9V6I'; // TODO dynamic
     const id = device.dvId;
@@ -52,7 +52,8 @@ const notifyGatewayIsBound = async (device: DeviceVM): Promise<void> => {
         })
     );
 
-    console.log(all);
+    console.log('notifyGatewayIsBound', all);
+    return all
 };
 
 const GatewayBindDialog: React.FC<GatewayBindDialogProps> = (props) => {
@@ -66,7 +67,15 @@ const GatewayBindDialog: React.FC<GatewayBindDialogProps> = (props) => {
         dispatch(SpaceSlice.closeBindModal());
     };
 
-    const handleBind = () => {
+    const handleBind = async () => {
+        return console.log('props.device', props.connection)
+        let promises = await notifyGatewayIsBound(props.device);
+        if (promises.includes(false)) {
+
+            dispatch(SpaceSlice.closeBindModal());
+            alert('ERROR!')
+            return
+        }
         const url = `/api/devices/${props.device.id}/gateway`;
 
         const params = {
@@ -85,7 +94,7 @@ const GatewayBindDialog: React.FC<GatewayBindDialogProps> = (props) => {
             .getInstance()
             .put<DeviceVM>(url, body, { params })
             .then((res) => {
-                notifyGatewayIsBound(res.data);
+
                 dispatch(SpaceSlice.closeBindModal());
                 props.boundCallback();
                 console.log(res.data);

@@ -96,11 +96,12 @@ const SpaceSlice = createSlice<
                 draft.connections = action.payload.results.map((conn) => {
                     return device_map[conn.imei]
                         ? {
-                              ...conn,
-                              isBound: true,
-                          }
+                            ...conn,
+                            isBound: true,
+                        }
                         : conn;
                 });
+                console.log('draft.connections', draft.connections)
             });
         },
         fetchProjects: (
@@ -247,8 +248,8 @@ const setCheckbox = SpaceSlice.actions.setCheckbox as ActionCreatorWithPayload<
 
 const fetchGatewayConnections = SpaceSlice.actions
     .fetchGatewayConnections as ActionCreatorWithPayload<
-    PaginationVM<GatewayConnectionVM>
->;
+        PaginationVM<GatewayConnectionVM>
+    >;
 
 const selectGatewayConnection = SpaceSlice.actions
     .selectGatewayConnection as ActionCreatorWithPayload<GatewayConnectionVM>;

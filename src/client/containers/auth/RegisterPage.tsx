@@ -107,7 +107,7 @@ export const RegisterPage: React.FC<RegisterPageProps> = (props) => {
                 }
             })
             .catch((err: AxiosError<any>) => {
-                console.error(err.message);
+                alert(err.message);
                 dispatch(FetchSlice.end());
             })
             .finally(() => {

@@ -1,8 +1,8 @@
-import { Card, CardContent } from '@material-ui/core';
+import { Card, CardContent, IconButton } from '@material-ui/core';
 import GetAppIcon from '@material-ui/icons/GetApp';
 import LinkOffIcon from '@material-ui/icons/LinkOff';
 import clsx from 'clsx';
-import React from 'react';
+import React, { useState } from 'react';
 import { useDrop } from 'react-dnd';
 import { useDispatch } from 'react-redux';
 import ProjectVM from 'src/client/domain/project/ProjectVM';
@@ -12,6 +12,8 @@ import SpaceVM, {
     SpaceTopology,
 } from 'src/client/domain/space/SpaceVM';
 import SpaceSlice from 'src/client/slices/SpaceSlice';
+import SettingsIcon from '@material-ui/icons/Settings';
+import { EditSpaceCardDialog } from './EditSpaceCardDialog';
 
 interface SpaceSmallCardProp {
     space: SpaceVM;
@@ -65,11 +67,17 @@ interface SpaceCardProp {
 const SpaceCard: React.FC<SpaceCardProp> = (props) => {
     const space = props.space;
 
+    const [show, setShow] = useState(false);
+
     const handleSpaceCardSelect = (e) => {
         e.stopPropagation();
         if (!!props.onSelectCard) {
             props.onSelectCard(space);
         }
+    };
+    const handleStopPropagation = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
     };
 
     const id = space.id;
@@ -128,7 +136,11 @@ const SpaceCard: React.FC<SpaceCardProp> = (props) => {
                 <Card className={'space-card'} variant="outlined">
                     <div className="card-header">
                         <div className="header-name">{name}</div>
-                        <div className="header-actions">{'actions'}</div>
+                        <div className="header-actions" onClick={handleStopPropagation}>
+                            <IconButton onClick={() => { setShow(!show) }}>
+                                <SettingsIcon />
+                            </IconButton>
+                        </div>
                     </div>
                     <CardContent>
                         <div className="leaves">{elements}</div>
@@ -139,6 +151,7 @@ const SpaceCard: React.FC<SpaceCardProp> = (props) => {
                     </CardContent>
                 </Card>
             </label>
+            <EditSpaceCardDialog show={show} setShow={setShow} data={space} />
         </React.Fragment>
     );
 };
@@ -194,7 +207,7 @@ const DeviceSmallCard: React.FC<DeviceSmallCardProp> = (props) => {
             className={classname}
             variant="outlined"
             onClick={handleClick}
-            // onDoubleClick={handleDoubleClick}
+        // onDoubleClick={handleDoubleClick}
         >
             <div className="card-header">
                 <div className="header-name">{name}</div>
@@ -413,15 +426,15 @@ const SpaceCardStyleList: React.FC<SpaceCardListProp> = (props) => {
 
     const spaces = !props.space_selected
         ? props.spaces.filter((item) => {
-              if (!item.parentId) {
-                  return item;
-              }
-          })
+            if (!item.parentId) {
+                return item;
+            }
+        })
         : props.spaces.filter((item) => {
-              if (props.space_selected.id == item.parentId) {
-                  return item;
-              }
-          });
+            if (props.space_selected.id == item.parentId) {
+                return item;
+            }
+        });
 
     for (let i = 0; i < spaces.length; i++) {
         const space = spaces[i];

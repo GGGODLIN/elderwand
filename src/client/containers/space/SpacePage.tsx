@@ -105,7 +105,7 @@ const fetchGatewayConnections = (
         .getInstance()
         .get<PaginationVM<GatewayConnectionVM>>(url, { params })
         .then((res) => {
-            console.log(res.data);
+            console.log('fetchGatewayConnections', res.data);
             dispatch(SpaceSlice.fetchGatewayConnections(res.data));
         })
         .catch((err) => {

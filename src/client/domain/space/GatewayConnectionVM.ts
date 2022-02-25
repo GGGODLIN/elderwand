@@ -10,6 +10,7 @@ export default interface GatewayConnectionVM {
     createdAt: number;
     updatedAt: number;
 
+    dvId: string;
     isBound: boolean;
 }
 
