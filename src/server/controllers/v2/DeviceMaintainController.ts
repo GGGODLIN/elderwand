@@ -7,12 +7,15 @@ import SpaceDTO from '../../domain/space/models/SpaceDTO';
 import DeviceDataRepositoryHelper, {
     ApiRepositoryCtor,
 } from '../../helpers/DeviceDataRepositoryHelper';
+import AuthUtil from '../../utils/AuthUtil';
 
 export default class DeviceMaintainControllerVersion2 {
-    static getRepository = async (ctx: IRouterContext) => {
+    static getRepository = async (ctx) => {
+        const token = AuthUtil.getToken(ctx);
         const ctor: ApiRepositoryCtor = {
             host: ServerEnvVar.SkymapApiHost,
             platformId: Platform.ElderWand,
+            token: token
         };
 
         const params = {
@@ -68,7 +71,7 @@ export default class DeviceMaintainControllerVersion2 {
             license: project.expireDate,
             server: 'beta', // TODO
         };
-
+        console.log('getRepository', vm)
         ctx.status = 200;
         ctx.body = vm;
 

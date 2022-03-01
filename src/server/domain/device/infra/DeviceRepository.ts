@@ -134,6 +134,7 @@ export default class DeviceRepository {
                 return dto;
             })
             .catch((err: AxiosError<ErrorInfoDTO>) => {
+                console.log('getDevice Err', err)
                 if (err.isAxiosError) {
                     // console.log('isAxiosError from repository');
                 }
