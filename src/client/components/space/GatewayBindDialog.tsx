@@ -68,8 +68,8 @@ const GatewayBindDialog: React.FC<GatewayBindDialogProps> = (props) => {
     };
 
     const handleBind = async () => {
-        return console.log('props.device', props.connection)
-        let promises = await notifyGatewayIsBound(props.device);
+        //return console.log('props.device', props.connection, props.device)
+        let promises = await notifyGatewayIsBound({ ...props.device, networkCards: [...props?.connection?.networkCards] });
         if (promises.includes(false)) {
 
             dispatch(SpaceSlice.closeBindModal());
@@ -108,7 +108,7 @@ const GatewayBindDialog: React.FC<GatewayBindDialogProps> = (props) => {
     };
 
     const open = props.open;
-
+    console.log('props.device', props.connection)
     return (
         <div>
             <Dialog
@@ -122,7 +122,15 @@ const GatewayBindDialog: React.FC<GatewayBindDialogProps> = (props) => {
                 <DialogContent>
                     <div>{props.device.name}</div>
                     <div>{props.connection.publicIP}</div>
-                    <div>{props.connection.imei}</div>
+                    {props.connection.networkCards.map((card) => {
+                        return (
+                            <React.Fragment key={card.id}>
+                                <div>{`${card.network} ${card.primary ? 'primary' : ''
+                                    }`}</div>
+                                <div>{`${card.mac} / ${card.ip}`}</div>
+                            </React.Fragment>
+                        );
+                    })}
                 </DialogContent>
                 <DialogActions>
                     <Button

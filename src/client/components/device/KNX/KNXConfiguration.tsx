@@ -122,10 +122,21 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
     // Physical Address
     const pAddr = !protocol?.commInfo?.pAddr ? '' : protocol.commInfo.pAddr;
 
+    const newFilters = (networkCardCount) => {
+        let newFiltersArr = [{ in: null, networkName: 'TP', out: null }]
+        if (networkCardCount >= 1) {
+            newFiltersArr.push({ in: null, networkName: 'internet', out: null })
+        }
+        if (networkCardCount >= 2) {
+            newFiltersArr.push({ in: null, networkName: 'intranet', out: null })
+        }
+        return newFiltersArr
+    }
     // Filters
     let filters = (
-        !protocol?.commInfo?.filters ? [] : protocol.commInfo.filters
+        !protocol?.commInfo?.filters ? newFilters(device?.spec?.networkCardCount) : protocol.commInfo.filters
     ) as Filter[];
+
 
     const isIPR = device.spec?.KNX?.isIPR ? device.spec.KNX.isIPR : false;
 
@@ -1478,7 +1489,7 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
         const switchPanelControlInfo = [];
 
         switchPanelControlInfo.push(
-            ...stateOfSetting.setting.buttons.map((button) => button.info)
+            ...stateOfSetting.setting.buttons.map((button) => button.info).filter((item) => item?.connectionInfo?.length >= 1)
         );
         console.log('switchPanelControlInfo', switchPanelControlInfo)
 
@@ -1700,6 +1711,9 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                         <label className="group-label">
                             {'KNX IPR Filters'}
                         </label>
+                        <label className="group-label-second">
+                            {'(Blocking message by group address, e.g. 1, 2-4, 5/1, 5/2-5/5, 6/1/1, 6/2/1-6/3/123)'}
+                        </label>
                         <div className={'filters'}>
                             {stateOfSetting.setting.filters.map(
                                 (filter, idx) => {
@@ -1714,7 +1728,7 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                                                         shrink: true,
                                                     }}
                                                     required={false}
-                                                    label={'Input'}
+                                                    label={'In'}
                                                     value={filter.in}
                                                     // value={filters[idx].in}
                                                     onChange={
@@ -1758,7 +1772,7 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                                                         shrink: true,
                                                     }}
                                                     required={false}
-                                                    label="Output"
+                                                    label="Out"
                                                     // value={filter.out}
                                                     value={
                                                         stateOfSetting.setting

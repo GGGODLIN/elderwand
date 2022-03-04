@@ -141,7 +141,7 @@ interface NetworkCardVM {
     id: string;
     primary?: boolean;
     enable: boolean;
-    name: string;
+    name?: string;
     ip: string;
     mac: string;
     network: string;

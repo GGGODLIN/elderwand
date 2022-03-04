@@ -228,7 +228,7 @@ export default class DeviceRepository {
         };
 
         const axios = new AxiosFactory({ baseURL: baseURL }).getInstance();
-        console.log('editDeviceProtocols', JSON.stringify(data?.switchPanelControlInfo))
+        console.log('editDeviceProtocols', JSON.stringify(data))
         return await axios
             .put<DeviceDTO>(pathname, data, { params: params, headers: { Authorization: `Bearer ${this.token}` } })
             .then((res) => {

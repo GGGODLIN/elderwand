@@ -55,6 +55,8 @@ export default class DeviceMaintainControllerVersion2 {
             query.projectId
         );
 
+        console.log('getRepository', JSON.stringify({ device: device, project: project, spaces: spaces, devices: devices }))
+
         const filter_spaces_with_device = filterSpaceWithDevices(
             spaces,
             devices

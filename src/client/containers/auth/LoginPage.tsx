@@ -60,10 +60,10 @@ const LoginPage: React.FC<LoginPageProps> = (props) => {
         password: '',
     };
 
-    if (ClientEnvVar.IsDev) {
-        defaultValues.username = 'skymap_admin';
-        defaultValues.password = 'password';
-    }
+    // if (ClientEnvVar.IsDev) {
+    //     defaultValues.username = 'skymap_admin';
+    //     defaultValues.password = 'password';
+    // }
 
     const {
         register,
