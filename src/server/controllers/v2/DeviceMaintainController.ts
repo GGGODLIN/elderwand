@@ -103,7 +103,15 @@ function filterSpaceWithDevices(spaces, devices) {
         ) {
             continue;
         }
-        filter.push(spaces_map[device.spaceId].parentId);
+        let pushId = spaces_map[device.spaceId].parentId
+        for (let index = 0; index < 1000; index++) {
+            if (pushId) {
+                filter.push(pushId);
+                pushId = spaces_map[pushId]?.parentId
+            } else {
+                break
+            }
+        }
     }
 
     const filter_spaces_with_device = spaces.filter((space) => {
@@ -159,6 +167,13 @@ function convertToDeviceVM(dto: DeviceDTO): DeviceVM {
             break;
         }
     }
+    let spec_switch = dto?.spec?.switchPanel ? {
+        btnCnt: dto?.spec?.switchPanel?.btnCount,
+        hasLPress: dto?.spec?.switchPanel?.hasLPress,
+        layout: dto?.spec?.switchPanel?.layout,
+        modifyStyle: dto?.spec?.switchPanel?.modifyStyle,
+        pageCount: dto?.spec?.switchPanel?.pageCount,
+    } : undefined
 
     return {
         id: dto.id,
@@ -175,18 +190,20 @@ function convertToDeviceVM(dto: DeviceDTO): DeviceVM {
         } as HwInfo,
         iconId: dto.iconId,
 
-        protocolInfo: dto.protocols.map((protocol) => {
-            return {
-                protocol: protocol.typeId,
-            };
-        }),
-
+        swInfo: dto?.softwareInfo,
         commInfo: comm_info,
 
         spec: {
             comPortCnt: dto.spec.comPortCount,
+            switch: spec_switch,
+            RS485: dto?.spec?.RS485,
             // manufacturerCode: dto.spec.manufacturerCode,
             isIPR: dto.spec.KNX?.isIPR ? dto.spec.KNX?.isIPR : false,
+            protocolInfo: dto.protocols.map((protocol) => {
+                return {
+                    protocol: protocol.typeId,
+                };
+            }),
         } as Spec,
 
         chInfo: dto.channelInfo?.map((info) => {
@@ -295,8 +312,7 @@ interface DeviceVM {
     iconId: string;
 
     hwInfo: HwInfo;
-
-    protocolInfo: ProtocolInfo[];
+    swInfo?: object[];
     commInfo: object;
 
     spec: Spec;
@@ -382,6 +398,7 @@ interface Spec {
     RS485?: Rs485;
     switch?: Switch;
 
+    protocolInfo: ProtocolInfo[];
     // id: string;
     // comPortCount?: number;
     // networkCardCount?: number;

@@ -17,19 +17,101 @@ interface GatewayBindDialogProps {
     device: DeviceVM;
     boundCallback?: Function;
 }
+const notifyGatewayIsUnBound = async (device: DeviceVM) => {
+    const token = 'icjUOsDkUO46k6b8vlypIjrMNENe9V6I'; // TODO dynamic
+    const id = device.dvId;
+    let sortedNetworkCards = device.networkCards?.sort?.((a, b) => {
+        if (a?.primary)
+            return -1
+        if (b?.primary)
+            return 0
+        return 0
+    })
+    console.log('notifyGatewayIsBound card', sortedNetworkCards)
+    let response = { isOk: false, res: null }
+    for (let index = 0; index < sortedNetworkCards?.length; index++) {
+        const card = sortedNetworkCards[index];
+        const base = `http://${card.ip}:4232`;
+        const url = `/driftice/v1/unbindIotCloud/${id}`;
+        const params = {};
+        const body = {};
+        let result = await new AxiosFactory({ baseURL: base })
+            .useHeader('token', token)
+            .useBefore(() => {
+                // dispatch(FetchSlice.start());
+            })
+            .getInstance()
+            .post<any>(url, body, { params })
+            .then((res) => {
+                console.log(res.data);
+                return { isOk: true, res: res };
+            })
+            .catch((err) => {
+                console.log(err);
+                return { isOk: false, res: err };
+            })
+            .finally(() => {
+                // dispatch(FetchSlice.end());
+            });
+        response = result
+        if (result?.isOk || result?.res?.response?.data?.errMsg) {
+            break
+        }
+    }
+    // const all = await Promise.all(
+    //     device.networkCards.map(async (card) => {
+    //         const base = `http://${card.ip}:4232`;
+    //         const url = `/driftice/v1/bindIotCloud/${id}`;
+    //         const params = {};
+    //         const body = {};
 
+    //         return await new AxiosFactory({ baseURL: base })
+    //             .useHeader('token', token)
+    //             .useBefore(() => {
+    //                 // dispatch(FetchSlice.start());
+    //             })
+    //             .getInstance()
+    //             .post<any>(url, body, { params })
+    //             .then((res) => {
+    //                 console.log(res.data);
+    //                 return { isOk: true, res: res };
+    //             })
+    //             .catch((err) => {
+    //                 console.log(err);
+    //                 return { isOk: false, res: err };
+    //             })
+    //             .finally(() => {
+    //                 // dispatch(FetchSlice.end());
+    //             });
+    //     })
+    // );
+
+    console.log('notifyGatewayIsUnBound', response);
+    return response
+};
 const GatewayUnBindDialog: React.FC<GatewayBindDialogProps> = (props) => {
     if (!props.device) {
         return <div />;
     }
-
+    console.log('GatewayUnBindDialog', props.device)
     const dispatch = useDispatch();
 
     const handleClose = () => {
         dispatch(SpaceSlice.closeUnBindModal());
     };
 
-    const handleUnBind = () => {
+    const handleUnBind = async () => {
+
+        dispatch(FetchSlice.start());
+        let response = await notifyGatewayIsUnBound({ ...props.device });
+        dispatch(FetchSlice.end());
+        if (!response?.isOk) {
+
+            dispatch(SpaceSlice.closeUnBindModal());
+            alert(`ERROR!  ${response?.res?.response?.data?.errMsg ?? response?.res}`)
+            return
+        }
+
         const url = `/api/devices/${props.device.id}/gateway`;
 
         const params = {

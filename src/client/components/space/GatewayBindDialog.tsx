@@ -24,36 +24,74 @@ const notifyGatewayIsBound = async (device: DeviceVM) => {
     // http://{{GATEWAY_IP}}:4232/driftice/v1/bindIotCloud/{{GATEWAY_DVID}}
     const token = 'icjUOsDkUO46k6b8vlypIjrMNENe9V6I'; // TODO dynamic
     const id = device.dvId;
-    const all = await Promise.all(
-        device.networkCards.map(async (card) => {
-            const base = `http://${card.ip}:4232`;
-            const url = `/driftice/v1/bindIotCloud/${id}`;
-            const params = {};
-            const body = {};
+    let sortedNetworkCards = device.networkCards?.sort?.((a, b) => {
+        if (a?.primary)
+            return -1
+        if (b?.primary)
+            return 0
+        return 0
+    })
+    console.log('notifyGatewayIsBound card', sortedNetworkCards)
+    let response = { isOk: false, res: null }
+    for (let index = 0; index < sortedNetworkCards?.length; index++) {
+        const card = sortedNetworkCards[index];
+        const base = `http://${card.ip}:4232`;
+        const url = `/driftice/v1/bindIotCloud/${id}`;
+        const params = {};
+        const body = {};
+        let result = await new AxiosFactory({ baseURL: base })
+            .useHeader('token', token)
+            .useBefore(() => {
+                // dispatch(FetchSlice.start());
+            })
+            .getInstance()
+            .post<any>(url, body, { params })
+            .then((res) => {
+                console.log(res.data);
+                return { isOk: true, res: res };
+            })
+            .catch((err) => {
+                console.log(err);
+                return { isOk: false, res: err };
+            })
+            .finally(() => {
+                // dispatch(FetchSlice.end());
+            });
+        response = result
+        if (result?.isOk || result?.res?.response?.data?.errMsg) {
+            break
+        }
+    }
+    // const all = await Promise.all(
+    //     device.networkCards.map(async (card) => {
+    //         const base = `http://${card.ip}:4232`;
+    //         const url = `/driftice/v1/bindIotCloud/${id}`;
+    //         const params = {};
+    //         const body = {};
 
-            return await new AxiosFactory({ baseURL: base })
-                .useHeader('token', token)
-                .useBefore(() => {
-                    // dispatch(FetchSlice.start());
-                })
-                .getInstance()
-                .post<any>(url, body, { params })
-                .then((res) => {
-                    console.log(res.data);
-                    return { isOk: true, res: res };
-                })
-                .catch((err) => {
-                    console.log(err);
-                    return { isOk: false, res: err };
-                })
-                .finally(() => {
-                    // dispatch(FetchSlice.end());
-                });
-        })
-    );
+    //         return await new AxiosFactory({ baseURL: base })
+    //             .useHeader('token', token)
+    //             .useBefore(() => {
+    //                 // dispatch(FetchSlice.start());
+    //             })
+    //             .getInstance()
+    //             .post<any>(url, body, { params })
+    //             .then((res) => {
+    //                 console.log(res.data);
+    //                 return { isOk: true, res: res };
+    //             })
+    //             .catch((err) => {
+    //                 console.log(err);
+    //                 return { isOk: false, res: err };
+    //             })
+    //             .finally(() => {
+    //                 // dispatch(FetchSlice.end());
+    //             });
+    //     })
+    // );
 
-    console.log('notifyGatewayIsBound', all);
-    return all
+    console.log('notifyGatewayIsBound', response);
+    return response
 };
 
 const GatewayBindDialog: React.FC<GatewayBindDialogProps> = (props) => {
@@ -70,12 +108,12 @@ const GatewayBindDialog: React.FC<GatewayBindDialogProps> = (props) => {
     const handleBind = async () => {
         //return console.log('props.device', props.connection, props.device)
         dispatch(FetchSlice.start());
-        let promises = await notifyGatewayIsBound({ ...props.device, networkCards: [...props?.connection?.networkCards] });
+        let response = await notifyGatewayIsBound({ ...props.device, networkCards: [...props?.connection?.networkCards] });
         dispatch(FetchSlice.end());
-        if (promises?.findIndex?.((item) => item?.isOk === false) !== -1) {
+        if (!response?.isOk) {
 
             dispatch(SpaceSlice.closeBindModal());
-            alert(`ERROR!  ${promises?.find?.((item) => item?.isOk === false)?.res?.message}`)
+            alert(`ERROR!  ${response?.res?.response?.data?.errMsg ?? response?.res}`)
             return
         }
         const url = `/api/devices/${props.device.id}/gateway`;
