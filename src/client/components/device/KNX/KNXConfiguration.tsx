@@ -122,19 +122,39 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
     // Physical Address
     const pAddr = !protocol?.commInfo?.pAddr ? '' : protocol.commInfo.pAddr;
 
-    const newFilters = (networkCardCount) => {
-        let newFiltersArr = [{ in: null, networkName: 'TP', out: null }]
+    const newFilters = (networkCardCount, filters) => {
+        let newFiltersArr = []
+        if (filters?.find?.((item) => item?.networkName === 'TP')) {
+            newFiltersArr.push({ ...filters?.find?.((item) => item?.networkName === 'TP'), name: null })
+        }
+        else {
+            newFiltersArr.push({ in: null, networkName: 'TP', name: null, out: null })
+        }
+
         if (networkCardCount >= 1) {
-            newFiltersArr.push({ in: null, networkName: 'internet', out: null })
+            if (filters?.find?.((item) => (item?.networkName === 'eth0' || item?.name === 'eth0'))) {
+                newFiltersArr.push({ ...filters?.find?.((item) => (item?.networkName === 'eth0' || item?.name === 'eth0')), name: 'eth0', networkName: 'internet' })
+            }
+            else {
+                newFiltersArr.push({ in: null, networkName: 'internet', name: 'eth0', out: null })
+            }
+
         }
         if (networkCardCount >= 2) {
-            newFiltersArr.push({ in: null, networkName: 'intranet', out: null })
+            console.log('networkCardCount 2')
+            if (filters?.find?.((item) => (item?.networkName === 'eth1' || item?.name === 'eth1'))) {
+                newFiltersArr.push({ ...filters?.find?.((item) => (item?.networkName === 'eth1' || item?.name === 'eth1')), name: 'eth1', networkName: 'intranet' })
+            }
+            else {
+                newFiltersArr.push({ in: null, networkName: 'intranet', name: 'eth1', out: null })
+            }
+
         }
         return newFiltersArr
     }
     // Filters
     let filters = (
-        !protocol?.commInfo?.filters ? newFilters(device?.spec?.networkCardCount) : protocol.commInfo.filters
+        newFilters(device?.spec?.networkCardCount, protocol.commInfo.filters)
     ) as Filter[];
 
 
@@ -147,24 +167,24 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
     //         out: '',
     //     } as Filter);
     // }
-    const cards = !device.networkCards ? [] : device.networkCards;
+    // const cards = !device.networkCards ? [] : device.networkCards;
 
-    for (const card of cards) {
-        const item = filters.find((filter) => filter.networkName == card.name);
+    // for (const card of cards) {
+    //     const item = filters.find((filter) => filter.networkName == card.network);
 
-        if (!item) {
-            const name =
-                card.name || StringUtil.toUpperCaseFirstLetter(card.network);
+    //     if (!item) {
+    //         const name =
+    //             card.name || StringUtil.toUpperCaseFirstLetter(card.network);
 
-            const filter = {
-                networkName: name,
-                in: '',
-                out: '',
-            } as Filter;
+    //         const filter = {
+    //             networkName: name,
+    //             in: '',
+    //             out: '',
+    //         } as Filter;
 
-            filters = [...filters, filter];
-        }
-    }
+    //         filters = [...filters, filter];
+    //     }
+    // }
 
     const objects = !protocol?.commInfo?.objs
         ? []
@@ -1719,7 +1739,7 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                                 (filter, idx) => {
                                     return (
                                         <div className="filter-group" key={idx}>
-                                            <label>{filter.networkName}</label>
+                                            <label>{filter.networkName}{!!filter?.name && `  (${filter?.name})`}</label>
                                             <div className={'filter'}>
                                                 <TextField
                                                     variant="outlined"

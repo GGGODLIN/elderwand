@@ -40,11 +40,11 @@ const notifyGatewayIsBound = async (device: DeviceVM) => {
                 .post<any>(url, body, { params })
                 .then((res) => {
                     console.log(res.data);
-                    return true;
+                    return { isOk: true, res: res };
                 })
                 .catch((err) => {
                     console.log(err);
-                    return false;
+                    return { isOk: false, res: err };
                 })
                 .finally(() => {
                     // dispatch(FetchSlice.end());
@@ -69,11 +69,13 @@ const GatewayBindDialog: React.FC<GatewayBindDialogProps> = (props) => {
 
     const handleBind = async () => {
         //return console.log('props.device', props.connection, props.device)
+        dispatch(FetchSlice.start());
         let promises = await notifyGatewayIsBound({ ...props.device, networkCards: [...props?.connection?.networkCards] });
-        if (promises.includes(false)) {
+        dispatch(FetchSlice.end());
+        if (promises?.findIndex?.((item) => item?.isOk === false) !== -1) {
 
             dispatch(SpaceSlice.closeBindModal());
-            alert('ERROR!')
+            alert(`ERROR!  ${promises?.find?.((item) => item?.isOk === false)?.res?.message}`)
             return
         }
         const url = `/api/devices/${props.device.id}/gateway`;
