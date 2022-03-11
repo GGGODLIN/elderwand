@@ -93,6 +93,7 @@ interface ProtocolType {
 }
 
 interface DeviceSpec {
+    protocol4GW?: string;
     id: string;
     comPortCount?: number;
     networkCardCount?: number;

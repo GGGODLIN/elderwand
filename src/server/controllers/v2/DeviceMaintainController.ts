@@ -156,17 +156,34 @@ function convertToGatewayVM(dto: DeviceDTO): DeviceVM {
 }
 
 function convertToDeviceVM(dto: DeviceDTO): DeviceVM {
-    let comm_info = {};
+    let comm_info = {} as any;
 
+    //protocol4GW
+    comm_info.protocol4GW = dto.protocols?.[0]?.typeId ?? 'EtN'
     for (const protocol of dto.protocols) {
+        //avoid protocol.commInfo is {}
         if (!protocol.commInfo || `${protocol.commInfo}` != '{}') {
             comm_info = {
+                ...comm_info,
                 protocol4GW: protocol.typeId,
                 [protocol.typeId]: protocol.commInfo,
             };
-            break;
         }
     }
+    if (dto?.spec?.protocol4GW) {
+        comm_info.protocol4GW = dto?.spec?.protocol4GW
+    }
+    // for (const protocol of dto.protocols) {
+    //     //if no protocol.commInfo
+    //     if (!protocol.commInfo || `${protocol.commInfo}` != '{}') {
+    //         comm_info = {
+    //             protocol4GW: protocol.typeId,
+    //             [protocol.typeId]: protocol.commInfo,
+    //         };
+    //         break;
+    //     }
+    // }
+
     let spec_switch = dto?.spec?.switchPanel ? {
         btnCnt: dto?.spec?.switchPanel?.btnCount,
         hasLPress: dto?.spec?.switchPanel?.hasLPress,
