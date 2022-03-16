@@ -201,6 +201,7 @@ export default class DeviceRepository {
         return await axios
             .put<DeviceDTO>(pathname, data, { params: params, headers: { Authorization: `Bearer ${this.token}` } })
             .then((res) => {
+                console.log('editDeviceProfile res', JSON.stringify(res.data))
                 const dto: DeviceDTO = res.data;
                 return dto;
             })

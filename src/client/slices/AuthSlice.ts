@@ -24,6 +24,7 @@ export class AuthState {
             tel: string;
             address: string;
             company: string;
+            roleId?: number;
         };
     };
 }
@@ -42,6 +43,7 @@ const getInitialState = (): AuthState => {
                 tel: '',
                 address: '',
                 company: '',
+                roleId: null,
             },
         },
     };
@@ -62,6 +64,7 @@ export const AuthSlice = createSlice<
                 draft.register.form.id = user.id;
                 draft.register.form.account_id = user.accountId;
                 draft.register.form.email = user.email;
+                draft.register.form.roleId = user?.roleId;
                 // IF already have an account
                 // draft.register.form.username = user.username;
                 // draft.register.form.display_name = user.display_name;

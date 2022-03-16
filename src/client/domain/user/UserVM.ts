@@ -25,6 +25,7 @@ export default interface UserVM {
     updated_by: string;
     created_at: number;
     updated_at: number;
+    roleId?: number;
 }
 
 // TODO remove and change to use PaginationVM

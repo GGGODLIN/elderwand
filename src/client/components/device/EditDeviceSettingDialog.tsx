@@ -467,6 +467,7 @@ const DeviceProfile: React.FC<DeviceProfileProps> = (props) => {
             project,
             device_vo,
             (data) => {
+                console.log('DeviceMaintainAPIs.editDeviceProfile', data)
                 DeviceMaintainAPIs.fetchDeviceTopologyResources(
                     dispatch,
                     project,
@@ -519,10 +520,10 @@ const DeviceProfile: React.FC<DeviceProfileProps> = (props) => {
                             required={true}
                             inputProps={{
                                 ...register('name', {
-                                    minLength: {
-                                        value: 4,
-                                        message: 'minLength',
-                                    },
+                                    // minLength: {
+                                    //     value: 4,
+                                    //     message: 'minLength',
+                                    // },
                                     maxLength: {
                                         value: 32,
                                         message: 'maxLength',
@@ -682,7 +683,7 @@ const DeviceProfile: React.FC<DeviceProfileProps> = (props) => {
                                         !stateOfDeviceProfile.profile.heartbeat
                                             ? 0
                                             : stateOfDeviceProfile.profile
-                                                  .heartbeat
+                                                .heartbeat
                                     }
                                     type={'number'}
                                     disabled={!device.heartbeat}
@@ -720,7 +721,7 @@ const DeviceProfile: React.FC<DeviceProfileProps> = (props) => {
                                         !stateOfDeviceProfile.profile.period
                                             ? 0
                                             : stateOfDeviceProfile.profile
-                                                  .period
+                                                .period
                                     }
                                     type={'number'}
                                     disabled={!device.period}

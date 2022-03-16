@@ -188,7 +188,7 @@ export default class UserRepository {
         const loginData = await this.login('elderwand_admin', 'password')
 
         return await axios
-            .get(pathname, { headers: { Authorization: `Bearer ${loginData?.token}` } })
+            .get(pathname, { headers: { Authorization: `Bearer ${loginData?.[0]?.token}` } })
             .then((res) => {
                 const dto = res.data;
                 return dto;

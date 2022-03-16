@@ -90,7 +90,8 @@ export const RegisterPage: React.FC<RegisterPageProps> = (props) => {
             "id": form.id,
             "password": formValue?.password,
             "tel": formValue?.tel,
-            "username": formValue?.username
+            "username": formValue?.username,
+            "roleId": form?.roleId
         }
 
         new AxiosFactory()
