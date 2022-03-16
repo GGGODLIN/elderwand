@@ -6,40 +6,40 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import DeviceMaintainAPIs from 'src/client/domain/device/DeviceMaintainAPIs';
-import DeviceVM, { ProjectVM } from 'src/client/domain/device/DeviceVM';
-import DeviceSlice from 'src/client/slices/DeviceSlice';
+import { ProjectVM, SpaceVM } from 'src/client/domain/device/DeviceVM';
+import SpaceSlice from 'src/client/slices/SpaceSlice';
 
-interface RemoveDeviceDialogProps {
+interface RemoveSpaceDialogProps {
     open: boolean;
     project: ProjectVM;
-    device: DeviceVM;
-    removeSuccessCallback?: Function;
+    space: SpaceVM;
 }
 
-const RemoveDeviceDialog: React.FC<RemoveDeviceDialogProps> = (props) => {
+const RemoveSpaceDialog: React.FC<RemoveSpaceDialogProps> = (props) => {
     const dispatch = useDispatch();
-
-    const device = props.device;
-    const project = props.project;
 
     if (!props.open) {
         return null;
     }
 
     const handleClose = () => {
-        dispatch(DeviceSlice.closeRemoveDeviceDialog());
+        dispatch(SpaceSlice.closeRemoveSpaceDialog());
     };
 
-    const handleRemove = () => {
-        DeviceMaintainAPIs.removeDevice(dispatch, project, device, () => {
-            DeviceMaintainAPIs.fetchDeviceTopologyResources(
-                dispatch,
-                props.project,
-                () => {
-                    dispatch(DeviceSlice.closeRemoveDeviceDialog());
-                }
-            );
-        });
+    const handleRemoveSpace = () => {
+        if (!props.space) {
+            return;
+        }
+
+        DeviceMaintainAPIs.removeSpace(
+            dispatch,
+            props.project,
+            props.space,
+            () => {
+                dispatch(SpaceSlice.closeRemoveSpaceDialog());
+                dispatch(SpaceSlice.refreshSpace());
+            }
+        );
     };
 
     const open = props.open;
@@ -52,21 +52,24 @@ const RemoveDeviceDialog: React.FC<RemoveDeviceDialogProps> = (props) => {
                 aria-labelledby="form-dialog-title"
             >
                 <DialogTitle id="form-dialog-title">
-                    {'Remove Device'}
+                    {'Remove Space'}
                 </DialogTitle>
                 <DialogContent>
-                    { }
                     <div>{`${props.project.name} - ${props.project.code}`}</div>
-                    <div>{`${props.device.name} - ${props.device.id}`}</div>
+                    {props.space && (
+                        <div>{`${props.space.name} - ${props.space.id}`}</div>
+                    )}
                 </DialogContent>
                 <DialogActions>
-                    <Button
-                        className={'remove'}
-                        onClick={handleRemove}
-                        style={{ color: 'red' }}
-                    >
-                        {'Remove'}
-                    </Button>
+                    {props.space && (
+                        <Button
+                            className={'add'}
+                            onClick={handleRemoveSpace}
+                            style={{ color: 'red' }}
+                        >
+                            {'Remove'}
+                        </Button>
+                    )}
                     <Button className={'cancel'} onClick={handleClose}>
                         {'Cancel'}
                     </Button>
@@ -76,4 +79,4 @@ const RemoveDeviceDialog: React.FC<RemoveDeviceDialogProps> = (props) => {
     );
 };
 
-export default RemoveDeviceDialog;
+export default RemoveSpaceDialog;

@@ -14,6 +14,7 @@ import SpaceVM, {
 import SpaceSlice from 'src/client/slices/SpaceSlice';
 import SettingsIcon from '@material-ui/icons/Settings';
 import { EditSpaceCardDialog } from './EditSpaceCardDialog';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 interface SpaceSmallCardProp {
     space: SpaceVM;
@@ -66,7 +67,7 @@ interface SpaceCardProp {
 
 const SpaceCard: React.FC<SpaceCardProp> = (props) => {
     const space = props.space;
-
+    const dispatch = useDispatch();
     const [show, setShow] = useState(false);
 
     const handleSpaceCardSelect = (e) => {
@@ -78,6 +79,10 @@ const SpaceCard: React.FC<SpaceCardProp> = (props) => {
     const handleStopPropagation = (e) => {
         e.preventDefault();
         e.stopPropagation();
+    };
+    const handleRemoveSpace = (e) => {
+        e.stopPropagation();
+        dispatch(SpaceSlice.removeSpace(space));
     };
 
     const id = space.id;
@@ -139,6 +144,9 @@ const SpaceCard: React.FC<SpaceCardProp> = (props) => {
                         <div className="header-actions" onClick={handleStopPropagation}>
                             <IconButton onClick={() => { setShow(!show) }}>
                                 <SettingsIcon />
+                            </IconButton>
+                            <IconButton onClick={handleRemoveSpace}>
+                                <DeleteIcon />
                             </IconButton>
                         </div>
                     </div>

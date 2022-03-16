@@ -21,7 +21,7 @@ export default class AuthController {
         await new AuthorizationUCO(repository)
             .login(body)
             .then((res: UserDTO) => {
-                const user = res;
+                const user = res?.[0];
 
                 const data = {
                     id: user.id,
@@ -46,6 +46,7 @@ export default class AuthController {
                 return;
             })
             .catch((err) => {
+                console.log('err', err)
                 if (err.isAxiosError) {
                     ctx.status = err.response.status;
                     ctx.body = err.response.data;

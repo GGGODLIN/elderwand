@@ -154,7 +154,7 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
     }
     // Filters
     let filters = (
-        newFilters(device?.spec?.networkCardCount, protocol.commInfo.filters)
+        newFilters(device?.spec?.networkCardCount, protocol?.commInfo?.filters)
     ) as Filter[];
 
 
@@ -1501,7 +1501,8 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
         const channelInfo = [];
 
         for (const key of Object.keys(groups)) {
-            channelInfo.push(groups[key][0]);
+            if (!!groups[key][0]?.dvId && !!groups[key][0]?.channelNo)
+                channelInfo.push(groups[key][0]);
         }
         //console.log('channelInfo', groups, channelInfo)
 

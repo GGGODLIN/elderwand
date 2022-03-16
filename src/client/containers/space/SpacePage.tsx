@@ -29,6 +29,7 @@ import { RootState } from 'src/client/reducer';
 import FetchSlice from 'src/client/slices/FetchSlice';
 import SpaceSlice from 'src/client/slices/SpaceSlice';
 import ScrollUtil from 'src/client/utils/ScrollUtil';
+import RemoveSpaceDialog from 'src/client/components/space/RemoveSpaceDialog';
 
 const Space2DTopologyGraphWithNoSSR = dynamic(
     () => import('src/client/components/space/Space2DTopologyGraph'),
@@ -242,6 +243,8 @@ export const SpacePage: React.FC<SpacePageProps> = () => {
         bind_modal,
         unbind_modal,
         client_ip,
+        remove_space_dialog,
+        refreshSpaceFlag
     } = useSelector((state: RootState) => {
         return {
             projects: state.space.projects || [],
@@ -253,6 +256,8 @@ export const SpacePage: React.FC<SpacePageProps> = () => {
             bind_modal: state.space.gc_bind_modal,
             unbind_modal: state.space.gc_unbind_modal,
             client_ip: state.space.client_ip,
+            remove_space_dialog: state.space.remove_space_dialog,
+            refreshSpaceFlag: state.space.refreshSpaceFlag
         };
     });
 
@@ -280,7 +285,7 @@ export const SpacePage: React.FC<SpacePageProps> = () => {
         if (project_selected != null) {
             fetchSpaces(dispatch, project_selected);
         }
-    }, [project_selected]);
+    }, [project_selected, refreshSpaceFlag]);
 
     useEffect(() => {
         if (!client_ip) {
@@ -482,6 +487,11 @@ export const SpacePage: React.FC<SpacePageProps> = () => {
                     boundCallback={() => {
                         fetchSpaces(dispatch, project_selected);
                     }}
+                />
+                <RemoveSpaceDialog
+                    open={remove_space_dialog.open}
+                    project={remove_space_dialog.project}
+                    space={remove_space_dialog.space}
                 />
             </div>
         </React.Fragment>

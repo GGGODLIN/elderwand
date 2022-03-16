@@ -47,8 +47,8 @@ const DeviceSmallCard: React.FC<DeviceSmallCardProp> = (props) => {
         const ids = !device.switchPanelControlInfo
             ? []
             : device.switchPanelControlInfo
-                  .filter((info) => !!info?.connectionInfo[0]?.dvId)
-                  .map((info) => info.connectionInfo[0].dvId);
+                .filter((info) => !!info?.connectionInfo[0]?.dvId)
+                .map((info) => info.connectionInfo[0].dvId);
         leaves = devices.filter((item) => ids.includes(item.dvId));
     }
 
@@ -194,7 +194,7 @@ const DeviceSmallCard: React.FC<DeviceSmallCardProp> = (props) => {
         >
             <div className="card-header">
                 <div className="header-name">{name}</div>
-                <div className="header-actions">{}</div>
+                <div className="header-actions">{ }</div>
             </div>
             <CardContent>
                 <div>{device.dvId}</div>
@@ -219,7 +219,7 @@ const DeviceSmallCard: React.FC<DeviceSmallCardProp> = (props) => {
                     <IconButton onClick={handleRemoveDevice}>
                         <DeleteIcon />
                     </IconButton>
-                    {}
+                    { }
                 </div>
             </div>
         </Card>
@@ -399,9 +399,9 @@ const SpaceCard: React.FC<SpaceCardProps> = (props) => {
     const image =
         !space.photos || !space.photos.length
             ? {
-                  name: 'default',
-                  path: 'http://placeimg.com/640/480/arch',
-              }
+                name: 'default',
+                path: 'http://placeimg.com/640/480/arch',
+            }
             : space.photos[0];
     const path = AssetsHelper.generatePhotoPath(icon.path);
 
@@ -426,8 +426,8 @@ const SpaceCard: React.FC<SpaceCardProps> = (props) => {
                     className={classname}
                     style={style}
                     variant="outlined"
-                    // onMouseDown={handleSelectSpace}
-                    // onDragStart={handleSelectSpace}
+                // onMouseDown={handleSelectSpace}
+                // onDragStart={handleSelectSpace}
                 >
                     <div className="card-header">
                         <div className="header-name">{header}</div>
@@ -435,11 +435,9 @@ const SpaceCard: React.FC<SpaceCardProps> = (props) => {
                             className="header-actions"
                             onDoubleClick={handleStopPropagation}
                         >
-                            {canDelete && (
-                                <IconButton onClick={handleRemoveSpace}>
-                                    <DeleteIcon />
-                                </IconButton>
-                            )}
+                            <IconButton onClick={handleRemoveSpace}>
+                                <DeleteIcon />
+                            </IconButton>
                         </div>
                     </div>
                     <CardContent>
@@ -450,7 +448,7 @@ const SpaceCard: React.FC<SpaceCardProps> = (props) => {
                     </CardContent>
                     <div className="card-footer">
                         <div className="footer-header">{footer_header}</div>
-                        <div className="footer-actions">{}</div>
+                        <div className="footer-actions">{ }</div>
                     </div>
                 </Card>
             </label>

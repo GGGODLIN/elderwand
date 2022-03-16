@@ -38,6 +38,12 @@ export interface SpaceMaintainState {
         device?: DeviceVM;
     };
     client_ip?: string;
+    remove_space_dialog: {
+        open: boolean;
+        project?: ProjectVM;
+        space?: SpaceVM;
+    };
+    refreshSpaceFlag: boolean;
 }
 
 const getInitialState = (): SpaceMaintainState => {
@@ -59,6 +65,12 @@ const getInitialState = (): SpaceMaintainState => {
             device: null,
         },
         client_ip: null,
+        remove_space_dialog: {
+            open: false,
+            project: null,
+            space: null,
+        },
+        refreshSpaceFlag: false
     } as SpaceMaintainState;
 };
 
@@ -194,6 +206,30 @@ const SpaceSlice = createSlice<
                 draft.client_ip = action.payload;
             });
         },
+        // remove space
+        removeSpace: (state, action: PayloadAction<SpaceVM>) => {
+            return produce(state, (draft) => {
+                draft.remove_space_dialog = {
+                    open: true,
+                    project: state.project_selected,
+                    space: action.payload,
+                };
+            });
+        },
+        closeRemoveSpaceDialog: (state) => {
+            return produce(state, (draft) => {
+                draft.remove_space_dialog = {
+                    open: false,
+                    project: null,
+                    space: null,
+                };
+            });
+        },
+        refreshSpace: (state) => {
+            return produce(state, (draft) => {
+                draft.refreshSpaceFlag = !state.refreshSpaceFlag
+            });
+        },
     },
 });
 
@@ -268,7 +304,13 @@ const closeUnBindModal = SpaceSlice.actions
 
 const setClientIP = SpaceSlice.actions
     .setClientIP as ActionCreatorWithPayload<string>;
+const removeSpace = SpaceSlice.actions
+    .removeSpace as ActionCreatorWithPayload<SpaceVM>;
 
+const closeRemoveSpaceDialog = SpaceSlice.actions
+    .closeRemoveSpaceDialog as ActionCreatorWithoutPayload;
+const refreshSpace = SpaceSlice.actions
+    .refreshSpace as ActionCreatorWithoutPayload;
 export default {
     reducer,
     clear,
@@ -286,4 +328,7 @@ export default {
     openUnBindModal,
     closeUnBindModal,
     setClientIP,
+    removeSpace,
+    closeRemoveSpaceDialog,
+    refreshSpace
 };

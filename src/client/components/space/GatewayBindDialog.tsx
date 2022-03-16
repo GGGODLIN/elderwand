@@ -94,6 +94,10 @@ const notifyGatewayIsBound = async (device: DeviceVM) => {
     return response
 };
 
+const makeUDPs = (connection: GatewayConnectionVM, device: DeviceVM) => {
+    //connection
+}
+
 const GatewayBindDialog: React.FC<GatewayBindDialogProps> = (props) => {
     if (!props.connection || !props.device) {
         return <div />;
