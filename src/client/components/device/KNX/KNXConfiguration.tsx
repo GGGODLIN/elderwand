@@ -1427,7 +1427,8 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
         const values = name.split('.');
         const page = values[1];
         const obj = values[2];
-        const field = values[3];
+        const btn = values[3];
+        const field = values[4];
 
         const nextState = produce(stateOfSetting, (draft) => {
             draft.changed = true;
