@@ -50,7 +50,7 @@ export default class DeviceMaintainController {
 
                 ctx.status = 200;
                 ctx.body = vm;
-
+                console.log('listDevices', JSON.stringify(vm))
                 return;
             })
             .catch((err) => {
@@ -138,7 +138,7 @@ export default class DeviceMaintainController {
 
                 ctx.status = 200;
                 ctx.body = vm;
-
+                console.log('getDeviceTopologyResource', JSON.stringify(vm))
                 return;
             })
             .catch((err) => {

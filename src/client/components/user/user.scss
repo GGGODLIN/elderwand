@@ -22,7 +22,7 @@
 
   .card-header-actions {
     position: relative;
-    height: 32px;
+    //height: 32px;
     padding: 0 4px;
 
     button {
@@ -35,7 +35,7 @@
 
   .card-avatar {
     width: auto;
-    margin: 0 12px 0 12px;
+    margin: 12px;
 
     .MuiAvatar-root {
       height: 64px;
@@ -49,6 +49,8 @@
 
   .card-info {
     margin: 0 auto;
+    flex-direction: row;
+    width: 100%;
   }
 
   .card-content {
@@ -154,4 +156,53 @@
 
 [aria-labelledby='role_select_input_label'] {
   min-width: 240px;
+}
+
+.register.page,
+.login.page {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+.register-form-card,
+.login-form-card {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  margin-top: 10%;
+  margin-bottom: 10%;
+
+  .MuiCardContent-root {
+    padding: 24px;
+  }
+
+  .avatar {
+    background-color: $red;
+    color: $white;
+    margin: 8px auto;
+  }
+
+  .title {
+    text-align: center;
+  }
+
+  form {
+    margin: 24px 0 0 0;
+    width: 100%;
+
+    [type='submit'] {
+      margin: 16px 0;
+    }
+
+    a {
+      color: $white;
+    }
+  }
+  .other-action {
+    a {
+      color: $black;
+      text-decoration: underline;
+    }
+  }
 }

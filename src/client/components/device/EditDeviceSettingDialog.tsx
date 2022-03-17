@@ -474,7 +474,7 @@ const DeviceProfile: React.FC<DeviceProfileProps> = (props) => {
                     () => {
                         dispatch(
                             DeviceSlice.editDeviceSetting({
-                                ...data,
+                                ...device_vo,
                                 project,
                                 space,
                             })
