@@ -54,9 +54,9 @@ export const UserCard: React.FC<UserCardProps> = (props) => {
                 <Grid
                     className={'card-header-actions'}
                     container
-                    justify="space-between"
+                    justify="center"
                 >
-                    <Grid item>
+                    <Grid container justify="flex-start">
                         <IconButton>
                             {/* <SupervisorAccountIcon /> */}
                             {UserRoleIconMap[user?.roleId]}
@@ -70,7 +70,7 @@ export const UserCard: React.FC<UserCardProps> = (props) => {
                             />
                         </Grid>
                     </Grid>
-                    <Grid item>
+                    {/* <Grid item>
                         <IconButton
                             style={{ visibility: 'visible' }}
                             onClick={() => {
@@ -79,7 +79,7 @@ export const UserCard: React.FC<UserCardProps> = (props) => {
                         >
                             <ControlCameraIcon />
                         </IconButton>
-                    </Grid>
+                    </Grid> */}
                 </Grid>
 
                 <div className="card-header">
@@ -130,7 +130,7 @@ export const UserCard: React.FC<UserCardProps> = (props) => {
                 </Grid>
 
                 <Grid className={'card-actions'} container justify="flex-end">
-                    <Grid item>
+                    {/* <Grid item>
                         <IconButton
                             onClick={() => {
                                 console.log('click');
@@ -138,7 +138,7 @@ export const UserCard: React.FC<UserCardProps> = (props) => {
                         >
                             <EmailIcon />
                         </IconButton>
-                    </Grid>
+                    </Grid> */}
                     <Grid item>
                         <IconButton
                             onClick={() => {
@@ -148,7 +148,7 @@ export const UserCard: React.FC<UserCardProps> = (props) => {
                             <VisibilityIcon />
                         </IconButton>
                     </Grid>
-                    <Grid item>
+                    {/* <Grid item>
                         <IconButton
                             onClick={() => {
                                 console.log('click');
@@ -156,8 +156,8 @@ export const UserCard: React.FC<UserCardProps> = (props) => {
                         >
                             <MoreVertIcon />
                         </IconButton>
-                    </Grid>
-                    <Grid item>
+                    </Grid> */}
+                    {/* <Grid item>
                         <IconButton
                             onClick={() => {
                                 console.log('click');
@@ -165,10 +165,12 @@ export const UserCard: React.FC<UserCardProps> = (props) => {
                         >
                             <DeleteForeverIcon />
                         </IconButton>
-                    </Grid>
+                    </Grid> */}
                 </Grid>
             </Card>
-            <UserProfileDialog open={openUserProfileDialog}
+            <UserProfileDialog
+                user={user}
+                open={openUserProfileDialog}
                 handleCancel={() => { setOpenUserProfileDialog(false) }}
                 handleConfirm={() => { setOpenUserProfileDialog(false) }} />
         </>

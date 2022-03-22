@@ -35,7 +35,7 @@
 
   .card-avatar {
     width: auto;
-    margin: 12px;
+    margin: 0 0 12px 0;
 
     .MuiAvatar-root {
       height: 64px;
@@ -159,7 +159,7 @@
 }
 
 .register.page,
-.login.page {
+.login {
   align-items: center;
   display: flex;
   justify-content: center;
@@ -170,8 +170,6 @@
   align-items: center;
   display: flex;
   flex-direction: column;
-  margin-top: 10%;
-  margin-bottom: 10%;
 
   .MuiCardContent-root {
     padding: 24px;

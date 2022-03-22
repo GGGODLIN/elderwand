@@ -57,15 +57,13 @@ export interface LoginPageProps {
 
 export const UserProfileDialog = (props) => {
     const name = 'login';
-    const classname = `${name} page`;
-
+    const classname = `${name}`;
+    const { open, handleCancel, handleConfirm, user } = props;
     const dispatch = useDispatch();
     const { t } = useTranslation();
-    const { user } = useSelector((state: RootState) => state.user);
     console.log('user', user)
     const { isLoading } = useSelector((state: RootState) => state.fetch);
 
-    const [isEditPwd, setIsEditPwd] = useState(false);
 
     let defaultValues = {
         username: user?.account?.username,
@@ -74,7 +72,7 @@ export const UserProfileDialog = (props) => {
         tel: user?.tel,
         address: user?.address
     };
-    const { open, handleCancel, handleConfirm } = props;
+
     const {
         register,
         watch,
@@ -87,9 +85,6 @@ export const UserProfileDialog = (props) => {
     });
 
     const onSubmit = async (form: LoginForm) => {
-        if (isEditPwd) {
-            handleEditUserPwd(form?.password)
-        }
         const url = `/api/users/${user?.id}`;
         const body = { ...form };
 
@@ -168,9 +163,9 @@ export const UserProfileDialog = (props) => {
                     onClose={handleCancel}
                     aria-labelledby="form-dialog-title"
                 >
-                    <DialogTitle id="form-dialog-title">
+                    {/* <DialogTitle id="form-dialog-title">
                         {'Confrim Dialog'}
-                    </DialogTitle>
+                    </DialogTitle> */}
                     <DialogContent>
                         {isLoading || < div className={classname}>
                             <Container className={'login-form-container'} maxWidth={'xs'}>
@@ -186,13 +181,12 @@ export const UserProfileDialog = (props) => {
                                             <TextField
                                                 type="text"
                                                 label={t(kws.UserProfile.Account)}
-                                                variant="outlined"
+                                                variant="standard"
+                                                disabled
                                                 margin="normal"
-                                                required
                                                 fullWidth
                                                 autoFocus
                                                 size="medium"
-                                                disabled
                                                 defaultValue={defaultValues?.username}
                                                 {...register('username', { value: defaultValues?.username })}
                                                 onChange={(
@@ -209,9 +203,9 @@ export const UserProfileDialog = (props) => {
                                             <TextField
                                                 type="text"
                                                 label={t(kws.UserProfile.FullName)}
-                                                variant="outlined"
+                                                variant="standard"
+                                                disabled
                                                 margin="normal"
-                                                required
                                                 fullWidth
                                                 size="medium"
                                                 defaultValue={defaultValues?.displayName}
@@ -235,7 +229,8 @@ export const UserProfileDialog = (props) => {
                                             <TextField
                                                 type="text"
                                                 label={t(kws.UserProfile.Email)}
-                                                variant="outlined"
+                                                variant="standard"
+                                                disabled
                                                 margin="normal"
                                                 fullWidth
                                                 size="medium"
@@ -256,71 +251,13 @@ export const UserProfileDialog = (props) => {
                                                     errors.email
                                                 )}
                                             />
-                                            {isEditPwd || <Button
-                                                type="button"
-                                                variant="contained"
-                                                color="primary"
-                                                fullWidth
-                                                onClick={() => setIsEditPwd(true)}
-                                            >
-                                                {t(kws.UserProfile.EditPassword)}
-                                            </Button>}
-                                            {isEditPwd && <>
-                                                <TextField
-                                                    type="password"
-                                                    label={t(kws.UserProfile.Password)}
-                                                    variant="outlined"
-                                                    margin="normal"
-                                                    required
-                                                    fullWidth
-                                                    size="medium"
-                                                    {...register('password', {
-                                                        required: `${t(
-                                                            kws.ErrorMessage.IsRequired
-                                                        )}`,
-                                                    })}
-                                                    onChange={(
-                                                        e: ChangeEvent<HTMLInputElement>
-                                                    ) => {
-                                                        setValue('password', e.target.value);
-                                                    }}
-                                                    error={!!errors.password}
-                                                    helperText={handleErrorMessage(
-                                                        errors.password
-                                                    )}
-                                                />
 
-                                                <TextField
-                                                    type="password"
-                                                    label={t(kws.UserProfile.ConfirmPassword)}
-                                                    variant="outlined"
-                                                    margin="normal"
-                                                    required
-                                                    fullWidth
-                                                    size="medium"
-                                                    {...register('confirmPassword', {
-                                                        required: `${t(
-                                                            kws.ErrorMessage.IsRequired
-                                                        )}`,
-                                                        validate: value => value === watch('password') || t(kws.UserProfile.ConfirmPassword)
-                                                    })}
-                                                    onChange={(
-                                                        e: ChangeEvent<HTMLInputElement>
-                                                    ) => {
-                                                        setValue('confirmPassword', e.target.value);
-                                                    }}
-                                                    error={!!errors.confirmPassword}
-                                                    helperText={handleErrorMessage(
-                                                        errors.confirmPassword
-                                                    )}
-                                                />
-                                            </>}
                                             <TextField
                                                 type="text"
                                                 label={t(kws.UserProfile.Phone)}
-                                                variant="outlined"
+                                                variant="standard"
+                                                disabled
                                                 margin="normal"
-                                                required
                                                 fullWidth
                                                 size="medium"
                                                 defaultValue={defaultValues?.tel}
@@ -344,9 +281,9 @@ export const UserProfileDialog = (props) => {
                                             <TextField
                                                 type="text"
                                                 label={t(kws.UserProfile.Address)}
-                                                variant="outlined"
+                                                variant="standard"
+                                                disabled
                                                 margin="normal"
-                                                required
                                                 fullWidth
                                                 size="medium"
                                                 defaultValue={defaultValues?.address}
@@ -368,18 +305,6 @@ export const UserProfileDialog = (props) => {
                                             />
 
 
-
-
-                                            <Button
-                                                type="submit"
-                                                variant="contained"
-                                                color="primary"
-                                                fullWidth
-                                                disabled={handleSubmitLock(errors)}
-                                            >
-                                                {t(kws.UserProfile.Submit)}
-                                            </Button>
-
                                         </form>
                                     </CardContent>
                                 </Card>
@@ -387,15 +312,15 @@ export const UserProfileDialog = (props) => {
                         </div>}
                     </DialogContent>
                     <DialogActions>
-                        <Button
+                        {/* <Button
                             className={'remove'}
                             onClick={handleConfirm}
                             style={{ color: 'red' }}
                         >
                             {'Confirm'}
-                        </Button>
+                        </Button> */}
                         <Button className={'cancel'} onClick={handleCancel}>
-                            {'Cancel'}
+                            {'Ok'}
                         </Button>
                     </DialogActions>
                 </Dialog>
