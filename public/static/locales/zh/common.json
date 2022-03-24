@@ -21,5 +21,8 @@
   },
   "DeviceMaintainPage": {
     "Status": "狀態"
+  },
+  "InviteUserDialog":{
+    "InviteUser": "邀請用戶"
   }
 }

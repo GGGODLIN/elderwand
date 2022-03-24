@@ -20,5 +20,8 @@
   },
   "DeviceMaintainPage": {
     "Status": "Status"
+  },
+  "InviteUserDialog":{
+    "InviteUser":"Invite User"
   }
 }

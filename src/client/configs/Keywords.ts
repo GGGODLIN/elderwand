@@ -43,6 +43,9 @@ const Keywords = {
         EditPassword: 'EditPassword',
         Submit: 'Submit'
     },
+    InviteUserDialog: {
+        InviteUser: 'InviteUserDialog.InviteUser'
+    }
 };
 
 export default Keywords;

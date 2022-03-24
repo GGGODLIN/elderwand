@@ -1409,6 +1409,15 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
 
                 if (button.attr.objId == obj) {
                     draft.setting.buttons[i].attr.lpress = checked;
+                    if (checked) {
+                        const objId = getCanBeUsedObjectID();
+                        let newAttr = {
+                            ...draft.setting.buttons[i],
+                            attr: { ...draft.setting.buttons[i].attr, objId: objId },
+                            obj: { ...draft.setting.buttons[i].obj, objId: objId }
+                        }
+                        draft.setting.buttons.push(newAttr)
+                    }
                 }
             }
         });
@@ -2451,17 +2460,7 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
 
                                         return (
                                             <tr key={idx} className={classname}>
-                                                {/* {idx % row_span == 0 && (
-                                                    <td
-                                                        className={'center'}
-                                                        rowSpan={row_span}
-                                                    >
-                                                        {button.attr.bIdx ||
-                                                            button.attr.btn}
-                                                    </td>
-                                                )} */}
-
-                                                {(button?.attrs?.[0]?.objId === button?.attr?.objId) && (
+                                                {idx % row_span == 0 && (
                                                     <td
                                                         className={'center'}
                                                         rowSpan={row_span}
@@ -2470,6 +2469,16 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                                                             button.attr.btn}
                                                     </td>
                                                 )}
+
+                                                {/* {(button?.attrs?.[0]?.objId === button?.attr?.objId) && (
+                                                    <td
+                                                        className={'center'}
+                                                        rowSpan={row_span}
+                                                    >
+                                                        {button.attr.bIdx ||
+                                                            button.attr.btn}
+                                                    </td>
+                                                )} */}
 
                                                 <td className={'center'}>
                                                     {/*toggle (單鍵), Rocker(雙鍵), toggle simulator(類單鍵)*/}
@@ -2547,7 +2556,7 @@ const KNXConfiguration: React.FC<KNXConfigurationProp> = (props) => {
                                                     </div>
                                                 </td>
 
-                                                {(button?.attrs?.[0]?.objId === button?.attr?.objId) && (
+                                                {idx % row_span == 0 && (
                                                     <td
                                                         className={'center'}
                                                         rowSpan={row_span}

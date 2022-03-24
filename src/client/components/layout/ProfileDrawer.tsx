@@ -6,15 +6,19 @@ import {
     Switch,
     Typography,
     withStyles,
+    Select,
+    MenuItem,
+    FormControl
 } from '@material-ui/core';
 import { blue } from '@material-ui/core/colors';
 import CloseIcon from '@material-ui/icons/Close';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import clsx from 'clsx';
-import * as React from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'src/client/reducer';
 import LayoutSlice from 'src/client/slices/LayoutSlice';
+import i18n from 'i18next';
 
 const LogoutButton: React.FC<{}> = (props) => {
     return (
@@ -71,7 +75,7 @@ const SwitchFormControlLabel: React.FC<{
 
 export const ProfileDrawer: React.FC<{}> = () => {
     const dispatch = useDispatch();
-
+    const [language, setLanguage] = useState(i18n?.language ?? 'cn');
     const handleDrawerClose = () => {
         dispatch(LayoutSlice.openProfileDrawer(false));
     };
@@ -89,8 +93,15 @@ export const ProfileDrawer: React.FC<{}> = () => {
     const classname = clsx('profile-drawer', open ? 'open' : '');
     const mask = clsx('mask', open ? 'open' : '');
 
+
+
     if (!display) {
         return <React.Fragment />;
+    }
+
+    const handleChangeLanguage = (e) => {
+        i18n.changeLanguage(e.target?.value)
+        setLanguage(e.target?.value)
     }
 
     return (
@@ -135,33 +146,51 @@ export const ProfileDrawer: React.FC<{}> = () => {
                 </div>
                 <Divider />
                 <div className="settings">
-                    <ul>
-                        <li>
-                            <SwitchFormControlLabel
-                                onChange={() => {}}
-                                label="SETTING 1"
-                                value={'setting_1'}
-                                checked={true}
-                            />
-                        </li>
-                        <li>
-                            <SwitchFormControlLabel
-                                onChange={() => {}}
-                                label="SETTING 2"
-                                value={'setting_2'}
-                                checked={false}
-                            />
-                        </li>
-                        <li>
-                            <SwitchFormControlLabel
-                                onChange={() => {}}
-                                label="SETTING 3"
-                                value={'setting_3'}
-                                checked={true}
-                                disabled={true}
-                            />
-                        </li>
-                    </ul>
+                    <FormControl
+                        variant={'outlined'}
+                        fullWidth={true}
+                        size={'small'}
+                    >
+                        <Select
+                            onChange={(e) => { handleChangeLanguage(e) }}
+                            value={language}
+                        >
+                            <MenuItem
+                                value={'en'}
+                            >
+                                <div>
+                                    <span>
+                                        {
+                                            'English'
+                                        }
+                                    </span>
+                                </div>
+                            </MenuItem>
+                            <MenuItem
+                                value={'zh'}
+                            >
+                                <div>
+                                    <span>
+                                        {
+                                            '繁體中文'
+                                        }
+                                    </span>
+                                </div>
+                            </MenuItem>
+                            <MenuItem
+                                value={'cn'}
+                            >
+                                <div>
+                                    <span>
+                                        {
+                                            '简体中文'
+                                        }
+                                    </span>
+                                </div>
+                            </MenuItem>
+                        </Select>
+                    </FormControl>
+
                 </div>
                 <Divider />
                 <div className="actions">

@@ -204,7 +204,7 @@ export const InviteUserDialog: React.FC<{}> = () => {
             maxWidth={maxWidth}
             fullWidth={true}
         >
-            <DialogTitle>{'Invite User'}</DialogTitle>
+            <DialogTitle>{t(kws.InviteUserDialog.InviteUser)}</DialogTitle>
             <DialogContent>
                 <form noValidate onSubmit={handleSubmit(onSubmit)} id={form_id}>
                     <Grid container direction="column">
