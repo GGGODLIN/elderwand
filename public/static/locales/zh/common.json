@@ -14,7 +14,11 @@
   "PhoneNumber": "電話",
   "AlreadyHaveAnAccount": "已經有帳號",
   "Submit": "送出",
-
+  "Admin":"管理",
+  "Profile":"個人資料",
+  "Logout":"登出",
+  "Description":"備註",
+  
   "ErrorMessage": {
     "IsRequired": "必要欄位",
     "InvalidEmailAddress": "非電子郵件信箱"
@@ -23,6 +27,7 @@
     "Status": "狀態"
   },
   "InviteUserDialog":{
-    "InviteUser": "邀請用戶"
+    "InviteUser": "邀請用戶",
+    "RoleType":"角色"
   }
 }

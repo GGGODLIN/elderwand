@@ -1,4 +1,9 @@
 const Keywords = {
+    Layout: {
+        Admin: 'Admin',
+        Profile: 'Profile',
+        Logout: 'Logout',
+    },
     LoginPage: {
         Login: 'Login',
         Username: 'Username',
@@ -41,10 +46,12 @@ const Keywords = {
         Address: 'Address',
         Company: 'Company',
         EditPassword: 'EditPassword',
-        Submit: 'Submit'
+        Submit: 'Submit',
+        Description: 'Description'
     },
     InviteUserDialog: {
-        InviteUser: 'InviteUserDialog.InviteUser'
+        InviteUser: 'InviteUserDialog.InviteUser',
+        RoleType: "InviteUserDialog.RoleType",
     }
 };
 

@@ -13,6 +13,10 @@
   "PhoneNumber": "Phone number",
   "AlreadyHaveAnAccount": "Already have an account",
   "Submit": "Submit",
+  "Admin":"Admin",
+  "Profile":"Profile",
+  "Logout":"Logout",
+  "Description":"Description",
 
   "ErrorMessage": {
     "IsRequired": "is require",
@@ -22,6 +26,7 @@
     "Status": "Status"
   },
   "InviteUserDialog":{
-    "InviteUser":"Invite User"
+    "InviteUser":"Invite User",
+    "RoleType":"Role Type"
   }
 }

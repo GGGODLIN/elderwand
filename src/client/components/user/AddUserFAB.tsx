@@ -215,7 +215,7 @@ export const InviteUserDialog: React.FC<{}> = () => {
                                 size="small"
                             >
                                 <InputLabel htmlFor={role_select_id}>
-                                    {'Role Type'}
+                                    {t(kws.InviteUserDialog.RoleType)}
                                 </InputLabel>
                                 <Select
                                     native
@@ -268,10 +268,10 @@ export const InviteUserDialog: React.FC<{}> = () => {
                         <Grid item>
                             <TextField
                                 // name="description"
-                                label="Description"
+                                label={t(kws.UserProfile.Description)}
                                 multiline
                                 variant="outlined"
-                                placeholder="Description"
+                                placeholder={t(kws.UserProfile.Description)}
                                 style={{ width: '100%' }}
                                 rows={1}
                                 size="small"

@@ -8,6 +8,8 @@ import { RootState } from 'src/client/reducer';
 import LayoutSlice from 'src/client/slices/LayoutSlice';
 import { FeatureDrawer } from './FeatureDrawer';
 import { ProfileDrawer } from './ProfileDrawer';
+import { useTranslation } from 'react-i18next';
+import kws from 'src/client/configs/Keywords';
 
 const LoginButton: React.FC<{}> = (props) => {
     return (
@@ -47,7 +49,7 @@ const FeatureButton: React.FC<{}> = (props) => {
 
 export const HeaderBar: React.FC<{}> = () => {
     const { user } = useSelector((state: RootState) => state.user);
-
+    const { t } = useTranslation();
     const isLogin = !!user;
 
     return (
@@ -57,17 +59,17 @@ export const HeaderBar: React.FC<{}> = () => {
                     {isLogin && <FeatureButton />}
                 </div>
 
-                <div className="logo">
+                {/* <div className="logo">
                     <a href="/">{'LOGO'}</a>
-                </div>
+                </div> */}
 
                 <nav>
                     <ul>
                         <li>
-                            <a href="/admin">{'Admin'}</a>
+                            <a href="/admin">{t(kws.Layout.Admin)}</a>
                         </li>
                         <li>
-                            <a href="/profile">{'Profile'}</a>
+                            <a href="/profile">{t(kws.Layout.Profile)}</a>
                         </li>
                         {/* <li>
                             <a href="/admin">{'Contact'}</a>

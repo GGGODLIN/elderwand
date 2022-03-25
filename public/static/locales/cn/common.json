@@ -14,6 +14,10 @@
   "PhoneNumber": "電話",
   "AlreadyHaveAnAccount": "已經有帳號",
   "Submit": "送出",
+  "Admin":"管理",
+  "Profile":"个人资料",
+  "Logout":"登出",
+  "Description":"备注",
 
   "ErrorMessage": {
     "IsRequired": "必要欄位",
@@ -23,6 +27,7 @@
     "Status": "状态"
   },
   "InviteUserDialog":{
-    "InviteUser": "邀请用户"
+    "InviteUser": "邀请用户",
+    "RoleType":"角色"
   }
 }

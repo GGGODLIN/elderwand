@@ -17,6 +17,9 @@ import { UserRoleIconMap } from 'src/client/configs/IconMap';
 import UserVM from 'src/client/domain/user/UserVM';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import { UserProfileDialog } from './UserProfileDialog'
+import { useTranslation } from 'react-i18next';
+import kws from 'src/client/configs/Keywords';
+
 export interface UserCardProps {
     classname?: string;
     user: UserVM;
@@ -27,7 +30,7 @@ type UserRoleType = 'admin' | 'tenant' | 'pe' | 'fe' | 'viewer';
 export const UserCard: React.FC<UserCardProps> = (props) => {
     const classname = clsx(['user-card']);
     const { user } = props;
-    console.log('UserCard', user)
+    const { t } = useTranslation();
 
     const [desc_disable, setDescription] = React.useState(true);
     const [openUserProfileDialog, setOpenUserProfileDialog] = React.useState(
@@ -117,8 +120,8 @@ export const UserCard: React.FC<UserCardProps> = (props) => {
                     <Grid item>
                         <TextField
                             name="description"
-                            label="Description"
-                            placeholder="description"
+                            label={t(kws.UserProfile.Description)}
+                            placeholder={t(kws.UserProfile.Description)}
                             variant="outlined"
                             // multiline
                             // rows={1}

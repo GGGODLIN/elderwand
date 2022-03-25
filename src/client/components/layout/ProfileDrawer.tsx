@@ -19,12 +19,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'src/client/reducer';
 import LayoutSlice from 'src/client/slices/LayoutSlice';
 import i18n from 'i18next';
+import { useTranslation } from 'react-i18next';
+import kws from 'src/client/configs/Keywords';
 
 const LogoutButton: React.FC<{}> = (props) => {
+    const { t } = useTranslation();
     return (
         <a href="/logout">
             <ExitToAppIcon />
-            <Typography variant="button">{'Logout'}</Typography>
+            <Typography variant="button">{t(kws.Layout.Logout)}</Typography>
         </a>
     );
 };
